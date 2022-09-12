@@ -9,21 +9,23 @@ module Modusynth
     class Tool
       include Mongoid::Document
       include Mongoid::Timestamps
+      include Mongoid::EmbeddedErrors
 
       field :name, type: String
 
       # @!attribute [rw] slots
       # @return [Integer] The number of slots the tool will take in each rack.
-      field :slots, type: Integer, default: 2
-
-      validates :slots,
-        numericality: { greater_than: 0, message: 'value' }
+      field :slots, type: Integer
       
       validates :name,
         presence: { message: 'required' },
-        length: { minimum: 1, message: 'length', if: :name? }
+        length: { minimum: 3, message: 'length', if: :name? }
 
-      embeds_many :inner_nodes, class_name: 'Models::Tools::InnerNode', inverse_of: :tool
+      validates :slots,
+        presence: { message: 'required' },
+        numericality: { greater_than: 0, message: 'value', if: :slots? }
+
+      embeds_many :inner_nodes, class_name: '::Modusynth::Models::Tools::InnerNode', inverse_of: :tool
     end
   end
 end

@@ -4,3 +4,9 @@ development:
       database: virtuatable
       hosts:
         - localhost:27017
+test:
+  clients:
+    default:
+      database: virtuatable
+      hosts:
+        - localhost:27017

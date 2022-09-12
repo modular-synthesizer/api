@@ -9,9 +9,15 @@ module Modusynth
 
         field :name, type: String
 
-        field :type, type: String
+        field :factory, type: String
 
-        field :payload, type: Hash
+        validates :name,
+          presence: { message: 'required' },
+          length: { minimum: 3, message: 'length', if: :name? }
+        
+        validates :factory,
+          presence: { message: 'required' },
+          length: { minimum: 3, message: 'length', if: :factory? }
       end
     end
   end

@@ -8,16 +8,16 @@ module Modusynth
           id: id.to_s,
           name: name,
           slots: slots,
-          inner_nodes: inner_nodes
+          innerNodes: inner_nodes
         }
       end
 
       def inner_nodes
         object.inner_nodes.map do |node|
           {
+            id: node.id.to_s,
             name: node.name,
-            type: node.type,
-            payload: node.payload
+            factory: node.factory
           }
         end
       end
