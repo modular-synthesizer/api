@@ -30,7 +30,8 @@ RSpec.describe Modusynth::Controllers::Tools do
           id: Modusynth::Models::Tool.first.id.to_s,
           name: 'test',
           slots: 10,
-          innerNodes: []
+          innerNodes: [],
+          innerLinks: []
         )
       end
       describe 'Created tool' do
@@ -86,62 +87,64 @@ RSpec.describe Modusynth::Controllers::Tools do
       end
     end
 
-    describe 'No name given' do
-      before { create }
+    describe 'Error cases' do
+      describe 'No name given' do
+        before { create }
 
-      it 'Returns a 400 (Bad Request) error code' do
-        expect(last_response.status).to be 400
+        it 'Returns a 400 (Bad Request) error code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct error body' do
+          expect(last_response.body).to include_json({key: 'name', message: 'required'})
+        end
       end
-      it 'Returns the correct error body' do
-        expect(last_response.body).to include_json({key: 'name', message: 'required'})
+
+      describe 'Name too short' do
+        before { create({name: 'a'}) }
+
+        it 'Returns a 400 (Bad Request) error code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct error body' do
+          expect(last_response.body).to include_json({key: 'name', message: 'length'})
+        end
+      end
+
+      describe 'Slots not given' do
+        before { create({name: 'test'}) }
+
+        it 'Returns a 400 (Bad Request) error code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct error body' do
+          expect(last_response.body).to include_json({key: 'slots', message: 'required'})
+        end
+      end
+
+      describe 'Slots given with negative value' do
+        before { create({name: 'test', slots: -1}) }
+
+        it 'Returns a 400 (Bad Request) error code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct error body' do
+          expect(last_response.body).to include_json({key: 'slots', message: 'value'})
+        end
+      end
+
+      describe 'Slots given with zero as value' do
+        before { create({name: 'test', slots: 0}) }
+
+        it 'Returns a 400 (Bad Request) error code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct error body' do
+          expect(last_response.body).to include_json({key: 'slots', message: 'value'})
+        end
       end
     end
 
-    describe 'Name too short' do
-      before { create({name: 'a'}) }
-
-      it 'Returns a 400 (Bad Request) error code' do
-        expect(last_response.status).to be 400
-      end
-      it 'Returns the correct error body' do
-        expect(last_response.body).to include_json({key: 'name', message: 'length'})
-      end
-    end
-
-    describe 'Slots not given' do
-      before { create({name: 'test'}) }
-
-      it 'Returns a 400 (Bad Request) error code' do
-        expect(last_response.status).to be 400
-      end
-      it 'Returns the correct error body' do
-        expect(last_response.body).to include_json({key: 'slots', message: 'required'})
-      end
-    end
-
-    describe 'Slots given with negative value' do
-      before { create({name: 'test', slots: -1}) }
-
-      it 'Returns a 400 (Bad Request) error code' do
-        expect(last_response.status).to be 400
-      end
-      it 'Returns the correct error body' do
-        expect(last_response.body).to include_json({key: 'slots', message: 'value'})
-      end
-    end
-
-    describe 'Slots given with zero as value' do
-      before { create({name: 'test', slots: 0}) }
-
-      it 'Returns a 400 (Bad Request) error code' do
-        expect(last_response.status).to be 400
-      end
-      it 'Returns the correct error body' do
-        expect(last_response.body).to include_json({key: 'slots', message: 'value'})
-      end
-    end
-
-    describe 'Inner nodes errors' do
+    describe 'Inner nodes error cases' do
 
       def create_with_node(payload = {})
         create({name: 'test', slots: 10, inner_nodes: [payload]})
@@ -188,6 +191,121 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         it 'Returns the correct error body' do
           expect(last_response.body).to include_json({key: 'inner_nodes[0].factory', message: 'length'})
+        end
+      end
+    end
+
+    describe 'Inner links error cases' do
+      def create_with_link(payload = {})
+        create({
+          name: 'test',
+          slots: 10,
+          inner_nodes: [{name: 'foo', factory: 'bar'}],
+          inner_links: [payload]
+        })
+      end
+
+      describe 'The origin is not given at all' do
+        before { create_with_link({}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            key: 'inner_links[0].from', message: 'required'
+          )
+        end
+      end
+
+      describe 'The origin node is not given' do
+        before { create_with_link({from: {}}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            key: 'inner_links[0].from.node', message: 'required'
+          )
+        end
+      end
+
+      describe 'The origin index is not given' do
+        before { create_with_link({from: {node: 'foo'}}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            key: 'inner_links[0].from.index', message: 'required'
+          )
+        end
+      end
+
+      describe 'The origin node is not in the inner nodes' do
+        before { create_with_link({from: {node: 'baz', index: 0}, to: {node: 'foo', index: 0}}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 404
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            key: 'inner_links[0].from.node', message: 'unknown'
+          )
+        end
+      end
+
+      describe 'The destination is not given at all' do
+        before { create_with_link({from: { node: 'foo', index: 0 }}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            key: 'inner_links[0].to', message: 'required'
+          )
+        end
+      end
+
+      describe 'The destination node is not given' do
+        before { create_with_link({from: { node: 'foo', index: 0 }, to: {}}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            key: 'inner_links[0].to.node', message: 'required'
+          )
+        end
+      end
+
+      describe 'The destination index is not given' do
+        before { create_with_link({from: {node: 'foo', index: 0}, to: {node: 'foo'}}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            key: 'inner_links[0].to.index', message: 'required'
+          )
+        end
+      end
+
+      describe 'The destination node is not in the inner nodes' do
+        before { create_with_link({from: {node: 'foo', index: 0}, to: {node: 'baz', index: 0}}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 404
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            key: 'inner_links[0].to.node', message: 'unknown'
+          )
         end
       end
     end

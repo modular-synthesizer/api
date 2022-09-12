@@ -8,7 +8,8 @@ module Modusynth
           id: id.to_s,
           name: name,
           slots: slots,
-          innerNodes: inner_nodes
+          innerNodes: inner_nodes,
+          innerLinks: inner_links
         }
       end
 
@@ -18,6 +19,22 @@ module Modusynth
             id: node.id.to_s,
             name: node.name,
             factory: node.factory
+          }
+        end
+      end
+
+      def inner_links
+        object.inner_links do |link|
+          {
+            id: link.id.to_s,
+            from: {
+              node: link.from.node,
+              index: link.from.index
+            },
+            to: {
+              node: link.to.node,
+              index: link.to.index
+            }
           }
         end
       end

@@ -7,6 +7,10 @@ module Modusynth
         field :node, type: String
 
         field :index, type: Integer
+
+        validates :node,
+          presence: { message: 'required' },
+          length: { minimum: 3, if: :node? }
       end
     end
   end

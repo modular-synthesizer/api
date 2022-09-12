@@ -16,6 +16,10 @@ module Modusynth
       # @!attribute [rw] slots
       # @return [Integer] The number of slots the tool will take in each rack.
       field :slots, type: Integer
+
+      embeds_many :inner_nodes, class_name: '::Modusynth::Models::Tools::InnerNode'
+
+      embeds_many :inner_links, class_name: '::Modusynth::Models::Tools::InnerLink'
       
       validates :name,
         presence: { message: 'required' },
@@ -24,8 +28,6 @@ module Modusynth
       validates :slots,
         presence: { message: 'required' },
         numericality: { greater_than: 0, message: 'value', if: :slots? }
-
-      embeds_many :inner_nodes, class_name: '::Modusynth::Models::Tools::InnerNode', inverse_of: :tool
     end
   end
 end
