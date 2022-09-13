@@ -2,7 +2,6 @@ module Modusynth
   module Models
     module Tools
       autoload :Category, './models/tools/category'
-      autoload :Constraints, './models/tools/constraints'
       autoload :InnerLink, './models/tools/inner_link'
       autoload :InnerLinkEnd, './models/tools/inner_link_end'
       autoload :InnerNode, './models/tools/inner_node'
