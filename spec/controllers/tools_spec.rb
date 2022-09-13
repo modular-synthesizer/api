@@ -31,7 +31,9 @@ RSpec.describe Modusynth::Controllers::Tools do
           name: 'test',
           slots: 10,
           innerNodes: [],
-          innerLinks: []
+          innerLinks: [],
+          inputs: [],
+          outputs: []
         )
       end
       describe 'Created tool' do
@@ -169,11 +171,24 @@ RSpec.describe Modusynth::Controllers::Tools do
             inner_nodes: [
               { name: 'foo', factory: 'bar' }
             ],
-          inputs: [{name: 'test', targets: ['foo'], index: 0}]
+            inputs: [
+              {name: 'test', targets: ['foo'], index: 0}
+            ]
           })
         end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            id: Modusynth::Models::Tool.first.id.to_s,
+            name: 'test',
+            slots: 10,
+            innerNodes: [{name: 'foo', factory: 'bar'}],
+            innerLinks: [],
+            inputs: [{name: 'test', index: 0, targets: ['foo']}],
+            outputs: []
+          )
+        end
         describe 'Created input port' do
-          let!(:tool) { Modusynth::Models::Tools.first }
+          let!(:tool) { Modusynth::Models::Tool.first }
           let!(:input) { tool.inputs.first }
 
           it 'Has created only one input' do
@@ -188,7 +203,48 @@ RSpec.describe Modusynth::Controllers::Tools do
           it 'Has created a port with the correct index' do
             expect(input.index).to be 0
           end
+        end
+      end
+      describe 'Tool with outputs' do
+        before do
+          create({
+            name: 'test',
+            slots: 10,
+            inner_nodes: [
+              { name: 'foo', factory: 'bar' }
+            ],
+            outputs: [
+              {name: 'test', targets: ['foo'], index: 0}
+            ]
+          })
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            id: Modusynth::Models::Tool.first.id.to_s,
+            name: 'test',
+            slots: 10,
+            innerNodes: [{name: 'foo', factory: 'bar'}],
+            innerLinks: [],
+            outputs: [{name: 'test', index: 0, targets: ['foo']}],
+            inputs: []
+          )
+        end
+        describe 'Created input port' do
+          let!(:tool) { Modusynth::Models::Tool.first }
+          let!(:output) { tool.outputs.first }
 
+          it 'Has created only one input' do
+            expect(tool.outputs.size).to be 1
+          end
+          it 'Has created a port with the correct name' do
+            expect(output.name).to eq 'test'
+          end
+          it 'Has created a port with the correct targets' do
+            expect(output.targets).to eq ['foo']
+          end
+          it 'Has created a port with the correct index' do
+            expect(output.index).to be 0
+          end
         end
       end
     end
