@@ -31,7 +31,9 @@ RSpec.describe Modusynth::Controllers::Tools do
           name: 'test',
           slots: 10,
           innerNodes: [],
-          innerLinks: []
+          innerLinks: [],
+          inputs: [],
+          outputs: []
         )
       end
       describe 'Created tool' do
@@ -159,6 +161,90 @@ RSpec.describe Modusynth::Controllers::Tools do
               }
             }]
           )
+        end
+      end
+      describe 'Tool with inputs' do
+        before do
+          create({
+            name: 'test',
+            slots: 10,
+            inner_nodes: [
+              { name: 'foo', factory: 'bar' }
+            ],
+            inputs: [
+              {name: 'test', targets: ['foo'], index: 0}
+            ]
+          })
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            id: Modusynth::Models::Tool.first.id.to_s,
+            name: 'test',
+            slots: 10,
+            innerNodes: [{name: 'foo', factory: 'bar'}],
+            innerLinks: [],
+            inputs: [{name: 'test', index: 0, targets: ['foo']}],
+            outputs: []
+          )
+        end
+        describe 'Created input port' do
+          let!(:tool) { Modusynth::Models::Tool.first }
+          let!(:input) { tool.inputs.first }
+
+          it 'Has created only one input' do
+            expect(tool.inputs.size).to be 1
+          end
+          it 'Has created a port with the correct name' do
+            expect(input.name).to eq 'test'
+          end
+          it 'Has created a port with the correct targets' do
+            expect(input.targets).to eq ['foo']
+          end
+          it 'Has created a port with the correct index' do
+            expect(input.index).to be 0
+          end
+        end
+      end
+      describe 'Tool with outputs' do
+        before do
+          create({
+            name: 'test',
+            slots: 10,
+            inner_nodes: [
+              { name: 'foo', factory: 'bar' }
+            ],
+            outputs: [
+              {name: 'test', targets: ['foo'], index: 0}
+            ]
+          })
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            id: Modusynth::Models::Tool.first.id.to_s,
+            name: 'test',
+            slots: 10,
+            innerNodes: [{name: 'foo', factory: 'bar'}],
+            innerLinks: [],
+            outputs: [{name: 'test', index: 0, targets: ['foo']}],
+            inputs: []
+          )
+        end
+        describe 'Created input port' do
+          let!(:tool) { Modusynth::Models::Tool.first }
+          let!(:output) { tool.outputs.first }
+
+          it 'Has created only one input' do
+            expect(tool.outputs.size).to be 1
+          end
+          it 'Has created a port with the correct name' do
+            expect(output.name).to eq 'test'
+          end
+          it 'Has created a port with the correct targets' do
+            expect(output.targets).to eq ['foo']
+          end
+          it 'Has created a port with the correct index' do
+            expect(output.index).to be 0
+          end
         end
       end
     end
@@ -382,6 +468,166 @@ RSpec.describe Modusynth::Controllers::Tools do
           expect(last_response.body).to include_json(
             key: 'inner_links[0].to.node', message: 'unknown'
           )
+        end
+      end
+    end
+
+    describe 'parameters error cases' do
+      before do
+        create({
+          name: 'test',
+          slots: 10,
+          parameters: [ 'unknown_id' ]
+        })
+      end
+
+      it 'Returns a 404 (Unknown) status code' do
+        expect(last_response.status).to be 404
+      end
+      it 'Returns the correct body' do
+        expect(last_response.body).to include_json({
+          key: 'parameters[0]', message: 'unknown'
+        })
+      end
+    end
+
+    describe 'inputs error cases' do
+
+      def create_with_input payload
+        create({name: 'test', slots: 10, inputs: [payload], inner_nodes: [{name: 'test', factory: 'test'}]})
+      end
+
+      describe 'The name is not given' do
+        before { create_with_input({}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json({
+            key: 'inputs[0].name', message: 'required'
+          })
+        end
+      end
+      describe 'The name is too short' do
+        before { create_with_input({name: 'a'}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json({
+            key: 'inputs[0].name', message: 'length'
+          })
+        end
+      end
+      describe 'A target is not a string' do
+        before { create_with_input({name: 'foo', targets: ['baz', 2]}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json({
+            key: 'inputs[0].targets[1]', message: 'type'
+          })
+        end
+      end
+      describe 'A target is not in the inner nodes list' do
+        before { create_with_input({name: 'foo', targets: ['test', 'baz']}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 404
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json({
+            key: 'inputs[0].targets[1]', message: 'unknown'
+          })
+        end
+      end
+      describe 'An index is below zero' do
+        before { create_with_input({name: 'foo', targets: [], index: -1}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json({
+            key: 'inputs[0].index', message: 'value'
+          })
+        end
+      end
+    end
+
+    describe 'outputs error cases' do
+
+      def create_with_output payload
+        create({
+          name: 'test',
+          slots: 10,
+          outputs: [payload],
+          inner_nodes: [{name: 'test', factory: 'test'}]
+        })
+      end
+
+      describe 'The name is not given' do
+        before { create_with_output({}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json({
+            key: 'outputs[0].name', message: 'required'
+          })
+        end
+      end
+      describe 'The name is too short' do
+        before { create_with_output({name: 'a'}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json({
+            key: 'outputs[0].name', message: 'length'
+          })
+        end
+      end
+      describe 'A target is not a string' do
+        before { create_with_output({name: 'foo', targets: ['baz', 2]}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json({
+            key: 'outputs[0].targets[1]', message: 'type'
+          })
+        end
+      end
+      describe 'A target is not in the inner nodes list' do
+        before { create_with_output({name: 'foo', targets: ['test', 'baz']}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 404
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json({
+            key: 'outputs[0].targets[1]', message: 'unknown'
+          })
+        end
+      end
+      describe 'An index is below zero' do
+        before { create_with_output({name: 'foo', targets: [], index: -1}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json({
+            key: 'outputs[0].index', message: 'value'
+          })
         end
       end
     end

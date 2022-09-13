@@ -9,7 +9,9 @@ module Modusynth
           slots: payload['slots'],
           inner_nodes: inner_nodes(payload),
           inner_links: inner_links(payload),
-          parameters: parameters(payload)
+          parameters: parameters(payload),
+          inputs: ports(payload, 'inputs'),
+          outputs: ports(payload, 'outputs')
         )
         tool.save!
         tool
@@ -48,8 +50,10 @@ module Modusynth
       def parameters payload
         return [] if payload['parameters'].nil?
 
-        payload['parameters'].map.with_index do |param|
-          Modusynth::Models::Tools::Parameter.find(param)
+        payload['parameters'].map.with_index do |param, idx|
+          param = Modusynth::Models::Tools::Parameter.find_by(id: param)
+          raise Modusynth::Exceptions.unknown("parameters[#{idx}]") if param.nil?
+          param
         end
       end
 
@@ -81,6 +85,42 @@ module Modusynth
           end
         end
       end
-    end
+
+      def ports payload, key
+        return [] if payload[key].nil?
+
+        ports = payload[key].map.with_index do |port, idx|
+          unless port['targets'].nil?
+            port['targets'].each.with_index do |target, j|
+              unless target.kind_of?(String)
+                raise Modusynth::Exceptions::BadRequest.new("#{key}[#{idx}].targets[#{j}]", 'type')
+              end
+            end
+          end
+          Modusynth::Models::Tools::Port.new(
+            name: port['name'],
+            targets: port['targets'],
+            index: port['index']
+          )
+        end
+
+        validate_port_nodes payload, key, payload['inner_nodes']
+        
+        ports
+      end
+
+      def validate_port_nodes payload, key, inner_nodes
+        names = (inner_nodes || []).map { |inode| inode['name'] }
+
+        (payload[key] || []).each.with_index do |port, i|
+          return if port['targets'].nil?
+          port['targets'].each.with_index do |target, j|
+            unless names.include? target
+              raise Modusynth::Exceptions.unknown("#{key}[#{i}].targets[#{j}]")
+            end
+          end
+        end
+      end
+    end 
   end
 end

@@ -4,11 +4,18 @@ module Modusynth
       class Port
         include Mongoid::Document
 
-        field :node, type: String
+        field :name, type: String
 
-        field :index, type: Integer
+        field :targets, type: Array
+
+        field :index, type: Integer, default: 0
+
+        validates :name,
+          presence: { message: 'required' },
+          length: { minimum: 3, message: 'length', if: :name? }
         
-        field :label, type: String
+        validates :index,
+          numericality: { greater_than: -1, message: 'value', if: :index? }
       end
     end
   end

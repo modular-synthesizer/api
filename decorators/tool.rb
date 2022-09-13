@@ -10,7 +10,9 @@ module Modusynth
           slots: slots,
           innerNodes: inner_nodes,
           innerLinks: inner_links,
-          parameters: parameters
+          parameters: parameters,
+          inputs: ports(object.inputs),
+          outputs: ports(object.outputs)
         }
       end
 
@@ -43,6 +45,12 @@ module Modusynth
       def parameters
         object.parameters.map do |param|
           Modusynth::Decorators::Parameter.new(param).to_h
+        end
+      end
+
+      def ports ports_list
+        ports_list.map do |port|
+          {name: port.name, index: port.index, targets: port.targets}
         end
       end
     end
