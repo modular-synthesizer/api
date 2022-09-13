@@ -50,11 +50,19 @@ module Modusynth
       def parameters payload
         return [] if payload['parameters'].nil?
 
-        payload['parameters'].map.with_index do |param, idx|
-          param = Modusynth::Models::Tools::Parameter.find_by(id: param)
-          raise Modusynth::Exceptions.unknown("parameters[#{idx}]") if param.nil?
-          param
+        results = payload['parameters'].map.with_index do |param, idx|
+          if param['descriptor'].nil?
+            raise Modusynth::Exceptions.required("parameters[#{idx}].descriptor")
+          end
+          descriptor = Modusynth::Models::Tools::Descriptor.find_by(id: param['descriptor'])
+          raise Modusynth::Exceptions.unknown("parameters[#{idx}]") if descriptor.nil?
+          Modusynth::Models::Tools::Parameter.new(
+            descriptor: descriptor,
+            targets: param['targets'] || []
+          )
         end
+
+        results
       end
 
       def inner_link_end raw_end

@@ -4,14 +4,12 @@ module Modusynth
       include Singleton
 
       def list
-        Modusynth::Models::Tools::Parameter.all.to_a
+        Modusynth::Models::Tools::Descriptor.all.to_a
       end
 
       def create params
-        params['targets'] = [] if params['targets'].nil?
-        object = Modusynth::Models::Tools::Parameter.new(
+        object = Modusynth::Models::Tools::Descriptor.new(
           name: params['name'],
-          targets: params['targets'],
           default: params['default'],
           minimum: params['minimum'],
           maximum: params['maximum'],

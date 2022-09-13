@@ -137,7 +137,13 @@ RSpec.describe Modusynth::Controllers::Tools do
           )
         end
         before do
-          create({name: 'test', slots: 10, parameters: [param.id.to_s]})
+          create({
+            name: 'test',
+            slots: 10,
+            parameters: [
+              {targets: [], descriptor: param.id.to_s}
+            ]
+          })
         end
 
         it 'Returns a 201 (Created) status code' do
@@ -477,7 +483,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         create({
           name: 'test',
           slots: 10,
-          parameters: [ 'unknown_id' ]
+          parameters: [ {descriptor: 'unknown_id'} ]
         })
       end
 

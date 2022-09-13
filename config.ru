@@ -8,3 +8,4 @@ require './module'
 Mongoid.load!('config/mongoid.yml', env)
 
 map('/tools') { run Modusynth::Controllers::Tools.new }
+map('/parameters') { run Modusynth::Controllers::Parameters.new }

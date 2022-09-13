@@ -5,9 +5,9 @@ module Modusynth
 
       def to_h
         {
+          id: object.id.to_s,
           name: object.name,
           value: object.default,
-          targets: object.targets,
           constraints: {
             minimum: object.minimum,
             maximum: object.maximum,

@@ -22,8 +22,7 @@ RSpec.describe Modusynth::Controllers::Parameters do
           'maximum' => 10,
           'step' => 1,
           'precision' => 0,
-          'default' => 0,
-          'targets' => ['bar']
+          'default' => 0
         })
       }
 
@@ -36,9 +35,9 @@ RSpec.describe Modusynth::Controllers::Parameters do
         expect(last_response.body).to include_json({
           'parameters' => [
             {
+              'id': Modusynth::Models::Tools::Descriptor.first.id.to_s,
               'name' => 'foo',
               'value' => 0,
-              'targets' => ['bar'],
               'constraints' => {
                 'minimum' => 0,
                 'maximum' => 10,
@@ -61,8 +60,7 @@ RSpec.describe Modusynth::Controllers::Parameters do
           maximum: 10,
           default: 0,
           step: 1,
-          precision: 0,
-          targets: ['bar']
+          precision: 0
         }.to_json
       end
       it 'Returns a 201 (Created) status code' do
@@ -72,12 +70,9 @@ RSpec.describe Modusynth::Controllers::Parameters do
 
       end
       describe 'Created parameter' do
-        let!(:param) { Modusynth::Models::Tools::Parameter.first }
+        let!(:param) { Modusynth::Models::Tools::Descriptor.first }
         it 'Has the correct name' do
           expect(param.name).to eq 'foo'
-        end
-        it 'Has the correct targets' do
-          expect(param.targets).to eq ['bar']
         end
         it 'Has the correct minimum' do
           expect(param.minimum).to be 0
@@ -222,19 +217,6 @@ RSpec.describe Modusynth::Controllers::Parameters do
         it 'Returns the correct body' do
           expect(last_response.body).to include_json({
             key: 'step', message: 'broad'
-          })
-        end
-      end
-
-      describe 'A given target is not a string' do
-        before { post '/', {name: 'foo', minimum: 0, maximum: 10, step: 1, precision: 0, default: 0, targets: ['baz', 2]}.to_json }
-
-        it 'Returns a 400 (Bad Request) status code' do
-          expect(last_response.status).to be 400
-        end
-        it 'Returns the correct body' do
-          expect(last_response.body).to include_json({
-            key: 'targets[1]', message: 'type'
           })
         end
       end
