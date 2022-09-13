@@ -9,8 +9,8 @@ module Modusynth
           slots: payload['slots'],
           inner_nodes: inner_nodes(payload),
           inner_links: inner_links(payload),
-          parameters: parameters(payload)
-          # inputs: ports(payload, 'inputs')
+          parameters: parameters(payload),
+          inputs: ports(payload, 'inputs')
           # outputs: ports(payload, 'outputs')
         )
         tool.save!
@@ -89,17 +89,32 @@ module Modusynth
       def ports payload, key
         return [] if payload[key].nil?
 
-        payload[key].map.with_index do |port, idx|
-          port['targets'].each.with_index do |target, j|
-            unless target.kind_of?(String)
-              raise Modusynth::Exceptions::BadRequest.new("#{key}[#{idx}].targets[#{j}]", value)
+        payload[key].each.with_index do |port, idx|
+          unless port['targets'].nil?
+            port['targets'].each.with_index do |target, j|
+              unless target.kind_of?(String)
+                raise Modusynth::Exceptions::BadRequest.new("#{key}[#{idx}].targets[#{j}]", 'type')
+              end
             end
           end
+        end
+
+        validate_port_nodes payload, key, payload['inner_nodes']
+        
+        payload[key].map.with_index do |port, idx|
           Modusynth::Models::Tools::Port.new(
             name: port['name'],
             targets: port['targets'],
             index: port['index']
           )
+        end
+      end
+
+      def validate_port_nodes payload, key, inner_nodes
+        names = (inner_nodes || []).map { |inode| inode['name'] }
+        targets = (payload[key] || []).map { |port| port['targets'] || [] }.flatten
+        if (names & targets).size <= 0 && targets.size > 0
+          raise Modusynth::Exceptions.unknown("#{key}[0].targets")
         end
       end
     end

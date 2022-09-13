@@ -405,8 +405,72 @@ RSpec.describe Modusynth::Controllers::Tools do
       end
     end
 
-    describe 'ports error cases' do
+    describe 'inputs error cases' do
 
+      def create_with_input payload
+        create({name: 'test', slots: 10, inputs: [payload], inner_nodes: [{name: 'test', factory: 'test'}]})
+      end
+
+      describe 'The name is not given' do
+        before { create_with_input({}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json({
+            key: 'inputs[0].name', message: 'required'
+          })
+        end
+      end
+      describe 'The name is too short' do
+        before { create_with_input({name: 'a'}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json({
+            key: 'inputs[0].name', message: 'length'
+          })
+        end
+      end
+      describe 'A target is not a string' do
+        before { create_with_input({name: 'foo', targets: ['baz', 2]}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json({
+            key: 'inputs[0].targets[1]', message: 'type'
+          })
+        end
+      end
+      describe 'A target is not in the inner nodes list' do
+        before { create_with_input({name: 'foo', targets: ['baz']}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 404
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json({
+            key: 'inputs[0].targets', message: 'unknown'
+          })
+        end
+      end
+      describe 'An index is below zero' do
+        before { create_with_input({name: 'foo', targets: [], index: -1}) }
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json({
+            key: 'inputs[0].index', message: 'value'
+          })
+        end
+      end
     end
   end
 end
