@@ -10,8 +10,8 @@ module Modusynth
           inner_nodes: inner_nodes(payload),
           inner_links: inner_links(payload),
           parameters: parameters(payload),
-          inputs: ports(payload, 'inputs')
-          # outputs: ports(payload, 'outputs')
+          inputs: ports(payload, 'inputs'),
+          outputs: ports(payload, 'outputs')
         )
         tool.save!
         tool
@@ -89,7 +89,7 @@ module Modusynth
       def ports payload, key
         return [] if payload[key].nil?
 
-        payload[key].each.with_index do |port, idx|
+        ports = payload[key].map.with_index do |port, idx|
           unless port['targets'].nil?
             port['targets'].each.with_index do |target, j|
               unless target.kind_of?(String)
@@ -97,26 +97,30 @@ module Modusynth
               end
             end
           end
-        end
-
-        validate_port_nodes payload, key, payload['inner_nodes']
-        
-        payload[key].map.with_index do |port, idx|
           Modusynth::Models::Tools::Port.new(
             name: port['name'],
             targets: port['targets'],
             index: port['index']
           )
         end
+
+        validate_port_nodes payload, key, payload['inner_nodes']
+        
+        ports
       end
 
       def validate_port_nodes payload, key, inner_nodes
         names = (inner_nodes || []).map { |inode| inode['name'] }
-        targets = (payload[key] || []).map { |port| port['targets'] || [] }.flatten
-        if (names & targets).size <= 0 && targets.size > 0
-          raise Modusynth::Exceptions.unknown("#{key}[0].targets")
+
+        (payload[key] || []).each.with_index do |port, i|
+          return if port['targets'].nil?
+          port['targets'].each.with_index do |target, j|
+            unless names.include? target
+              raise Modusynth::Exceptions.unknown("#{key}[#{i}].targets[#{j}]")
+            end
+          end
         end
       end
-    end
+    end 
   end
 end
