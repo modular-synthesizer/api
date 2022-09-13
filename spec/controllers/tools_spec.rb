@@ -385,5 +385,28 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
       end
     end
+
+    describe 'parameters error cases' do
+      before do
+        create({
+          name: 'test',
+          slots: 10,
+          parameters: [ 'unknown_id' ]
+        })
+      end
+
+      it 'Returns a 404 (Unknown) status code' do
+        expect(last_response.status).to be 404
+      end
+      it 'Returns the correct body' do
+        expect(last_response.body).to include_json({
+          key: 'parameters[0]', message: 'unknown'
+        })
+      end
+    end
+
+    describe 'ports error cases' do
+
+    end
   end
 end

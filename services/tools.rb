@@ -10,6 +10,8 @@ module Modusynth
           inner_nodes: inner_nodes(payload),
           inner_links: inner_links(payload),
           parameters: parameters(payload)
+          # inputs: ports(payload, 'inputs')
+          # outputs: ports(payload, 'outputs')
         )
         tool.save!
         tool
@@ -48,8 +50,10 @@ module Modusynth
       def parameters payload
         return [] if payload['parameters'].nil?
 
-        payload['parameters'].map.with_index do |param|
-          Modusynth::Models::Tools::Parameter.find(param)
+        payload['parameters'].map.with_index do |param, idx|
+          param = Modusynth::Models::Tools::Parameter.find_by(id: param)
+          raise Modusynth::Exceptions.unknown("parameters[#{idx}]") if param.nil?
+          param
         end
       end
 
@@ -79,6 +83,23 @@ module Modusynth
           unless names.include? link[link_end]['node']
             raise Modusynth::Exceptions.unknown("inner_links[#{index}].#{link_end}.node")
           end
+        end
+      end
+
+      def ports payload, key
+        return [] if payload[key].nil?
+
+        payload[key].map.with_index do |port, idx|
+          port['targets'].each.with_index do |target, j|
+            unless target.kind_of?(String)
+              raise Modusynth::Exceptions::BadRequest.new("#{key}[#{idx}].targets[#{j}]", value)
+            end
+          end
+          Modusynth::Models::Tools::Port.new(
+            name: port['name'],
+            targets: port['targets'],
+            index: port['index']
+          )
         end
       end
     end
