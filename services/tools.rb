@@ -9,10 +9,10 @@ module Modusynth
           slots: payload['slots'],
           inner_nodes: inner_nodes(payload),
           inner_links: inner_links(payload),
-          parameters: parameters(payload),
           inputs: ports(payload, 'inputs'),
           outputs: ports(payload, 'outputs')
         )
+        tool.parameters = parameters(payload, tool)
         tool.save!
         tool
       end
@@ -47,7 +47,7 @@ module Modusynth
         end
       end
 
-      def parameters payload
+      def parameters payload, tool
         return [] if payload['parameters'].nil?
 
         results = payload['parameters'].map.with_index do |param, idx|
@@ -56,10 +56,13 @@ module Modusynth
           end
           descriptor = Modusynth::Models::Tools::Descriptor.find_by(id: param['descriptor'])
           raise Modusynth::Exceptions.unknown("parameters[#{idx}]") if descriptor.nil?
-          Modusynth::Models::Tools::Parameter.new(
+          parameter = Modusynth::Models::Tools::Parameter.new(
             descriptor: descriptor,
-            targets: param['targets'] || []
+            targets: param['targets'] || [],
+            tool: tool
           )
+          parameter.save!
+          parameter
         end
 
         results
