@@ -3,12 +3,103 @@ RSpec.describe Modusynth::Controllers::Tools do
     Modusynth::Controllers::Tools
   end
 
+  def create_tool
+    parameter = Modusynth::Services::Parameters.instance.create(
+      'name' => 'frequency',
+      'default' => 440,
+      'minimum' => 20,
+      'maximum' => 2020,
+      'step' => 1,
+      'precision' => 0
+    )
+    Modusynth::Services::Tools.instance.create(
+      'name' => 'VCA',
+      'slots' => 3,
+      'inner_nodes' => [
+        {'name' => 'gain', 'factory' => 'GainNode'}
+      ],
+      'parameters' => [
+        {'descriptor' => parameter.id.to_s, 'targets' => ['gain']}
+      ],
+      'inner_links' => [],
+      'inputs' => [
+        {'name' => 'INPUT', 'index' => 0, 'targets' => ['gain']}
+      ],
+      'outputs' => [
+        {'name' => 'INPUT', 'index' => 0, 'targets' => ['gain']}
+      ]
+    )
+  end
+
   describe 'GET /' do
     describe 'empty list' do
       before { get '/' }
 
+      it 'Returns a 200 (OK) status code' do
+        expect(last_response.status).to be 200
+      end
       it 'returns an empty list when nothing has been created' do
         expect(last_response.body).to include_json({tools: []})
+      end
+    end
+
+    describe 'not empty list' do
+      let!(:tool) { create_tool }
+      before { get '/' }
+      
+      it 'Returns a 200 (OK) status code' do
+        expect(last_response.status).to be 200
+      end
+      it 'Returns the correct body' do
+        expect(JSON.parse(last_response.body)).to eq({
+          'tools' => [
+            {'id' => tool.id.to_s, 'name' => 'VCA'}
+          ]
+        })
+      end
+    end
+
+  end
+
+  describe 'GET /:id' do
+
+    describe 'Nominal case' do
+      let!(:tool) { create_tool }
+
+      before do
+        get "/#{tool.id.to_s}"
+      end
+      it 'Returns a 200 (OK) status code' do
+        expect(last_response.status).to be 200
+      end
+      it 'Returns the correct body' do
+        expect(last_response.body).to include_json({
+          id: tool.id.to_s,
+          name: 'VCA',
+          innerNodes: [
+            {name: 'gain', factory: 'GainNode'}
+          ],
+          parameters: [
+            {
+              name: 'frequency',
+              value: 440,
+              constraints: {
+                minimum: 20,
+                maximum: 2020,
+                step: 1,
+                precision: 0
+              },
+              targets: ['gain']
+            }
+          ],
+          innerLinks: [],
+          inputs: [
+            {name: 'INPUT', index: 0, targets: ['gain']}
+          ],
+          outputs: [
+            {name: 'INPUT', index: 0, targets: ['gain']}
+          ]
+        })
       end
     end
   end

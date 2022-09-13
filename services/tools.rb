@@ -3,6 +3,10 @@ module Modusynth
     class Tools
       include Singleton
 
+      def find(id)
+        Modusynth::Models::Tool.find(id)
+      end
+
       def create(payload)
         tool = Modusynth::Models::Tool.new(
           name: payload['name'],

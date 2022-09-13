@@ -16,6 +16,13 @@ module Modusynth
         }
       end
 
+      def to_simple_h
+        {
+          id: id.to_s,
+          name: name
+      }
+      end
+
       def inner_nodes
         object.inner_nodes.map do |node|
           {
