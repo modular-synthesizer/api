@@ -9,7 +9,8 @@ module Modusynth
           name: name,
           slots: slots,
           innerNodes: inner_nodes,
-          innerLinks: inner_links
+          innerLinks: inner_links,
+          parameters: parameters
         }
       end
 
@@ -36,6 +37,12 @@ module Modusynth
               index: link.to.index
             }
           }
+        end
+      end
+
+      def parameters
+        object.parameters.map do |param|
+          Modusynth::Decorators::Parameter.new(param).to_h
         end
       end
     end

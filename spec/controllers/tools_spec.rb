@@ -46,6 +46,9 @@ RSpec.describe Modusynth::Controllers::Tools do
         it 'has no inner nodes' do
           expect(tool.inner_nodes).to eq []
         end
+        it 'Has no linked parameters' do
+          expect(tool.parameters).to eq []
+        end
       end
     end
 
@@ -77,12 +80,85 @@ RSpec.describe Modusynth::Controllers::Tools do
           it 'Has created exactly one inner node' do
             expect(tool.inner_nodes.size).to be 1
           end
-          it 'Has creatd a node with the correct name' do
+          it 'Has created a node with the correct name' do
             expect(node.name).to eq 'foo'
           end
           it 'Has created a node wih the correct factory' do
             expect(node.factory).to eq 'bar'
           end
+        end
+      end
+      describe 'Tool with inner links' do
+        before do
+          create({
+            name: 'test',
+            slots: 10,
+            inner_nodes: [
+              { name: 'foo', factory: 'bar' },
+              { name: 'baz', factory: 'bar' }
+            ],
+            inner_links: [{from: {node: 'foo', index: 0}, to: {node: 'baz', index: 1}}]
+          })
+        end
+        describe 'Created inner link' do
+          let!(:tool) { Modusynth::Models::Tool.first }
+          let!(:link) { tool.inner_links.first }
+          let!(:from) { link.from }
+          let!(:to) { link.to }
+  
+          it 'Has created exactly one inner link' do
+            expect(tool.inner_links.size).to be 1
+          end
+          it 'Has creatd a link with the correct origin node' do
+            expect(from.node).to eq 'foo'
+          end
+          it 'Has creatd a link with the correct origin index' do
+            expect(from.index).to be 0
+          end
+          it 'Has creatd a link with the correct destination node' do
+            expect(to.node).to eq 'baz'
+          end
+          it 'Has creatd a link with the correct destination index' do
+            expect(to.index).to be 1
+          end
+        end
+      end
+      describe 'Tool with parameters' do
+        let!(:param) do
+          Modusynth::Services::Parameters.instance.create(
+            'name' => 'parameter',
+            'minimum' => 0,
+            'maximum' => 10,
+            'step' => 1,
+            'precision' => 0,
+            'default' => 1
+          )
+        end
+        before do
+          create({name: 'test', slots: 10, parameters: [param.id.to_s]})
+        end
+
+        it 'Returns a 201 (Created) status code' do
+          expect(last_response.status).to be 201
+        end
+        it 'Returns the correct body' do
+          creation = Modusynth::Models::Tool.first
+          expect(last_response.body).to include_json(
+            id: creation.id.to_s,
+            name: 'test',
+            slots: 10,
+            parameters: [{
+              name: 'parameter',
+              targets: [],
+              value: 1,
+              constraints: {
+                minimum: 0,
+                maximum: 10,
+                step: 1,
+                precision: 0
+              }
+            }]
+          )
         end
       end
     end

@@ -40,6 +40,8 @@ module Modusynth
 
         validate :targets_types
 
+        has_and_belongs_to_many :tools, class_name: '::Modusynth::Models::Tool', inverse_of: :parameters
+
         def boundaries
           return if minimum.nil? || maximum.nil?
           errors.add(:boundaries, 'order') unless minimum <= maximum

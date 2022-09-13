@@ -8,7 +8,8 @@ module Modusynth
           name: payload['name'],
           slots: payload['slots'],
           inner_nodes: inner_nodes(payload),
-          inner_links: inner_links(payload)
+          inner_links: inner_links(payload),
+          parameters: parameters(payload)
         )
         tool.save!
         tool
@@ -41,6 +42,14 @@ module Modusynth
             from: inner_link_end(link['from']),
             to: inner_link_end(link['to'])
           )
+        end
+      end
+
+      def parameters payload
+        return [] if payload['parameters'].nil?
+
+        payload['parameters'].map.with_index do |param|
+          Modusynth::Models::Tools::Parameter.find(param)
         end
       end
 

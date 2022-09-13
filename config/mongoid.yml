@@ -4,9 +4,13 @@ development:
       database: virtuatable
       hosts:
         - localhost:27017
+  options:
+    raise_not_found_error: true
 test:
   clients:
     default:
       database: virtuatable
       hosts:
         - localhost:27017
+  options:
+    raise_not_found_error: true
