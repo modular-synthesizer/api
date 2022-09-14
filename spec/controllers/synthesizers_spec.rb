@@ -4,7 +4,33 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
   end
 
   describe 'GET /' do
+    describe 'empty list' do
+      before { get '/' }
 
+      it 'Returns a 200 (OK) status code' do
+        expect(last_response.status).to be 200
+      end
+      it 'Returns an empty list' do
+        expect(JSON.parse(last_response.body)).to eq({'synthesizers' => []})
+      end
+    end
+    describe 'populated list' do
+      let!(:synthesizer) {
+        Modusynth::Services::Synthesizers.instance.create({'name' => 'test synth'})
+      }
+      before { get '/' }
+      it 'Returns a 200 (OK) status code' do
+        expect(last_response.status).to be 200
+      end
+      it 'Returns the correct body' do
+        expect(JSON.parse(last_response.body)).to eq({'synthesizers' => [
+          {
+            'id' => Modusynth::Models::Synthesizer.first.id.to_s,
+            'name' => 'test synth'
+          }
+        ]})
+      end
+    end
   end
   describe 'POST /' do
     describe 'Nominal case' do

@@ -3,7 +3,10 @@ module Modusynth
     class Synthesizers < Modusynth::Controllers::Base
 
       get '/' do
-
+        synthesizers = service.list.map do |synthesizer|
+          decorate(synthesizer)
+        end
+        halt 200, {synthesizers: synthesizers}.to_json
       end
 
       post '/' do
