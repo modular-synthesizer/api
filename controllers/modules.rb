@@ -2,7 +2,7 @@ module Modusynth
   module Controllers
     class Modules < Modusynth::Controllers::Base
       post '/' do
-        halt 200, decorate(service.create(body_params)).to_json
+        halt 201, decorate(service.create(body_params)).to_json
       end
 
       def decorate item
