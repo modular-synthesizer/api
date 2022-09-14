@@ -1,6 +1,6 @@
 module Modusynth
   module Controllers
-    class Nodes < Modusynth::Controllers::Base
+    class Modules < Modusynth::Controllers::Base
       post '/' do
         halt 200, decorate(service.create(body_params)).to_json
       end
