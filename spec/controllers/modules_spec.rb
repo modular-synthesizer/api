@@ -3,10 +3,17 @@ describe Modusynth::Controllers::Modules do
     Modusynth::Controllers::Modules
   end
   describe 'POST /' do
-    let!(:synth) { Modusynth::Services::Synthesizers.instance.create({'name' => 'test synth'}) }
+    let!(:synth) { create(:synthesizer) }
+    let!(:tool) { create(:VCA) }
 
     describe 'Nominal case' do
-      before { post '/', {synthesizer_id: synth.id.to_s}.to_json }
+      before do
+        payload = {
+          synthesizer_id: synth.id.to_s,
+          tool_id: tool.id.to_s
+        }
+        post '/', payload.to_json
+      end
 
       it 'Returns a 201 (Created) status code' do
         expect(last_response.status).to be 201

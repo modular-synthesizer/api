@@ -6,10 +6,12 @@ module Modusynth
     # parameters that can change frequencies, gains, or any over value.
     # @author Vincent Courtois <courtois.vincent@outlook.com>
     class Module
-    include Mongoid::Document
-    include Mongoid::Timestamps
+      include Mongoid::Document
+      include Mongoid::Timestamps
 
-    belongs_to :synthesizer, class_name: '::Modusynth::Models::Module', inverse_of: :modules
+      belongs_to :synthesizer, class_name: '::Modusynth::Models::Module', inverse_of: :modules
+
+      belongs_to :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :modules
     end
   end
 end
