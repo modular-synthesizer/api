@@ -43,6 +43,8 @@ GEM
       request_store (>= 1.0)
       ruby2_keywords
     erubi (1.11.0)
+    factory_bot (6.2.1)
+      activesupport (>= 5.0.0)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     loofah (2.18.0)
@@ -111,6 +113,7 @@ PLATFORMS
 DEPENDENCIES
   database_cleaner-mongoid (= 2.0.1)
   draper (= 4.0.2)
+  factory_bot (= 6.2.1)
   mongoid (= 8.0.2)
   mongoid-embedded-errors (= 4.0.0)
   pry (= 0.14.1)

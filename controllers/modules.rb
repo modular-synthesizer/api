@@ -1,0 +1,17 @@
+module Modusynth
+  module Controllers
+    class Modules < Modusynth::Controllers::Base
+      post '/' do
+        halt 201, decorate(service.create(body_params)).to_json
+      end
+
+      def decorate item
+        Modusynth::Decorators::Module.new(item).to_h
+      end
+
+      def service
+        Modusynth::Services::Modules.instance
+      end
+    end
+  end
+end

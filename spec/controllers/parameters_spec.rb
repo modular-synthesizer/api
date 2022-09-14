@@ -15,16 +15,7 @@ RSpec.describe Modusynth::Controllers::Parameters do
       end
     end
     describe 'List with items' do
-      let!(:param) {
-        Modusynth::Services::Parameters.instance.create({
-          'name' => 'foo',
-          'minimum' => 0,
-          'maximum' => 10,
-          'step' => 1,
-          'precision' => 0,
-          'default' => 0
-        })
-      }
+      let!(:param) { create(:frequency) }
 
       before { get '/' }
 
@@ -36,11 +27,11 @@ RSpec.describe Modusynth::Controllers::Parameters do
           'parameters' => [
             {
               'id': Modusynth::Models::Tools::Descriptor.first.id.to_s,
-              'name' => 'foo',
-              'value' => 0,
+              'name' => 'frequency',
+              'value' => 440,
               'constraints' => {
-                'minimum' => 0,
-                'maximum' => 10,
+                'minimum' => 20,
+                'maximum' => 2020,
                 'step' => 1,
                 'precision' => 0,
               }

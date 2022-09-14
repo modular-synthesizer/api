@@ -26,6 +26,8 @@ module Modusynth
       embeds_many :outputs, class_name: '::Modusynth::Models::Tools::Port'
 
       has_many :parameters, class_name: '::Modusynth::Models::Tools::Parameter', inverse_of: :tool
+
+      has_many :modules, class_name: '::Modusynth::Models::Module', inverse_of: :tool
       
       validates :name,
         presence: { message: 'required' },

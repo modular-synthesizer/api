@@ -17,6 +17,7 @@ end
 
 group :test do
   gem 'database_cleaner-mongoid', '2.0.1'
+  gem 'factory_bot', '6.2.1'
   gem 'rack-test', '2.0.2', require: 'rack/test'
   gem 'rspec', '3.11.0'
   gem 'rspec-json_expectations', '2.2.0'

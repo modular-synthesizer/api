@@ -7,6 +7,12 @@ module Modusynth
         Modusynth::Models::Tool.find(id)
       end
 
+      def find_or_fail id, field = 'id'
+        tool = find id
+        raise Modusynth::Exceptions.unknown(field) if tool.nil?
+        tool
+      end
+
       def create(payload)
         tool = Modusynth::Models::Tool.new(
           name: payload['name'],
