@@ -28,7 +28,7 @@ module Modusynth
           {
             id: node.id.to_s,
             name: node.name,
-            factory: node.factory
+            generator: node.generator
           }
         end
       end

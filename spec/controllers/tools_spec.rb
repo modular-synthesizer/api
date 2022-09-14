@@ -16,7 +16,7 @@ RSpec.describe Modusynth::Controllers::Tools do
       'name' => 'VCA',
       'slots' => 3,
       'inner_nodes' => [
-        {'name' => 'gain', 'factory' => 'GainNode'}
+        {'name' => 'gain', 'generator' => 'GainNode'}
       ],
       'parameters' => [
         {'descriptor' => parameter.id.to_s, 'targets' => ['gain']}
@@ -77,7 +77,7 @@ RSpec.describe Modusynth::Controllers::Tools do
           id: tool.id.to_s,
           name: 'VCA',
           innerNodes: [
-            {name: 'gain', factory: 'GainNode'}
+            {name: 'gain', generator: 'GainNode'}
           ],
           parameters: [
             {
@@ -147,7 +147,7 @@ RSpec.describe Modusynth::Controllers::Tools do
 
     describe 'Alternative cases' do
       describe 'Tool with inner nodes' do
-        before { create({name: 'test', slots: 10, inner_nodes: [{ name: 'foo', factory: 'bar' }]}) }
+        before { create({name: 'test', slots: 10, inner_nodes: [{ name: 'foo', generator: 'bar' }]}) }
 
         it 'Returns a 201 (Created) status code' do
           expect(last_response.status).to be 201
@@ -161,7 +161,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             innerNodes: [{
               id: creation.inner_nodes.first.id.to_s,
               name: 'foo',
-              factory: 'bar'
+              generator: 'bar'
             }]
           )
         end
@@ -176,8 +176,8 @@ RSpec.describe Modusynth::Controllers::Tools do
           it 'Has created a node with the correct name' do
             expect(node.name).to eq 'foo'
           end
-          it 'Has created a node wih the correct factory' do
-            expect(node.factory).to eq 'bar'
+          it 'Has created a node wih the correct generator' do
+            expect(node.generator).to eq 'bar'
           end
         end
       end
@@ -187,8 +187,8 @@ RSpec.describe Modusynth::Controllers::Tools do
             name: 'test',
             slots: 10,
             inner_nodes: [
-              { name: 'foo', factory: 'bar' },
-              { name: 'baz', factory: 'bar' }
+              { name: 'foo', generator: 'bar' },
+              { name: 'baz', generator: 'bar' }
             ],
             inner_links: [{from: {node: 'foo', index: 0}, to: {node: 'baz', index: 1}}]
           })
@@ -266,7 +266,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             name: 'test',
             slots: 10,
             inner_nodes: [
-              { name: 'foo', factory: 'bar' }
+              { name: 'foo', generator: 'bar' }
             ],
             inputs: [
               {name: 'test', targets: ['foo'], index: 0}
@@ -278,7 +278,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             id: Modusynth::Models::Tool.first.id.to_s,
             name: 'test',
             slots: 10,
-            innerNodes: [{name: 'foo', factory: 'bar'}],
+            innerNodes: [{name: 'foo', generator: 'bar'}],
             innerLinks: [],
             inputs: [{name: 'test', index: 0, targets: ['foo']}],
             outputs: []
@@ -308,7 +308,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             name: 'test',
             slots: 10,
             inner_nodes: [
-              { name: 'foo', factory: 'bar' }
+              { name: 'foo', generator: 'bar' }
             ],
             outputs: [
               {name: 'test', targets: ['foo'], index: 0}
@@ -320,7 +320,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             id: Modusynth::Models::Tool.first.id.to_s,
             name: 'test',
             slots: 10,
-            innerNodes: [{name: 'foo', factory: 'bar'}],
+            innerNodes: [{name: 'foo', generator: 'bar'}],
             innerLinks: [],
             outputs: [{name: 'test', index: 0, targets: ['foo']}],
             inputs: []
@@ -431,25 +431,25 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
       end
 
-      describe 'factory not given' do
+      describe 'generator not given' do
         before { create_with_node({name: 'test'}) }
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct error body' do
-          expect(last_response.body).to include_json({key: 'inner_nodes[0].factory', message: 'required'})
+          expect(last_response.body).to include_json({key: 'inner_nodes[0].generator', message: 'required'})
         end
       end
 
-      describe 'factory not given' do
-        before { create_with_node({name: 'test', factory: 'a'}) }
+      describe 'generator not given' do
+        before { create_with_node({name: 'test', generator: 'a'}) }
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct error body' do
-          expect(last_response.body).to include_json({key: 'inner_nodes[0].factory', message: 'length'})
+          expect(last_response.body).to include_json({key: 'inner_nodes[0].generator', message: 'length'})
         end
       end
     end
@@ -459,7 +459,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         create({
           name: 'test',
           slots: 10,
-          inner_nodes: [{name: 'foo', factory: 'bar'}],
+          inner_nodes: [{name: 'foo', generator: 'bar'}],
           inner_links: [payload]
         })
       end
@@ -591,7 +591,7 @@ RSpec.describe Modusynth::Controllers::Tools do
     describe 'inputs error cases' do
 
       def create_with_input payload
-        create({name: 'test', slots: 10, inputs: [payload], inner_nodes: [{name: 'test', factory: 'test'}]})
+        create({name: 'test', slots: 10, inputs: [payload], inner_nodes: [{name: 'test', generator: 'test'}]})
       end
 
       describe 'The name is not given' do
@@ -663,7 +663,7 @@ RSpec.describe Modusynth::Controllers::Tools do
           name: 'test',
           slots: 10,
           outputs: [payload],
-          inner_nodes: [{name: 'test', factory: 'test'}]
+          inner_nodes: [{name: 'test', generator: 'test'}]
         })
       end
 

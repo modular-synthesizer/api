@@ -21,8 +21,19 @@ describe Modusynth::Controllers::Modules do
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
           id: Modusynth::Models::Module.first.id.to_s,
-          synthesizer_id: synth.id.to_s
+          synthesizer_id: synth.id.to_s,
+          name: 'VCA'
         )
+      end
+
+      describe 'The created module' do
+        let(:creation) { Modusynth::Models::Module.first }
+        it 'Has the correct synthesizer' do
+          expect(creation.synthesizer_id.to_s).to eq synth.id.to_s
+        end
+        it 'Has the correct tool' do
+          expect(creation.tool_id.to_s).to eq tool.id.to_s
+        end
       end
     end
     describe 'Error case' do

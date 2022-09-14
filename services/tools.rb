@@ -39,7 +39,7 @@ module Modusynth
         payload['inner_nodes'].map do |node|
           Modusynth::Models::Tools::InnerNode.new(
             name: node['name'],
-            factory: node['factory']
+            generator: node['generator']
           )
         end
       end

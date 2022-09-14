@@ -9,15 +9,17 @@ module Modusynth
 
         field :name, type: String
 
-        field :factory, type: String
+        field :generator, type: String
 
         validates :name,
           presence: { message: 'required' },
           length: { minimum: 3, message: 'length', if: :name? }
         
-        validates :factory,
+        validates :generator,
           presence: { message: 'required' },
-          length: { minimum: 3, message: 'length', if: :factory? }
+          length: { minimum: 3, message: 'length', if: :generator? }
+        
+        embedded_in :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :inner_nodes
       end
     end
   end
