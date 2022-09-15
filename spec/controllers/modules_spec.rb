@@ -22,7 +22,30 @@ describe Modusynth::Controllers::Modules do
         expect(last_response.body).to include_json(
           id: Modusynth::Models::Module.first.id.to_s,
           synthesizer_id: synth.id.to_s,
-          name: 'VCA'
+          name: 'VCA',
+          innerNodes: [
+            {name: 'gain', generator: 'GainNode'}
+          ],
+          innerLinks: [],
+          parameters: [
+            {
+              name: 'gain',
+              value: 1,
+              targets: ['gain'],
+              constraints: {
+                minimum: 0,
+                maximum: 10,
+                step: 0.05,
+                precision: 2
+              }
+            }
+          ],
+          inputs: [
+            {name: 'INPUT', targets: ['gain'], index: 0}
+          ],
+          outputs: [
+            {name: 'OUTPUT', targets: ['gain'], index: 0}
+          ]
         )
       end
 

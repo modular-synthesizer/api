@@ -14,7 +14,7 @@ module Modusynth
 
         field :precision, type: Integer
 
-        field :step, type: Integer
+        field :step, type: Float
 
         validates :name,
           presence: { message: 'required' },

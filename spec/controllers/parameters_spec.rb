@@ -32,7 +32,7 @@ RSpec.describe Modusynth::Controllers::Parameters do
               'constraints' => {
                 'minimum' => 20,
                 'maximum' => 2020,
-                'step' => 1,
+                'step' => 1.0,
                 'precision' => 0,
               }
             }
@@ -72,7 +72,7 @@ RSpec.describe Modusynth::Controllers::Parameters do
           expect(param.maximum).to be 10
         end
         it 'Has the correct step' do
-          expect(param.step).to be 1
+          expect(param.step).to be 1.0
         end
         it 'Has the correct precision' do
           expect(param.precision).to be 0

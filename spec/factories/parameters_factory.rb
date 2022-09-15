@@ -18,7 +18,7 @@ FactoryBot.define do
     end
   end
   factory :parameter, class: Modusynth::Models::Tools::Parameter do
-    association :tool, factory: :VCA
+    association :tool, factory: :tool
     factory :frequency do
       association :descriptor, factory: :frequency_descriptor
     end
