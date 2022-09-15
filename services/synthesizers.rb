@@ -20,6 +20,14 @@ module Modusynth
         synthesizer.save!
         synthesizer
       end
+
+      def delete id
+        synth = Modusynth::Models::Synthesizer.find(id)
+        unless synth.nil?
+          synth.modules.delete_all
+          synth.delete
+        end
+      end
     end
   end
 end
