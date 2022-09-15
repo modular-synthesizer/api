@@ -13,19 +13,19 @@ module Modusynth
       end
 
       def update id, values
-        instance = find_or_fail(id)
-        fields = instance.tool.parameters.map(&:descriptor).map(&:name)
-        values.keys.each do |field|
-          param = instance.tool.param field
-          value = values[field]
-          raise Modusynth::Exceptions::BadRequest.new(field, 'unknown') if param.nil?
-          if value < param.descriptor.minimum || value > param.descriptor.maximum
-            raise Modusynth::Exceptions::BadRequest.new(field, 'value')
+        node = find_or_fail(id)
+        values.each do |field, value|
+          parameter = node.parameters.called(field)
+          unless parameter.nil?
+            template = node.tool.parameters.called(field).first
+            if value < template.descriptor.minimum || value > template.descriptor.maximum
+              raise Modusynth::Exceptions::BadRequest.new(field, 'value')
+            end
+            parameter.update(value: value)
           end
-          instance.parameters.called(field).first.update(value: values[field])
         end
-        instance.save!
-        instance
+        node.save!
+        node
       end
 
       def find_or_fail(id)

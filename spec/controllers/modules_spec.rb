@@ -103,18 +103,6 @@ describe Modusynth::Controllers::Modules do
       end
     end
     describe 'Error cases' do
-      describe 'When the value does not exist' do
-        before { put "/#{node.id.to_s}", {unknown: 2}.to_json }
-
-        it 'Returns a 400 (Bad Request) status code' do
-          expect(last_response.status).to be 400
-        end
-        it 'Returns the correct body' do
-          expect(last_response.body).to include_json(
-            key: 'unknown', message: 'unknown'
-          )
-        end
-      end
       describe 'When the value is below the minimum' do
         before { put "/#{node.id.to_s}", {gain: -1}.to_json }
 
