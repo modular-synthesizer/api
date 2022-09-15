@@ -51,7 +51,8 @@ module Modusynth
       end
 
       def delete id
-        find_or_fail(id).delete
+        node = Modusynth::Models::Module.find(id)
+        node.delete unless node.nil?
       end
 
       private

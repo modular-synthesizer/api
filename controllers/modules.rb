@@ -11,7 +11,7 @@ module Modusynth
 
       delete '/:id' do
         service.delete(params[:id])
-        halt 204, {message: 'ok'}.to_json
+        halt 200, {message: 'deleted'}.to_json
       end
 
       def decorate item
