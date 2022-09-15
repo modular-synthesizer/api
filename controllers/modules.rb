@@ -9,6 +9,11 @@ module Modusynth
         halt 200, decorate(service.update(params[:id], body_params)).to_json
       end
 
+      delete '/:id' do
+        service.delete(params[:id])
+        halt 204, {message: 'ok'}.to_json
+      end
+
       def decorate item
         Modusynth::Decorators::Module.new(item).to_h
       end

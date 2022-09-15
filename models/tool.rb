@@ -36,6 +36,11 @@ module Modusynth
       validates :slots,
         presence: { message: 'required' },
         numericality: { greater_than: 0, message: 'value', if: :slots? }
+
+      def param name
+        descriptors = Modusynth::Models::Tools::Descriptor.where(name: name)
+        parameters.where(:descriptor_id.in => descriptors.map(&:id).map(&:to_s)).first
+      end
     end
   end
 end

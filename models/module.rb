@@ -23,15 +23,6 @@ module Modusynth
           )
         end
       end
-
-      def set(field, value)
-        unless values.map(&:name).include? field
-          raise Modusynth::Exceptions.unknown('name')
-        end
-        instance = values.where(name: name).first
-        instance.value = value
-        instance.save!
-      end
     end
   end
 end

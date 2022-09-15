@@ -104,16 +104,44 @@ describe Modusynth::Controllers::Modules do
     end
     describe 'Error cases' do
       describe 'When the value does not exist' do
-        it 'Returns a 404 (Not Found) status code' do
+        before { put "/#{node.id.to_s}", {unknown: 2}.to_json }
 
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            key: 'unknown', message: 'unknown'
+          )
         end
       end
       describe 'When the value is below the minimum' do
+        before { put "/#{node.id.to_s}", {gain: -1}.to_json }
 
+        it 'Returns a 404 (Not Found) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            key: 'gain', message: 'value'
+          )
+        end
       end
       describe 'When the value is above the maximum' do
+        before { put "/#{node.id.to_s}", {gain: 11}.to_json }
 
+        it 'Returns a 404 (Not Found) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            key: 'gain', message: 'value'
+          )
+        end
       end
     end
+  end
+  describe 'DELETE /:id' do
+
   end
 end
