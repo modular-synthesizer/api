@@ -12,22 +12,6 @@ module Modusynth
         creation
       end
 
-      
-
-      def set(field, value)
-        binding.pry
-        unless values.map(&:name).include? field
-          raise Modusynth::Exceptions.unknown('name')
-        end
-        instance = values.where(name: name).first
-        param_desc = tool.parameters.where(name: name)
-        if value < param_desc.descriptor.minimum || value > param_desc.descriptor.maximum
-          raise Modusynth::Exceptions::BadRequest.new(key: field, error: 'value')
-        end
-        instance.value = value
-        instance.save!
-      end
-
       def update id, values
         instance = find_or_fail(id)
         fields = instance.tool.parameters.map(&:descriptor).map(&:name)
@@ -38,7 +22,7 @@ module Modusynth
           if value < param.descriptor.minimum || value > param.descriptor.maximum
             raise Modusynth::Exceptions::BadRequest.new(field, 'value')
           end
-          instance.values.where(name: field).first.update(value: values[field])
+          instance.parameters.called(field).first.update(value: values[field])
         end
         instance.save!
         instance

@@ -1,7 +1,7 @@
 module Modusynth
   module Models
     module Modules
-      autoload :Value, './models/modules/value'
+      autoload :Parameter, './models/modules/parameter'
     end
   end
 end

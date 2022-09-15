@@ -13,14 +13,23 @@ module Modusynth
 
       belongs_to :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :modules
 
-      embeds_many :values, class_name: '::Modusynth::Models::Modules::Value', inverse_of: :module
+      has_many :parameters, class_name: '::Modusynth::Models::Modules::Parameter', inverse_of: :module
 
-      before_save do |document|
+      after_create do |document|
         document.tool.parameters.each do |parameter|
-          document.values << Modusynth::Models::Modules::Value.new(
-            name: parameter.descriptor.name,
+          document.parameters << Modusynth::Models::Modules::Parameter.new(
+            parameter: parameter,
             value: parameter.descriptor.default
           )
+        end
+      end
+
+      def method_missing name, *args, &block
+        if /[a-z_]+=/.match name
+          parameter = parameters.where(name: name[0..-1]).first
+          parameter.value = args[0] unless parameter.nil?
+        else
+          super
         end
       end
     end

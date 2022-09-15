@@ -18,6 +18,15 @@ module Modusynth
             return errors.add(:"targets[#{index}]", 'type') unless target.kind_of?(String)
           end
         end
+
+        def name
+          descriptor.name
+        end
+
+        scope :called, ->(name) {
+          descriptors = Modusynth::Models::Tools::Descriptor.where(name: name)
+          return where(:descriptor_id.in => descriptors.map(&:id))
+        }
       end
     end
   end

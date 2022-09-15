@@ -57,14 +57,14 @@ describe Modusynth::Controllers::Modules do
         it 'Has the correct tool' do
           expect(creation.tool_id.to_s).to eq tool.id.to_s
         end
-        it 'Has values corresponding to the number of parameters' do
-          expect(creation.values.size).to be 1
+        it 'Has parameters corresponding to the number of parameters' do
+          expect(creation.parameters.size).to be 1
         end
         it 'Has the correct name for the gain parameter value' do
-          expect(creation.values.first.name).to eq 'gain'
+          expect(creation.parameters.first.name).to eq 'gain'
         end
         it 'Has the correct value for the gain parameter value' do
-          expect(creation.values.first.value).to eq 1.0
+          expect(creation.parameters.first.value).to eq 1.0
         end
       end
     end
@@ -98,7 +98,7 @@ describe Modusynth::Controllers::Modules do
       end
       it 'Has update the gain value' do
         updated = Modusynth::Models::Module.where(id: node.id.to_s).first
-        value = updated.values.where(name: 'gain').first
+        value = updated.parameters.called('gain').first
         expect(value.value).to be 2.0
       end
     end
