@@ -6,7 +6,7 @@ module Modusynth
 
         field :name, type: String
 
-        field :default, type: Integer
+        field :default, type: Float
 
         field :minimum, type: Integer
 

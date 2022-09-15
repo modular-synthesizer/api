@@ -10,7 +10,7 @@ module Modusynth
 
       field :name, type: String
 
-      has_many :modules, class_name: :'::Modusynth::Models::Module', inverse_of: :synthesizer
+      has_many :modules, class_name: '::Modusynth::Models::Module', inverse_of: :synthesizer
 
       validates :name,
         presence: { message: 'required' },

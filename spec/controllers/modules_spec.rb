@@ -57,6 +57,15 @@ describe Modusynth::Controllers::Modules do
         it 'Has the correct tool' do
           expect(creation.tool_id.to_s).to eq tool.id.to_s
         end
+        it 'Has values corresponding to the number of parameters' do
+          expect(creation.values.size).to be 1
+        end
+        it 'Has the correct name for the gain parameter value' do
+          expect(creation.values.first.name).to eq 'gain'
+        end
+        it 'Has the correct value for the gain parameter value' do
+          expect(creation.values.first.value).to eq 1.0
+        end
       end
     end
     describe 'Error case' do
@@ -71,6 +80,39 @@ describe Modusynth::Controllers::Modules do
             key: 'synthesizer_id', message: 'unknown'
           )
         end
+      end
+    end
+  end
+  describe 'PUT /:id' do
+    let(:node) { create(:VCA_module) }
+
+    describe 'Nominal case' do
+      before do
+        put "/#{node.id.to_s}", {gain: 2}.to_json
+      end
+      it 'Returns a 200 (OK) status code' do
+        expect(last_response.status).to be 200
+      end
+      it 'Returns the correct body' do
+
+      end
+      it 'Has update the gain value' do
+        updated = Modusynth::Models::Module.where(id: node.id.to_s).first
+        value = updated.values.where(name: 'gain').first
+        expect(value.value).to be 2.0
+      end
+    end
+    describe 'Error cases' do
+      describe 'When the value does not exist' do
+        it 'Returns a 404 (Not Found) status code' do
+
+        end
+      end
+      describe 'When the value is below the minimum' do
+
+      end
+      describe 'When the value is above the maximum' do
+
       end
     end
   end

@@ -9,9 +9,29 @@ module Modusynth
       include Mongoid::Document
       include Mongoid::Timestamps
 
-      belongs_to :synthesizer, class_name: '::Modusynth::Models::Module', inverse_of: :modules
+      belongs_to :synthesizer, class_name: '::Modusynth::Models::Synthesizer', inverse_of: :modules
 
       belongs_to :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :modules
+
+      embeds_many :values, class_name: '::Modusynth::Models::Modules::Value', inverse_of: :module
+
+      before_save do |document|
+        document.tool.parameters.each do |parameter|
+          document.values << Modusynth::Models::Modules::Value.new(
+            name: parameter.descriptor.name,
+            value: parameter.descriptor.default
+          )
+        end
+      end
+
+      def set(field, value)
+        unless values.map(&:name).include? field
+          raise Modusynth::Exceptions.unknown('name')
+        end
+        instance = values.where(name: name).first
+        instance.value = value
+        instance.save!
+      end
     end
   end
 end

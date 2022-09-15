@@ -5,6 +5,10 @@ module Modusynth
         halt 201, decorate(service.create(body_params)).to_json
       end
 
+      put '/:id' do
+        halt 200, decorate(service.update(params[:id], body_params)).to_json
+      end
+
       def decorate item
         Modusynth::Decorators::Module.new(item).to_h
       end

@@ -78,7 +78,7 @@ RSpec.describe Modusynth::Controllers::Parameters do
           expect(param.precision).to be 0
         end
         it 'Has the correct default' do
-          expect(param.default).to be 0
+          expect(param.default).to be 0.0
         end
       end
     end
