@@ -19,8 +19,7 @@ module Modusynth
           slots: payload['slots'],
           inner_nodes: inner_nodes(payload),
           inner_links: inner_links(payload),
-          inputs: ports(payload, 'inputs'),
-          outputs: ports(payload, 'outputs')
+          ports: ports(payload, 'inputs') + ports(payload, 'outputs')
         )
         tool.parameters = parameters(payload, tool)
         tool.save!
@@ -114,14 +113,15 @@ module Modusynth
           unless port['targets'].nil?
             port['targets'].each.with_index do |target, j|
               unless target.kind_of?(String)
-                raise Modusynth::Exceptions::BadRequest.new("#{key}[#{idx}].targets[#{j}]", 'type')
+                raise Modusynth::Exceptions::BadRequest.new("ports[#{idx}].targets[#{j}]", 'type')
               end
             end
           end
           Modusynth::Models::Tools::Port.new(
             name: port['name'],
             targets: port['targets'],
-            index: port['index']
+            index: port['index'],
+            kind: key[0..-2] # Removes the trailing S from "outputs" or "inputs"
           )
         end
 
@@ -137,7 +137,7 @@ module Modusynth
           return if port['targets'].nil?
           port['targets'].each.with_index do |target, j|
             unless names.include? target
-              raise Modusynth::Exceptions.unknown("#{key}[#{i}].targets[#{j}]")
+              raise Modusynth::Exceptions.unknown("ports[#{i}].targets[#{j}]")
             end
           end
         end

@@ -602,7 +602,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json({
-            key: 'inputs[0].name', message: 'required'
+            key: 'ports[0].name', message: 'required'
           })
         end
       end
@@ -614,7 +614,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json({
-            key: 'inputs[0].name', message: 'length'
+            key: 'ports[0].name', message: 'length'
           })
         end
       end
@@ -626,7 +626,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json({
-            key: 'inputs[0].targets[1]', message: 'type'
+            key: 'ports[0].targets[1]', message: 'type'
           })
         end
       end
@@ -638,7 +638,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json({
-            key: 'inputs[0].targets[1]', message: 'unknown'
+            key: 'ports[0].targets[1]', message: 'unknown'
           })
         end
       end
@@ -650,7 +650,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json({
-            key: 'inputs[0].index', message: 'value'
+            key: 'ports[0].index', message: 'value'
           })
         end
       end
@@ -675,7 +675,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json({
-            key: 'outputs[0].name', message: 'required'
+            key: 'ports[0].name', message: 'required'
           })
         end
       end
@@ -687,7 +687,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json({
-            key: 'outputs[0].name', message: 'length'
+            key: 'ports[0].name', message: 'length'
           })
         end
       end
@@ -699,7 +699,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json({
-            key: 'outputs[0].targets[1]', message: 'type'
+            key: 'ports[0].targets[1]', message: 'type'
           })
         end
       end
@@ -711,7 +711,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json({
-            key: 'outputs[0].targets[1]', message: 'unknown'
+            key: 'ports[0].targets[1]', message: 'unknown'
           })
         end
       end
@@ -723,7 +723,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json({
-            key: 'outputs[0].index', message: 'value'
+            key: 'ports[0].index', message: 'value'
           })
         end
       end

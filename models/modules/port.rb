@@ -9,7 +9,11 @@ module Modusynth
         
         belongs_to :module, class_name: '::Modusynth::Models::Module'
 
-        belongs_to :descriptor, class_name: '::Modusynth::Models::Tools::Port'
+        belongs_to :descriptor, class_name: '::Modusynth::Models::Tools::Port', inverse_of: :ports
+
+        def kind
+          descriptor.kind
+        end
       end
     end
   end

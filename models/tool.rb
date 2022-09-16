@@ -21,9 +21,7 @@ module Modusynth
 
       embeds_many :inner_links, class_name: '::Modusynth::Models::Tools::InnerLink'
 
-      embeds_many :inputs, class_name: '::Modusynth::Models::Tools::Port'
-
-      embeds_many :outputs, class_name: '::Modusynth::Models::Tools::Port'
+      embeds_many :ports, class_name: '::Modusynth::Models::Tools::Port', inverse_of: :tool
 
       has_many :parameters, class_name: '::Modusynth::Models::Tools::Parameter', inverse_of: :tool
 
@@ -40,6 +38,14 @@ module Modusynth
       def param name
         descriptors = Modusynth::Models::Tools::Descriptor.where(name: name)
         parameters.where(:descriptor_id.in => descriptors.map(&:id).map(&:to_s)).first
+      end
+
+      def inputs
+        ports.where(kind: 'input').to_a
+      end
+
+      def outputs
+        ports.where(kind: 'output').to_a
       end
     end
   end

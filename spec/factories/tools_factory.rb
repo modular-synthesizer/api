@@ -6,7 +6,13 @@ FactoryBot.define do
     end
   end
   factory :port, class: Modusynth::Models::Tools::Port do
-  index { 0 }
+    index { 0 }
+    factory :input_port do
+      kind { 'input' }
+    end
+    factory :output_port do
+      kind { 'output' }
+    end
   end
   factory :tool, class: Modusynth::Models::Tool do
     name { 'test tool' }
@@ -17,8 +23,10 @@ FactoryBot.define do
       after(:create) do |tool|
         create_list(:gain_node, 1, tool: tool)
         create_list(:gain, 1, tool: tool, targets: ['gain'])
-        tool.inputs = [build(:port, name: 'INPUT', targets: ['gain'])]
-        tool.outputs = [build(:port, name: 'OUTPUT', targets: ['gain'])]
+        tool.ports = [
+          build(:input_port, name: 'INPUT', targets: ['gain']),
+          build(:output_port, name: 'OUTPUT', targets: ['gain'])
+        ]
         tool.save!
       end
     end

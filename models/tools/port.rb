@@ -4,11 +4,15 @@ module Modusynth
       class Port
         include Mongoid::Document
 
+        field :kind, type: String
+
         field :name, type: String
 
         field :targets, type: Array
 
         field :index, type: Integer, default: 0
+
+        embedded_in :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :ports
 
         validates :name,
           presence: { message: 'required' },

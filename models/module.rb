@@ -15,11 +15,25 @@ module Modusynth
 
       has_many :parameters, class_name: '::Modusynth::Models::Modules::Parameter', inverse_of: :module
 
+      has_many :ports, class_name: '::Modusynth::Models::Modules::Port', inverse_of: :module
+
       after_create do |document|
         document.tool.parameters.each do |parameter|
           document.parameters << Modusynth::Models::Modules::Parameter.new(
             parameter: parameter,
             value: parameter.descriptor.default
+          )
+        end
+        document.tool.parameters.each do |port|
+          document.ports << Modusynth::Models::Modules::Port.new(
+            descriptor: port,
+            module: document
+          )
+        end
+        document.tool.parameters.each do |port|
+          document.ports << Modusynth::Models::Modules::Port.new(
+            descriptor: port,
+            module: document
           )
         end
       end
