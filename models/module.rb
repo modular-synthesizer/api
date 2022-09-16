@@ -17,6 +17,7 @@ module Modusynth
 
       has_many :ports, class_name: '::Modusynth::Models::Modules::Port', inverse_of: :module
 
+      # Instanciates all porst and parameters from the tool in the node.
       after_create do |document|
         document.tool.parameters.each do |parameter|
           document.parameters << Modusynth::Models::Modules::Parameter.new(
@@ -24,16 +25,9 @@ module Modusynth
             value: parameter.descriptor.default
           )
         end
-        document.tool.parameters.each do |port|
+        document.tool.ports.each do |port|
           document.ports << Modusynth::Models::Modules::Port.new(
-            descriptor: port,
-            module: document
-          )
-        end
-        document.tool.parameters.each do |port|
-          document.ports << Modusynth::Models::Modules::Port.new(
-            descriptor: port,
-            module: document
+            descriptor: port, module: document
           )
         end
       end
