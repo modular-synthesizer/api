@@ -15,13 +15,13 @@ RSpec.describe Modusynth::Controllers::Tools do
     Modusynth::Services::Tools.instance.create(
       'name' => 'VCA',
       'slots' => 3,
-      'inner_nodes' => [
+      'innerNodes' => [
         {'name' => 'gain', 'generator' => 'GainNode'}
       ],
       'parameters' => [
         {'descriptor' => parameter.id.to_s, 'targets' => ['gain']}
       ],
-      'inner_links' => [],
+      'innerLinks' => [],
       'inputs' => [
         {'name' => 'INPUT', 'index' => 0, 'targets' => ['gain']}
       ],
@@ -306,7 +306,7 @@ RSpec.describe Modusynth::Controllers::Tools do
 
     describe 'Error cases' do
       describe 'No name given' do
-        before { create }
+        before { create_empty_tool }
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
@@ -317,7 +317,7 @@ RSpec.describe Modusynth::Controllers::Tools do
       end
 
       describe 'Name too short' do
-        before { create({name: 'a'}) }
+        before { create_empty_tool({name: 'a'}) }
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
@@ -328,7 +328,7 @@ RSpec.describe Modusynth::Controllers::Tools do
       end
 
       describe 'Slots not given' do
-        before { create({name: 'test'}) }
+        before { create_empty_tool({name: 'test'}) }
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
@@ -339,7 +339,7 @@ RSpec.describe Modusynth::Controllers::Tools do
       end
 
       describe 'Slots given with negative value' do
-        before { create({name: 'test', slots: -1}) }
+        before { create_empty_tool({name: 'test', slots: -1}) }
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
@@ -350,7 +350,7 @@ RSpec.describe Modusynth::Controllers::Tools do
       end
 
       describe 'Slots given with zero as value' do
-        before { create({name: 'test', slots: 0}) }
+        before { create_empty_tool({name: 'test', slots: 0}) }
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
@@ -364,7 +364,7 @@ RSpec.describe Modusynth::Controllers::Tools do
     describe 'Inner nodes error cases' do
 
       def create_with_node(payload = {})
-        create({name: 'test', slots: 10, inner_nodes: [payload]})
+        create_empty_tool({name: 'test', slots: 10, innerNodes: [payload]})
       end
 
       describe 'name not given' do
@@ -414,11 +414,11 @@ RSpec.describe Modusynth::Controllers::Tools do
 
     describe 'Inner links error cases' do
       def create_with_link(payload = {})
-        create({
+        create_empty_tool({
           name: 'test',
           slots: 10,
-          inner_nodes: [{name: 'foo', generator: 'bar'}],
-          inner_links: [payload]
+          innerNodes: [{name: 'foo', generator: 'bar'}],
+          innerLinks: [payload]
         })
       end
 
@@ -430,7 +430,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
-            key: 'inner_links[0].from', message: 'required'
+            key: 'innerLinks[0].from', message: 'required'
           )
         end
       end
@@ -443,7 +443,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
-            key: 'inner_links[0].from.node', message: 'required'
+            key: 'innerLinks[0].from.node', message: 'required'
           )
         end
       end
@@ -456,7 +456,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
-            key: 'inner_links[0].from.index', message: 'required'
+            key: 'innerLinks[0].from.index', message: 'required'
           )
         end
       end
@@ -469,7 +469,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
-            key: 'inner_links[0].from.node', message: 'unknown'
+            key: 'innerLinks[0].from.node', message: 'unknown'
           )
         end
       end
@@ -482,7 +482,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
-            key: 'inner_links[0].to', message: 'required'
+            key: 'innerLinks[0].to', message: 'required'
           )
         end
       end
@@ -495,7 +495,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
-            key: 'inner_links[0].to.node', message: 'required'
+            key: 'innerLinks[0].to.node', message: 'required'
           )
         end
       end
@@ -508,7 +508,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
-            key: 'inner_links[0].to.index', message: 'required'
+            key: 'innerLinks[0].to.index', message: 'required'
           )
         end
       end
@@ -521,7 +521,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
-            key: 'inner_links[0].to.node', message: 'unknown'
+            key: 'innerLinks[0].to.node', message: 'unknown'
           )
         end
       end
@@ -529,7 +529,7 @@ RSpec.describe Modusynth::Controllers::Tools do
 
     describe 'parameters error cases' do
       before do
-        create({
+        create_empty_tool({
           name: 'test',
           slots: 10,
           parameters: [ {descriptor: 'unknown_id'} ]
@@ -549,7 +549,7 @@ RSpec.describe Modusynth::Controllers::Tools do
     describe 'inputs error cases' do
 
       def create_with_input payload
-        create({name: 'test', slots: 10, inputs: [payload], inner_nodes: [{name: 'test', generator: 'test'}]})
+        create_empty_tool({name: 'test', slots: 10, inputs: [payload], innerNodes: [{name: 'test', generator: 'test'}]})
       end
 
       describe 'The name is not given' do
@@ -593,11 +593,11 @@ RSpec.describe Modusynth::Controllers::Tools do
     describe 'outputs error cases' do
 
       def create_with_output payload
-        create({
+        create_empty_tool({
           name: 'test',
           slots: 10,
           outputs: [payload],
-          inner_nodes: [{name: 'test', generator: 'test'}]
+          innerNodes: [{name: 'test', generator: 'test'}]
         })
       end
 
