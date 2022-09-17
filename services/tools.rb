@@ -44,7 +44,6 @@ module Modusynth
       def inner_links payload
         (payload['innerLinks'] || []).map.with_index do |link, idx|
           validate_link link, idx
-          validate_link_nodes link, idx, payload['innerNodes']
           Modusynth::Models::Tools::InnerLink.new(
             from: inner_link_end(link['from']),
             to: inner_link_end(link['to'])

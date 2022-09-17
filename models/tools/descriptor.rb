@@ -16,9 +16,7 @@ module Modusynth
 
         field :step, type: Float
 
-        validates :name,
-          presence: { message: 'required' },
-          length: { minimum: 3, message: 'length', if: :name? }
+        validates :name, presence: { message: 'required' }
 
         validates :minimum, presence: { message: 'required' }
 

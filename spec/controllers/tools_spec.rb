@@ -422,7 +422,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         })
       end
 
-      describe 'The origin is not given at all' do
+      describe 'The origin is not given' do
         before { create_with_link({}) }
 
         it 'Returns a 400 (Bad Request) status code' do
@@ -461,20 +461,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
       end
 
-      describe 'The origin node is not in the inner nodes' do
-        before { create_with_link({from: {node: 'baz', index: 0}, to: {node: 'foo', index: 0}}) }
-
-        it 'Returns a 400 (Bad Request) status code' do
-          expect(last_response.status).to be 404
-        end
-        it 'Returns the correct body' do
-          expect(last_response.body).to include_json(
-            key: 'innerLinks[0].from.node', message: 'unknown'
-          )
-        end
-      end
-
-      describe 'The destination is not given at all' do
+      describe 'The destination is not given' do
         before { create_with_link({from: { node: 'foo', index: 0 }}) }
 
         it 'Returns a 400 (Bad Request) status code' do
@@ -486,20 +473,6 @@ RSpec.describe Modusynth::Controllers::Tools do
           )
         end
       end
-
-      describe 'The destination node is not given' do
-        before { create_with_link({from: { node: 'foo', index: 0 }, to: {}}) }
-
-        it 'Returns a 400 (Bad Request) status code' do
-          expect(last_response.status).to be 400
-        end
-        it 'Returns the correct body' do
-          expect(last_response.body).to include_json(
-            key: 'innerLinks[0].to.node', message: 'required'
-          )
-        end
-      end
-
       describe 'The destination index is not given' do
         before { create_with_link({from: {node: 'foo', index: 0}, to: {node: 'foo'}}) }
 
@@ -509,19 +482,6 @@ RSpec.describe Modusynth::Controllers::Tools do
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
             key: 'innerLinks[0].to.index', message: 'required'
-          )
-        end
-      end
-
-      describe 'The destination node is not in the inner nodes' do
-        before { create_with_link({from: {node: 'foo', index: 0}, to: {node: 'baz', index: 0}}) }
-
-        it 'Returns a 400 (Bad Request) status code' do
-          expect(last_response.status).to be 404
-        end
-        it 'Returns the correct body' do
-          expect(last_response.body).to include_json(
-            key: 'innerLinks[0].to.node', message: 'unknown'
           )
         end
       end

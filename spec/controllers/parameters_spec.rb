@@ -95,19 +95,6 @@ RSpec.describe Modusynth::Controllers::Parameters do
           })
         end
       end
-      describe 'The name is too short' do
-        before { post '/', {name: 'a'}.to_json }
-
-        it 'Returns a 400 (Bad Request) status code' do
-          expect(last_response.status).to be 400
-        end
-        it 'Returns the correct body' do
-          expect(last_response.body).to include_json({
-            key: 'name', message: 'length'
-          })
-        end
-      end
-
       describe  'The minimum is not given' do
         before { post '/', {name: 'foo'}.to_json }
 
@@ -120,7 +107,6 @@ RSpec.describe Modusynth::Controllers::Parameters do
           })
         end
       end
-
       describe 'The maximum is not given' do
         before { post '/', {name: 'foo', minimum: 0}.to_json }
 
@@ -133,7 +119,6 @@ RSpec.describe Modusynth::Controllers::Parameters do
           })
         end
       end
-
       describe 'The step attribute is not given' do
         before { post '/', {name: 'foo', minimum: 0, maximum: 10}.to_json }
 
@@ -146,7 +131,6 @@ RSpec.describe Modusynth::Controllers::Parameters do
           })
         end
       end
-
       describe 'The precision is not given' do
         before { post '/', {name: 'foo', minimum: 0, maximum: 10, step: 1}.to_json }
 
@@ -159,7 +143,6 @@ RSpec.describe Modusynth::Controllers::Parameters do
           })
         end
       end
-
       describe 'The default is not given' do
         before { post '/', {name: 'foo', minimum: 0, maximum: 10, step: 1, precision: 0}.to_json }
 
@@ -172,7 +155,6 @@ RSpec.describe Modusynth::Controllers::Parameters do
           })
         end
       end
-
       describe 'The default is above the maximum' do
         before { post '/', {name: 'foo', minimum: 0, maximum: 10, step: 1, precision: 0, default: 11}.to_json }
 
@@ -185,7 +167,6 @@ RSpec.describe Modusynth::Controllers::Parameters do
           })
         end
       end
-
       describe 'The minimum is below the minimum' do
         before { post '/', {name: 'foo', minimum: 1, maximum: 10, step: 1, precision: 0, default: 0}.to_json }
 
@@ -198,7 +179,6 @@ RSpec.describe Modusynth::Controllers::Parameters do
           })
         end
       end
-
       describe 'The step attribute is too broad for the boundaries' do
         before { post '/', {name: 'foo', minimum: 0, maximum: 1, step: 1, precision: 0, default: 0}.to_json }
 

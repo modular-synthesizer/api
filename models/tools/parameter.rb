@@ -4,6 +4,8 @@ module Modusynth
       class Parameter
         include Mongoid::Document
 
+        field :name, type: String
+
         field :targets, type: Array, default: []
 
         belongs_to :descriptor,
@@ -11,6 +13,8 @@ module Modusynth
           inverse_of: :parameters
 
         belongs_to :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :parameters
+
+        validates :name, presence: { message: 'required' }
 
         def targets_types
           return if targets.nil? || !targets.kind_of?(Array)
