@@ -105,13 +105,8 @@ RSpec.describe Modusynth::Controllers::Tools do
   end
 
   describe 'POST /' do
-
-    def create(body = {})
-      post '/', body.to_json, 'CONTENT_TYPE' => 'application/json'
-    end
-
     describe 'Nominal case' do
-      before { create({name: 'test', slots: 10}) }
+      before { create_simple_tool }
 
       it 'Returns a 201 (Created) status code' do
         expect(last_response.status).to be 201
@@ -119,8 +114,8 @@ RSpec.describe Modusynth::Controllers::Tools do
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
           id: Modusynth::Models::Tool.first.id.to_s,
-          name: 'test',
-          slots: 10,
+          name: 'VCA',
+          slots: 3,
           innerNodes: [],
           innerLinks: [],
           inputs: [],
@@ -131,10 +126,10 @@ RSpec.describe Modusynth::Controllers::Tools do
         let!(:tool) { Modusynth::Models::Tool.first }
 
         it 'Has the correct name' do
-          expect(tool.name).to eq 'test'
+          expect(tool.name).to eq 'VCA'
         end
         it 'has the correct number of slots' do
-          expect(tool.slots).to be 10
+          expect(tool.slots).to be 3
         end
         it 'has no inner nodes' do
           expect(tool.inner_nodes).to eq []
@@ -147,7 +142,7 @@ RSpec.describe Modusynth::Controllers::Tools do
 
     describe 'Alternative cases' do
       describe 'Tool with inner nodes' do
-        before { create({name: 'test', slots: 10, inner_nodes: [{ name: 'foo', generator: 'bar' }]}) }
+        before { create_tool_with_inner_node }
 
         it 'Returns a 201 (Created) status code' do
           expect(last_response.status).to be 201
@@ -156,12 +151,12 @@ RSpec.describe Modusynth::Controllers::Tools do
           creation = Modusynth::Models::Tool.first
           expect(last_response.body).to include_json(
             id: creation.id.to_s,
-            name: 'test',
-            slots: 10,
+            name: 'VCA',
+            slots: 3,
             innerNodes: [{
               id: creation.inner_nodes.first.id.to_s,
-              name: 'foo',
-              generator: 'bar'
+              name: 'gain',
+              generator: 'GainNode'
             }]
           )
         end
@@ -174,25 +169,16 @@ RSpec.describe Modusynth::Controllers::Tools do
             expect(tool.inner_nodes.size).to be 1
           end
           it 'Has created a node with the correct name' do
-            expect(node.name).to eq 'foo'
+            expect(node.name).to eq 'gain'
           end
           it 'Has created a node wih the correct generator' do
-            expect(node.generator).to eq 'bar'
+            expect(node.generator).to eq 'GainNode'
           end
         end
       end
       describe 'Tool with inner links' do
-        before do
-          create({
-            name: 'test',
-            slots: 10,
-            inner_nodes: [
-              { name: 'foo', generator: 'bar' },
-              { name: 'baz', generator: 'bar' }
-            ],
-            inner_links: [{from: {node: 'foo', index: 0}, to: {node: 'baz', index: 1}}]
-          })
-        end
+        before { create_tool_with_inner_link }
+
         describe 'Created inner link' do
           let!(:tool) { Modusynth::Models::Tool.first }
           let!(:link) { tool.inner_links.first }
@@ -203,13 +189,13 @@ RSpec.describe Modusynth::Controllers::Tools do
             expect(tool.inner_links.size).to be 1
           end
           it 'Has creatd a link with the correct origin node' do
-            expect(from.node).to eq 'foo'
+            expect(from.node).to eq 'oscillator'
           end
           it 'Has creatd a link with the correct origin index' do
             expect(from.index).to be 0
           end
           it 'Has creatd a link with the correct destination node' do
-            expect(to.node).to eq 'baz'
+            expect(to.node).to eq 'gain'
           end
           it 'Has creatd a link with the correct destination index' do
             expect(to.index).to be 1
@@ -227,15 +213,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             'default' => 1
           )
         end
-        before do
-          create({
-            name: 'test',
-            slots: 10,
-            parameters: [
-              {targets: [], descriptor: param.id.to_s}
-            ]
-          })
-        end
+        before { create_tool_with_parameter param }
 
         it 'Returns a 201 (Created) status code' do
           expect(last_response.status).to be 201
@@ -244,8 +222,8 @@ RSpec.describe Modusynth::Controllers::Tools do
           creation = Modusynth::Models::Tool.first
           expect(last_response.body).to include_json(
             id: creation.id.to_s,
-            name: 'test',
-            slots: 10,
+            name: 'VCA',
+            slots: 3,
             parameters: [{
               name: 'parameter',
               targets: [],
@@ -261,26 +239,16 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
       end
       describe 'Tool with inputs' do
-        before do
-          create({
-            name: 'test',
-            slots: 10,
-            inner_nodes: [
-              { name: 'foo', generator: 'bar' }
-            ],
-            inputs: [
-              {name: 'test', targets: ['foo'], index: 0}
-            ]
-          })
-        end
+        before { create_tool_with_input }
+
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
             id: Modusynth::Models::Tool.first.id.to_s,
-            name: 'test',
-            slots: 10,
-            innerNodes: [{name: 'foo', generator: 'bar'}],
+            name: 'VCA',
+            slots: 3,
+            innerNodes: [],
             innerLinks: [],
-            inputs: [{name: 'test', index: 0, targets: ['foo']}],
+            inputs: [{name: 'INPUT', index: 0, targets: ['gain']}],
             outputs: []
           )
         end
@@ -292,10 +260,10 @@ RSpec.describe Modusynth::Controllers::Tools do
             expect(tool.inputs.size).to be 1
           end
           it 'Has created a port with the correct name' do
-            expect(input.name).to eq 'test'
+            expect(input.name).to eq 'INPUT'
           end
           it 'Has created a port with the correct targets' do
-            expect(input.targets).to eq ['foo']
+            expect(input.targets).to eq ['gain']
           end
           it 'Has created a port with the correct index' do
             expect(input.index).to be 0
@@ -303,26 +271,16 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
       end
       describe 'Tool with outputs' do
-        before do
-          create({
-            name: 'test',
-            slots: 10,
-            inner_nodes: [
-              { name: 'foo', generator: 'bar' }
-            ],
-            outputs: [
-              {name: 'test', targets: ['foo'], index: 0}
-            ]
-          })
-        end
+        before { create_tool_with_output }
+
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
             id: Modusynth::Models::Tool.first.id.to_s,
-            name: 'test',
-            slots: 10,
-            innerNodes: [{name: 'foo', generator: 'bar'}],
+            name: 'VCA',
+            slots: 3,
+            innerNodes: [],
             innerLinks: [],
-            outputs: [{name: 'test', index: 0, targets: ['foo']}],
+            outputs: [{name: 'OUTPUT', index: 0, targets: ['gain']}],
             inputs: []
           )
         end
@@ -334,10 +292,10 @@ RSpec.describe Modusynth::Controllers::Tools do
             expect(tool.outputs.size).to be 1
           end
           it 'Has created a port with the correct name' do
-            expect(output.name).to eq 'test'
+            expect(output.name).to eq 'OUTPUT'
           end
           it 'Has created a port with the correct targets' do
-            expect(output.targets).to eq ['foo']
+            expect(output.targets).to eq ['gain']
           end
           it 'Has created a port with the correct index' do
             expect(output.index).to be 0
@@ -442,7 +400,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
       end
 
-      describe 'generator not given' do
+      describe 'generator name too short' do
         before { create_with_node({name: 'test', generator: 'a'}) }
 
         it 'Returns a 400 (Bad Request) error code' do
@@ -618,30 +576,6 @@ RSpec.describe Modusynth::Controllers::Tools do
           })
         end
       end
-      describe 'A target is not a string' do
-        before { create_with_input({name: 'foo', targets: ['baz', 2]}) }
-
-        it 'Returns a 400 (Bad Request) status code' do
-          expect(last_response.status).to be 400
-        end
-        it 'Returns the correct body' do
-          expect(last_response.body).to include_json({
-            key: 'ports[0].targets[1]', message: 'type'
-          })
-        end
-      end
-      describe 'A target is not in the inner nodes list' do
-        before { create_with_input({name: 'foo', targets: ['test', 'baz']}) }
-
-        it 'Returns a 400 (Bad Request) status code' do
-          expect(last_response.status).to be 404
-        end
-        it 'Returns the correct body' do
-          expect(last_response.body).to include_json({
-            key: 'ports[0].targets[1]', message: 'unknown'
-          })
-        end
-      end
       describe 'An index is below zero' do
         before { create_with_input({name: 'foo', targets: [], index: -1}) }
 
@@ -688,30 +622,6 @@ RSpec.describe Modusynth::Controllers::Tools do
         it 'Returns the correct body' do
           expect(last_response.body).to include_json({
             key: 'ports[0].name', message: 'length'
-          })
-        end
-      end
-      describe 'A target is not a string' do
-        before { create_with_output({name: 'foo', targets: ['baz', 2]}) }
-
-        it 'Returns a 400 (Bad Request) status code' do
-          expect(last_response.status).to be 400
-        end
-        it 'Returns the correct body' do
-          expect(last_response.body).to include_json({
-            key: 'ports[0].targets[1]', message: 'type'
-          })
-        end
-      end
-      describe 'A target is not in the inner nodes list' do
-        before { create_with_output({name: 'foo', targets: ['test', 'baz']}) }
-
-        it 'Returns a 400 (Bad Request) status code' do
-          expect(last_response.status).to be 404
-        end
-        it 'Returns the correct body' do
-          expect(last_response.body).to include_json({
-            key: 'ports[0].targets[1]', message: 'unknown'
           })
         end
       end

@@ -33,9 +33,7 @@ module Modusynth
       private
 
       def inner_nodes payload
-        return [] if payload['inner_nodes'].nil?
-
-        payload['inner_nodes'].map do |node|
+        (payload['innerNodes'] || []).map do |node|
           Modusynth::Models::Tools::InnerNode.new(
             name: node['name'],
             generator: node['generator']
@@ -44,11 +42,9 @@ module Modusynth
       end
 
       def inner_links payload
-        return [] if payload['inner_links'].nil?
-
-        payload['inner_links'].map.with_index do |link, idx|
+        (payload['innerLinks'] || []).map.with_index do |link, idx|
           validate_link link, idx
-          validate_link_nodes link, idx, payload['inner_nodes']
+          validate_link_nodes link, idx, payload['innerNodes']
           Modusynth::Models::Tools::InnerLink.new(
             from: inner_link_end(link['from']),
             to: inner_link_end(link['to'])
@@ -87,11 +83,11 @@ module Modusynth
       def validate_link link, index
         ['from', 'to'].each do |link_end|
           unless link.key? link_end
-            raise Modusynth::Exceptions.required("inner_links[#{index}].#{link_end}")
+            raise Modusynth::Exceptions.required("innerLinks[#{index}].#{link_end}")
           end
           ['node', 'index'].each do |field|
             unless link[link_end].key? field
-              raise Modusynth::Exceptions.required("inner_links[#{index}].#{link_end}.#{field}")
+              raise Modusynth::Exceptions.required("innerLinks[#{index}].#{link_end}.#{field}")
             end
           end
         end
@@ -101,45 +97,19 @@ module Modusynth
         names = inner_nodes.map { |inode| inode['name'] }
         ['from', 'to'].each do |link_end|
           unless names.include? link[link_end]['node']
-            raise Modusynth::Exceptions.unknown("inner_links[#{index}].#{link_end}.node")
+            raise Modusynth::Exceptions.unknown("innerLinks[#{index}].#{link_end}.node")
           end
         end
       end
 
       def ports payload, key
-        return [] if payload[key].nil?
-
-        ports = payload[key].map.with_index do |port, idx|
-          unless port['targets'].nil?
-            port['targets'].each.with_index do |target, j|
-              unless target.kind_of?(String)
-                raise Modusynth::Exceptions::BadRequest.new("ports[#{idx}].targets[#{j}]", 'type')
-              end
-            end
-          end
+        (payload[key] || []).map.with_index do |port, idx|
           Modusynth::Models::Tools::Port.new(
             name: port['name'],
             targets: port['targets'],
             index: port['index'],
             kind: key[0..-2] # Removes the trailing S from "outputs" or "inputs"
           )
-        end
-
-        validate_port_nodes payload, key, payload['inner_nodes']
-        
-        ports
-      end
-
-      def validate_port_nodes payload, key, inner_nodes
-        names = (inner_nodes || []).map { |inode| inode['name'] }
-
-        (payload[key] || []).each.with_index do |port, i|
-          return if port['targets'].nil?
-          port['targets'].each.with_index do |target, j|
-            unless names.include? target
-              raise Modusynth::Exceptions.unknown("ports[#{i}].targets[#{j}]")
-            end
-          end
         end
       end
     end 
