@@ -12,6 +12,11 @@ module Modusynth
         creation
       end
 
+      def list(params)
+        search = params.slice(:synthesizer_id)
+        Modusynth::Models::Module.where(**search).to_a
+      end
+
       def update id, values
         node = find_or_fail(id)
         values.each do |field, value|

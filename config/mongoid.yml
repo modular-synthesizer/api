@@ -9,7 +9,7 @@ development:
 test:
   clients:
     default:
-      database: virtuatable
+      database: virtuatable-test
       hosts:
         - localhost:27017
   options:

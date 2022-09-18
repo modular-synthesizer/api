@@ -5,6 +5,7 @@ group :development, :production, :test do
   gem 'mongoid-embedded-errors', '4.0.0'
   gem 'sinatra', '2.2.2'
   gem 'draper', '4.0.2'
+  gem 'sinatra-cross_origin', '0.4.0', require: 'sinatra/cross_origin'
 end
 
 group :development, :production do

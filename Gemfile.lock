@@ -103,6 +103,7 @@ GEM
       rack (~> 2.2)
       rack-protection (= 2.2.2)
       tilt (~> 2.0)
+    sinatra-cross_origin (0.4.0)
     tilt (2.0.11)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
@@ -122,6 +123,7 @@ DEPENDENCIES
   rspec (= 3.11.0)
   rspec-json_expectations (= 2.2.0)
   sinatra (= 2.2.2)
+  sinatra-cross_origin (= 0.4.0)
 
 BUNDLED WITH
    2.3.20

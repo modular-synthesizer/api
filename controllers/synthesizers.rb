@@ -4,9 +4,13 @@ module Modusynth
 
       get '/' do
         synthesizers = service.list.map do |synthesizer|
-          decorate(synthesizer)
+          Modusynth::Decorators::Synthesizer.new(synthesizer).to_simple_h
         end
         halt 200, {synthesizers: synthesizers}.to_json
+      end
+
+      get '/:id' do
+        halt 200, decorate(service.find_or_fail(params[:id])).to_json
       end
 
       post '/' do

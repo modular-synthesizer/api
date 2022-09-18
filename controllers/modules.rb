@@ -5,6 +5,13 @@ module Modusynth
         halt 201, decorate(service.create(body_params)).to_json
       end
 
+      get '/' do
+        results = service.list(params).map do |node|
+          decorate(node).to_h
+        end
+        halt 200, results.to_json
+      end
+
       put '/:id' do
         halt 200, decorate(service.update(params[:id], body_params)).to_json
       end
