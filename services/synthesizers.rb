@@ -14,9 +14,8 @@ module Modusynth
       end
 
       def create payload
-        synthesizer = Modusynth::Models::Synthesizer.new(
-          name: payload['name']
-        )
+        payload = payload.slice('name', 'slots', 'racks')
+        synthesizer = Modusynth::Models::Synthesizer.new(**payload)
         synthesizer.save!
         synthesizer
       end
