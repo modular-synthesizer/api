@@ -13,6 +13,10 @@ module Modusynth
         halt 200, decorate(service.find_or_fail(params[:id])).to_json
       end
 
+      put '/:id' do
+        halt 200, decorate(service.update(params[:id], body_params)).to_json
+      end
+
       post '/' do
         halt 201, decorate(service.create(body_params)).to_json
       end

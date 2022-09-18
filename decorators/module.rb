@@ -13,13 +13,15 @@ module Modusynth
       def to_h
         {
           id: object.id.to_s,
-          synthesizer_id: object.synthesizer.id.to_s,
-          name: object.tool.name,
+          slot: object.slot,
+          slots: object.tool.slots,
+          rack: object.rack,
           innerNodes: tool.inner_nodes,
           innerLinks: tool.inner_links,
           parameters: parameters,
           inputs: ports(tool.inputs),
-          outputs: ports(tool.outputs)
+          outputs: ports(tool.outputs),
+          type: tool.name
         }
       end
 

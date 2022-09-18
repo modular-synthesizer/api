@@ -9,6 +9,10 @@ module Modusynth
       include Mongoid::Document
       include Mongoid::Timestamps
 
+      field :slot, type: Integer, default: 0
+
+      field :rack, type: Integer, default: 0
+
       belongs_to :synthesizer, class_name: '::Modusynth::Models::Synthesizer', inverse_of: :modules
 
       belongs_to :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :modules
