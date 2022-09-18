@@ -11,13 +11,14 @@ module Modusynth
       end
 
       def to_h
-        
         {
           id: object.id.to_s,
           name: object.name,
-          nodes: object.modules.map do |node|
-            Modusynth::Decorators::Module.new(node).to_h
-          end
+          slots: object.slots,
+          racks: object.racks,
+          x: object.x,
+          y: object.y,
+          scale: object.scale
         }
       end
     end

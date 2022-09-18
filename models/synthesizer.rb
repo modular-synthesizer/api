@@ -10,6 +10,16 @@ module Modusynth
 
       field :name, type: String
 
+      field :slots, type: Integer, default: 50
+
+      field :racks, type: Integer, default: 1
+
+      field :x, type: Integer, default: 0
+
+      field :y, type: Integer, default: 0
+
+      field :scale, type: Float, default: 1.0
+
       has_many :modules, class_name: '::Modusynth::Models::Module', inverse_of: :synthesizer
 
       validates :name,
