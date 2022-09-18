@@ -21,7 +21,7 @@ module Modusynth
 
       embeds_many :inner_links, class_name: '::Modusynth::Models::Tools::InnerLink'
 
-      embeds_many :ports, class_name: '::Modusynth::Models::Tools::Port', inverse_of: :tool
+      has_many :ports, class_name: '::Modusynth::Models::Tools::Port', inverse_of: :tool
 
       has_many :parameters, class_name: '::Modusynth::Models::Tools::Parameter', inverse_of: :tool
 

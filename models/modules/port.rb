@@ -14,6 +14,9 @@ module Modusynth
         def kind
           descriptor.kind
         end
+
+        scope :inputs, ->{ where(:descriptor.in => Modusynth::Models::Tools::Port.all.inputs.to_a) }
+        scope :outputs, ->{ where(:descriptor.in => Modusynth::Models::Tools::Port.all.outputs.to_a) }
       end
     end
   end

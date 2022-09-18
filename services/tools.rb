@@ -19,8 +19,9 @@ module Modusynth
           slots: payload['slots'],
           inner_nodes: inner_nodes(payload),
           inner_links: inner_links(payload),
-          ports: ports(payload, 'inputs') + ports(payload, 'outputs')
         )
+        tool.ports = ports(payload, 'inputs') + ports(payload, 'outputs')
+        tool.ports.each(&:save!)
         tool.parameters = parameters(payload, tool)
         tool.save!
         tool
