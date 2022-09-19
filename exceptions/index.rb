@@ -12,7 +12,15 @@ module Modusynth
     end
 
     def self.from_validation exception, prefix = ''
-      messages = exception.document.errors.messages
+      self.on_document exception.document, prefix
+    end
+
+    def self.from_active_model exception, prefix = ''
+      self.on_document exception.model, prefix
+    end
+
+    def self.on_document document, prefix
+      messages = document.errors.messages
       key = messages.keys.first
       prefix += '.' if prefix != ''
       Modusynth::Exceptions::BadRequest.new("#{prefix}#{key}", messages[key][0])

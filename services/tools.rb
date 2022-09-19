@@ -20,16 +20,17 @@ module Modusynth
           inner_nodes: inner_nodes(payload),
           inner_links: inner_links(payload),
         )
-        tool.ports = ports(payload, 'inputs') + ports(payload, 'outputs')
-        tool.ports.each.with_index do |port, idx|
+        all_ports(payload).each.with_index do |port, idx|
           begin
-            port.save!
-          rescue Mongoid::Errors::Validations => exception
-            raise Modusynth::Exceptions.from_validation exception, "ports[#{idx}]"
+            tool.ports << port
+            port.validate!
+          rescue ActiveModel::ValidationError => exception
+            raise Modusynth::Exceptions.from_active_model exception, "ports[#{idx}]"
           end
         end
         tool.parameters = parameters(payload, tool)
         tool.save!
+        tool.ports.each(&:save!)
         tool
       end
 
@@ -38,6 +39,10 @@ module Modusynth
       end
 
       private
+
+      def all_ports payload
+        ports(payload, 'inputs') + ports(payload, 'outputs')
+      end
 
       def inner_nodes payload
         (payload['innerNodes'] || []).map do |node|

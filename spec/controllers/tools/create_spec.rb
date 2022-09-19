@@ -1,3 +1,13 @@
+RSpec.shared_examples 'empty lists' do
+  it 'has Created no tool' do
+    expect(Modusynth::Models::Tool.all.size).to be 0
+  end
+  it 'Has created no ports' do
+    expect(Modusynth::Models::Tools::Port.all.size).to be 0
+  end
+end
+
+
 RSpec.describe Modusynth::Controllers::Tools do
   def app
     Modusynth::Controllers::Tools
@@ -213,6 +223,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         it 'Returns the correct error body' do
           expect(last_response.body).to include_json({key: 'name', message: 'required'})
         end
+        include_examples 'empty lists'
       end
 
       describe 'Name too short' do
@@ -224,6 +235,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         it 'Returns the correct error body' do
           expect(last_response.body).to include_json({key: 'name', message: 'length'})
         end
+        include_examples 'empty lists'
       end
 
       describe 'Slots not given' do
@@ -235,6 +247,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         it 'Returns the correct error body' do
           expect(last_response.body).to include_json({key: 'slots', message: 'required'})
         end
+        include_examples 'empty lists'
       end
 
       describe 'Slots given with negative value' do
@@ -246,6 +259,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         it 'Returns the correct error body' do
           expect(last_response.body).to include_json({key: 'slots', message: 'value'})
         end
+        include_examples 'empty lists'
       end
 
       describe 'Slots given with zero as value' do
@@ -257,6 +271,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         it 'Returns the correct error body' do
           expect(last_response.body).to include_json({key: 'slots', message: 'value'})
         end
+        include_examples 'empty lists'
       end
     end
 
@@ -275,6 +290,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         it 'Returns the correct error body' do
           expect(last_response.body).to include_json({key: 'inner_nodes[0].name', message: 'required'})
         end
+        include_examples 'empty lists'
       end
 
       describe 'name too short' do
@@ -286,6 +302,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         it 'Returns the correct error body' do
           expect(last_response.body).to include_json({key: 'inner_nodes[0].name', message: 'length'})
         end
+        include_examples 'empty lists'
       end
 
       describe 'generator not given' do
@@ -297,6 +314,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         it 'Returns the correct error body' do
           expect(last_response.body).to include_json({key: 'inner_nodes[0].generator', message: 'required'})
         end
+        include_examples 'empty lists'
       end
 
       describe 'generator name too short' do
@@ -308,6 +326,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         it 'Returns the correct error body' do
           expect(last_response.body).to include_json({key: 'inner_nodes[0].generator', message: 'length'})
         end
+        include_examples 'empty lists'
       end
     end
 
@@ -332,6 +351,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             key: 'innerLinks[0].from', message: 'required'
           )
         end
+        include_examples 'empty lists'
       end
 
       describe 'The origin node is not given' do
@@ -345,6 +365,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             key: 'innerLinks[0].from.node', message: 'required'
           )
         end
+        include_examples 'empty lists'
       end
 
       describe 'The origin index is not given' do
@@ -358,6 +379,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             key: 'innerLinks[0].from.index', message: 'required'
           )
         end
+        include_examples 'empty lists'
       end
 
       describe 'The destination is not given' do
@@ -371,6 +393,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             key: 'innerLinks[0].to', message: 'required'
           )
         end
+        include_examples 'empty lists'
       end
       describe 'The destination index is not given' do
         before { create_with_link({from: {node: 'foo', index: 0}, to: {node: 'foo'}}) }
@@ -383,6 +406,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             key: 'innerLinks[0].to.index', message: 'required'
           )
         end
+        include_examples 'empty lists'
       end
     end
 
@@ -403,12 +427,17 @@ RSpec.describe Modusynth::Controllers::Tools do
           key: 'parameters[0]', message: 'unknown'
         })
       end
+      include_examples 'empty lists'
     end
 
     describe 'inputs error cases' do
 
-      def create_with_input payload
-        create_empty_tool({name: 'test', slots: 10, inputs: [payload], innerNodes: [{name: 'test', generator: 'test'}]})
+      def create_with_input *payload
+        create_empty_tool({
+          name: 'test',
+          slots: 10,
+          inputs: [{name: 'test', targets: [], index: 0}] + payload,
+          innerNodes: [{name: 'test', generator: 'test'}]})
       end
 
       describe 'The name is not given' do
@@ -419,9 +448,10 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json({
-            key: 'ports[0].name', message: 'required'
+            key: 'ports[1].name', message: 'required'
           })
         end
+        include_examples 'empty lists'
       end
       describe 'The name is too short' do
         before { create_with_input({name: 'a'}) }
@@ -431,9 +461,10 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json({
-            key: 'ports[0].name', message: 'length'
+            key: 'ports[1].name', message: 'length'
           })
         end
+        include_examples 'empty lists'
       end
       describe 'An index is below zero' do
         before { create_with_input({name: 'foo', targets: [], index: -1}) }
@@ -443,9 +474,10 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json({
-            key: 'ports[0].index', message: 'value'
+            key: 'ports[1].index', message: 'value'
           })
         end
+        include_examples 'empty lists'
       end
     end
 
@@ -471,6 +503,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             key: 'ports[0].name', message: 'required'
           })
         end
+        include_examples 'empty lists'
       end
       describe 'The name is too short' do
         before { create_with_output({name: 'a'}) }
@@ -483,6 +516,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             key: 'ports[0].name', message: 'length'
           })
         end
+        include_examples 'empty lists'
       end
       describe 'An index is below zero' do
         before { create_with_output({name: 'foo', targets: [], index: -1}) }
@@ -495,6 +529,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             key: 'ports[0].index', message: 'value'
           })
         end
+        include_examples 'empty lists'
       end
     end
   end
