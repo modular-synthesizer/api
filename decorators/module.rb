@@ -28,6 +28,7 @@ module Modusynth
       def parameters
         object.parameters.map do |instance|
           {
+            id: instance.id,
             value: instance.value,
             name: instance.parameter.name,
             input: { id: instance.parameter.id.to_s },

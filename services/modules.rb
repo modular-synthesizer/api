@@ -18,9 +18,9 @@ module Modusynth
       end
 
       def update id, payload
-        payload = payload.slice('slot', ('rack'))
+        attributes = payload.slice('slot', ('rack'))
         node = find_or_fail(id)
-        node.update(**payload)
+        node.update(**attributes)
         (payload['parameters'] || []).each do |param|
           obj = node.parameters.find(param['id'])
           obj.value = param['value']
