@@ -17,21 +17,34 @@ module Modusynth
         Modusynth::Models::Module.where(**search).to_a
       end
 
-      def update id, values
+      def update id, payload
+        payload = payload.slice('slot', ('rack'))
         node = find_or_fail(id)
-        values.each do |field, value|
-          parameter = node.parameters.called(field)
-          unless parameter.nil?
-            template = node.tool.parameters.called(field).first
-            if value < template.descriptor.minimum || value > template.descriptor.maximum
-              raise Modusynth::Exceptions::BadRequest.new(field, 'value')
-            end
-            parameter.update(value: value)
-          end
+        node.update(**payload)
+        (payload['parameters'] || []).each do |param|
+          obj = node.parameters.find(param['id'])
+          obj.value = param['value']
+          obj.save!
         end
         node.save!
         node
       end
+
+      # def update id, values
+      #   node = find_or_fail(id)
+      #   values.each do |field, value|
+      #     parameter = node.parameters.called(field)
+      #     unless parameter.nil?
+      #       template = node.tool.parameters.called(field).first
+      #       if value < template.descriptor.minimum || value > template.descriptor.maximum
+      #         raise Modusynth::Exceptions::BadRequest.new(field, 'value')
+      #       end
+      #       parameter.update(value: value)
+      #     end
+      #   end
+      #   node.save!
+      #   node
+      # end
 
       def find_or_fail(id)
         instance = Modusynth::Models::Module.find(id)
