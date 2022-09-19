@@ -21,7 +21,13 @@ module Modusynth
           inner_links: inner_links(payload),
         )
         tool.ports = ports(payload, 'inputs') + ports(payload, 'outputs')
-        tool.ports.each(&:save!)
+        tool.ports.each.with_index do |port, idx|
+          begin
+            port.save!
+          rescue Mongoid::Errors::Validations => exception
+            raise Modusynth::Exceptions.from_validation exception, "ports[#{idx}]"
+          end
+        end
         tool.parameters = parameters(payload, tool)
         tool.save!
         tool

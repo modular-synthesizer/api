@@ -11,10 +11,11 @@ module Modusynth
       raise Modusynth::Exceptions::Unknown.new(field, 'unknown')
     end
 
-    def self.from_validation exception
+    def self.from_validation exception, prefix = ''
       messages = exception.document.errors.messages
       key = messages.keys.first
-      Modusynth::Exceptions::BadRequest.new(key: key, error: messages[key][0])
+      prefix += '.' if prefix != ''
+      Modusynth::Exceptions::BadRequest.new("#{prefix}#{key}", messages[key][0])
     end
   end
 end
