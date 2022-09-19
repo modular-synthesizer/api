@@ -26,9 +26,19 @@ module Modusynth
       end
 
       def parameters
-        object.tool.parameters.map do |parameter|
-          descriptor = Modusynth::Decorators::Parameter.new(parameter.descriptor).to_h
-          descriptor.merge({targets: parameter.targets})
+        object.parameters.map do |instance|
+          {
+            value: instance.value,
+            name: instance.parameter.name,
+            input: { id: instance.parameter.id.to_s },
+            targets: instance.parameter.targets,
+            constraints: {
+              minimum: instance.parameter.descriptor.minimum,
+              maximum: instance.parameter.descriptor.maximum,
+              step: instance.parameter.descriptor.step,
+              precision: instance.parameter.descriptor.precision
+            }
+          }
         end
       end
 

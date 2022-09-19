@@ -8,9 +8,13 @@ module Modusynth
 
         field :value, type: Float
 
+        field :input, type: BSON::ObjectId, default: ->{ BSON::ObjectId.new }
+
         belongs_to :parameter, class_name: '::Modusynth::Models::Tools::Parameter'
 
         belongs_to :module, class_name: '::Modusynth::Models::Module', inverse_of: :value
+
+        embeds_one :port, class_name: '::Modusynth::Models::Parameters::Port'
 
         def name
           parameter.name

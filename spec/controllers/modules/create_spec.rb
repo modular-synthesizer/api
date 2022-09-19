@@ -19,8 +19,8 @@ describe Modusynth::Controllers::Modules do
         expect(last_response.status).to be 201
       end
       it 'Returns the correct body' do
-        expect(last_response.body).to include_json(
-          id: Modusynth::Models::Module.first.id.to_s,
+        expect(last_response.body).to include_json({
+          id: have_attributes(size: 24),
           type: 'VCA',
           innerNodes: [
             {name: 'gain', generator: 'GainNode'}
@@ -36,6 +36,9 @@ describe Modusynth::Controllers::Modules do
                 maximum: 10,
                 step: 0.05,
                 precision: 2
+              },
+              input: {
+                id: have_attributes(size: 24)
               }
             }
           ],
@@ -45,7 +48,7 @@ describe Modusynth::Controllers::Modules do
           outputs: [
             {name: 'OUTPUT', targets: ['gain'], index: 0}
           ]
-        )
+        })
       end
 
       describe 'The created module' do
