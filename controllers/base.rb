@@ -28,9 +28,7 @@ module Modusynth
       end
 
       error Mongoid::Errors::Validations do |error|
-        key = error.document.errors.messages.keys.first
-        message = error.document.errors.messages[key][0]
-        halt 400, {key: key, message: message}.to_json
+        raise Modusynth::Esceptions.from_validation error
       end
 
       error Modusynth::Exceptions::BadRequest do |exception|

@@ -10,5 +10,11 @@ module Modusynth
     def self.unknown field
       raise Modusynth::Exceptions::Unknown.new(field, 'unknown')
     end
+
+    def self.from_validation exception
+      messages = exception.document.errors.messages
+      key = messages.keys.first
+      Modusynth::Exceptions::BadRequest.new(key: key, error: messages[key][0])
+    end
   end
 end
