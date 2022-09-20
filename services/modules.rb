@@ -6,7 +6,9 @@ module Modusynth
       def create payload
         creation = Modusynth::Models::Module.new(
           synthesizer: synthesizer(payload['synthesizer_id']),
-          tool: tool(payload['tool_id'])
+          tool: tool(payload['tool_id']),
+          slot: payload['slot'] || 0,
+          rack: payload['rack'] || 0
         )
         creation.save!
         creation
