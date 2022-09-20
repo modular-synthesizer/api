@@ -12,6 +12,10 @@ module Modusynth
         halt 201, decorate(service.create(body_params)).to_json
       end
 
+      put '/:id' do
+        halt 200, decorate(service.update(params[:id], body_params)).to_json
+      end
+
       delete '/:id' do
         service.delete(params[:id])
         halt 200, {message: 'deleted'}.to_json

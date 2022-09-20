@@ -12,12 +12,19 @@ module Modusynth
         payload = payload.slice('from', 'to', 'synthesizer_id', 'color')
 
         link = Modusynth::Models::Link.new(
-          from: find_port(payload['from']),
-          to: find_port(payload['to']),
+          from: payload['from'],
+          to: payload['to'],
           color: payload['color'],
           synthesizer: find_synth(payload['synthesizer_id'])
         )
         link.save!
+        link
+      end
+
+      def update id, payload
+        payload = payload.slice('color')
+        link = find_or_fail(id)
+        link.update(**payload)
         link
       end
 
@@ -29,10 +36,6 @@ module Modusynth
         link = Modusynth::Models::Link.find(id)
         raise Modusynth::Exceptions.unknown 'id' if link.nil?
         link
-      end
-
-      def find_port id
-        Modusynth::Models::Modules::Port.find(id)
       end
 
       def find_synth id

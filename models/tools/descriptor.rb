@@ -30,8 +30,6 @@ module Modusynth
         
         validate :boundaries
 
-        validate :steps
-
         validate :default_value
 
         has_many :parameters,
@@ -41,11 +39,6 @@ module Modusynth
         def boundaries
           return if minimum.nil? || maximum.nil?
           errors.add(:boundaries, 'order') unless minimum <= maximum
-        end
-
-        def steps
-          return if step.nil? || minimum.nil? || maximum.nil?
-          errors.add(:step, 'broad') unless step < (maximum - minimum) / 2
         end
 
         def default_value
