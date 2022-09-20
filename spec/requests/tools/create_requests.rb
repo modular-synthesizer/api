@@ -40,7 +40,7 @@ end
 def create_tool_with_input
   create_simple_tool({
     inputs: [
-      {name: 'INPUT', targets: ['gain'], index: 0}
+      {name: 'INPUT', target: 'gain', index: 0}
     ]
   })
 end
@@ -48,7 +48,7 @@ end
 def create_tool_with_output
   create_simple_tool({
     outputs: [
-      {name: 'OUTPUT', targets: ['gain'], index: 0}
+      {name: 'OUTPUT', target: 'gain', index: 0}
     ]
   })
 end

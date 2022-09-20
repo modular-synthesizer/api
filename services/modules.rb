@@ -24,6 +24,10 @@ module Modusynth
         (payload['parameters'] || []).each do |param|
           obj = node.parameters.find(param['id'])
           obj.value = param['value']
+          descriptor = obj.parameter.descriptor
+          if obj.value < descriptor.minimum || obj.value > descriptor.maximum
+            raise Modusynth::Exceptions::BadRequest.new(descriptor.name, 'value')
+          end
           obj.save!
         end
         node.save!

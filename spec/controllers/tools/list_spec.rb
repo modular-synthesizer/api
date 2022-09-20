@@ -25,7 +25,7 @@ RSpec.describe Modusynth::Controllers::Tools do
       it 'Returns the correct body' do
         expect(JSON.parse(last_response.body)).to eq({
           'tools' => [
-            {'id' => tool.id.to_s, 'name' => 'VCA'}
+            {'id' => tool.id.to_s, 'name' => 'VCA', 'slots' => 3}
           ]
         })
       end

@@ -36,10 +36,10 @@ RSpec.describe Modusynth::Controllers::Tools do
           ],
           innerLinks: [],
           inputs: [
-            {name: 'INPUT', index: 0, targets: ['gain']}
+            {name: 'INPUT', index: 0, target: 'gain'}
           ],
           outputs: [
-            {name: 'OUTPUT', index: 0, targets: ['gain']}
+            {name: 'OUTPUT', index: 0, target: 'gain'}
           ]
         })
       end

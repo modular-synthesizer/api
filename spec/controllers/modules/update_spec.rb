@@ -3,17 +3,16 @@ describe Modusynth::Controllers::Modules do
     Modusynth::Controllers::Modules
   end
   describe 'PUT /:id' do
-    let(:node) { create(:VCA_module) }
+    let!(:node) { create(:VCA_module) }
+    let!(:param_id) { node.parameters.first.id.to_s }
 
     describe 'Nominal case' do
       before do
-        put "/#{node.id.to_s}", {gain: 2}.to_json
+        payload = {parameters: [{value: 2, id: param_id}]}
+        put "/#{node.id.to_s}", payload.to_json
       end
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
-      end
-      it 'Returns the correct body' do
-
       end
       it 'Has update the gain value' do
         updated = Modusynth::Models::Module.where(id: node.id.to_s).first
@@ -23,7 +22,10 @@ describe Modusynth::Controllers::Modules do
     end
     describe 'Error cases' do
       describe 'When the value is below the minimum' do
-        before { put "/#{node.id.to_s}", {gain: -1}.to_json }
+        before do
+          payload = { parameters: [{value: -1, id: param_id}] }
+          put "/#{node.id.to_s}", payload.to_json
+        end
 
         it 'Returns a 404 (Not Found) status code' do
           expect(last_response.status).to be 400
@@ -35,7 +37,10 @@ describe Modusynth::Controllers::Modules do
         end
       end
       describe 'When the value is above the maximum' do
-        before { put "/#{node.id.to_s}", {gain: 11}.to_json }
+        before do
+          payload = { parameters: [{value: 11, id: param_id}] }
+          put "/#{node.id.to_s}", payload.to_json
+        end
 
         it 'Returns a 404 (Not Found) status code' do
           expect(last_response.status).to be 400
