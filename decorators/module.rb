@@ -48,7 +48,7 @@ module Modusynth
           {
             id: port.id.to_s,
             name: port.descriptor.name,
-            targets: port.descriptor.targets,
+            target: port.descriptor.target,
             index: port.descriptor.index
           }
         end
