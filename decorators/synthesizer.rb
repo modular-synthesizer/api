@@ -6,7 +6,9 @@ module Modusynth
       def to_simple_h
         {
           id: object.id.to_s,
-          name: object.name
+          name: object.name,
+          nodes_count: object.modules.count,
+          links_count: object.links.count
         }
       end
 

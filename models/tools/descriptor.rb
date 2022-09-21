@@ -30,8 +30,6 @@ module Modusynth
         
         validate :boundaries
 
-        validate :steps
-
         validate :default_value
 
         has_many :parameters,

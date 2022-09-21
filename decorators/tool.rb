@@ -59,7 +59,7 @@ module Modusynth
 
       def ports ports_list
         ports_list.map do |port|
-          {name: port.name, index: port.index, targets: port.targets}
+          {name: port.name, index: port.index, target: port.target}
         end
       end
     end

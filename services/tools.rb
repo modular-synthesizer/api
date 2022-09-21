@@ -21,10 +21,17 @@ module Modusynth
           inner_links: inner_links(payload),
           category: category(payload)
         )
-        tool.ports = ports(payload, 'inputs') + ports(payload, 'outputs')
-        tool.ports.each(&:save!)
+        all_ports(payload).each.with_index do |port, idx|
+          begin
+            tool.ports << port
+            port.validate!
+          rescue ActiveModel::ValidationError => exception
+            raise Modusynth::Exceptions.from_active_model exception, "ports[#{idx}]"
+          end
+        end
         tool.parameters = parameters(payload, tool)
         tool.save!
+        tool.ports.each(&:save!)
         tool
       end
 
@@ -47,6 +54,10 @@ module Modusynth
         category = Modusynth::Models::Category.find(payload['category_id'])
         raise Modusynth::Exceptions.unknown('category_id') if category.nil?
         category
+      end
+
+      def all_ports payload
+        ports(payload, 'inputs') + ports(payload, 'outputs')
       end
 
       def inner_nodes payload
@@ -122,7 +133,7 @@ module Modusynth
         (payload[key] || []).map.with_index do |port, idx|
           Modusynth::Models::Tools::Port.new(
             name: port['name'],
-            targets: port['targets'],
+            target: port['target'],
             index: port['index'],
             kind: key[0..-2] # Removes the trailing S from "outputs" or "inputs"
           )

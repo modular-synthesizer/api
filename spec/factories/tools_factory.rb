@@ -24,8 +24,8 @@ FactoryBot.define do
         create_list(:gain_node, 1, tool: tool)
         create_list(:gain, 1, tool: tool, targets: ['gain'])
         tool.ports = [
-          build(:input_port, name: 'INPUT', targets: ['gain']),
-          build(:output_port, name: 'OUTPUT', targets: ['gain'])
+          build(:input_port, name: 'INPUT', target: 'gain'),
+          build(:output_port, name: 'OUTPUT', target: 'gain')
         ]
         tool.save!
       end

@@ -1,6 +1,7 @@
 module Modusynth
   module Models
     autoload :Category, './models/category'
+    autoload :Link, './models/link'
     autoload :Module, './models/module'
     autoload :Synthesizer, './models/synthesizer'
     autoload :Tools, './models/tools/index'
