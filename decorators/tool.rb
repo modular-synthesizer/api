@@ -19,8 +19,9 @@ module Modusynth
       def to_simple_h
         {
           id: id.to_s,
-          name: name
-      }
+          name: name,
+          slots: slots
+        }
       end
 
       def inner_nodes

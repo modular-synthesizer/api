@@ -19,6 +19,7 @@ module Modusynth
           slots: payload['slots'],
           inner_nodes: inner_nodes(payload),
           inner_links: inner_links(payload),
+          category: category(payload)
         )
         tool.ports = ports(payload, 'inputs') + ports(payload, 'outputs')
         tool.ports.each(&:save!)
@@ -28,10 +29,25 @@ module Modusynth
       end
 
       def list
-        Modusynth::Models::Tool.all.to_a
+        results = {}
+        Modusynth::Models::Category.all.each do |category|
+          if category.tools.count > 0
+            results[category.name] = category.tools.map do |tool|
+              Modusynth::Decorators::Tool.new(tool).to_simple_h
+            end
+          end
+        end
+        results
       end
 
       private
+
+      def category(payload)
+        raise Modusynth::Exceptions.require('category_id') if payload['category_id'].nil?
+        category = Modusynth::Models::Category.find(payload['category_id'])
+        raise Modusynth::Exceptions.unknown('category_id') if category.nil?
+        category
+      end
 
       def inner_nodes payload
         (payload['innerNodes'] || []).map do |node|

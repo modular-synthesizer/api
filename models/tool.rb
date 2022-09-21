@@ -17,6 +17,8 @@ module Modusynth
       # @return [Integer] The number of slots the tool will take in each rack.
       field :slots, type: Integer
 
+      belongs_to :category, class_name: '::Modusynth::Models::Category', inverse_of: :tools, optional: true
+
       embeds_many :inner_nodes, class_name: '::Modusynth::Models::Tools::InnerNode'
 
       embeds_many :inner_links, class_name: '::Modusynth::Models::Tools::InnerLink'

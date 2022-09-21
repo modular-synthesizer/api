@@ -45,7 +45,7 @@ module Modusynth
 
         def steps
           return if step.nil? || minimum.nil? || maximum.nil?
-          errors.add(:step, 'broad') unless step < (maximum - minimum) / 2
+          errors.add(:step, 'broad') unless step * 2 < (maximum - minimum)
         end
 
         def default_value

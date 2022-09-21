@@ -8,10 +8,7 @@ module Modusynth
       # The route to build the list of tools. It returns a subset
       # of fields from the tools to make it as light as possible.
       get '/' do
-        results = service.list.map do |tool|
-          Modusynth::Decorators::Tool.new(tool).to_simple_h
-        end
-        halt 200, {tools: results}.to_json
+        halt 200, service.list.to_json
       end
 
       get '/:id' do
