@@ -14,3 +14,4 @@ map('/parameters') { run Modusynth::Controllers::Parameters.new }
 map('/modules') { run Modusynth::Controllers::Modules.new }
 map('/synthesizers') { run Modusynth::Controllers::Synthesizers.new }
 map('/links') { run Modusynth::Controllers::Links.new }
+map('/categories') { run Modusynth::Controllers::Categories.new }

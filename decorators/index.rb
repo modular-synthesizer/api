@@ -1,5 +1,6 @@
 module Modusynth
   module Decorators
+    autoload :Category, './decorators/category'
     autoload :Link, './decorators/link'
     autoload :Module, './decorators/module'
     autoload :Parameter, './decorators/parameter'

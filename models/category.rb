@@ -10,6 +10,14 @@ module Modusynth
       field :name, type: String
 
       has_many :tools, class_name: '::Modusynth::Models::Tool', inverse_of: :category
+
+      validates :name,
+        presence: { message: 'required' },
+        uniqueness: { message: 'uniq' },
+        length: { message: 'length', minimum: 2, if: :name? },
+        # The format is ONLY alphabetical characters as the name will be used as
+        # a translation key on the frontend side.
+        format: { with: /\A[A-za-z]+\Z/, message: 'format' }
     end
   end
 end
