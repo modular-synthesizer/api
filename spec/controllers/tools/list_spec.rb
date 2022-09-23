@@ -11,7 +11,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         expect(last_response.status).to be 200
       end
       it 'returns an empty list when nothing has been created' do
-        expect(last_response.body).to include_json({tools: []})
+        expect(last_response.body).to include_json({})
       end
     end
 

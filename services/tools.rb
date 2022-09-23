@@ -19,7 +19,7 @@ module Modusynth
           slots: payload['slots'],
           inner_nodes: inner_nodes(payload),
           inner_links: inner_links(payload),
-          category: category(payload)
+          category_id: payload['category_id']
         )
         all_ports(payload).each.with_index do |port, idx|
           begin
@@ -35,25 +35,26 @@ module Modusynth
         tool
       end
 
+      # Lists all the tools group by their category name. Category names will be
+      # the keys of a hash where values are an array of tools linked to this
+      # category as simple hashes.
+      #
+      # @return [Hash<String,Array<Hash>>] the results as a hash where values
+      #   are lists of tools linked to the corresponding key being the category
+      #   name.
       def list
-        results = {}
-        Modusynth::Models::Category.all.each do |category|
-          if category.tools.count > 0
-            results[category.name] = category.tools.map do |tool|
-              Modusynth::Decorators::Tool.new(tool).to_simple_h
-            end
-          end
+        results = Modusynth::Models::Tool.all.to_a.reduce({}) do |list, item|
+          cname = item.category.name rescue 'tools'
+          decorated = Modusynth::Decorators::Tool.new(item).to_simple_h
+          list[cname] = [*list[cname].to_a, decorated]
+          list
         end
-        results
       end
 
       private
 
       def category(payload)
-        raise Modusynth::Exceptions.require('category_id') if payload['category_id'].nil?
-        category = Modusynth::Models::Category.find(payload['category_id'])
-        raise Modusynth::Exceptions.unknown('category_id') if category.nil?
-        category
+        Modusynth::Models::Category.where(id: payload['category_id'])
       end
 
       def all_ports payload

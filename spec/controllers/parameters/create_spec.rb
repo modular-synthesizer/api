@@ -140,18 +140,6 @@ RSpec.describe Modusynth::Controllers::Parameters do
           })
         end
       end
-      describe 'The step attribute is too broad for the boundaries' do
-        before { post '/', {name: 'foo', minimum: 0, maximum: 1, step: 1, precision: 0, default: 0}.to_json }
-
-        it 'Returns a 400 (Bad Request) status code' do
-          expect(last_response.status).to be 400
-        end
-        it 'Returns the correct body' do
-          expect(last_response.body).to include_json({
-            key: 'step', message: 'broad'
-          })
-        end
-      end
     end
   end
 end
