@@ -14,6 +14,12 @@ module Modusynth
         decorator.new(category).to_h
       end
 
+      def update id, payload
+        category = find_or_fail(id)
+        category.update(**payload.slice('name'))
+        decorator.new(category).to_h
+      end
+
       def list
         model.all.map do |category|
           decorator.new(category).to_h

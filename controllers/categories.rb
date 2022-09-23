@@ -10,6 +10,10 @@ module Modusynth
         halt 200, service.list.to_json
       end
 
+      put '/:id' do
+        halt 200, service.update(params[:id], body_params).to_json
+      end
+
       delete '/:id' do
         service.delete(params[:id])
         halt 204
