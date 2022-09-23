@@ -14,6 +14,12 @@ module Modusynth
         decorator.new(category).to_h
       end
 
+      def list
+        model.all.map do |category|
+          decorator.new(category).to_h
+        end
+      end
+
       def model
         Modusynth::Models::Category
       end

@@ -7,10 +7,7 @@ module Modusynth
       end
 
       get '/' do
-        results = Modusynth::Models::Category.all.map do |category|
-          Modusynth::Decorators::Category.new(category).to_h
-        end
-        halt 200, results.to_json
+        halt 200, service.list.to_json
       end
 
       def service
