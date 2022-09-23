@@ -20,6 +20,16 @@ module Modusynth
         end
       end
 
+      def delete id
+        find_or_fail(id).delete
+      end
+
+      def find_or_fail id
+        item = model.find(id)
+        raise Modusynth::Exceptions.unknown if item.nil?
+        item
+      end
+
       def model
         Modusynth::Models::Category
       end

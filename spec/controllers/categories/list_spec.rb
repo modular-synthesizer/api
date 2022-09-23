@@ -1,4 +1,4 @@
-RSpec.describe Modusynth::Controllers::Categories do
+RSpec.describe 'GET /categories' do
   def app
     Modusynth::Controllers::Categories
   end

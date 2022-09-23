@@ -7,7 +7,7 @@ module Modusynth
       raise Modusynth::Exceptions::BadRequest.new(field, 'required')
     end
 
-    def self.unknown field
+    def self.unknown field = 'id'
       raise Modusynth::Exceptions::Unknown.new(field, 'unknown')
     end
 

@@ -10,6 +10,11 @@ module Modusynth
         halt 200, service.list.to_json
       end
 
+      delete '/:id' do
+        service.delete(params[:id])
+        halt 204
+      end
+
       def service
         Modusynth::Services::Categories.instance
       end
