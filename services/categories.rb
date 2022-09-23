@@ -17,6 +17,7 @@ module Modusynth
       def update id, payload
         category = find_or_fail(id)
         category.update(**payload.slice('name'))
+        category.save!
         decorator.new(category).to_h
       end
 
@@ -31,7 +32,7 @@ module Modusynth
       end
 
       def find_or_fail id
-        item = model.find(id)
+        item = model.where(id: id).first
         raise Modusynth::Exceptions.unknown if item.nil?
         item
       end

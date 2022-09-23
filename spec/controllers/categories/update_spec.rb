@@ -13,7 +13,7 @@ RSpec.describe 'PUT /categories/:id' do
     end
     it 'Returns the correct body' do
       expect(last_response.body).to include_json(
-        id: category.id.to_s,
+        id: dopefun.id.to_s,
         name: 'otherName'
       )
     end
@@ -34,13 +34,13 @@ RSpec.describe 'PUT /categories/:id' do
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
           id: dopefun.id.to_s,
-          name: 'testcategory'
+          name: 'dopefun'
         )
       end
       describe 'Updated category' do
         let!(:category) { Modusynth::Models::Category.first }
         it 'Has not updated the name' do
-          expect(category.name).to eq 'testCategory'
+          expect(category.name).to eq 'dopefun'
         end
       end
     end
