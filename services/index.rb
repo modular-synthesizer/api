@@ -1,5 +1,6 @@
 module Modusynth
   module Services
+    autoload :Accounts, './services/accounts'
     autoload :Categories, './services/categories'
     autoload :Links, './services/links'
     autoload :Modules, './services/modules'
