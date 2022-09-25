@@ -4,9 +4,10 @@ module Modusynth
     autoload :Category, './models/category'
     autoload :Link, './models/link'
     autoload :Module, './models/module'
+    autoload :Modules, './models/modules/index'
     autoload :Synthesizer, './models/synthesizer'
+    autoload :Session, './models/session'
     autoload :Tools, './models/tools/index'
     autoload :Tool, './models/tool'
-    autoload :Modules, './models/modules/index'
   end
 end

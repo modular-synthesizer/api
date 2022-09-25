@@ -5,6 +5,7 @@ module Modusynth
     autoload :Links, './services/links'
     autoload :Modules, './services/modules'
     autoload :Parameters, './services/parameters'
+    autoload :Sessions, './services/sessions'
     autoload :Synthesizers, './services/synthesizers'
     autoload :Tools, './services/tools'
   end

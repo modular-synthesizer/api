@@ -1,6 +1,7 @@
 module Modusynth
   module Exceptions
     autoload :BadRequest, './exceptions/bad_request'
+    autoload :Forbidden, './exceptions/forbidden'
     autoload :Unknown, './exceptions/unknown'
 
     def self.required field
@@ -9,6 +10,10 @@ module Modusynth
 
     def self.unknown field = 'id'
       raise Modusynth::Exceptions::Unknown.new(field, 'unknown')
+    end
+
+    def self.forbidden field = 'auth_token'
+      raise Modusynth::Exceptions::Forbidden.new(field, 'forbidden')
     end
 
     def self.from_validation exception, prefix = ''

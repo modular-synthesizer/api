@@ -6,6 +6,7 @@ module Modusynth
     autoload :Links, './controllers/links'
     autoload :Modules, './controllers/modules'
     autoload :Parameters, './controllers/parameters'
+    autoload :Sessions, './controllers/sessions'
     autoload :Synthesizers, './controllers/synthesizers'
     autoload :Tools, './controllers/tools'
   end
