@@ -6,6 +6,9 @@ require './module'
 Dir['./spec/support/**/*.rb'].each do |filename|
   require filename
 end
+Dir['./spec/shared/**/*.rb'].each do |filename|
+  require filename
+end
 Dir['./spec/requests/**/*.rb'].each do |filename|
   require filename
 end

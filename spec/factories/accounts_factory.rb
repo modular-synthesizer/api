@@ -13,5 +13,13 @@ FactoryBot.define do
       password_confirmation { 'testpassword' }
       email { 'cidualia@modusynth.com' }
     end
+
+    # Used ONLY for authentication errors in controllers tests.
+    factory :authenticator do
+      username { 'authenticator' }
+      password { 'testpassword' }
+      password_confirmation { 'testpassword' }
+      email { 'authenticator@modusynth.com' }
+    end
   end
 end
