@@ -11,13 +11,16 @@ module Modusynth
       end
 
       def delete token, auth_session
-        session = Modusynth::Models::Session.where(token: token).first
-        raise Modusynth::Exceptions.unknown 'token' if session.nil?
-        if session.account.id.to_s != auth_session.account.id.to_s || auth_session.expired?
-          raise Modusynth::Exceptions.forbidden 'auth_token'
-        end
+        session = find_or_fail token
+        ownership.check session, auth_session
         session.logged_out = true
         session.save!
+        session
+      end
+
+      def find_or_fail token
+        session = Modusynth::Models::Session.where(token: token).first
+        raise Modusynth::Exceptions.unknown 'token' if session.nil?
         session
       end
 
@@ -36,6 +39,10 @@ module Modusynth
 
       def model
         Modusynth::Models::Session
+      end
+
+      def ownership
+        Modusynth::Services::Ownership.instance
       end
     end
   end
