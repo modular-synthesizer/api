@@ -22,9 +22,16 @@ module Modusynth
 
       def body_params
         request.body.rewind
-        JSON.parse(request.body.read.to_s)
+        JSON.parse(request.body.read.to_s).merge(params)
       rescue JSON::ParserError
-        {}
+        params
+      end
+
+      def auth_session
+        raise Modusynth::Exceptions.required 'auth_token' unless body_params.key? 'auth_token'
+        result = Modusynth::Models::Session.where(token: body_params['auth_token']).first
+        raise Modusynth::Exceptions.unknown 'auth_token' if result.nil?
+        result
       end
 
       error Mongoid::Errors::Validations do |error|
@@ -38,6 +45,10 @@ module Modusynth
 
       error Modusynth::Exceptions::Unknown do |exception|
         halt 404, {key: exception.key, message: exception.error}.to_json
+      end
+
+      error Modusynth::Exceptions::Forbidden do |exception|
+        halt 403, {key: exception.key, message: exception.error}.to_json
       end
       
       options "*" do

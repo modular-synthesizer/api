@@ -10,6 +10,17 @@ module Modusynth
         decorator.new(session).to_h
       end
 
+      def delete token, auth_session
+        session = Modusynth::Models::Session.where(token: token).first
+        raise Modusynth::Exceptions.unknown 'token' if session.nil?
+        if session.account.id.to_s != auth_session.account.id.to_s || auth_session.expired?
+          raise Modusynth::Exceptions.forbidden 'auth_token'
+        end
+        session.logged_out = true
+        session.save!
+        session
+      end
+
       private
 
       def account payload

@@ -14,7 +14,13 @@ module Modusynth
 
       field :token, type: String, default: ->{ BSON::ObjectId.new.to_s }
 
+      field :logged_out, type: Boolean, default: false
+
       belongs_to :account, class_name: '::Modusynth::Models::Account', inverse_of: :sessions
+      
+      def expired?
+        logged_out || created_at + 1000 * duration < DateTime.now
+      end
     end
   end
 end

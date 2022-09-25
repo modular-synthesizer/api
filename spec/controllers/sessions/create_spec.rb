@@ -35,6 +35,12 @@ RSpec.describe 'POST /sessions' do
       it 'Has the correct duration' do
         expect(session.duration).to be 3600
       end
+      it 'has not been logged out yet' do
+        expect(session.logged_out).to be_falsy
+      end
+      it 'is not considered expired' do
+        expect(session.expired?).to be_falsy
+      end
     end
   end
   describe 'Alternative cases' do
