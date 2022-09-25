@@ -1,6 +1,7 @@
 source 'https://rubygems.org/'
 
 group :development, :production, :test do
+  gem 'bcrypt', '3.1.18'
   gem 'mongoid', '8.0.2'
   gem 'mongoid-embedded-errors', '4.0.0'
   gem 'sinatra', '2.2.2'

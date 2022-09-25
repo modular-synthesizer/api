@@ -1,5 +1,6 @@
 module Modusynth
   module Models
+    autoload :Account, './models/account'
     autoload :Category, './models/category'
     autoload :Link, './models/link'
     autoload :Module, './models/module'
