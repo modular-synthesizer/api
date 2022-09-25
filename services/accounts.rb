@@ -4,11 +4,21 @@ module Modusynth
       include Singleton
 
       def create payload
-        account = Modusynth::Models::Account.new(
+        account = model.new(
           **payload.slice('username', 'email', 'password', 'password_confirmation')
         )
         account.save!
         decorator.new(account).to_h
+      end
+
+      def find id
+        return model.where(id: id).first
+      end
+
+      private
+
+      def model
+        Modusynth::Models::Account
       end
 
       def decorator

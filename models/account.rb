@@ -18,6 +18,8 @@ module Modusynth
       #   @return [String] the confirmation of the password, do not get, just set it ; it must be the same as the password.
       has_secure_password validations: false
 
+      has_many :sessions, class_name: '::Modusynth::Models::Session', inverse_of: :account
+
       validates :username,
         presence: { message: 'required' },
         length: { minimum: 5, message: 'length', if: :username? },
