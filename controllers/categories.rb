@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Controllers
     class Categories < Modusynth::Controllers::Base
-
       post '/' do
         halt 201, service.create(body_params).to_json
       end

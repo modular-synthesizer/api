@@ -1,19 +1,21 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Controllers
     class Base < Sinatra::Base
       register Sinatra::CrossOrigin
-      
+
       before do
-        content_type :json    
+        content_type :json
         headers({
-          'Access-Control-Allow-Origin' => '*', 
-          'Access-Control-Allow-Methods' => ['OPTIONS', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE']
-        })
+                  'Access-Control-Allow-Origin' => '*',
+                  'Access-Control-Allow-Methods' => %w[OPTIONS GET POST PUT PATCH DELETE]
+                })
       end
 
       configure do
         enable :cross_origin
-        set :logger, Logger.new(STDOUT)
+        set :logger, Logger.new($stdout)
         logger.level = Logger::ERROR if ENV['RACK_ENV'] == 'test'
         # This configuration options allow the error handler to work in tests.
         set :show_exceptions, false
@@ -38,9 +40,11 @@ module Modusynth
       #   the sessions persisted in the database.
       def auth_session
         raise Modusynth::Exceptions.required 'auth_token' unless body_params.key? 'auth_token'
+
         result = Modusynth::Models::Session.where(token: body_params['auth_token']).first
         raise Modusynth::Exceptions.unknown 'auth_token' if result.nil?
         raise Modusynth::Exceptions.forbidden 'auth_token' if result.expired?
+
         result
       end
 
@@ -50,22 +54,22 @@ module Modusynth
 
       error Mongoid::Errors::Validations do |error|
         exception = Modusynth::Exceptions.from_validation error
-        halt 400, {key: exception.key, message: exception.error}.to_json
+        halt 400, { key: exception.key, message: exception.error }.to_json
       end
 
       error Modusynth::Exceptions::BadRequest do |exception|
-        halt 400, {key: exception.key, message: exception.error}.to_json
+        halt 400, { key: exception.key, message: exception.error }.to_json
       end
 
       error Modusynth::Exceptions::Unknown do |exception|
-        halt 404, {key: exception.key, message: exception.error}.to_json
+        halt 404, { key: exception.key, message: exception.error }.to_json
       end
 
       error Modusynth::Exceptions::Forbidden do |exception|
-        halt 403, {key: exception.key, message: exception.error}.to_json
+        halt 403, { key: exception.key, message: exception.error }.to_json
       end
-      
-      options "*" do
+
+      options '*' do
         200
       end
     end

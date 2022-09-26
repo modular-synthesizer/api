@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Controllers
     # Controller for the tools allowing the user to
     # create new modules in an existing synthesizer.
     # @author Vincent Courtois <courtois.vincent@outlook.com>
     class Tools < Base
-
       # The route to build the list of tools. It returns a subset
       # of fields from the tools to make it as light as possible.
       get '/' do
