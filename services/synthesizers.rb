@@ -23,19 +23,14 @@ module Modusynth
         synthesizer
       end
 
-      def update id, payload
-        payload = payload.slice('x', 'y', 'scale')
-        synth = find_or_fail(id)
-        synth.update **payload
+      def update synthesizer, payload
+        synthesizer.update(**payload.slice('x', 'y', 'scale'))
         synth
       end
 
-      def delete id
-        synth = Modusynth::Models::Synthesizer.find(id)
-        unless synth.nil?
-          synth.modules.delete_all
-          synth.delete
-        end
+      def delete synthesizer
+        synthesizer.modules.delete_all
+        synthesizer.delete
       end
     end
   end

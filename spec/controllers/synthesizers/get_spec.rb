@@ -2,11 +2,18 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
   def app
     Modusynth::Controllers::Synthesizers
   end
+
+  let!(:babausse) { create(:babausse) }
+  let!(:session) { create(:session, account: babausse) }
+
+  # This synthesizer is used in the authentication tests only
+  let!(:synthesizer) { create(:synthesizer, id: '63319a0b7fa9786f0409a830', account: babausse) }
+
   describe 'GET /:id' do
     describe 'Nominal case' do
-      let!(:synthesizer) { create(:synthesizer) }
+      let!(:synthesizer) { create(:synthesizer, account: babausse) }
       before do
-        get "/#{synthesizer.id.to_s}"
+        get "/#{synthesizer.id.to_s}", {auth_token: session.token}
       end
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
@@ -26,7 +33,7 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
     describe 'Error cases' do
       describe 'The synthesizer does not exist' do
         before do
-          get '/unknown'
+          get '/unknown', {auth_token: session.token}
         end
         it 'Returns a 404 (Not Found) status code' do
           expect(last_response.status).to be 404
@@ -39,4 +46,6 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
       end
     end
   end
+
+  include_examples 'authentication', 'get', '/63319a0b7fa9786f0409a830', ownership: true
 end

@@ -2,6 +2,12 @@ module Modusynth
   module Controllers
     class Synthesizers < Modusynth::Controllers::Base
 
+      def synthesizer
+        result = service.find_or_fail(params['id'])
+        ownership.check result, auth_session
+        result
+      end
+
       get '/' do
         synthesizers = service.list.map do |synthesizer|
           Modusynth::Decorators::Synthesizer.new(synthesizer).to_simple_h
@@ -10,11 +16,11 @@ module Modusynth
       end
 
       get '/:id' do
-        halt 200, decorate(service.find_or_fail(params[:id])).to_json
+        halt 200, decorate(synthesizer).to_json
       end
 
       put '/:id' do
-        halt 200, decorate(service.update(params[:id], body_params)).to_json
+        halt 200, decorate(service.update(synthesizer, body_params)).to_json
       end
 
       post '/' do
@@ -22,7 +28,7 @@ module Modusynth
       end
 
       delete '/:id' do
-        service.delete(params[:id])
+        service.delete(synthesizer)
         halt 200, {message: 'deleted'}.to_json
       end
 

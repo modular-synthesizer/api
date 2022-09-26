@@ -44,6 +44,10 @@ module Modusynth
         result
       end
 
+      def ownership
+        Modusynth::Services::Ownership.instance
+      end
+
       error Mongoid::Errors::Validations do |error|
         exception = Modusynth::Exceptions.from_validation error
         halt 400, {key: exception.key, message: exception.error}.to_json
