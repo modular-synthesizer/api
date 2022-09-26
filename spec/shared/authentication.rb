@@ -41,7 +41,7 @@ RSpec.shared_examples 'authentication' do |verb, path, ownership: false|
       before do
         Modusynth::Services::Sessions.instance.delete(
           authenticator_session.token,
-          authenticator_session.token
+          authenticator_session
         )
         request(verb, path, {auth_token: authenticator_session.token})
       end

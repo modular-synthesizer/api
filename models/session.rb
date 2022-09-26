@@ -9,6 +9,7 @@ module Modusynth
     class Session
       include Mongoid::Document
       include Mongoid::Timestamps
+    include Modusynth::Models::Concerns::Ownable
 
       field :duration, type: Integer, default: 604800
 

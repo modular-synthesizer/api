@@ -84,4 +84,6 @@ RSpec.describe 'POST /categories' do
       end
     end
   end
+
+  include_examples 'authentication', 'post', '/'
 end
