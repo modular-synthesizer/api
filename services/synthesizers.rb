@@ -13,9 +13,12 @@ module Modusynth
         synthesizer
       end
 
-      def create payload
+      def create payload, auth_session
         payload = payload.slice('name', 'slots', 'racks')
-        synthesizer = Modusynth::Models::Synthesizer.new(**payload)
+        synthesizer = Modusynth::Models::Synthesizer.new(
+          account: auth_session.account,
+          **payload
+        )
         synthesizer.save!
         synthesizer
       end

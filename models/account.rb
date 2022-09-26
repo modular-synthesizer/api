@@ -20,6 +20,8 @@ module Modusynth
 
       has_many :sessions, class_name: '::Modusynth::Models::Session', inverse_of: :account
 
+      has_many :synthesizers, class_name: '::Modusynth::Models::Account', inverse_of: :account
+
       validates :username,
         presence: { message: 'required' },
         length: { minimum: 5, message: 'length', if: :username? },

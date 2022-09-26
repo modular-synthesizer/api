@@ -38,8 +38,9 @@ module Modusynth
       #   the sessions persisted in the database.
       def auth_session
         raise Modusynth::Exceptions.required 'auth_token' unless body_params.key? 'auth_token'
-        result = Modusynth::Models::Session.where(token: params['auth_token']).first
+        result = Modusynth::Models::Session.where(token: body_params['auth_token']).first
         raise Modusynth::Exceptions.unknown 'auth_token' if result.nil?
+        raise Modusynth::Exceptions.forbidden 'auth_token' if result.expired?
         result
       end
 

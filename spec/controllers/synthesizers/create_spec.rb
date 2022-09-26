@@ -2,9 +2,13 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
   def app
     Modusynth::Controllers::Synthesizers
   end
+
+  let!(:babausse) { create(:babausse) }
+  let!(:session) { create(:session, account: babausse) }
+
   describe 'POST /' do
     describe 'Nominal case' do
-      before { post '/', {name: 'test synth'}.to_json }
+      before { post '/', {name: 'test synth', auth_token: session.token}.to_json }
 
       it 'Returns a 201 (Created) status code' do
         expect(last_response.status).to be 201
@@ -26,11 +30,14 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
         it 'has the correct name' do
           expect(synth.name).to eq 'test synth'
         end
+        it 'Has the correct owner' do
+          expect(synth.account.username).to eq 'babausse'
+        end
       end
     end
     describe 'Alternative cases' do
       describe 'The number of racks is given' do
-        before { post '/', {name: 'test synth', racks: 3}.to_json }
+        before { post '/', {name: 'test synth', racks: 3, auth_token: session.token}.to_json }
 
         it 'Returns a 201 (Created) status code' do
           expect(last_response.status).to be 201
@@ -40,7 +47,7 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
         end
       end
       describe 'The number of slots is given' do
-        before { post '/', {name: 'test synth', slots: 100}.to_json }
+        before { post '/', {name: 'test synth', slots: 100, auth_token: session.token}.to_json }
 
         it 'Returns a 201 (Created) status code' do
           expect(last_response.status).to be 201
@@ -52,7 +59,7 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
     end
     describe 'Error cases' do
       describe 'Name not given' do
-        before { post '/' }
+        before { post '/', {auth_token: session.token}.to_json }
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
@@ -64,7 +71,7 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
         end
       end
       describe 'Name too short' do
-        before { post '/', {name: 'foo'}.to_json }
+        before { post '/', {name: 'foo', auth_token: session.token}.to_json }
         
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
@@ -77,4 +84,6 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
       end
     end
   end
+
+  include_examples 'authentication', 'post', '/'
 end

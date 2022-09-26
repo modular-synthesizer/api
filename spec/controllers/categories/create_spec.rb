@@ -2,7 +2,7 @@ RSpec.describe 'POST /categories' do
   def app
     Modusynth::Controllers::Categories
   end
-
+  
   describe 'Nominal case' do
     before do
       post '/', {name: 'testCategory'}.to_json
@@ -84,6 +84,4 @@ RSpec.describe 'POST /categories' do
       end
     end
   end
-
-  include_examples 'authentication', 'post', '/'
 end

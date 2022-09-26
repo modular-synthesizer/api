@@ -18,7 +18,7 @@ module Modusynth
       end
 
       post '/' do
-        halt 201, decorate(service.create(body_params)).to_json
+        halt 201, decorate(service.create(body_params, auth_session)).to_json
       end
 
       delete '/:id' do
