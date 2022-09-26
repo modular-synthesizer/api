@@ -3,9 +3,14 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
     Modusynth::Controllers::Synthesizers
   end
 
+  let!(:babausse) { create(:babausse) }
+  let!(:session) { create(:session, account: babausse) }
+
   describe 'GET /' do
     describe 'empty list' do
-      before { get '/' }
+      before do
+        get '/', {auth_token: session.token}
+      end
 
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
@@ -16,9 +21,12 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
     end
     describe 'populated list' do
       let!(:synthesizer) {
-        Modusynth::Services::Synthesizers.instance.create({'name' => 'test synth'})
+        Modusynth::Services::Synthesizers.instance.create({'name' => 'test synth'}, session)
       }
-      before { get '/' }
+      before do
+        get '/', {auth_token: session.token}
+      end
+
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
       end
@@ -34,4 +42,6 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
       end
     end
   end
+
+  include_examples 'authentication', 'post', '/'
 end

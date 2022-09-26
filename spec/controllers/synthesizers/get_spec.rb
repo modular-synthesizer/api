@@ -1,13 +1,11 @@
 RSpec.describe Modusynth::Controllers::Synthesizers do
+
   def app
     Modusynth::Controllers::Synthesizers
   end
 
   let!(:babausse) { create(:babausse) }
   let!(:session) { create(:session, account: babausse) }
-
-  # This synthesizer is used in the authentication tests only
-  let!(:synthesizer) { create(:synthesizer, id: '63319a0b7fa9786f0409a830', account: babausse) }
 
   describe 'GET /:id' do
     describe 'Nominal case' do
@@ -47,5 +45,5 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
     end
   end
 
-  include_examples 'authentication', 'get', '/63319a0b7fa9786f0409a830', ownership: true
+  include_examples 'authentication::synthesizers', 'get', "/#{id}", ownership: true
 end

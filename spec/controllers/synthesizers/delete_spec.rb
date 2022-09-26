@@ -1,14 +1,18 @@
 RSpec.describe Modusynth::Controllers::Synthesizers do
+
   def app
     Modusynth::Controllers::Synthesizers
   end
 
+  let!(:babausse) { create(:babausse) }
+  let!(:session) { create(:session, account: babausse) }
+
   describe 'DELETE /:id' do
-    let!(:node) { create(:VCA_module) }
-    let!(:synthesizer) { node.synthesizer }
+    let!(:synthesizer) { create(:synthesizer, account: babausse) }
+    let!(:node) { create(:VCA_module, synthesizer: synthesizer) }
     
     describe 'Nominal case' do
-      before { delete "/#{synthesizer.id.to_s}" }
+      before { delete "/#{synthesizer.id.to_s}", {auth_token: session.token} }
       
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
@@ -26,17 +30,21 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
     describe 'Alternative cases' do
       describe 'Two consecutive calls' do
         before do
-          delete "/#{synthesizer.id.to_s}"
-          delete "/#{synthesizer.id.to_s}"
+          delete "/#{synthesizer.id.to_s}", {auth_token: session.token}
+          delete "/#{synthesizer.id.to_s}", {auth_token: session.token}
         end
 
-        it 'Returns a 200 (OK) status code' do
-          expect(last_response.status).to be 200
+        it 'Returns a 404 (Not Found) status code' do
+          expect(last_response.status).to be 404
         end
         it 'Returns the correct body' do
-          expect(last_response.body).to include_json(message: 'deleted')
+          expect(last_response.body).to include_json(
+            key: 'id', message: 'unknown'
+          )
         end
       end
     end
   end
+
+  include_examples 'authentication::synthesizers', 'get', "/#{id}", ownership: true
 end
