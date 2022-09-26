@@ -10,9 +10,9 @@ module Modusynth
         decorator.new(session).to_h
       end
 
-      def delete token, auth_session
+      def delete token, auth_token
         session = find_or_fail token
-        ownership.check session, auth_session
+        ownership.check session, auth_token
         session.logged_out = true
         session.save!
         session

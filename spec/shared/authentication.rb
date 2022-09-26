@@ -39,7 +39,10 @@ RSpec.shared_examples 'authentication' do |verb, path, ownership: false|
     end
     describe 'The authentication token is expired' do
       before do
-        Modusynth::Services::Sessions.instance.delete(authenticator_session.token, authenticator_session)
+        Modusynth::Services::Sessions.instance.delete(
+          authenticator_session.token,
+          authenticator_session.token
+        )
         request(verb, path, {auth_token: authenticator_session.token})
       end
       it 'Returns a 403 (Forbidden) status code' do

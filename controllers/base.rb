@@ -27,11 +27,9 @@ module Modusynth
         params
       end
 
-      def auth_session
+      def auth_token
         raise Modusynth::Exceptions.required 'auth_token' unless body_params.key? 'auth_token'
-        result = Modusynth::Models::Session.where(token: body_params['auth_token']).first
-        raise Modusynth::Exceptions.unknown 'auth_token' if result.nil?
-        result
+        body_params['auth_token']
       end
 
       error Mongoid::Errors::Validations do |error|

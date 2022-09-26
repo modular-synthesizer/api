@@ -6,7 +6,7 @@ module Modusynth
       end
 
       delete '/:token' do
-        deleted = service.delete(params[:token], auth_session)
+        deleted = service.delete(params[:token], auth_token)
         halt 200, { token: deleted.token, expired: true }.to_json
       end
 
