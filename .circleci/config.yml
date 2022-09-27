@@ -1,0 +1,19 @@
+version: 2.1
+
+orbs:
+  virtuaexecutors: virtuaorbs/executors@0.1.0
+  virtuacommands: virtuaorbs/commands@0.3.0
+
+jobs:
+  tests-job:
+    docker:
+      - image: circleci/ruby:3.0.0-node-browsers
+      - image: mongo:4.1.4-xenial
+    steps:
+      - virtuacommands/run-test-suites
+
+workflows:
+  version: 2.1
+  build:
+    jobs:
+      - tests-job
