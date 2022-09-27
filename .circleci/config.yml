@@ -22,11 +22,12 @@ jobs:
           version: 20.10.14
       - echo 'export VERSION="$(date +%Y-%m-%d_%H:%M:%S)"' >> "$BASH_ENV"
       - export 
-      - docker build -t ${DOCKER_REPOSITORY}:${VERSION}
-      - docker push ${DOCKER_REPOSITORY}:${VERSION}
+      - docker build -t ${DOCKER_USERNAME}/${DOCKER_REPOSITORY}:${VERSION} -f deployment/Dockerfile
+      - docker push ${DOCKER_USERNAME}/${DOCKER_REPOSITORY}:${VERSION}
 
 workflows:
   version: 2.1
   build:
     jobs:
       - tests-job
+      - docker-job
