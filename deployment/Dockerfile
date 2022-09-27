@@ -2,7 +2,7 @@ FROM ruby:3.0.0
 
 WORKDIR /api
 
-COPY . /auapith
+COPY . /api
 
 # Installs dependencies to be able to start the server
 RUN gem install bundler && bundle install
