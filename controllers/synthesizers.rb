@@ -13,7 +13,7 @@ module Modusynth
         synthesizers = service.list.map do |synthesizer|
           Modusynth::Decorators::Synthesizer.new(synthesizer).to_simple_h
         end
-        halt 200, { synthesizers: }.to_json
+        halt 200, { synthesizers: synthesizers }.to_json
       end
 
       get '/:id' do
