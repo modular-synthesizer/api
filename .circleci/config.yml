@@ -11,6 +11,19 @@ jobs:
       - image: mongo:4.1.4-xenial
     steps:
       - virtuacommands/run-test-suites
+  docker-job:
+    docker:
+      - image: cimg/base:2022.06
+        auth:
+          username: $DOCKER_USERNAME
+          password: $DOCKER_PASSWORD
+    steps:
+      - setup_remote_docker:
+          version: 20.10.14
+      - echo 'export VERSION="$(date +%Y-%m-%d_%H:%M:%S)"' >> "$BASH_ENV"
+      - export 
+      - docker build -t ${DOCKER_REPOSITORY}:${VERSION}
+      - docker push ${DOCKER_REPOSITORY}:${VERSION}
 
 workflows:
   version: 2.1
