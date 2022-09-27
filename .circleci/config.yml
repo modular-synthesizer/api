@@ -22,7 +22,7 @@ jobs:
       - setup_remote_docker:
           version: 20.10.14
       - run:
-          command: echo 'export VERSION=`date +%Y-%m-%d_%H.%M.%S`' >> "$BASH_ENV"
+          command: export DATETIME=`date +%Y-%m-%d_%H.%M.%S` && echo "export VERSION=${DATETIME}" >> $BASH_ENV
       - run:
           command: docker build -t ${DOCKER_USERNAME}/${DOCKER_REPOSITORY}:${VERSION} -f deployment/Dockerfile .
       - run:
