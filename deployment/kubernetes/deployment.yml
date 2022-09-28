@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: modusynth
+  name: api-deployment
+  labels:
+    app: modusynth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: modusynth
+  template:
+    metadata:
+      labels:
+        app: modusynth
+    spec:
+      dnsPolicy: Default
+      containers:
+        - name: modusynth-api
+          image: virtuatable/modusynth-api:<VERSION>
+          args:
+            - web
+          ports:
+            - containerPort: 80
+          env:
+            - name: RACK_ENV
+              value: production
+            - name: MONGODB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: api
+                  key: database-uri

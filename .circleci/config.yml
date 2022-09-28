@@ -41,6 +41,8 @@ jobs:
           password: $DOCKER_PASSWORD
     steps:
       - checkout
+      - kube/install-kubectl
+      - kube/install-kubeconfig
       - setup_remote_docker:
           version: 20.10.14
       - run:
@@ -51,7 +53,10 @@ jobs:
           command: curl https://hub.docker.com/v2/repositories/${DOCKER_USERNAME}/${DOCKER_REPOSITORY}/tags -o tags.json
       - run:
           name: Add trace to ensure that validation is ok and to display latest tag for Docker
-          command: cat tags.json | jq .results | jq .[0] | jq .name
+          command: export LAST_VERSION=$(cat tags.json | jq .results | jq .[0] | jq .name) && echo "export VERSION=${LAST_VERSION}" >> $BASH_ENV
+      - run:
+          name: Create the deployment on the production cluster
+          command: sed -e "s/<VERSION>/${VERSION}/g" deployment/kubernetes/deployment.yml | kubectl apply -f -
 
 workflows:
   version: 2.1

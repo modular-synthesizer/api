@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function web {
-  bundle exec rackup -p $PORT
+  bundle exec rackup -p 80
 }
 
 function shell {
