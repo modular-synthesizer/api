@@ -58,6 +58,12 @@ jobs:
       - run:
           name: Create the deployment on the production cluster
           command: sed -e "s/<VERSION>/${VERSION}/g" deployment/kubernetes/deployment.yml | kubectl apply -f -
+      - run:
+          name: Create the service for the API
+          command: kubectl apply -f deployment/kubernetes/service.yml
+      - run:
+          name: Create the ingress for the API
+          command: kubectl apply -f deployment/kubernetes/ingress.yml
 
 workflows:
   version: 2.1
