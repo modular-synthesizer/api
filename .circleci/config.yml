@@ -41,6 +41,11 @@ jobs:
           password: $DOCKER_PASSWORD
     steps:
       - checkout
+      - setup_remote_docker:
+          version: 20.10.14
+      - run:
+          name: Authenticate on Docker HUB from environment variable
+          command: echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
       - run:
           name: Add trace to ensure that validation is ok and to display latest tag for Docker
           command: docker images | awk '{print $1}' | awk 'NR==2'
@@ -50,10 +55,7 @@ workflows:
   version: 2.1
   build:
     jobs:
-      - tests-job
-      - docker-job:
-          requires:
-            - tests-job
+      - docker-job
       - deployment-approval:
           type: approval
           requires:
