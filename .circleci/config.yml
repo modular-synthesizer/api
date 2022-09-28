@@ -33,10 +33,34 @@ jobs:
       - run:
           name: Push the image to Docker HUB
           command: docker push ${DOCKER_USERNAME}/${DOCKER_REPOSITORY}:${VERSION}
+  deployment-approval:
+    type: approval
+    requires:
+      - docker-job
+  deployment-job:
+    docker:
+      - image: cimg/base:2022.06
+        auth:
+          username: $DOCKER_USERNAME
+          password: $DOCKER_PASSWORD
+    steps:
+      - checkout
+      - run:
+          name: Add trace to ensure that validation is ok and to display latest tag for Docker
+          command: docker images | awk '{print $1}' | awk 'NR==2'
+
 
 workflows:
   version: 2.1
   build:
     jobs:
       - tests-job
-      - docker-job
+      - docker-job:
+          requires:
+            - tests-job
+      - deployment-approval:
+          requires:
+            - docker-job
+      - deployment-job:
+          requires:
+            - deployment-approval
