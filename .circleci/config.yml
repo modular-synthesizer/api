@@ -47,9 +47,11 @@ jobs:
           name: Authenticate on Docker HUB from environment variable
           command: echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
       - run:
+          name: Store tags in a JSON file
+          command: curl https://hub.docker.com/v2/repositories/${DOCKER_USERNAME}/${DOCKER_REPOSITORY}/tags -o tags.json
+      - run:
           name: Add trace to ensure that validation is ok and to display latest tag for Docker
-          command: docker images | awk '{print $1}' | awk 'NR==2'
-
+          command: cat tags.json | jq .results | jq .[0] | jq .name
 
 workflows:
   version: 2.1
