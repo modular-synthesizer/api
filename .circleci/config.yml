@@ -7,8 +7,8 @@ orbs:
 jobs:
   tests-job:
     docker:
-      - image: circleci/ruby:3.0.0-node-browsers
-      - image: mongo:4.1.4-xenial
+      - image: circleci/ruby:3.0.3
+      - image: mongo:5.0.12
     steps:
       - virtuacommands/run-test-suites
   docker-job:
@@ -22,12 +22,16 @@ jobs:
       - setup_remote_docker:
           version: 20.10.14
       - run:
+          name: Authenticate on Docker HUB from environment variable
           command: echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
       - run:
+          name: Set the version to be used in later steps
           command: export DATETIME=`date +%Y-%m-%d_%H.%M.%S` && echo "export VERSION=${DATETIME}" >> $BASH_ENV
       - run:
+          name: Build the docker image from the Dockerfile
           command: docker build -t ${DOCKER_USERNAME}/${DOCKER_REPOSITORY}:${VERSION} -f deployment/Dockerfile .
       - run:
+          name: Push the image to Docker HUB
           command: docker push ${DOCKER_USERNAME}/${DOCKER_REPOSITORY}:${VERSION}
 
 workflows:
