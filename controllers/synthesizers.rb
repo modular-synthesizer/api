@@ -3,7 +3,6 @@
 module Modusynth
   module Controllers
     class Synthesizers < Modusynth::Controllers::Base
-
       api_route 'get', '/' do
         results = service.list(@session.account).map do |synthesizer|
           Modusynth::Decorators::Synthesizer.new(synthesizer).to_simple_h
