@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Helpers
     # This module holds logic for declaring new routes on the API.
@@ -5,7 +7,7 @@ module Modusynth
     # Sinatra get/post/... functions, with authentication, checking
     # the ownership of a resource, or the permissions of the user.
     module Routes
-      def api_route verb, path, **options, &block
+      def api_route(verb, path, **options, &block)
         options = with_defaults options
         auth_service = Modusynth::Services::Authentication.instance
 
@@ -25,7 +27,7 @@ module Modusynth
       #   will override the corresponding key in the default hash.
       # @return [Hash] the hash with the default values added for
       #   the corresponding keys.
-      def with_defaults options
+      def with_defaults(options)
         defaults = {
           authenticated: true,
           ownership: nil
