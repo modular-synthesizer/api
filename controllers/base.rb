@@ -4,12 +4,13 @@ module Modusynth
   module Controllers
     class Base < Sinatra::Base
       register Sinatra::CrossOrigin
+      extend Modusynth::Helpers::Routes
 
       before do
         content_type :json
         headers({
                   'Access-Control-Allow-Origin' => '*',
-                  'Access-Control-Allow-Methods' => %w[OPTIONS GET POST PUT PATCH DELETE]
+                  'Access-Control-Allow-Methods' => '*'
                 })
       end
 

@@ -21,7 +21,10 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
     end
     describe 'populated list' do
       let!(:synthesizer) {
-        Modusynth::Services::Synthesizers.instance.create({'name' => 'test synth'}, session)
+        Modusynth::Services::Synthesizers.instance.create(
+          {'name' => 'test synth'},
+          session.account
+        )
       }
       before do
         get '/', {auth_token: session.token}

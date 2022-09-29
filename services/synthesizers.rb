@@ -3,8 +3,9 @@ module Modusynth
     class Synthesizers
       include Singleton
 
-      def list
-        Modusynth::Models::Synthesizer.all.to_a
+      def list account
+        return model.all.to_a if account.admin
+        model.where(account: account).to_a
       end
 
       def find_or_fail id, field = 'id'
@@ -13,11 +14,10 @@ module Modusynth
         synthesizer
       end
 
-      def create payload, auth_session
+      def create payload, account
         payload = payload.slice('name', 'slots', 'racks')
         synthesizer = Modusynth::Models::Synthesizer.new(
-          account: auth_session.account,
-          **payload
+          account: account, **payload
         )
         synthesizer.save!
         synthesizer
@@ -31,6 +31,12 @@ module Modusynth
       def delete synthesizer
         synthesizer.modules.delete_all
         synthesizer.delete
+      end
+
+      private
+
+      def model
+        Modusynth::Models::Synthesizer
       end
     end
   end
