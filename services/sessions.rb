@@ -18,9 +18,9 @@ module Modusynth
         session
       end
 
-      def find_or_fail token
+      def find_or_fail token, field: 'token'
         session = Modusynth::Models::Session.where(token: token).first
-        raise Modusynth::Exceptions.unknown 'token' if session.nil?
+        raise Modusynth::Exceptions.unknown field if session.nil?
         session
       end
 
