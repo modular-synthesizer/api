@@ -6,7 +6,7 @@ orbs:
   virtuacommands: virtuaorbs/commands@0.5.1
 
 jobs:
-  tests-job:
+  test-job:
     docker:
       - image: circleci/ruby:3.0.3
       - image: mongo:5.0.12
