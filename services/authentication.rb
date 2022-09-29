@@ -33,6 +33,16 @@ module Modusynth
         session
       end
 
+      # Raises an error if the user is not an administrator. It is used to
+      # forbid normal users to access routes such as tools or parameters
+      # management so that they don't modify the application's data.
+      #
+      # @param session [Modusynth::Models::Session] the session makind the request.
+      # @raise [Modusynth::Exceptions::Forbidden] if the user is not admin.
+      def check_privileges session
+        raise Modusynth::Exceptions.forbidden unless session.account.admin
+      end
+
       # Checks if the user making the request has access to the resource. To
       # find the resource, the UUID is extracted from the payoad.
       #

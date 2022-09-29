@@ -13,6 +13,7 @@ module Modusynth
 
         send verb, path do
           @session = auth_service.authenticate(body_params) if options[:authenticated]
+          auth_service.check_privileges(@session) if options[:admin]
           if options[:ownership] == true && respond_to?(:service)
             @resource = auth_service.ownership(body_params, @session, service)
           end
@@ -30,7 +31,9 @@ module Modusynth
       def with_defaults(options)
         defaults = {
           authenticated: true,
-          ownership: nil
+          ownership: nil,
+          # Indicates if the route is ONLY accessible to admins.
+          admin: false
         }
         defaults.merge options
       end
