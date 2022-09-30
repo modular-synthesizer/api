@@ -1,4 +1,4 @@
-RSpec.shared_examples 'authentication' do |verb, path, ownership: false|
+RSpec.shared_examples 'authentication' do |verb, path|
   let!(:authenticator) { create(:authenticator) }
   let!(:authenticator_session) { create(:session, account: authenticator) }
 
@@ -52,21 +52,6 @@ RSpec.shared_examples 'authentication' do |verb, path, ownership: false|
         expect(last_response.body).to include_json(
           key: 'auth_token', message: 'forbidden'
         )
-      end
-    end
-    if ownership
-      before do
-        request(verb, path, {auth_token: authenticator_session.token})
-      end
-      describe 'The authentication token does not belong to the resource' do
-        it 'Returns a 403 (Forbidden) status code' do
-          expect(last_response.status).to be 403
-        end
-        it 'Returns the correct body' do
-          expect(last_response.body).to include_json(
-            key: 'auth_token', message: 'forbidden'
-          )
-        end
       end
     end
   end
