@@ -12,6 +12,8 @@ module Modusynth
 
       field :email, type: String
 
+      field :admin, type: Boolean, default: false
+
       # @!attribute [w] password
       #   @return [String] password, in clear, of the user ; do not attempt to get the value, just set it when changing the password.
       # @!attribute [w] password_confirmation

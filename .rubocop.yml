@@ -1,4 +1,6 @@
 Style/Documentation:
   Enabled: false
+Naming/BlockForwarding:
+  Enabled: false
 AllCops:
   NewCops: enable

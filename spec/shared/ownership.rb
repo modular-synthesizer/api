@@ -1,25 +1,24 @@
-RSpec.shared_examples 'ownership' do |verb, path, resource_factory|
 
-  let!(:first_account) { create(:random_account) }
-  let!(:second_account) { create(:random_account) }
-
-  let!(:first_session) { create(:session, account: first_account) }
-  let!(:second_session) { create(:session, account: second_account) }
-
-  let!(:resource) { create(resource_factory, account: first_account) }
-
-  let!(:payload) do
-    pl = {auth_token: second_session.token }
-    pl = pl.to_json if ['post', 'put'].include? verb
-    pl
-  end
-
-  let!(:real_path) { path == '/:id' ? "/#{resource.id.to_s}" : path}
+# The shared example to check the errors regarding the ownership of a resource.
+# This route mainly checks that a user cannot access a resource created by
+# another user directly with the given route. in the path, the ":id" part is
+# always replaced with the UUID of the resource created by the given factory.
+RSpec.shared_examples 'ownership' do |verb, path, factory, field=:id|
+  let!(:owner) { create(:account) }
+  let!(:resource) { create(factory, account: owner) }
 
   describe 'Ownership errors' do
-    describe 'When a user tries to access the resource of another user' do
+    let!(:requester) { create(:account) }
+    let!(:session) { create(:session, account: requester) }
+
+    let!(:payload) do
+      payload = { auth_token: session.token }
+      ['post', 'put'].include?(verb) ? payload.to_json : payload
+    end
+
+    describe 'When a user is not the creator of the resource' do
       before do
-        send(verb, real_path, payload)
+        send(verb, path.gsub(':id', resource.send(field).to_s), payload)
       end
       it 'Returns a 403 (Forbidden) status code' do
         expect(last_response.status).to be 403
@@ -29,6 +28,29 @@ RSpec.shared_examples 'ownership' do |verb, path, resource_factory|
           key: 'auth_token', message: 'forbidden'
         )
       end
+    end
+  end
+  # An administrator can do anything on the data for any user.
+  # These great powers come with a shit ton of responsibilities.
+  describe 'Ownership override by admin' do
+    let!(:admin) { create(:account, admin: true) }
+    let!(:session) { create(:session, account: admin) }
+
+    let!(:payload) do
+      payload = { auth_token: session.token }
+      ['post', 'put'].include?(verb) ? payload.to_json : payload
+    end
+
+    before do
+      send(verb, path.gsub(':id', resource.send(field).to_s), payload)
+    end
+    it 'Returns anything ranging from 100 to 299 as there is no error' do
+      expect(last_response.status).to be < 299
+    end
+    it 'Does not return an error body' do
+      expect(last_response.body).to_not include_json(
+        key: 'auth_token', message: 'forbidden'
+      )
     end
   end
 end

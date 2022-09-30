@@ -1,24 +1,24 @@
 FactoryBot.define do
   factory :account, class: ::Modusynth::Models::Account do
+
+    username { Faker::Alphanumeric.unique.alphanumeric(number: 10, min_alpha: 10) }
+    email { Faker::Internet.unique.free_email }
+    password { 'testpassword' }
+    password_confirmation { 'testpassword' }
+
     factory :babausse do
       username { 'babausse' }
-      password { 'testpassword' }
-      password_confirmation { 'testpassword' }
       email { 'courtois.vincent@outlook.com' }
     end
 
     factory :cidualia do
       username { 'Cidualia' }
-      password { 'testpassword' }
-      password_confirmation { 'testpassword' }
       email { 'cidualia@modusynth.com' }
     end
 
     # Used ONLY for authentication errors in controllers tests.
     factory :authenticator do
       username { 'authenticator' }
-      password { 'testpassword' }
-      password_confirmation { 'testpassword' }
       email { 'authenticator@modusynth.com' }
     end
 
