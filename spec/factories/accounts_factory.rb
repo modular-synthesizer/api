@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :account, class: ::Modusynth::Models::Account do
 
-    username { Faker::Internet.unique.username }
+    username { Faker::Alphanumeric.unique.alphanumeric(number: 10, min_alpha: 10) }
     email { Faker::Internet.unique.free_email }
     password { 'testpassword' }
     password_confirmation { 'testpassword' }

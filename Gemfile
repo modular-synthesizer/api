@@ -20,6 +20,7 @@ end
 group :test do
   gem 'database_cleaner-mongoid', '2.0.1'
   gem 'factory_bot', '6.2.1'
+  gem 'faker', '2.23.0'
   gem 'rack-test', '2.0.2', require: 'rack/test'
   gem 'rspec', '3.11.0'
   gem 'rspec_junit_formatter', '0.6.0'
