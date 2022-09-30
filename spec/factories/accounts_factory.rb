@@ -21,5 +21,12 @@ FactoryBot.define do
       password_confirmation { 'testpassword' }
       email { 'authenticator@modusynth.com' }
     end
+
+    factory :random_account do
+      username { Faker::Internet.unique.username }
+      email { Faker::Internet.unique.free_email }
+      password { 'testpassword' }
+      password_confirmation { 'testpassword' }
+    end
   end
 end
