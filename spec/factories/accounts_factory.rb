@@ -22,11 +22,8 @@ FactoryBot.define do
       email { 'authenticator@modusynth.com' }
     end
 
-    factory :random_account do
-      username { Faker::Internet.unique.username }
-      email { Faker::Internet.unique.free_email }
-      password { 'testpassword' }
-      password_confirmation { 'testpassword' }
+    factory(:random_admin) do
+      admin { true }
     end
   end
 end

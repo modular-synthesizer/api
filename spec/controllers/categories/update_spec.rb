@@ -3,10 +3,13 @@ RSpec.describe 'PUT /categories/:id' do
     Modusynth::Controllers::Categories.new
   end
 
+  let!(:admin) { create(:random_admin) }
+  let!(:admin_session) { create(:session, account: admin) }
+
   let!(:dopefun) { create(:dopefun) }
   describe 'Nominal case' do
     before do
-      put "/#{dopefun.id.to_s}", {name: 'otherName'}.to_json
+      put "/#{dopefun.id.to_s}", {name: 'otherName', auth_token: admin_session.token}.to_json
     end
     it 'Returns a 200 (OK) status code' do
       expect(last_response.status).to be 200
@@ -26,7 +29,7 @@ RSpec.describe 'PUT /categories/:id' do
   describe 'Alternative case' do
     describe 'A name is not given' do
       before do
-        put "/#{dopefun.id.to_s}"
+        put "/#{dopefun.id.to_s}", {auth_token: admin_session.token}
       end
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
@@ -48,7 +51,7 @@ RSpec.describe 'PUT /categories/:id' do
   describe 'error cases' do
     describe 'The category is not found' do
       before do
-        put '/unknown'
+        put '/unknown', {auth_token: admin_session.token}
       end
       it 'returns a 404 (Not Found) status code' do
         expect(last_response.status).to be 404
@@ -61,7 +64,7 @@ RSpec.describe 'PUT /categories/:id' do
     end
     describe 'The name is too short' do
       before do
-        put "/#{dopefun.id.to_s}", {name: 'c'}.to_json
+        put "/#{dopefun.id.to_s}", {name: 'c', auth_token: admin_session.token}.to_json
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -74,7 +77,7 @@ RSpec.describe 'PUT /categories/:id' do
     end
     describe 'The name does not have the correct format' do
       before do
-        put "/#{dopefun.id.to_s}", {name: 'new name'}.to_json
+        put "/#{dopefun.id.to_s}", {name: 'new name', auth_token: admin_session.token}.to_json
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -86,4 +89,6 @@ RSpec.describe 'PUT /categories/:id' do
       end
     end
   end
+
+  include_examples 'admin', 'put', '/anything'
 end

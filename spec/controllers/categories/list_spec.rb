@@ -3,9 +3,12 @@ RSpec.describe 'GET /categories' do
     Modusynth::Controllers::Categories
   end
 
+  let!(:admin) { create(:random_admin) }
+  let!(:admin_session) { create(:session, account: admin) }
+
   describe 'Nominal case' do
     before do
-      post '/', {name: 'testCategory'}.to_json
+      post '/', {name: 'testCategory', auth_token: admin_session.token}.to_json
       get '/'
     end
     it 'Returns a 200 (OK) status code' do
