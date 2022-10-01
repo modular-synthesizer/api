@@ -46,7 +46,7 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
     end
   end
 
-  include_examples 'authentication', 'get', "/anything"
+  include_examples 'authentication', 'delete', "/anything"
 
-  include_examples 'ownership', 'get', '/:id', :synthesizer
+  include_examples 'ownership', 'delete', '/:id', :synthesizer
 end
