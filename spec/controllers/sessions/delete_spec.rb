@@ -76,11 +76,13 @@ RSpec.describe 'DELETE /:id' do
       end
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
-          key: 'token', message: 'unknown'
+          key: 'id', message: 'unknown'
         )
       end
     end
   end
 
-  include_examples 'authentication', 'delete', '/6330b8cab8c724a019c7b839', ownership: true
+  include_examples 'authentication', 'delete', '/anything'
+
+  include_examples 'ownership', 'delete', '/:id', :session, :token
 end

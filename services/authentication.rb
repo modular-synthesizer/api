@@ -26,7 +26,7 @@ module Modusynth
           raise Modusynth::Exceptions.required 'auth_token'
         end
         # The :find_or_fail method will raise not found errors if needed.
-        session = sessions.find_or_fail payload['auth_token'], field: 'auth_token'
+        session = sessions.find_or_fail payload['auth_token'], 'auth_token'
         if session.account.nil? || session.expired?
           raise Modusynth::Exceptions.forbidden
         end
@@ -67,7 +67,9 @@ module Modusynth
         # Ownership cannot be checked if the model does not respond to :account.
         return unless resource.respond_to? :account
 
-        unless session.account.admin || resource.account == session.account 
+        return resource if session.account.admin
+
+        if resource.account != session.account 
           raise Modusynth::Exceptions.forbidden
         end
         resource

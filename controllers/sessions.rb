@@ -7,9 +7,9 @@ module Modusynth
         halt 201, service.create(body_params).to_json
       end
 
-      delete '/:token' do
-        deleted = service.delete(params[:token], auth_session)
-        halt 200, { token: deleted.token, expired: true }.to_json
+      api_route 'delete', '/:id', ownership: true do
+        service.delete @resource
+        halt 200, { token: @resource.token, expired: true }.to_json
       end
 
       def service

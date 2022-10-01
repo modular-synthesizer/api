@@ -10,15 +10,13 @@ module Modusynth
         decorator.new(session).to_h
       end
 
-      def delete token, auth_session
-        session = find_or_fail token
-        ownership.check session, auth_session
+      def delete session
         session.logged_out = true
         session.save!
         session
       end
 
-      def find_or_fail token, field: 'token'
+      def find_or_fail token, field = 'id'
         session = Modusynth::Models::Session.where(token: token).first
         raise Modusynth::Exceptions.unknown field if session.nil?
         session
