@@ -3,13 +3,13 @@ RSpec.describe 'GET /categories' do
     Modusynth::Controllers::Categories
   end
 
-  let!(:admin) { create(:random_admin) }
-  let!(:admin_session) { create(:session, account: admin) }
+  let!(:account) { create(:account, admin: true) }
+  let!(:session) { create(:session, account: account) }
 
   describe 'Nominal case' do
     before do
-      post '/', {name: 'testCategory', auth_token: admin_session.token}.to_json
-      get '/'
+      post '/', {name: 'testCategory', auth_token: session.token}.to_json
+      get '/', {auth_token: session.token}
     end
     it 'Returns a 200 (OK) status code' do
       expect(last_response.status).to be 200
@@ -26,7 +26,7 @@ RSpec.describe 'GET /categories' do
   describe 'Alternative cases' do
     describe 'Empty list' do
       before do
-        get '/'
+        get '/', {auth_token: session.token}
       end
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
@@ -36,4 +36,6 @@ RSpec.describe 'GET /categories' do
       end
     end
   end
+
+  include_examples 'authentication', 'get', '/'
 end

@@ -7,7 +7,7 @@ module Modusynth
         halt 201, service.create(body_params).to_json
       end
 
-      get '/' do
+      api_route 'get', '/' do
         halt 200, service.list.to_json
       end
 
