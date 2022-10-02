@@ -4,6 +4,9 @@ RSpec.describe Modusynth::Controllers::Parameters do
   end
 
   describe 'POST /' do
+    let!(:admin) { create(:random_admin) }
+    let!(:session) { create(:session, account: admin) }
+
     describe 'Nominal case' do
       before do
         post '/', {
@@ -12,7 +15,8 @@ RSpec.describe Modusynth::Controllers::Parameters do
           maximum: 10,
           default: 0,
           step: 1,
-          precision: 0
+          precision: 0,
+          auth_token: session.token
         }.to_json
       end
       it 'Returns a 201 (Created) status code' do
@@ -45,7 +49,7 @@ RSpec.describe Modusynth::Controllers::Parameters do
     end
     describe 'Error cases' do
       describe 'The name is not given' do
-        before { post '/' }
+        before { post '/', {auth_token: session.token} }
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
@@ -57,7 +61,7 @@ RSpec.describe Modusynth::Controllers::Parameters do
         end
       end
       describe  'The minimum is not given' do
-        before { post '/', {name: 'foo'}.to_json }
+        before { post '/', {name: 'foo', auth_token: session.token}.to_json }
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
@@ -69,7 +73,7 @@ RSpec.describe Modusynth::Controllers::Parameters do
         end
       end
       describe 'The maximum is not given' do
-        before { post '/', {name: 'foo', minimum: 0}.to_json }
+        before { post '/', {name: 'foo', minimum: 0, auth_token: session.token}.to_json }
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
@@ -81,7 +85,7 @@ RSpec.describe Modusynth::Controllers::Parameters do
         end
       end
       describe 'The step attribute is not given' do
-        before { post '/', {name: 'foo', minimum: 0, maximum: 10}.to_json }
+        before { post '/', {name: 'foo', minimum: 0, maximum: 10, auth_token: session.token}.to_json }
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
@@ -93,7 +97,7 @@ RSpec.describe Modusynth::Controllers::Parameters do
         end
       end
       describe 'The precision is not given' do
-        before { post '/', {name: 'foo', minimum: 0, maximum: 10, step: 1}.to_json }
+        before { post '/', {name: 'foo', minimum: 0, maximum: 10, step: 1, auth_token: session.token}.to_json }
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
@@ -105,7 +109,7 @@ RSpec.describe Modusynth::Controllers::Parameters do
         end
       end
       describe 'The default is not given' do
-        before { post '/', {name: 'foo', minimum: 0, maximum: 10, step: 1, precision: 0}.to_json }
+        before { post '/', {name: 'foo', minimum: 0, maximum: 10, step: 1, precision: 0, auth_token: session.token}.to_json }
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
@@ -117,7 +121,7 @@ RSpec.describe Modusynth::Controllers::Parameters do
         end
       end
       describe 'The default is above the maximum' do
-        before { post '/', {name: 'foo', minimum: 0, maximum: 10, step: 1, precision: 0, default: 11}.to_json }
+        before { post '/', {name: 'foo', minimum: 0, maximum: 10, step: 1, precision: 0, default: 11, auth_token: session.token}.to_json }
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
@@ -129,7 +133,7 @@ RSpec.describe Modusynth::Controllers::Parameters do
         end
       end
       describe 'The minimum is below the minimum' do
-        before { post '/', {name: 'foo', minimum: 1, maximum: 10, step: 1, precision: 0, default: 0}.to_json }
+        before { post '/', {name: 'foo', minimum: 1, maximum: 10, step: 1, precision: 0, default: 0, auth_token: session.token}.to_json }
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
@@ -141,5 +145,9 @@ RSpec.describe Modusynth::Controllers::Parameters do
         end
       end
     end
+
+    include_examples 'authentication', 'post', '/'
+    
+    include_examples 'admin', 'post', '/'
   end
 end

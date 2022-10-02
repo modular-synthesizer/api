@@ -4,8 +4,11 @@ RSpec.describe Modusynth::Controllers::Parameters do
   end
 
   describe 'GET /' do
+    let!(:account) { create(:account) }
+    let!(:session) { create(:session, account: account) }
+
     describe 'Empty list' do
-      before { get '/' }
+      before { get '/', {auth_token: session.token} }
 
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
@@ -17,7 +20,7 @@ RSpec.describe Modusynth::Controllers::Parameters do
     describe 'List with items' do
       let!(:param) { create(:frequency) }
 
-      before { get '/' }
+      before { get '/', {auth_token: session.token} }
 
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
@@ -40,5 +43,7 @@ RSpec.describe Modusynth::Controllers::Parameters do
         })
       end
     end
+
+    include_examples 'authentication', 'get', '/'
   end
 end
