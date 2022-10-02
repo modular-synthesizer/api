@@ -4,12 +4,14 @@ RSpec.describe Modusynth::Controllers::Tools do
   end
 
   describe 'GET /:id' do
+    let!(:account) { create(:account) }
+    let!(:session) { create(:session, account: account) }
 
     describe 'Nominal case' do
       let!(:tool) { create(:VCA) }
 
       before do
-        get "/#{tool.id.to_s}"
+        get "/#{tool.id.to_s}", {auth_token: session.token}
       end
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
@@ -44,5 +46,22 @@ RSpec.describe Modusynth::Controllers::Tools do
         })
       end
     end
+    describe 'Error cases' do
+      describe 'When the UUID is not found' do
+        before do
+          get '/unknown', {auth_token: session.token}
+        end
+        it 'Returns a 404 (Not Found) status code' do
+          expect(last_response.status).to be 404
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            key: 'id', message: 'unknown'
+          )
+        end
+      end
+    end
+
+    include_examples 'authentication', 'get', '/anything'
   end
 end

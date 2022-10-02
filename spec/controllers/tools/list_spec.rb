@@ -4,8 +4,11 @@ RSpec.describe Modusynth::Controllers::Tools do
   end
 
   describe 'GET /' do
+    let!(:account) { create(:account) }
+    let!(:session) { create(:session, account: account) }
+
     describe 'empty list' do
-      before { get '/' }
+      before { get '/', {auth_token: session.token} }
 
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
@@ -17,7 +20,7 @@ RSpec.describe Modusynth::Controllers::Tools do
 
     describe 'not empty list' do
       let!(:tool) { create(:VCA) }
-      before { get '/' }
+      before { get '/', {auth_token: session.token} }
       
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
@@ -30,5 +33,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         })
       end
     end
+
+    include_examples 'authentication', 'get', '/'
   end
 end

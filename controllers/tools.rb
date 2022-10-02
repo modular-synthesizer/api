@@ -8,12 +8,12 @@ module Modusynth
     class Tools < Base
       # The route to build the list of tools. It returns a subset
       # of fields from the tools to make it as light as possible.
-      get '/' do
+      api_route 'get', '/' do
         halt 200, service.list.to_json
       end
 
-      get '/:id' do
-        halt 200, decorate(service.find(params['id'])).to_json
+      api_route 'get', '/:id' do
+        halt 200, decorate(service.find_or_fail(params['id'])).to_json
       end
 
       api_route 'post', '/', admin: true do
