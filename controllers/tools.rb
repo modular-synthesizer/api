@@ -16,7 +16,7 @@ module Modusynth
         halt 200, decorate(service.find(params['id'])).to_json
       end
 
-      post '/' do
+      api_route 'post', '/', admin: true do
         halt 201, decorate(service.create(body_params)).to_json
       end
 

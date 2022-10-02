@@ -14,8 +14,12 @@ RSpec.describe Modusynth::Controllers::Tools do
   end
 
   describe 'POST /' do
+
+    let!(:admin) { create(:random_admin) }
+    let!(:session) { create(:session, account: admin) }
+
     describe 'Nominal case' do
-      before { create_simple_tool }
+      before { create_simple_tool(session) }
 
       it 'Returns a 201 (Created) status code' do
         expect(last_response.status).to be 201
@@ -51,7 +55,7 @@ RSpec.describe Modusynth::Controllers::Tools do
 
     describe 'Alternative cases' do
       describe 'Tool with inner nodes' do
-        before { create_tool_with_inner_node }
+        before { create_tool_with_inner_node(session) }
 
         it 'Returns a 201 (Created) status code' do
           expect(last_response.status).to be 201
@@ -86,7 +90,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
       end
       describe 'Tool with inner links' do
-        before { create_tool_with_inner_link }
+        before { create_tool_with_inner_link(session) }
 
         describe 'Created inner link' do
           let!(:tool) { Modusynth::Models::Tool.first }
@@ -122,7 +126,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             'default' => 1
           )
         end
-        before { create_tool_with_parameter param }
+        before { create_tool_with_parameter(session, param) }
 
         it 'Returns a 201 (Created) status code' do
           expect(last_response.status).to be 201
@@ -148,7 +152,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
       end
       describe 'Tool with inputs' do
-        before { create_tool_with_input }
+        before { create_tool_with_input(session) }
 
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
@@ -180,7 +184,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
       end
       describe 'Tool with outputs' do
-        before { create_tool_with_output }
+        before { create_tool_with_output(session) }
 
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
@@ -215,7 +219,7 @@ RSpec.describe Modusynth::Controllers::Tools do
 
     describe 'Error cases' do
       describe 'No name given' do
-        before { create_empty_tool }
+        before { create_empty_tool(session) }
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
@@ -227,7 +231,7 @@ RSpec.describe Modusynth::Controllers::Tools do
       end
 
       describe 'Name too short' do
-        before { create_empty_tool({name: 'a'}) }
+        before { create_empty_tool(session, {name: 'a'}) }
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
@@ -239,7 +243,7 @@ RSpec.describe Modusynth::Controllers::Tools do
       end
 
       describe 'Slots not given' do
-        before { create_empty_tool({name: 'test'}) }
+        before { create_empty_tool(session, {name: 'test'}) }
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
@@ -251,7 +255,7 @@ RSpec.describe Modusynth::Controllers::Tools do
       end
 
       describe 'Slots given with negative value' do
-        before { create_empty_tool({name: 'test', slots: -1}) }
+        before { create_empty_tool(session, {name: 'test', slots: -1}) }
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
@@ -263,7 +267,7 @@ RSpec.describe Modusynth::Controllers::Tools do
       end
 
       describe 'Slots given with zero as value' do
-        before { create_empty_tool({name: 'test', slots: 0}) }
+        before { create_empty_tool(session, {name: 'test', slots: 0}) }
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
@@ -277,12 +281,12 @@ RSpec.describe Modusynth::Controllers::Tools do
 
     describe 'Inner nodes error cases' do
 
-      def create_with_node(payload = {})
-        create_empty_tool({name: 'test', slots: 10, innerNodes: [payload]})
+      def create_with_node(session, payload = {})
+        create_empty_tool(session, {name: 'test', slots: 10, innerNodes: [payload]})
       end
 
       describe 'name not given' do
-        before { create_with_node() }
+        before { create_with_node(session) }
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
@@ -294,7 +298,7 @@ RSpec.describe Modusynth::Controllers::Tools do
       end
 
       describe 'name too short' do
-        before { create_with_node({name: 'a'}) }
+        before { create_with_node(session, {name: 'a'}) }
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
@@ -306,7 +310,7 @@ RSpec.describe Modusynth::Controllers::Tools do
       end
 
       describe 'generator not given' do
-        before { create_with_node({name: 'test'}) }
+        before { create_with_node(session, {name: 'test'}) }
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
@@ -318,7 +322,7 @@ RSpec.describe Modusynth::Controllers::Tools do
       end
 
       describe 'generator name too short' do
-        before { create_with_node({name: 'test', generator: 'a'}) }
+        before { create_with_node(session, {name: 'test', generator: 'a'}) }
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
@@ -332,7 +336,7 @@ RSpec.describe Modusynth::Controllers::Tools do
 
     describe 'Inner links error cases' do
       def create_with_link(payload = {})
-        create_empty_tool({
+        create_empty_tool(session, {
           name: 'test',
           slots: 10,
           innerNodes: [{name: 'foo', generator: 'bar'}],
@@ -412,7 +416,7 @@ RSpec.describe Modusynth::Controllers::Tools do
 
     describe 'parameters error cases' do
       before do
-        create_empty_tool({
+        create_empty_tool(session, {
           name: 'test',
           slots: 10,
           parameters: [ {descriptor: 'unknown_id'} ]
@@ -433,7 +437,7 @@ RSpec.describe Modusynth::Controllers::Tools do
     describe 'inputs error cases' do
 
       def create_with_input *payload
-        create_empty_tool({
+        create_empty_tool(session, {
           name: 'test',
           slots: 10,
           inputs: [{name: 'test', targets: [], index: 0}] + payload,
@@ -484,7 +488,7 @@ RSpec.describe Modusynth::Controllers::Tools do
     describe 'outputs error cases' do
 
       def create_with_output payload
-        create_empty_tool({
+        create_empty_tool(session, {
           name: 'test',
           slots: 10,
           outputs: [payload],
@@ -532,5 +536,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         include_examples 'empty lists'
       end
     end
+
+    include_examples 'admin', 'post', '/'
   end
 end
