@@ -30,29 +30,6 @@ module Modusynth
         params
       end
 
-      # We find the authentication session here and NOT in the ownership service as we sometimes
-      # need to make authentication controls without ownership check.
-      #
-      # @return [Modusynth::Models::Session] the aauthentication session linked to the provided
-      #   :auth_token parameter value.
-      #
-      # @raise [Modusynth::Exceptions::BadRequest] when the :auth_token field is NOT provided
-      # @raise [Modusynth::Exceptions::Unknown] when the :auth_token does not reference any of
-      #   the sessions persisted in the database.
-      def auth_session
-        raise Modusynth::Exceptions.required 'auth_token' unless body_params.key? 'auth_token'
-
-        result = Modusynth::Models::Session.where(token: body_params['auth_token']).first
-        raise Modusynth::Exceptions.unknown 'auth_token' if result.nil?
-        raise Modusynth::Exceptions.forbidden 'auth_token' if result.expired?
-
-        result
-      end
-
-      def ownership
-        Modusynth::Services::Ownership.instance
-      end
-
       error Mongoid::Errors::Validations do |error|
         exception = Modusynth::Exceptions.from_validation error
         halt 400, { key: exception.key, message: exception.error }.to_json
