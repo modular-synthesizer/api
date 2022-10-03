@@ -3,7 +3,7 @@
 module Modusynth
   module Controllers
     class Sessions < Modusynth::Controllers::Base
-      post '/' do
+      api_route 'post', '/', authenticated: false do
         halt 201, service.create(body_params).to_json
       end
 
