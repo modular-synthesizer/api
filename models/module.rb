@@ -21,6 +21,10 @@ module Modusynth
 
       has_many :ports, class_name: '::Modusynth::Models::Modules::Port', inverse_of: :module
 
+      def account
+        synthesizer.account
+      end
+
       # Instanciates all porst and parameters from the tool in the node.
       after_create do |document|
         document.tool.parameters.each do |parameter|

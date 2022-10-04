@@ -2,6 +2,10 @@ describe Modusynth::Controllers::Modules do
   def app
     Modusynth::Controllers::Modules
   end
+
+  let!(:account) { create(:account) }
+  let!(:session) { create(:session, account: account) }
+
   describe 'POST /' do
     let!(:synth) { create(:synthesizer) }
     let!(:tool) { create(:VCA) }
@@ -10,7 +14,8 @@ describe Modusynth::Controllers::Modules do
       before do
         payload = {
           synthesizer_id: synth.id.to_s,
-          tool_id: tool.id.to_s
+          tool_id: tool.id.to_s,
+          auth_token: session.token
         }
         post '/', payload.to_json
       end
@@ -72,7 +77,7 @@ describe Modusynth::Controllers::Modules do
     end
     describe 'Error case' do
       describe 'The synthesizer does not exist' do
-        before { post '/', {synthesizer_id: 'unknown'}.to_json }
+        before { post '/', {synthesizer_id: 'unknown', auth_token: session.token}.to_json }
 
         it 'Returns a 404 (Not Found) status code' do
           expect(last_response.status).to be 404
@@ -84,5 +89,7 @@ describe Modusynth::Controllers::Modules do
         end
       end
     end
+
+  include_examples 'authentication', 'post', '/'
   end
 end

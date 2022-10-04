@@ -3,7 +3,7 @@
 module Modusynth
   module Controllers
     class Modules < Modusynth::Controllers::Base
-      post '/' do
+      api_route 'post', '/' do
         halt 201, decorate(service.create(body_params)).to_json
       end
 
@@ -18,7 +18,7 @@ module Modusynth
         halt 200, decorate(service.update(params[:id], body_params)).to_json
       end
 
-      delete '/:id' do
+      api_route 'delete', '/:id', ownership: true do
         service.delete(params[:id])
         halt 200, { message: 'deleted' }.to_json
       end
