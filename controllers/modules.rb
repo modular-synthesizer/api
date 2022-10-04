@@ -7,7 +7,7 @@ module Modusynth
         halt 201, decorate(service.create(body_params)).to_json
       end
 
-      get '/' do
+      api_route 'get', '/' do
         results = service.list(params).map do |node|
           decorate(node).to_h
         end
