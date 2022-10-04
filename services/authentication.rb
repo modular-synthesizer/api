@@ -62,7 +62,7 @@ module Modusynth
       def ownership payload, session, service
         return unless service.respond_to?(:find_or_fail)
         
-        resource = service.find_or_fail(payload[:id])
+        resource = service.find_or_fail(payload['id'])
 
         # Ownership cannot be checked if the model does not respond to :account.
         return unless resource.respond_to? :account

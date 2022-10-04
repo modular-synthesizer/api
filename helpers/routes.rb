@@ -13,7 +13,7 @@ module Modusynth
 
         send verb, path do
           if options[:authenticated]
-            @session = auth_service.authenticate(body_params) 
+            @session = auth_service.authenticate(body_params)
             auth_service.check_privileges(@session) if options[:admin]
             if options[:ownership] == true && respond_to?(:service)
               @resource = auth_service.ownership(body_params, @session, service)

@@ -2,13 +2,21 @@ describe Modusynth::Controllers::Modules do
   def app
     Modusynth::Controllers::Modules
   end
+
+  let!(:account) { create(:account) }
+  let!(:session) { create(:session, account: account) }
+
   describe 'PUT /:id' do
-    let!(:node) { create(:VCA_module) }
+    let!(:synth) { create(:synthesizer, account: account) }
+    let!(:node) { create(:VCA_module, synthesizer: synth) }
     let!(:param_id) { node.parameters.first.id.to_s }
 
     describe 'Nominal case' do
       before do
-        payload = {parameters: [{value: 2, id: param_id}]}
+        payload = {
+          parameters: [{value: 2, id: param_id}],
+          auth_token: session.token
+        }
         put "/#{node.id.to_s}", payload.to_json
       end
       it 'Returns a 200 (OK) status code' do
@@ -23,7 +31,10 @@ describe Modusynth::Controllers::Modules do
     describe 'Error cases' do
       describe 'When the value is below the minimum' do
         before do
-          payload = { parameters: [{value: -1, id: param_id}] }
+          payload = {
+            parameters: [{value: -1, id: param_id}],
+            auth_token: session.token
+          }
           put "/#{node.id.to_s}", payload.to_json
         end
 
@@ -38,7 +49,10 @@ describe Modusynth::Controllers::Modules do
       end
       describe 'When the value is above the maximum' do
         before do
-          payload = { parameters: [{value: 11, id: param_id}] }
+          payload = {
+            parameters: [{value: 11, id: param_id}],
+            auth_token: session.token
+          }
           put "/#{node.id.to_s}", payload.to_json
         end
 
@@ -52,5 +66,9 @@ describe Modusynth::Controllers::Modules do
         end
       end
     end
+
+    include_examples 'authentication', 'put', '/:id'
+
+    include_examples 'ownership', 'put', '/:id', :VCA_module
   end
 end

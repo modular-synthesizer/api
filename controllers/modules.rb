@@ -14,7 +14,7 @@ module Modusynth
         halt 200, results.to_json
       end
 
-      put '/:id' do
+      api_route 'put', '/:id', ownership: true do
         halt 200, decorate(service.update(params[:id], body_params)).to_json
       end
 
