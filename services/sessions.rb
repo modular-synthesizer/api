@@ -4,8 +4,8 @@ module Modusynth
       include Singleton
 
       def create payload
-        account = account payload
-        session = model.create(**payload.slice('account_id', 'duration'))
+        account = accounts_service.authenticate payload['username'], payload['password']
+        session = model.create(account: account, **payload.slice('duration'))
         session.save!
         decorator.new(session).to_h
       end
@@ -24,11 +24,8 @@ module Modusynth
 
       private
 
-      def account payload
-        raise Modusynth::Exceptions.required 'account_id' unless payload.key? 'account_id'
-        account = Modusynth::Services::Accounts.instance.find payload['account_id']
-        raise Modusynth::Exceptions.unknown 'account_id' if account.nil?
-        account
+      def accounts_service
+        Modusynth::Services::Accounts.instance
       end
 
       def decorator

@@ -9,7 +9,8 @@ RSpec.describe 'POST /sessions' do
   describe 'Nominal case' do
     before do
       payload = {
-        account_id: babausse.id.to_s,
+        username: babausse.username,
+        password: 'testpassword',
         duration: 3600
       }
       post '/', payload.to_json
@@ -45,7 +46,10 @@ RSpec.describe 'POST /sessions' do
   end
   describe 'Alternative cases' do
     before do
-      post '/', {account_id: babausse.id.to_s}.to_json
+      post '/', {
+        username: babausse.username,
+        password: 'testpassword'
+      }.to_json
     end
     describe 'When a duration is not given' do
       it 'Returns a 201 (Created) status code' do
@@ -68,29 +72,55 @@ RSpec.describe 'POST /sessions' do
     end
   end
   describe 'Error cases' do
-    describe 'When the account_id is not given' do
+    describe 'When the username is not given' do
       before do 
-        post '/', {duration: 3600}.to_json
+        post '/', {duration: 3600, password: 'testpassword'}.to_json
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
       end
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
-          key: 'account_id', message: 'required'
+          key: 'username', message: 'required'
         )
       end
     end
-    describe 'When the account is not found' do
+    describe 'When the password is not given' do
+      before do 
+        post '/', {duration: 3600, username: babausse.username}.to_json
+      end
+      it 'Returns a 400 (Bad Request) status code' do
+        expect(last_response.status).to be 400
+      end
+      it 'Returns the correct body' do
+        expect(last_response.body).to include_json(
+          key: 'password', message: 'required'
+        )
+      end
+    end
+    describe 'When the username is not found' do
       before do
-        post '/', {duration: 3600, account_id: 'unknown'}.to_json
+        post '/', {duration: 3600, username: 'unknown', password: 'testpassword'}.to_json
       end
       it 'Returns a 404 (Not Found) status code' do
         expect(last_response.status).to be 404
       end
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
-          key: 'account_id', message: 'unknown'
+          key: 'username', message: 'unknown'
+        )
+      end
+    end
+    describe 'When the password is not the correct one' do
+      before do
+        post '/', {duration: 3600, username: babausse.username, password: 'wrongpassword'}.to_json
+      end
+      it 'Returns a 404 (Not Found) status code' do
+        expect(last_response.status).to be 403
+      end
+      it 'Returns the correct body' do
+        expect(last_response.body).to include_json(
+          key: 'username', message: 'forbidden'
         )
       end
     end
