@@ -25,7 +25,7 @@ module Modusynth
 
       def update synthesizer, payload
         synthesizer.update(**payload.slice('x', 'y', 'scale'))
-        synth
+        synthesizer
       end
 
       def delete synthesizer
