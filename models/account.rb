@@ -44,6 +44,12 @@ module Modusynth
 
       validates :password_confirmation,
         presence: {message: 'required', if: :password_digest_changed?}
+
+      def account=(account);end
+
+      def account
+        self
+      end
     end
   end
 end

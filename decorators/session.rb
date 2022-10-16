@@ -6,7 +6,7 @@ module Modusynth
           token: object.token,
           created_at: object.created_at.iso8601(0),
           duration: object.duration,
-          account_id: object.account.id
+          account_id: object.account.id.to_s
         }
       end
     end

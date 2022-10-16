@@ -29,6 +29,12 @@ module Modusynth
         account
       end
 
+      def find_or_fail id
+        account = model.where(id: id).first
+        raise Modusynth::Exceptions.unknown 'id' if account.nil?
+        account
+      end
+
       private
 
       def model

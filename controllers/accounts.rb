@@ -7,8 +7,10 @@ module Modusynth
         halt 201, service.create(body_params).to_json
       end
 
-      api_route 'get', '/:id', ownership: true do
-        halt 200, Modusynth::Decorators::Account.new(@resource).to_json
+      api_route 'get', '/:id' do
+        account = service.find_or_fail(params[:id])
+
+        halt 200, Modusynth::Decorators::Account.new(account).to_h.to_json
       end
 
       def service
