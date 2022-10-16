@@ -6,7 +6,7 @@ module Modusynth
       api_route 'post', '/', authenticated: false do
         halt 201, service.create(body_params).to_json
       end
-      
+
       api_route 'get', '/:id', ownership: true do
         halt 200, Modusynth::Decorators::Session.new(@resource).to_h.to_json
       end
