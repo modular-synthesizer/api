@@ -22,7 +22,11 @@ RSpec.describe 'POST /sessions' do
       expect(last_response.body).to include_json(
         token: have_attributes(size: 24),
         duration: 3600,
-        created_at: date_matcher
+        created_at: date_matcher,
+        account_id: babausse.id.to_s,
+        username: babausse.username,
+        email: babausse.email,
+        admin: babausse.admin
       )
     end
     describe 'The created session' do

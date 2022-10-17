@@ -16,7 +16,11 @@ RSpec.describe 'GET /sessions/:id' do
     it 'Returns the correct body' do
       expect(last_response.body).to include_json(
         token: session.token,
-        account_id: account.id.to_s
+        account_id: account.id.to_s,
+        username: account.username,
+        account_id: account.id.to_s,
+        email: account.email,
+        admin: account.admin
       )
     end
   end
