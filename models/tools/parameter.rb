@@ -4,6 +4,8 @@ module Modusynth
       class Parameter
         include Mongoid::Document
 
+        store_in collection: 'tools_parameters'
+
         field :name, type: String
 
         field :targets, type: Array, default: []

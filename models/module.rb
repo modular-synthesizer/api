@@ -9,6 +9,8 @@ module Modusynth
       include Mongoid::Document
       include Mongoid::Timestamps
 
+      store_in collection: 'modules'
+
       field :slot, type: Integer, default: 0
 
       field :rack, type: Integer, default: 0

@@ -3,6 +3,8 @@ module Modusynth
     class Link
       include Mongoid::Document
 
+      store_in collection: 'links'
+
       field :color, type: String
       
       field :to, type: String

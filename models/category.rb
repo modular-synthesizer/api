@@ -7,6 +7,8 @@ module Modusynth
     class Category
       include Mongoid::Document
 
+      store_in collection: 'categories'
+
       field :name, type: String
 
       has_many :tools, class_name: '::Modusynth::Models::Tool', inverse_of: :category

@@ -6,6 +6,8 @@ module Modusynth
       # @author Vincent Courtois <courtois.vincent@outlook.com>
       class Port
         include Mongoid::Document
+
+        store_in collection: 'ports'
         
         belongs_to :module, class_name: '::Modusynth::Models::Module'
 

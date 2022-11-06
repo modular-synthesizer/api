@@ -9,6 +9,8 @@ module Modusynth
       include Mongoid::Timestamps
       include Modusynth::Models::Concerns::Ownable
 
+      store_in collection: 'synthesizers'
+
       field :name, type: String
 
       field :slots, type: Integer, default: 50

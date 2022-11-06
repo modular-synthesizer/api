@@ -18,7 +18,6 @@ RSpec.describe 'GET /sessions/:id' do
         token: session.token,
         account_id: account.id.to_s,
         username: account.username,
-        account_id: account.id.to_s,
         email: account.email,
         admin: account.admin
       )

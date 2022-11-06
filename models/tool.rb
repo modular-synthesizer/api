@@ -11,6 +11,8 @@ module Modusynth
       include Mongoid::Timestamps
       include Mongoid::EmbeddedErrors
 
+      store_in collection: 'tools'
+
       field :name, type: String
 
       # @!attribute [rw] slots

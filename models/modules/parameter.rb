@@ -6,6 +6,8 @@ module Modusynth
       class Parameter
         include Mongoid::Document
 
+        store_in collection: 'parameters'
+
         field :value, type: Float
 
         field :input, type: BSON::ObjectId, default: ->{ BSON::ObjectId.new }

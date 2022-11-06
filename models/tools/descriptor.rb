@@ -4,6 +4,8 @@ module Modusynth
       class Descriptor
         include Mongoid::Document
 
+        store_in collection: 'tools_descriptors'
+
         field :name, type: String
 
         field :default, type: Float

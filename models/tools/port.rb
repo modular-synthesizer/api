@@ -4,6 +4,8 @@ module Modusynth
       class Port
         include Mongoid::Document
 
+        store_in collection: 'tools_ports'
+
         field :kind, type: String
 
         field :name, type: String

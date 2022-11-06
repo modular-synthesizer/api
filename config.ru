@@ -17,3 +17,4 @@ map('/parameters') { run Modusynth::Controllers::Parameters.new }
 map('/sessions') { run Modusynth::Controllers::Sessions.new }
 map('/synthesizers') { run Modusynth::Controllers::Synthesizers.new }
 map('/tools') { run Modusynth::Controllers::Tools.new }
+map('/generators') { run Modusynth::Controllers::Generators.new }

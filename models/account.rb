@@ -3,7 +3,9 @@ module Modusynth
     class Account
       include Mongoid::Document
       include Mongoid::Timestamps
-    include ActiveModel::SecurePassword
+      include ActiveModel::SecurePassword
+
+      store_in collection: 'accounts'
 
       field :username, type: String
       # @!attribute [r] password_digest
