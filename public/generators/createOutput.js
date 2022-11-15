@@ -1,1 +1,1 @@
-return [{name, node: context.defaultOutput}]
+return [{name, node: context.destination}]
