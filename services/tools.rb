@@ -94,7 +94,8 @@ module Modusynth
             targets: param['targets'] || [],
             tool: tool,
             x: param['x'],
-            y: param['y']
+            y: param['y'],
+            component: param['component']
           )
           parameter.save!
           parameter
@@ -144,6 +145,6 @@ module Modusynth
           )
         end
       end
-    end 
+    end
   end
 end

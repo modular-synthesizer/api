@@ -56,7 +56,8 @@ module Modusynth
           descriptor.merge({
             targets: param.targets,
             x: param.x,
-            y: param.y
+            y: param.y,
+            component: param.component
           })
         end
       end

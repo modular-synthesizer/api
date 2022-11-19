@@ -20,9 +20,11 @@ FactoryBot.define do
   factory :parameter, class: Modusynth::Models::Tools::Parameter do
     association :tool, factory: :tool
     factory :frequency do
+      component { 'MyComponent' }
       association :descriptor, factory: :frequency_descriptor
     end
     factory :gain do
+      component { 'MyComponent' }
       association :descriptor, factory: :gain_descriptor
     end
   end

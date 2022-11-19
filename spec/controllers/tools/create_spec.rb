@@ -148,7 +148,8 @@ RSpec.describe Modusynth::Controllers::Tools do
                 precision: 0
               },
               x: 20,
-              y: 30
+              y: 30,
+              component: 'MyComponent'
             }]
           )
         end

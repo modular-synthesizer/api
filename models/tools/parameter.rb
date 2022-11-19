@@ -14,6 +14,8 @@ module Modusynth
 
         field :y, type: Integer, default: 0
 
+        field :component, type: String
+
         belongs_to :descriptor,
           class_name: '::Modusynth::Models::Tools::Descriptor',
           inverse_of: :parameters
@@ -21,6 +23,8 @@ module Modusynth
         belongs_to :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :parameters
 
         validates :name, presence: { message: 'required' }
+
+        validates :component, presence: { message: 'required' }
 
         def targets_types
           return if targets.nil? || !targets.kind_of?(Array)
