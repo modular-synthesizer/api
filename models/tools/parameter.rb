@@ -10,6 +10,10 @@ module Modusynth
 
         field :targets, type: Array, default: []
 
+        field :x, type: Integer, default: 0
+
+        field :y, type: Integer, default: 0
+
         belongs_to :descriptor,
           class_name: '::Modusynth::Models::Tools::Descriptor',
           inverse_of: :parameters

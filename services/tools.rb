@@ -92,7 +92,9 @@ module Modusynth
           parameter = Modusynth::Models::Tools::Parameter.new(
             descriptor: descriptor,
             targets: param['targets'] || [],
-            tool: tool
+            tool: tool,
+            x: param['x'],
+            y: param['y']
           )
           parameter.save!
           parameter

@@ -32,7 +32,7 @@ end
 def create_tool_with_parameter session, descriptor
   create_simple_tool(session, {
     parameters: [
-      {targets: ['gain'], descriptor: descriptor.id.to_s}
+      {targets: ['gain'], descriptor: descriptor.id.to_s, x: 20, y: 30}
     ]
   })
 end

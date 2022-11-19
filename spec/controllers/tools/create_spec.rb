@@ -146,7 +146,9 @@ RSpec.describe Modusynth::Controllers::Tools do
                 maximum: 10,
                 step: 1,
                 precision: 0
-              }
+              },
+              x: 20,
+              y: 30
             }]
           )
         end
