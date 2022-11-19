@@ -163,7 +163,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             slots: 3,
             innerNodes: [],
             innerLinks: [],
-            inputs: [{name: 'INPUT', index: 0, target: 'gain'}],
+            inputs: [{name: 'INPUT', index: 0, target: 'gain', x: 20, y: 30}],
             outputs: []
           )
         end
@@ -183,6 +183,12 @@ RSpec.describe Modusynth::Controllers::Tools do
           it 'Has created a port with the correct index' do
             expect(input.index).to be 0
           end
+          it 'Has created a port with the correct X coordinate' do
+            expect(input.x).to be 20
+          end
+          it 'Has created a port with the correct Y coordinate' do
+            expect(input.y).to be 30
+          end
         end
       end
       describe 'Tool with outputs' do
@@ -195,7 +201,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             slots: 3,
             innerNodes: [],
             innerLinks: [],
-            outputs: [{name: 'OUTPUT', index: 0, target: 'gain'}],
+            outputs: [{name: 'OUTPUT', index: 0, target: 'gain', x: 20, y: 30}],
             inputs: []
           )
         end
@@ -214,6 +220,12 @@ RSpec.describe Modusynth::Controllers::Tools do
           end
           it 'Has created a port with the correct index' do
             expect(output.index).to be 0
+          end
+          it 'Has created a port with the correct X coordinate' do
+            expect(output.x).to be 20
+          end
+          it 'Has created a port with the correct Y coordinate' do
+            expect(output.y).to be 30
           end
         end
       end

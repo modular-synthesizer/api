@@ -138,7 +138,9 @@ module Modusynth
             name: port['name'],
             target: port['target'],
             index: port['index'],
-            kind: key[0..-2] # Removes the trailing S from "outputs" or "inputs"
+            kind: key[0..-2], # Removes the trailing S from "outputs" or "inputs",
+            x: port['x'],
+            y: port['y']
           )
         end
       end
