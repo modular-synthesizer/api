@@ -41,7 +41,7 @@ module Modusynth
             },
             x: instance.parameter.x || 0,
             y: instance.parameter.y || 0,
-            component: instance.component
+            component: instance.parameter.component
           }
         end
       end
