@@ -28,7 +28,7 @@ module Modusynth
       def parameters
         object.parameters.map do |instance|
           {
-            id: instance.id,
+            id: instance.id.to_s,
             value: instance.value,
             name: instance.parameter.name,
             input: { id: instance.parameter.id.to_s },
@@ -38,7 +38,9 @@ module Modusynth
               maximum: instance.parameter.descriptor.maximum,
               step: instance.parameter.descriptor.step,
               precision: instance.parameter.descriptor.precision
-            }
+            },
+            x: instance.parameter.x || 0,
+            y: instance.parameter.y || 0
           }
         end
       end
@@ -49,7 +51,9 @@ module Modusynth
             id: port.id.to_s,
             name: port.descriptor.name,
             target: port.descriptor.target,
-            index: port.descriptor.index
+            index: port.descriptor.index,
+            x: port.descriptor.x || 0,
+            y: port.descriptor.y || 0
           }
         end
       end
