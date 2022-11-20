@@ -92,7 +92,10 @@ module Modusynth
           parameter = Modusynth::Models::Tools::Parameter.new(
             descriptor: descriptor,
             targets: param['targets'] || [],
-            tool: tool
+            tool: tool,
+            x: param['x'],
+            y: param['y'],
+            component: param['component']
           )
           parameter.save!
           parameter
@@ -136,10 +139,12 @@ module Modusynth
             name: port['name'],
             target: port['target'],
             index: port['index'],
-            kind: key[0..-2] # Removes the trailing S from "outputs" or "inputs"
+            kind: key[0..-2], # Removes the trailing S from "outputs" or "inputs",
+            x: port['x'],
+            y: port['y']
           )
         end
       end
-    end 
+    end
   end
 end

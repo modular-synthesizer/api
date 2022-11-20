@@ -20,10 +20,19 @@ RSpec.describe Modusynth::Controllers::Parameters do
         }.to_json
       end
       it 'Returns a 201 (Created) status code' do
-
+        expect(last_response.status).to be 201
       end
       it 'Returns the correct body' do
-
+        expect(last_response.body).to include_json(
+          name: 'foo',
+          value: 0,
+          constraints: {
+            minimum: 0,
+            maximum: 10,
+            step: 1,
+            precision: 0
+          }
+        )
       end
       describe 'Created parameter' do
         let!(:param) { Modusynth::Models::Tools::Descriptor.first }

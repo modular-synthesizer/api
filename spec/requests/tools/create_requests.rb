@@ -32,7 +32,13 @@ end
 def create_tool_with_parameter session, descriptor
   create_simple_tool(session, {
     parameters: [
-      {targets: ['gain'], descriptor: descriptor.id.to_s}
+      {
+        targets: ['gain'],
+        descriptor: descriptor.id.to_s,
+        x: 20,
+        y: 30,
+        component: 'MyComponent'
+      }
     ]
   })
 end
@@ -40,7 +46,7 @@ end
 def create_tool_with_input session
   create_simple_tool(session, {
     inputs: [
-      {name: 'INPUT', target: 'gain', index: 0}
+      {name: 'INPUT', target: 'gain', index: 0, x: 20, y: 30}
     ]
   })
 end
@@ -48,7 +54,7 @@ end
 def create_tool_with_output session
   create_simple_tool(session, {
     outputs: [
-      {name: 'OUTPUT', target: 'gain', index: 0}
+      {name: 'OUTPUT', target: 'gain', index: 0, x: 20, y: 30}
     ]
   })
 end
