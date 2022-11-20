@@ -40,7 +40,8 @@ module Modusynth
               precision: instance.parameter.descriptor.precision
             },
             x: instance.parameter.x || 0,
-            y: instance.parameter.y || 0
+            y: instance.parameter.y || 0,
+            component: instance.component
           }
         end
       end
