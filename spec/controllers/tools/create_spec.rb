@@ -164,7 +164,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             slots: 3,
             innerNodes: [],
             innerLinks: [],
-            inputs: [{name: 'INPUT', index: 0, targets: ['gain'], x: 20, y: 30}],
+            inputs: [{name: 'INPUT', index: 0, target: 'gain', x: 20, y: 30}],
             outputs: []
           )
         end
@@ -179,7 +179,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             expect(input.name).to eq 'INPUT'
           end
           it 'Has created a port with the correct targets' do
-            expect(input.targets).to eq ['gain']
+            expect(input.target).to eq 'gain'
           end
           it 'Has created a port with the correct index' do
             expect(input.index).to be 0
@@ -202,7 +202,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             slots: 3,
             innerNodes: [],
             innerLinks: [],
-            outputs: [{name: 'OUTPUT', index: 0, targets: ['gain'], x: 20, y: 30}],
+            outputs: [{name: 'OUTPUT', index: 0, target: 'gain', x: 20, y: 30}],
             inputs: []
           )
         end
@@ -217,7 +217,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             expect(output.name).to eq 'OUTPUT'
           end
           it 'Has created a port with the correct targets' do
-            expect(output.targets).to eq ['gain']
+            expect(output.target).to eq 'gain'
           end
           it 'Has created a port with the correct index' do
             expect(output.index).to be 0
@@ -538,7 +538,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         include_examples 'empty lists'
       end
       describe 'An index is below zero' do
-        before { create_with_output({name: 'foo', targets: ['test'], index: -1}) }
+        before { create_with_output({name: 'foo', target: 'test', index: -1}) }
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400

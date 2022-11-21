@@ -137,7 +137,7 @@ module Modusynth
         (payload[key] || []).map.with_index do |port, idx|
           Modusynth::Models::Tools::Port.new(
             name: port['name'],
-            targets: port['targets'],
+            target: port['target'],
             index: port['index'],
             kind: key[0..-2], # Removes the trailing S from "outputs" or "inputs",
             x: port['x'],
