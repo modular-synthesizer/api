@@ -10,7 +10,7 @@ module Modusynth
 
         field :name, type: String
 
-        field :target, type: String
+        field :targets, type: Array, default: []
 
         field :index, type: Integer, default: 0
 

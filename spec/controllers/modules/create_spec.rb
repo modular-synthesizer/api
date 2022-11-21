@@ -48,10 +48,10 @@ describe Modusynth::Controllers::Modules do
             }
           ],
           inputs: [
-            {name: 'INPUT', target: 'gain', index: 0}
+            {name: 'INPUT', targets: ['gain'], index: 0}
           ],
           outputs: [
-            {name: 'OUTPUT', target: 'gain', index: 0}
+            {name: 'OUTPUT', targets: ['gain'], index: 0}
           ]
         })
       end

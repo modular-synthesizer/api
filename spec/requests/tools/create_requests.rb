@@ -46,7 +46,7 @@ end
 def create_tool_with_input session
   create_simple_tool(session, {
     inputs: [
-      {name: 'INPUT', target: 'gain', index: 0, x: 20, y: 30}
+      {name: 'INPUT', targets: ['gain'], index: 0, x: 20, y: 30}
     ]
   })
 end
@@ -54,7 +54,7 @@ end
 def create_tool_with_output session
   create_simple_tool(session, {
     outputs: [
-      {name: 'OUTPUT', target: 'gain', index: 0, x: 20, y: 30}
+      {name: 'OUTPUT', targets: ['gain'], index: 0, x: 20, y: 30}
     ]
   })
 end
