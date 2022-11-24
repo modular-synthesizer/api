@@ -4,16 +4,16 @@ metadata:
   namespace: modusynth
   name: api-deployment
   labels:
-    app: modusynth
+    app: modusynth-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: modusynth
+      app: modusynth-api
   template:
     metadata:
       labels:
-        app: modusynth
+        app: modusynth-api
     spec:
       dnsPolicy: Default
       containers:
@@ -22,7 +22,7 @@ spec:
           args:
             - web
           ports:
-            - containerPort: 80
+            - containerPort: 443
           env:
             - name: RACK_ENV
               value: production
