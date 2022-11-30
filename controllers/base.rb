@@ -48,7 +48,7 @@ module Modusynth
       end
 
       error StandardError do |exception|
-        halt 500, {message: exception.message}.to_json
+        halt 500, { message: exception.message }.to_json
       end
 
       options '*' do

@@ -20,7 +20,7 @@ module Modusynth
           rack: object.rack,
           innerNodes: tool.inner_nodes,
           innerLinks: tool.inner_links,
-          parameters:,
+          parameters: parameters,
           inputs: ports(object.ports.inputs),
           outputs: ports(object.ports.outputs),
           type: tool.name
