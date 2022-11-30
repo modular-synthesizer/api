@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Decorators
     class Module < Draper::Decorator
@@ -46,7 +48,7 @@ module Modusynth
         end
       end
 
-      def ports list
+      def ports(list)
         list.map do |port|
           {
             id: port.id.to_s,

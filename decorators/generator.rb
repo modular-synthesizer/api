@@ -2,11 +2,11 @@
 
 module Modusynth
   module Decorators
-    class Category < Draper::Decorator
+    class Generator < Draper::Decorator
       def to_h
         {
-          id: object.id.to_s,
-          name: object.name
+          name: object.name,
+          code: object.code
         }
       end
     end

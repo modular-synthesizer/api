@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Decorators
     autoload :Account, './decorators/account'
     autoload :Category, './decorators/category'
+    autoload :Generator, './decorators/generator'
     autoload :Link, './decorators/link'
     autoload :Module, './decorators/module'
     autoload :Parameter, './decorators/parameter'

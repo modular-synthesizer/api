@@ -3,6 +3,7 @@ module Modusynth
     autoload :Accounts, './services/accounts'
     autoload :Authentication, './services/authentication'
     autoload :Categories, './services/categories'
+    autoload :Generators, './services/generators'
     autoload :Links, './services/links'
     autoload :Modules, './services/modules'
     autoload :Ownership, './services/ownership'
