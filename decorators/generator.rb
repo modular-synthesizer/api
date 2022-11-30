@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Decorators
     class Generator < Draper::Decorator
@@ -10,4 +12,3 @@ module Modusynth
     end
   end
 end
-    

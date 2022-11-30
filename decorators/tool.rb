@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Decorators
     class Tool < Draper::Decorator
@@ -6,11 +8,11 @@ module Modusynth
       def to_h
         {
           id: id.to_s,
-          name: name,
-          slots: slots,
+          name:,
+          slots:,
           innerNodes: inner_nodes,
           innerLinks: inner_links,
-          parameters: parameters,
+          parameters:,
           inputs: ports(object.inputs),
           outputs: ports(object.outputs)
         }
@@ -19,8 +21,8 @@ module Modusynth
       def to_simple_h
         {
           id: id.to_s,
-          name: name,
-          slots: slots
+          name:,
+          slots:
         }
       end
 
@@ -54,17 +56,17 @@ module Modusynth
         object.parameters.map do |param|
           descriptor = Modusynth::Decorators::Parameter.new(param.descriptor).to_h
           descriptor.merge({
-            targets: param.targets,
-            x: param.x,
-            y: param.y,
-            component: param.component
-          })
+                             targets: param.targets,
+                             x: param.x,
+                             y: param.y,
+                             component: param.component
+                           })
         end
       end
 
-      def ports ports_list
+      def ports(ports_list)
         ports_list.map do |port|
-          {name: port.name, index: port.index, target: port.target, x: port.x, y: port.y}
+          { name: port.name, index: port.index, target: port.target, x: port.x, y: port.y }
         end
       end
     end

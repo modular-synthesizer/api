@@ -3,7 +3,6 @@
 module Modusynth
   module Controllers
     class Generators < Modusynth::Controllers::Base
-
       api_route 'post', '/', admin: true do
         halt 201, service.create(body_params).to_json
       end

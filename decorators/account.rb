@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Decorators
     class Account < Draper::Decorator
