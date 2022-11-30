@@ -1,1 +1,0 @@
-return [{name, node: context.destination}]
