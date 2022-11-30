@@ -6,6 +6,8 @@ module Modusynth
       # @author Vincent Courtois <courtois.vincent@outlook.com>
       class Generator
         include Mongoid::Document
+        
+        store_in collection: 'generators'
 
         # @!attribute [rw] name
         #   @return [String] the name of the generator, used in inner links to identify their type.
