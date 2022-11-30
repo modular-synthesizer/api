@@ -3,7 +3,7 @@ version: 2.1
 executors:
   mongoruby:
     docker:
-      - image: circleci/ruby:3.0.3
+      - image: cimg/ruby:3.1.3
       - image: mongo:5.0.12
 
 orbs:
@@ -50,7 +50,7 @@ jobs:
 
   lint-job:
     docker:
-      - image: circleci/ruby:3.0.3
+      - image: cimg/ruby:3.1.3
     steps:
       - virtuacommands/perform-rubocop-analysis:
           directories: controllers/
