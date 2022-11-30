@@ -10,7 +10,11 @@ module Modusynth
       end
 
       def list
-        model.all.map { |gen| decorator.new(gen).to_h }
+        model.all.map(&:name)
+      end
+
+      def get_by_name name
+        model.find_by(name: name)
       end
 
       def model

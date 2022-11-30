@@ -11,6 +11,10 @@ module Modusynth
         halt 200, service.list.to_json
       end
 
+      api_route 'get', '/:name' do
+        halt 200, service.get_by_name(params[:name]).code
+      end
+
       def service
         Modusynth::Services::Generators.instance
       end
