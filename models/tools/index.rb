@@ -3,6 +3,7 @@ module Modusynth
     module Tools
       autoload :Category, './models/tools/category'
       autoload :Descriptor, './models/tools/descriptor'
+      autoload :Generator, './models/tools/generator'
       autoload :InnerLink, './models/tools/inner_link'
       autoload :InnerLinkEnd, './models/tools/inner_link_end'
       autoload :InnerNode, './models/tools/inner_node'
