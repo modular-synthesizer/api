@@ -38,7 +38,12 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
           synthesizers: [
             {
               id: a_kind_of(String),
-              name: 'test synth'
+              name: 'test synth',
+              racks: 1,
+              slots: 50,
+              x: 0,
+              y: 0,
+              scale: 1
             }
           ]
         )
@@ -46,5 +51,5 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
     end
   end
 
-  include_examples 'authentication', 'post', '/'
+  include_examples 'authentication', 'get', '/'
 end

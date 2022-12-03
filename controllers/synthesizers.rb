@@ -5,7 +5,7 @@ module Modusynth
     class Synthesizers < Modusynth::Controllers::Base
       api_route 'get', '/' do
         results = service.list(@session.account).map do |synthesizer|
-          Modusynth::Decorators::Synthesizer.new(synthesizer).to_simple_h
+          Modusynth::Decorators::Synthesizer.new(synthesizer).to_h
         end
         halt 200, { synthesizers: results }.to_json
       end

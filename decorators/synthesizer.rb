@@ -5,15 +5,6 @@ module Modusynth
     class Synthesizer < Draper::Decorator
       delegate_all
 
-      def to_simple_h
-        {
-          id: object.id.to_s,
-          name: object.name,
-          nodes_count: object.modules.count,
-          links_count: object.links.count
-        }
-      end
-
       def to_h
         {
           id: object.id.to_s,
