@@ -16,7 +16,7 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
         expect(last_response.status).to be 200
       end
       it 'Returns an empty list' do
-        expect(JSON.parse(last_response.body)).to eq({'synthesizers' => []})
+        expect(JSON.parse(last_response.body)).to eq([])
       end
     end
     describe 'populated list' do
@@ -34,19 +34,17 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
         expect(last_response.status).to be 200
       end
       it 'Returns the correct body' do
-        expect(last_response.body).to include_json(
-          synthesizers: [
-            {
-              id: a_kind_of(String),
-              name: 'test synth',
-              racks: 1,
-              slots: 50,
-              x: 0,
-              y: 0,
-              scale: 1
-            }
-          ]
-        )
+        expect(last_response.body).to include_json([
+          {
+            id: a_kind_of(String),
+            name: 'test synth',
+            racks: 1,
+            slots: 50,
+            x: 0,
+            y: 0,
+            scale: 1
+          }
+        ])
       end
     end
   end

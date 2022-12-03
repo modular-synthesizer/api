@@ -7,7 +7,7 @@ module Modusynth
         results = service.list(@session.account).map do |synthesizer|
           Modusynth::Decorators::Synthesizer.new(synthesizer).to_h
         end
-        halt 200, { synthesizers: results }.to_json
+        halt 200, results.to_json
       end
 
       api_route 'get', '/:id', ownership: true do
