@@ -13,6 +13,12 @@ module Modusynth
         #   @return [string] the uniq slug to identify the group.
         field :slug, type: String
 
+        # @!attribute [rw] scopes
+        #   @return [Iterable] the scopes this group can access through the application.
+        has_and_belongs_to_many :scopes,
+          class_name: '::Modusynth::Models::Permissions::Scope',
+          inverse_of: :groups
+
         validates :slug,
           presence: { message: 'required' },
           format: { with: /\A[a-z]+(\-[a-z]+)*\Z/, message: 'format', if: :slug? },
