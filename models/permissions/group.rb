@@ -19,6 +19,12 @@ module Modusynth
           class_name: '::Modusynth::Models::Permissions::Scope',
           inverse_of: :groups
 
+        # @!attribute [rw] accounts
+        #   @return [Iterable] the accounts having a membership in this group.
+        has_and_belongs_to_many :accounts,
+          class_name: '::Modusynth::Models::Account',
+          inverse_of: :groups
+
         validates :slug,
           presence: { message: 'required' },
           format: { with: /\A[a-z]+(\-[a-z]+)*\Z/, message: 'format', if: :slug? },
