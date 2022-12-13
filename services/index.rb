@@ -8,6 +8,7 @@ module Modusynth
     autoload :Modules, './services/modules'
     autoload :Ownership, './services/ownership'
     autoload :Parameters, './services/parameters'
+    autoload :Permissions, './services/permissions/index'
     autoload :Sessions, './services/sessions'
     autoload :Synthesizers, './services/synthesizers'
     autoload :Tools, './services/tools'
