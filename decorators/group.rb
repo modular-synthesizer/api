@@ -5,6 +5,7 @@ module Modusynth
     class Group < Draper::Decorator
       def to_h
         {
+          id: object.id.to_s,
           slug: object.slug,
           scopes: scopes
         }
