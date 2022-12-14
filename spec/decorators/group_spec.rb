@@ -1,0 +1,19 @@
+RSpec.describe Modusynth::Decorators::Group do
+  let!(:decorator) { Modusynth::Decorators::Group }
+  let!(:scope_model) { Modusynth::Models::Permissions::Scope }
+  let!(:group_model) { Modusynth::Models::Permissions::Group }
+  let!(:scopes) {
+    [
+      scope_model.create(label: 'Custom::Second'),
+      scope_model.create(label: 'Custom::First')
+    ]
+  }
+  let!(:group) { group_model.create(slug: 'custom-slug', scopes: scopes) }
+
+  it 'Decorates the model correctly as a hash' do
+    expect(decorator.new(group).to_h).to eq({
+      slug: 'custom-slug',
+      scopes: [ 'Custom::First', 'Custom::Second' ]
+    })
+  end
+end
