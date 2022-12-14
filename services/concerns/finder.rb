@@ -1,11 +1,13 @@
 module Modusynth
   module Services
     module Concerns
-      # A finder service is a service that provide methods to find one or
-      # several instances of the associated model. If the :model method is
-      # NOT defined when invoking one of its methods, it will therefore
+      # A finder service is a service that provide methods to find an
+      # instance of the associated model. If the :model method is NOT
+      # defined when invoking one of its methods, it will therefore
       # raise an error to indicate you did not implement everything you
       # needed to use this concern.
+      #
+      # @author Vincent Courtois <courtois.vincent@outlook.com>
       module Finder
         extend ActiveSupport::Concern
 

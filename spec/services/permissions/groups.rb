@@ -51,7 +51,12 @@ RSpec.describe Modusynth::Services::Permissions::Groups do
     end
   end
   describe :list do
+    let!(:first) { model.create(slug: 'first-slug') }
+    let!(:second) { model.create(slug: 'custom-slug') }
 
+    it 'Returns the correct list in the correct order' do
+      expect(service.list).to eq [second, first]
+    end
   end
   describe :update do
 

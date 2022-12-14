@@ -18,6 +18,10 @@ module Modusynth
           group
         end
 
+        def list
+          model.all.sort(slug: 1).to_a
+        end
+
         private
 
         def model
