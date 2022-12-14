@@ -3,8 +3,9 @@ module Modusynth
     module Permissions
       # Service to administrate the groups (creation, deletion, membership).
       # @author Vincent Courtois <courtois.vincent@outlook.com>
-      class Group
+      class Groups
         include Singleton
+        include Modusynth::Services::Concerns::Finder
 
         # Creates the group given the corresponding slug.
         # @param slug [string] the slug for the group to create, see the
@@ -21,20 +22,9 @@ module Modusynth
           find_or_fail(id: id).delete
         end
 
-        # Tries to find a group given its unique identifier. If it does not
-        # find it, fails with a correct esception raised.
-        # @param id [string] the unique identifier of the group to find.
-        # @raise [::Modusynth::Exceptions::Unknown] when the UUID is not
-        #   found in the database.
-        def find_or_fail(id:)
-          instance = model.where(id: id).first
-          raise Modusynth::Exceptions.unknown if instance.nil?
-          instance
-        end
-
         private
 
-        def models
+        def model
           Modusynth::Models::Permissions::Group
         end
       end
