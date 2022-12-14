@@ -12,6 +12,7 @@ RSpec.describe Modusynth::Decorators::Group do
 
   it 'Decorates the model correctly as a hash' do
     expect(decorator.new(group).to_h).to eq({
+      id: group.id.to_s,
       slug: 'custom-slug',
       scopes: [ 'Custom::First', 'Custom::Second' ]
     })

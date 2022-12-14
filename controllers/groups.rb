@@ -1,7 +1,7 @@
 module Modusynth
   module Controllers
     class Groups < Modusynth::Controllers::Base
-      get '/' do
+      api_route 'get', '/' do
         results = service.list.map do |group|
           decorator.new(group).to_h
         end
