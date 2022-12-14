@@ -22,6 +22,13 @@ module Modusynth
           model.all.sort(slug: 1).to_a
         end
 
+        def update(id:, slug:)
+          instance = find_or_fail(id: id)
+          instance.update_attributes(slug: slug)
+          instance.save!
+          instance
+        end
+
         private
 
         def model

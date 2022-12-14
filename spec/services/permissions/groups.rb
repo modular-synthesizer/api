@@ -59,6 +59,20 @@ RSpec.describe Modusynth::Services::Permissions::Groups do
     end
   end
   describe :update do
+    let!(:creation) { service.create(slug: 'update-slug') }
 
+    it 'Correctly update the slug if a correct value is provided' do
+      expect(service.update(id: creation.id, slug: 'new-slug').slug).to eq 'new-slug'
+    end
+    it 'Does not update the group if the slug is given as nil' do
+      expect(->{ service.update(id: creation.id, slug: nil) }).to raise_error(
+        Mongoid::Errors::Validations
+      )
+    end
+    it 'Does not update the group if the slug is incorrect' do
+      expect(->{ service.update(id: creation.id, slug: 'slug_123') }).to raise_error(
+        Mongoid::Errors::Validations
+      )
+    end
   end
 end
