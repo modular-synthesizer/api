@@ -20,15 +20,19 @@ module Modusynth
         # @raise [::Modusynth::Exceptions::Concern] when the concern is not
         #   correctly implemented
         def find_or_fail(id:)
+          instance = find(id: id)
+          raise Modusynth::Exceptions.unknown if instance.nil?
+          instance
+        end
+
+        def find(id:)
           unless respond_to? :model, true
             raise Modusynth::Exceptions::Concern.new(
               caller: 'find_or_fail',
               called: 'model'
             )
           end
-          instance = model.where(id: id).first
-          raise Modusynth::Exceptions.unknown if instance.nil?
-          instance
+          model.where(id: id).first
         end
       end
     end
