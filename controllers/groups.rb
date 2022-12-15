@@ -3,7 +3,7 @@ module Modusynth
     class Groups < Modusynth::Controllers::Base
       api_route 'get', '/' do
         results = service.list.map do |group|
-          decorator.new(group).to_h
+          decorate(group)
         end
         halt 200, results.to_json
       end
@@ -14,11 +14,16 @@ module Modusynth
 
       api_route 'post', '/', admin: true do
         group = service.create(slug: body_params['slug'])
-        halt 201, decorator.new(group).to_h.to_json
+        halt 201, decorate(group).to_json
       end
 
-      put '/:id' do
-        group = service.update(**body_params)
+      api_route 'put', '/:id', admin: true do
+        group = service.update(
+          id: params[:id],
+          slug: body_params['slug'],
+          scopes: body_params['scopes']
+        )
+        halt 200, decorate(group).to_json
       end
 
       delete '/:id' do
@@ -32,8 +37,8 @@ module Modusynth
         Modusynth::Services::Permissions::Groups.instance
       end
 
-      def decorator
-        Modusynth::Decorators::Group
+      def decorate group
+        Modusynth::Decorators::Group.new(group).to_h
       end
     end
   end

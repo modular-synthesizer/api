@@ -22,6 +22,11 @@ RSpec.describe Modusynth::Services::Permissions::Groups do
         Mongoid::Errors::Validations
       )
     end
+    it 'Raises an exception if a scope is not found' do
+      expect { service.create(slug: 'custom-slug', scopes: ['unknown']) }.to raise_error(
+        Modusynth::Exceptions::Unknown
+      )
+    end
   end
   describe :delete do
     let!(:group) { service.create(slug: 'custom-deletion') }
@@ -72,6 +77,11 @@ RSpec.describe Modusynth::Services::Permissions::Groups do
     it 'Does not update the group if the slug is incorrect' do
       expect(->{ service.update(id: creation.id, slug: 'slug_123') }).to raise_error(
         Mongoid::Errors::Validations
+      )
+    end
+    it 'Does not update the group if a scope is not found' do
+      expect { service.update(scopes: ['unknown']) }.to raise_error(
+        Modusynth::Exceptions::Unknown
       )
     end
   end
