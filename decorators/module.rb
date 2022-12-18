@@ -23,7 +23,8 @@ module Modusynth
           parameters: parameters,
           inputs: ports(object.ports.inputs),
           outputs: ports(object.ports.outputs),
-          type: tool.name
+          type: tool.name,
+          category: tool.category.name
         }
       end
 
