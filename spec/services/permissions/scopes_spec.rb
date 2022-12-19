@@ -43,6 +43,18 @@ RSpec.describe do
       expect(service.delete(id: 'unknown')).to be false
     end
   end
+  describe :find_or_fail do
+    let!(:scope) { service.create(label: 'Tests::Creation') }
+
+    it 'Returns the correct results' do
+      expect(service.find_or_fail(id: scope.id).id).to eq scope.id
+    end
+    it 'Raises an error if the record does not exist' do
+      expect { service.find_or_fail(id: 'unknown') }.to raise_error(
+        Modusynth::Exceptions::Unknown
+      )
+    end
+  end
   describe :list do
     describe 'Nominal case' do
       let!(:first_scope) { create(:scope, label: 'Tests::Ab') }
