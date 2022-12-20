@@ -9,6 +9,7 @@ module Modusynth
     autoload :Link, './decorators/link'
     autoload :Module, './decorators/module'
     autoload :Parameter, './decorators/parameter'
+    autoload :Scope, './decorators/scope'
     autoload :Session, './decorators/session'
     autoload :Synthesizer, './decorators/synthesizer'
     autoload :Tool, './decorators/tool'

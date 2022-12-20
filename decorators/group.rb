@@ -12,7 +12,9 @@ module Modusynth
       end
 
       def scopes
-        object.scopes.sort_by(&:label).map(&:label)
+        object.scopes.sort_by(&:label).map do |scope|
+          {id: scope.id.to_s, label: scope.label}
+        end
       end
     end
   end

@@ -14,7 +14,10 @@ RSpec.describe Modusynth::Decorators::Group do
     expect(decorator.new(group).to_h).to eq({
       id: group.id.to_s,
       slug: 'custom-slug',
-      scopes: [ 'Custom::First', 'Custom::Second' ]
+      scopes: [
+        {id: scopes.last.id.to_s, label: 'Custom::First'},
+        {id: scopes.first.id.to_s, label: 'Custom::Second'}
+      ]
     })
   end
 end
