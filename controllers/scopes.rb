@@ -5,7 +5,7 @@ module Modusynth
         results = service.list.map { |scope| decorate(scope) }
         halt 200, results.to_json
       end
-      api_routes 'get', '/:id', admin: true do
+      api_route 'get', '/:id', admin: true do
         scope = service.find_or_fail(id: params[:id])
         halt 200, decorate(scope).to_json
       end
