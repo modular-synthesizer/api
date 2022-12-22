@@ -1,4 +1,8 @@
 RSpec.describe 'PUT /:id' do
+  def app
+    Modusynth::Controllers::Groups.new
+  end
+
   let!(:account) { create(:account, admin: true) }
   let!(:session) { create(:session, account: account) }
   let!(:scopes) { create_list(:scope, 2) }

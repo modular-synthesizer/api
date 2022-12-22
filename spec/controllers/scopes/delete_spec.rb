@@ -28,4 +28,5 @@ RSpec.describe 'DELETE /scopes/:id' do
       end
     end
   end
+  include_examples 'admin', 'delete', '/:id'
 end

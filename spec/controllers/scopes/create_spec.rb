@@ -94,4 +94,5 @@ RSpec.describe 'POST /scopes' do
       end
     end
   end
+  include_examples 'admin', 'post', '/'
 end

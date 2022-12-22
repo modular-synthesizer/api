@@ -35,4 +35,5 @@ RSpec.describe 'GET /scopes' do
       end
     end
   end
+  include_examples 'admin', 'get', '/'
 end
