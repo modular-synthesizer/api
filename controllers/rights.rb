@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Controllers
     class Rights < Modusynth::Controllers::Base
@@ -23,7 +25,8 @@ module Modusynth
       def service
         Modusynth::Services::Permissions::Rights.instance
       end
-      def decorate scope
+
+      def decorate(scope)
         Modusynth::Decorators::Right.new(scope).to_h
       end
     end

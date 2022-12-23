@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Controllers
     class Groups < Modusynth::Controllers::Base
@@ -33,7 +35,7 @@ module Modusynth
         Modusynth::Services::Permissions::Groups.instance
       end
 
-      def decorate group
+      def decorate(group)
         Modusynth::Decorators::Group.new(group).to_h
       end
     end
