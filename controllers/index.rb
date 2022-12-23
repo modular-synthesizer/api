@@ -10,7 +10,7 @@ module Modusynth
     autoload :Links, './controllers/links'
     autoload :Modules, './controllers/modules'
     autoload :Parameters, './controllers/parameters'
-    autoload :Scopes, './controllers/scopes'
+    autoload :Rights, './controllers/rights'
     autoload :Sessions, './controllers/sessions'
     autoload :Synthesizers, './controllers/synthesizers'
     autoload :Tools, './controllers/tools'

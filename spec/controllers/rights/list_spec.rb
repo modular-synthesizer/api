@@ -1,6 +1,6 @@
 RSpec.describe 'GET /scopes' do
   def app
-    Modusynth::Controllers::Scopes.new
+    Modusynth::Controllers::Rights.new
   end
 
   let!(:account) { create(:account, admin: true) }

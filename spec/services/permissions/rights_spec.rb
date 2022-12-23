@@ -1,5 +1,5 @@
 RSpec.describe do
-  let!(:service) { Modusynth::Services::Permissions::Scopes.instance }
+  let!(:service) { Modusynth::Services::Permissions::Rights.instance }
   describe :create do
     describe 'Nominal case' do
       let!(:creation) { service.create(label: 'Category::Tests') }
@@ -36,7 +36,7 @@ RSpec.describe do
         expect(result).to be true
       end
       it 'Correctly deletes an existing record' do
-        expect(Modusynth::Models::Permissions::Scope.all.count).to be 0
+        expect(Modusynth::Models::Permissions::Right.all.count).to be 0
       end
     end
     it 'Returns the correct result if the UUID does not exist' do

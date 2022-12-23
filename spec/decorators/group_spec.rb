@@ -1,6 +1,6 @@
 RSpec.describe Modusynth::Decorators::Group do
   let!(:decorator) { Modusynth::Decorators::Group }
-  let!(:scope_model) { Modusynth::Models::Permissions::Scope }
+  let!(:scope_model) { Modusynth::Models::Permissions::Right }
   let!(:group_model) { Modusynth::Models::Permissions::Group }
   let!(:scopes) {
     [

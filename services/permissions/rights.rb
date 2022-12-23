@@ -1,7 +1,7 @@
 module Modusynth
   module Services
     module Permissions
-      class Scopes
+      class Rights
         include Singleton
         include Modusynth::Services::Concerns::Finder
         include Modusynth::Services::Concerns::Deleter
@@ -19,7 +19,7 @@ module Modusynth
         private
 
         def model
-          Modusynth::Models::Permissions::Scope
+          Modusynth::Models::Permissions::Right
         end
       end
     end

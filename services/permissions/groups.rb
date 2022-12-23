@@ -40,7 +40,7 @@ module Modusynth
 
         def find_scopes ids:
           ids.map do |id|
-            Modusynth::Services::Permissions::Scopes.instance.find_or_fail(id: id)
+            Modusynth::Services::Permissions::Rights.instance.find_or_fail(id: id)
           end
         end
 

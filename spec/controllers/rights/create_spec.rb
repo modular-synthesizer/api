@@ -1,6 +1,6 @@
 RSpec.describe 'POST /scopes' do
   def app
-    Modusynth::Controllers::Scopes.new
+    Modusynth::Controllers::Rights.new
   end
 
   let!(:account) { create(:account, admin: true) }
@@ -17,7 +17,7 @@ RSpec.describe 'POST /scopes' do
       expect(last_response.body).to include_json(label: 'Test::Scopes', groups: [])
     end
     describe 'The created scope' do
-      let!(:creation) { Modusynth::Models::Permissions::Scope.first }
+      let!(:creation) { Modusynth::Models::Permissions::Right.first }
       it 'Has the correct label' do
         expect(creation.label).to eq 'Test::Scopes'
       end

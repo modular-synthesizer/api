@@ -1,6 +1,6 @@
-RSpec.describe Modusynth::Models::Permissions::Scope do
+RSpec.describe Modusynth::Models::Permissions::Right do
   describe :label do
-    let!(:model) { Modusynth::Models::Permissions::Scope }
+    let!(:model) { Modusynth::Models::Permissions::Right }
 
     describe 'Valid record' do
       it 'Validates a correctly initialized record' do

@@ -1,6 +1,6 @@
 module Modusynth
   module Controllers
-    class Scopes < Modusynth::Controllers::Base
+    class Rights < Modusynth::Controllers::Base
       api_route 'get', '/', admin: true do
         results = service.list.map { |scope| decorate(scope) }
         halt 200, results.to_json
@@ -21,10 +21,10 @@ module Modusynth
       private
 
       def service
-        Modusynth::Services::Permissions::Scopes.instance
+        Modusynth::Services::Permissions::Rights.instance
       end
       def decorate scope
-        Modusynth::Decorators::Scope.new(scope).to_h
+        Modusynth::Decorators::Right.new(scope).to_h
       end
     end
   end

@@ -1,6 +1,6 @@
 RSpec.describe 'DELETE /scopes/:id' do
   def app
-    Modusynth::Controllers::Scopes.new
+    Modusynth::Controllers::Rights.new
   end
 
   let!(:account) { create(:account, admin: true) }
@@ -15,7 +15,7 @@ RSpec.describe 'DELETE /scopes/:id' do
       expect(last_response.status).to be 204
     end
     it 'Has deleted the scope' do
-      expect(Modusynth::Models::Permissions::Scope.where(label: 'Test::Deletion').count).to be 0
+      expect(Modusynth::Models::Permissions::Right.where(label: 'Test::Deletion').count).to be 0
     end
   end
   describe 'Alternative cases' do

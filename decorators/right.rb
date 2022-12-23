@@ -1,6 +1,6 @@
 module Modusynth
   module Decorators
-    class Scope < Draper::Decorator
+    class Right < Draper::Decorator
       delegate_all
 
       def to_h
