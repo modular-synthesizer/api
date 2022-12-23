@@ -18,11 +18,7 @@ module Modusynth
       end
 
       api_route 'put', '/:id', admin: true do
-        group = service.update(
-          id: params[:id],
-          slug: body_params['slug'],
-          scopes: body_params['scopes']
-        )
+        group = service.update(body_params)
         halt 200, decorate(group).to_json
       end
 
