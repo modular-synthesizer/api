@@ -17,7 +17,8 @@ RSpec.describe Modusynth::Decorators::Group do
       scopes: [
         {id: scopes.last.id.to_s, label: 'Custom::First'},
         {id: scopes.first.id.to_s, label: 'Custom::Second'}
-      ]
+      ],
+      is_default: false
     })
   end
 end

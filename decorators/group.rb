@@ -7,7 +7,8 @@ module Modusynth
         {
           id: object.id.to_s,
           slug: object.slug,
-          scopes: scopes
+          scopes: scopes,
+          is_default: object.is_default
         }
       end
 

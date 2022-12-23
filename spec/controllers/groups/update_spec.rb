@@ -17,7 +17,8 @@ RSpec.describe 'PUT /:id' do
       payload = {
         slug: 'new-slug',
         scopes: [new_scope.id.to_s],
-        auth_token: session.token
+        auth_token: session.token,
+        is_default: true
       }
       put "/#{group.id.to_s}", payload.to_json
     end
@@ -30,16 +31,21 @@ RSpec.describe 'PUT /:id' do
         slug: 'new-slug',
         scopes: [
           {id: new_scope.id.to_s, label: 'Scopes::Test'}
-        ]
+        ],
+        is_default: true
       )
     end
     describe 'Attributes of the updated record' do
       let!(:updated) { Modusynth::Models::Permissions::Group.first }
+      
       it 'Has updated the slug' do
         expect(updated.slug).to eq 'new-slug'
       end
       it 'Has updated the scopes' do
         expect(updated.scopes.map(&:id)).to eq [new_scope.id]
+      end
+      it 'Has updated the default flag' do
+        expect(updated.is_default).to be true
       end
     end
   end

@@ -26,7 +26,7 @@ module Modusynth
         end
 
         def update payload
-          attrs = payload.slice('id', 'scopes', 'slug')
+          attrs = payload.slice('id', 'scopes', 'slug', 'is_default')
           if attrs['scopes'].kind_of? Array
             attrs['scopes'] = find_scopes(ids: attrs['scopes'])
           end
