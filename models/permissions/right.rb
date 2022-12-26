@@ -9,6 +9,8 @@ module Modusynth
         include Mongoid::Document
         include Mongoid::Timestamps
 
+        store_in collection: 'rights'
+
         # @!attribute [rw] label
         #   @return [string] the designation of the right in the code.
         field :label, type: String

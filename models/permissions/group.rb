@@ -9,6 +9,8 @@ module Modusynth
         include Mongoid::Document
         include Mongoid::Timestamps
 
+        store_in collection: 'groups'
+
         # @!attribute [rw] slug
         #   @return [string] the uniq slug to identify the group.
         field :slug, type: String

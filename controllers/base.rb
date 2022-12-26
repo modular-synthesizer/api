@@ -30,6 +30,12 @@ module Modusynth
         params
       end
 
+      # THis method is destined to replace the body_params method as it
+      # is easier to read, and correctly transforms all keys in symbols.
+      def payload
+        body_params.transform_keys { |k| k.to_sym }
+      end
+
       error Mongoid::Errors::Validations do |error|
         exception = Modusynth::Exceptions.from_validation error
         halt 400, { key: exception.key, message: exception.error }.to_json

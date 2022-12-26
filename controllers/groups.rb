@@ -11,21 +11,21 @@ module Modusynth
       end
 
       get '/:id' do
-        halt 200, find_or_fail(id: params[:id]).to_h.to_json
+        halt 200, find_or_fail(id: payload[:id]).to_h.to_json
       end
 
       api_route 'post', '/', admin: true do
-        group = service.create(slug: body_params['slug'])
+        group = service.create(slug: payload[:slug])
         halt 201, decorate(group).to_json
       end
 
       api_route 'put', '/:id', admin: true do
-        group = service.update(body_params)
+        group = service.update(payload)
         halt 200, decorate(group).to_json
       end
 
       delete '/:id' do
-        service.delete(id: params[:id])
+        service.delete(id: payload[:id])
         halt 204
       end
 

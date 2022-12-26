@@ -26,11 +26,11 @@ module Modusynth
         end
 
         def update payload
-          attrs = payload.slice('id', 'scopes', 'slug', 'is_default')
-          if attrs['scopes'].kind_of? Array
-            attrs['scopes'] = find_scopes(ids: attrs['scopes'])
+          attrs = payload.slice(:id, :scopes, :slug, :is_default)
+          if attrs[:scopes].kind_of? Array
+            attrs[:scopes] = find_scopes(ids: attrs[:scopes])
           end
-          instance = find_or_fail(id: attrs['id'])
+          instance = find_or_fail(id: attrs[:id])
           instance.update_attributes(**attrs)
           instance.save!
           instance.reload
