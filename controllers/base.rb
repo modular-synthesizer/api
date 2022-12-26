@@ -33,7 +33,7 @@ module Modusynth
       # THis method is destined to replace the body_params method as it
       # is easier to read, and correctly transforms all keys in symbols.
       def payload
-        body_params.transform_keys { |k| k.to_sym }
+        body_params.transform_keys(&:to_sym)
       end
 
       error Mongoid::Errors::Validations do |error|
