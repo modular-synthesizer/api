@@ -7,6 +7,7 @@ Bundler.require(env)
 
 require './module'
 
+Dotenv.load
 Mongoid.load!('config/mongoid.yml', env)
 
 map('/accounts') { run Modusynth::Controllers::Accounts.new }

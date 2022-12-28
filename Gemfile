@@ -7,6 +7,7 @@ group :development, :production, :test do
   gem 'sinatra', '2.2.2'
   gem 'draper', '4.0.2'
   gem 'sinatra-cross_origin', '0.4.0', require: 'sinatra/cross_origin'
+  gem 'dotenv', '2.8.1', require: 'dotenv/load'
 end
 
 group :development, :production do
