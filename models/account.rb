@@ -26,6 +26,10 @@ module Modusynth
 
       has_many :synthesizers, class_name: '::Modusynth::Models::Account', inverse_of: :account
 
+      has_and_belongs_to_many :groups,
+        class_name: '::Modusynth::Models::Permissions::Group',
+        inverse_of: :accounts
+
       validates :username,
         presence: { message: 'required' },
         length: { minimum: 5, message: 'length', if: :username? },

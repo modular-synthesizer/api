@@ -1,6 +1,7 @@
 module Modusynth
   module Exceptions
     autoload :BadRequest, './exceptions/bad_request'
+    autoload :Concern, './exceptions/concern'
     autoload :Forbidden, './exceptions/forbidden'
     autoload :Unknown, './exceptions/unknown'
 
