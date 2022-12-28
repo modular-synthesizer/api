@@ -24,7 +24,7 @@ module Modusynth
           inputs: ports(object.ports.inputs),
           outputs: ports(object.ports.outputs),
           type: tool.name,
-          category: tool.category.name
+          category: tool.category.nil? ? 'tools' : tool.category.name
         }
       end
 
