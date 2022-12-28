@@ -12,42 +12,15 @@ orbs:
   virtuacommands: virtuaorbs/commands@0.5.1
 
 jobs:
-  test-job-accounts:
+  test-job:
     executor: mongoruby
+    parallelism: 5
     steps:
-      - virtuacommands/run-rspec-tests:
-          suite: './spec/controllers/accounts'
-  test-job-categories:
-    executor: mongoruby
-    steps:
-      - virtuacommands/run-rspec-tests:
-          suite: './spec/controllers/categories'
-  test-job-modules:
-    executor: mongoruby
-    steps:
-      - virtuacommands/run-rspec-tests:
-          suite: './spec/controllers/modules'
-  test-job-parameters:
-    executor: mongoruby
-    steps:
-      - virtuacommands/run-rspec-tests:
-          suite: './spec/controllers/parameters'
-  test-job-sessions:
-    executor: mongoruby
-    steps:
-      - virtuacommands/run-rspec-tests:
-          suite: './spec/controllers/sessions'
-  test-job-synthesizers:
-    executor: mongoruby
-    steps:
-      - virtuacommands/run-rspec-tests:
-          suite: './spec/controllers/synthesizers'
-  test-job-tools:
-    executor: mongoruby
-    steps:
-      - virtuacommands/run-rspec-tests:
-          suite: './spec/controllers/tools'
-
+      - run:
+          name: Run RSpec Tests
+          command: |
+            TESTFILES=$(circleci tests glob “spec/**/*_spec.rb” | circleci tests split)
+            bundle exec rspec — ${TESTFILES}
   lint-job:
     docker:
       - image: cimg/ruby:3.1.3
@@ -111,23 +84,11 @@ workflows:
   version: 2.1
   build:
     jobs:
-      - test-job-accounts
-      - test-job-categories
-      - test-job-modules
-      - test-job-parameters
-      - test-job-sessions
-      - test-job-synthesizers
-      - test-job-tools
+      - test-job
       - lint-job
       - docker-job:
           requires:
-            - test-job-accounts
-            - test-job-categories
-            - test-job-modules
-            - test-job-parameters
-            - test-job-sessions
-            - test-job-synthesizers
-            - test-job-tools
+            - test-job
             - lint-job
       - deployment-approval:
           type: approval
