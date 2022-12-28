@@ -18,6 +18,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Install dependencies
+          command: gem install bundler && bundle install
+      - run:
           name: Run RSpec Tests
           command: |
             TESTFILES=$(circleci tests glob “spec/**/*_spec.rb” | circleci tests split)
