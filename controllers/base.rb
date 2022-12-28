@@ -4,7 +4,8 @@ module Modusynth
   module Controllers
     class Base < Sinatra::Base
       register Sinatra::CrossOrigin
-      extend Modusynth::Helpers::Routes
+      register Modusynth::Helpers::Routes
+      helpers Modusynth::Helpers::Payloads
 
       before do
         content_type :json
@@ -21,19 +22,6 @@ module Modusynth
         # This configuration options allow the error handler to work in tests.
         set :show_exceptions, false
         set :raise_errors, false
-      end
-
-      def body_params
-        request.body.rewind
-        JSON.parse(request.body.read.to_s).merge(params)
-      rescue JSON::ParserError
-        params
-      end
-
-      # THis method is destined to replace the body_params method as it
-      # is easier to read, and correctly transforms all keys in symbols.
-      def payload
-        body_params.transform_keys(&:to_sym)
       end
 
       error Mongoid::Errors::Validations do |error|
