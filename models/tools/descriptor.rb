@@ -1,10 +1,17 @@
 module Modusynth
   module Models
     module Tools
+      # A descriptor gives constraints concerning a type of parameter. These constraints are then applied to the
+      # parameter with the same name on the nodes the Parameter object is targeting.
+      # @author Vincent Courtois <courtois.vincent@outlook.com>
       class Descriptor
         include Mongoid::Document
 
         store_in collection: 'tools_descriptors'
+
+        # @!attribute [rw] field
+        #   @return [String] the name of the field the parameters linked to this descriptor will be applied on.
+        field :field, type: String
 
         field :name, type: String
 
@@ -17,6 +24,10 @@ module Modusynth
         field :precision, type: Integer
 
         field :step, type: Float
+
+        has_many :parameters,
+          class_name: '::Modusynth::Models::Tools::Parameter',
+          inverse_of: :descriptor
 
         validates :name, presence: { message: 'required' }
 
@@ -33,10 +44,6 @@ module Modusynth
         validate :boundaries
 
         validate :default_value
-
-        has_many :parameters,
-          class_name: '::Modusynth::Models::Tools::Parameter',
-          inverse_of: :descriptor
 
         def boundaries
           return if minimum.nil? || maximum.nil?

@@ -1,46 +1,39 @@
 module Modusynth
   module Models
     module Tools
+      # A parameter represents a value of an AudioParam in the client-side application. It links a descriptor setting
+      # constraints for the value of the parameter, and a set of targets being inner nodes of the tool the parameter is
+      # declared into. After being instanciated, each tool parameter will generate a module parameter.
+      #
+      # @author Vincent Courtois <courtois.vincent@outlook.com>
       class Parameter
         include Mongoid::Document
 
         store_in collection: 'tools_parameters'
 
-        field :name, type: String
-
+        # @!attribute [rw] targets
+        #   @return [Array<String>] The names of the inner nodes this parameter is applied onto.
         field :targets, type: Array, default: []
 
-        field :x, type: Integer, default: 0
-
-        field :y, type: Integer, default: 0
-
-        field :component, type: String
-
-        belongs_to :descriptor,
-          class_name: '::Modusynth::Models::Tools::Descriptor',
-          inverse_of: :parameters
-
+        # @!attribute [rw] descriptor
+        #   @return [Modusynth::Models::Tools::Descriptor] the constraints applied to the current parameter
+        belongs_to :descriptor, class_name: '::Modusynth::Models::Tools::Descriptor', inverse_of: :parameters
+        # @!attribute [rw] tool
+        #   @return [Modisynth::Models::Tool] the tool this parameters is declared onto.
         belongs_to :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :parameters
 
         validates :name, presence: { message: 'required' }
 
         validates :component, presence: { message: 'required' }
 
-        def targets_types
-          return if targets.nil? || !targets.kind_of?(Array)
-          targets.each.with_index do |target, index|
-            return errors.add(:"targets[#{index}]", 'type') unless target.kind_of?(String)
-          end
-        end
-
-        def name
-          descriptor.name
-        end
-
         scope :called, ->(name) {
           descriptors = Modusynth::Models::Tools::Descriptor.where(name: name)
           return where(:descriptor_id.in => descriptors.map(&:id))
         }
+
+        def field
+          descriptor.field
+        end
       end
     end
   end
