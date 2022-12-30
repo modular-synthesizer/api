@@ -37,17 +37,9 @@ module Modusynth
           class_name: '::Modusynth::Models::Tools::Parameter',
           inverse_of: :descriptor
 
-        validates :name, presence: { message: 'required' }
-
-        validates :minimum, presence: { message: 'required' }
-
-        validates :maximum, presence: { message: 'required' }
-
-        validates :step, presence: { message: 'required' }
-
-        validates :precision, presence: { message: 'required' }
-
-        validates :default, presence: { message: 'required' }
+        [:name, :minimum, :maximum, :step, :precision, :default].each do |field|
+          validates_presence_of field, message: 'required'
+        end
         
         validate :boundaries
 
