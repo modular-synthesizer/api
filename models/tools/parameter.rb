@@ -30,10 +30,6 @@ module Modusynth
           descriptors = Modusynth::Models::Tools::Descriptor.where(name: name)
           return where(:descriptor_id.in => descriptors.map(&:id))
         }
-
-        def field
-          descriptor.field
-        end
       end
     end
   end

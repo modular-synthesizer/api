@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Models
     module Tools
@@ -13,7 +15,7 @@ module Modusynth
         field :component, type: String
         # @!attribute [rw] payload
         #   @return [Hash] the attributes passed to the component as props. If an attribute is not defined, the default
-        #     value will be used on the client side to 
+        #     value for this key will be used on the client side.
         field :payload, type: Hash, default: {}
       end
     end
