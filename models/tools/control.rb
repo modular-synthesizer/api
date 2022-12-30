@@ -10,6 +10,8 @@ module Modusynth
       #
       # @author Vincent Courtois <courtois.vincent@outlook.com>
       class Control
+        include Mongoid::Document
+
         # @!attribute [rw] component
         #   @return [String] the name of the component, on the client-side, used to render this control.
         field :component, type: String
@@ -17,6 +19,10 @@ module Modusynth
         #   @return [Hash] the attributes passed to the component as props. If an attribute is not defined, the default
         #     value for this key will be used on the client side.
         field :payload, type: Hash, default: {}
+
+        validates :component,
+                  presence: { message: 'required' },
+                  format: { with: /\A[A-Z][A-Za-z]*\Z/, message: 'format'}
       end
     end
   end
