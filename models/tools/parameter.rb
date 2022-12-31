@@ -22,10 +22,6 @@ module Modusynth
         #   @return [Modisynth::Models::Tool] the tool this parameters is declared onto.
         belongs_to :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :parameters
 
-        validates :name, presence: { message: 'required' }
-
-        validates :component, presence: { message: 'required' }
-
         scope :called, ->(name) {
           descriptors = Modusynth::Models::Tools::Descriptor.where(name: name)
           return where(:descriptor_id.in => descriptors.map(&:id))

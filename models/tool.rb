@@ -37,7 +37,7 @@ module Modusynth
       
       validates :name,
         presence: { message: 'required' },
-        length: { minimum: 3, message: 'length', if: :name? }
+        length: { minimum: 3, message: 'minlength', if: :name? }
 
       validates :slots,
         presence: { message: 'required' },
