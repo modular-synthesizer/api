@@ -5,8 +5,8 @@ module Modusynth
       class Links
         include Singleton
 
-        def create index:, from: nil, to: nil
-          Modusynth::Models::Tools::InnerNode.new(**validate!(index:, from:, to:))
+        def build index:, from: nil, to: nil
+          Modusynth::Models::Tools::InnerLink.new(**validate!(index:, from:, to:))
         end
 
         def validate! index:, **payload
