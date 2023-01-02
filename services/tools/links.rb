@@ -3,6 +3,7 @@ module Modusynth
     module Tools
       # This service holds all the logic to validate and create new inner links between inner nodes.
       class Links
+        include Modusynth::Services::Concerns::Creator
         include Singleton
 
         def build index:, from: nil, to: nil
