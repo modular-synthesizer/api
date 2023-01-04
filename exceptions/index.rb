@@ -4,6 +4,7 @@ module Modusynth
     autoload :Concern, './exceptions/concern'
     autoload :Forbidden, './exceptions/forbidden'
     autoload :Unknown, './exceptions/unknown'
+    autoload :Validation, './exceptions/validation'
 
     def self.required field
       raise Modusynth::Exceptions::BadRequest.new(field, 'required')
@@ -26,7 +27,7 @@ module Modusynth
     end
 
     def self.on_document document, prefix
-      messages = document.errors.messages
+      messages = document.messages_with_prefixes
       key = messages.keys.first
       prefix += '.' if prefix != ''
       Modusynth::Exceptions::BadRequest.new("#{prefix}#{key}", messages[key][0])

@@ -6,24 +6,17 @@ module Modusynth
         include Modusynth::Services::Concerns::Creator
         include Singleton
 
-        def build index:, from: nil, to: nil
-          Modusynth::Models::Tools::InnerLink.new(**validate!(index:, from:, to:))
+        def build from: nil, to: nil
+          Modusynth::Models::Tools::InnerLink.new(**validate!(from:, to:))
         end
 
-        def validate! index:, **payload
+        def validate! prefix:, **payload
           [:from, :to].each do |link_end|
             unless payload.key?(link_end) && !payload[link_end].nil?
-              raise Modusynth::Exceptions.required("innerLinks[#{index}].#{link_end}")
-            end
-            [:node, :index].each do |field|
-              unless payload[link_end].key?(field) && !payload[link_end][field].nil?
-                raise Modusynth::Exceptions.required("innerLinks[#{index}].#{link_end}.#{field}")
-              end
-            end
-            if payload[link_end][:index] < 0
-              raise Modusynth::Exceptions::BadRequest.new("innerLinks[#{index}].#{link_end}.index", 'value')
+              raise Modusynth::Exceptions.required("#{prefix}#{prefix == '' ? '' : '.'}#{link_end}")
             end
           end
+          Modusynth::Models::Tools::InnerLink.new(**payload).validate!
           payload
         end
       end

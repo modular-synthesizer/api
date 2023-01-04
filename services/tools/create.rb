@@ -9,8 +9,8 @@ module Modusynth
           Modusynth::Models::Tool.new(
             name:,
             slots:,
-            inner_nodes: InnerNodes.instance.build_all(nodes),
-            inner_links: Links.instance.build_all(links)
+            inner_nodes: InnerNodes.instance.build_all(nodes, prefix: 'nodes'),
+            inner_links: Links.instance.build_all(links, prefix: 'links')
             # parameters: build_parameters(parameters),
             # controls: build_controls(controls),
             # ports: build_ports(ports),

@@ -5,14 +5,8 @@ Bundler.require(:test)
 
 require './module'
 
-Dir['./spec/support/**/*.rb'].each do |filename|
-  require filename
-end
-Dir['./spec/shared/**/*.rb'].each do |filename|
-  require filename
-end
-Dir['./spec/requests/**/*.rb'].each do |filename|
-  require filename
+['spec/request', 'spec/shared', 'spec/support'].each do |folder|
+  Dir["./#{folder}/**/*.rb"].each { |fn| require fn }
 end
 
 Mongoid.load!('config/mongoid.yml', :test)
