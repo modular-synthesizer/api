@@ -6,11 +6,11 @@ module Modusynth
         include Modusynth::Services::Concerns::Creator
         include Singleton
 
-        def build name: nil, generator: nil
+        def build name: nil, generator: nil, **others
           model.new(name:, generator:)
         end
 
-        def validate! prefix:, generator:, name:
+        def validate! prefix:, generator:, name:, **others
           model.new(generator:, name:).validate!
         end
 
