@@ -16,13 +16,21 @@ RSpec.describe 'Tool creation service' do
   end
 
   describe 'Error cases' do
-    describe 'With an invalid inner node' do 
+    describe 'With an invalid inner node' do
+      let!(:payload) do
+        {name: 'TestTool', slots: 10, nodes: [{name: 'test-node', generator: 'fo'}]}
+      end
       it 'Returns the correct kind of exception' do
-        inner_node = {name: 'test-node', generator: 'fo'}
-        payload = {name: 'TestTool', slots: 10, nodes: [inner_node]}
         expect { service.build_and_validate!(**payload) }.to raise_error(
           Modusynth::Exceptions::Validation
         )
+      end
+      it 'Has the correct messages' do
+        begin
+          service.build_and_validate!(**payload)
+        rescue Modusynth::Exceptions::Validation => exception
+          expect(exception.messages).to eq({:'nodes[0].generator' => ['length']})
+        end
       end
     end
     describe 'With an invalid inner link' do
