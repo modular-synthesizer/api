@@ -14,7 +14,7 @@ module Modusynth
             # parameters: build_parameters(parameters),
             # controls: build_controls(controls),
             ports: Ports.instance.build_all(ports, prefix: 'ports'),
-            # category: get_category(categoryId)
+            category: Categories.instance.find_or_fail(id: categoryId, field: 'categoryId')
           )
         end
       end
