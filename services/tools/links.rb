@@ -6,11 +6,11 @@ module Modusynth
         include Modusynth::Services::Concerns::Creator
         include Singleton
 
-        def build from: nil, to: nil
+        def build from: nil, to: nil, **others
           Modusynth::Models::Tools::InnerLink.new(**validate!(from:, to:))
         end
 
-        def validate! prefix:, **payload
+        def validate! prefix: '', **payload
           [:from, :to].each do |link_end|
             unless payload.key?(link_end) && !payload[link_end].nil?
               raise Modusynth::Exceptions.required("#{prefix}#{prefix == '' ? '' : '.'}#{link_end}")
