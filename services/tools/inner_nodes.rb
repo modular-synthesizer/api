@@ -7,17 +7,11 @@ module Modusynth
         include Singleton
 
         def build name: nil, generator: nil, **others
-          model.new(name:, generator:)
+          Modusynth::Models::Tools::InnerNode.new(name:, generator:)
         end
 
         def validate! prefix:, generator:, name:, **others
-          model.new(generator:, name:).validate!
-        end
-
-        private
-
-        def model
-          Modusynth::Models::Tools::InnerNode
+          build(generator:, name:).validate!
         end
       end
     end

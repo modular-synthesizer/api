@@ -14,12 +14,6 @@ module Modusynth
 
         field :index, type: Integer, default: 0
 
-        field :x, type: Integer, default: 0
-
-        field :y, type: Integer, default: 0
-
-        belongs_to :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :ports
-
         validates :name,
           presence: { message: 'required' },
           length: { minimum: 3, message: 'length', if: :name? }

@@ -30,11 +30,14 @@ module Modusynth
             validate!(prefix:, **payload) if respond_to?(:validate!, true)
             build(**payload)
           rescue Mongoid::Errors::Validations => exception
-            raise Modusynth::Exceptions::Validation.new(messages: exception.errors.messages, prefix:)
+            validation_exception(messages: exception.errors.messages, prefix:)
           rescue ActiveModel::ValidationError => exception
-            exc = Modusynth::Exceptions::Validation.new(messages: exception.model.errors.messages, prefix:)
-            raise exc
+            validation_exception(messages: exception.model.errors.messages, prefix:)
           end
+        end
+
+        def validation_exception(messages:, prefix:)
+          raise Modusynth::Exceptions::Validation.new(messages:, prefix:)
         end
       end
     end

@@ -51,5 +51,23 @@ RSpec.describe 'Tool creation service' do
         end
       end
     end
+    describe 'With an invalid port' do
+      let!(:payload) do
+        port = {name: nil, kind: 'input', target: 'test', index: 0}
+        {name: 'TestTool', slots: 10, ports: [port]}
+      end
+      it 'Returns an error with the first key in error' do
+        expect { service.build_and_validate!(**payload) }.to raise_error(
+          Modusynth::Exceptions::Validation
+        )
+      end
+      it 'Has the correct message' do
+        begin
+          service.build_and_validate!(**payload)
+        rescue Modusynth::Exceptions::Validation => exception
+          expect(exception.messages).to eq({:'ports[0].name' => ['required']})
+        end
+      end
+    end
   end
 end

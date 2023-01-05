@@ -10,10 +10,10 @@ module Modusynth
             name:,
             slots:,
             inner_nodes: InnerNodes.instance.build_all(nodes, prefix: 'nodes'),
-            inner_links: Links.instance.build_all(links, prefix: 'links')
+            inner_links: Links.instance.build_all(links, prefix: 'links'),
             # parameters: build_parameters(parameters),
             # controls: build_controls(controls),
-            # ports: build_ports(ports),
+            ports: Ports.instance.build_all(ports, prefix: 'ports'),
             # category: get_category(categoryId)
           )
         end
