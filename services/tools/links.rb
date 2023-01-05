@@ -16,7 +16,11 @@ module Modusynth
               raise Modusynth::Exceptions.required("#{prefix}#{prefix == '' ? '' : '.'}#{link_end}")
             end
           end
-          Modusynth::Models::Tools::InnerLink.new(**payload).validate!
+          item = Modusynth::Models::Tools::InnerLink.new(
+            from: LinkEnds.instance.build_and_validate!(prefix: "#{prefix}.from", **payload[:from]),
+            to: LinkEnds.instance.build_and_validate!(prefix: "#{prefix}.to", **payload[:to])
+          )
+          item.validate!
           payload
         end
       end

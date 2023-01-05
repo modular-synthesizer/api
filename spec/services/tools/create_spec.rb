@@ -34,12 +34,21 @@ RSpec.describe 'Tool creation service' do
       end
     end
     describe 'With an invalid inner link' do
-      it 'Returns an error with the first key in error' do
+      let!(:payload) do
         inner_link = {from: {node: 'test', index: 0}, to: { node: 'test', index: -1 }}
-        payload = {name: 'TestTool', slots: 10, links: [inner_link]}
+        {name: 'TestTool', slots: 10, links: [inner_link]}
+      end
+      it 'Returns an error with the first key in error' do
         expect { service.build_and_validate!(**payload) }.to raise_error(
           Modusynth::Exceptions::Validation
         )
+      end
+      it 'Has the correct message' do
+        begin
+          service.build_and_validate!(**payload)
+        rescue Modusynth::Exceptions::Validation => exception
+          expect(exception.messages).to eq({:'links[0].to.index' => ['value']})
+        end
       end
     end
   end
