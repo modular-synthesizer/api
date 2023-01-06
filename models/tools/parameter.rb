@@ -18,9 +18,6 @@ module Modusynth
         # @!attribute [rw] descriptor
         #   @return [Modusynth::Models::Tools::Descriptor] the constraints applied to the current parameter
         belongs_to :descriptor, class_name: '::Modusynth::Models::Tools::Descriptor', inverse_of: :parameters
-        # @!attribute [rw] tool
-        #   @return [Modisynth::Models::Tool] the tool this parameters is declared onto.
-        belongs_to :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :parameters
 
         scope :called, ->(name) {
           descriptors = Modusynth::Models::Tools::Descriptor.where(name: name)

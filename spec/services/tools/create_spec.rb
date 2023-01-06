@@ -103,5 +103,50 @@ RSpec.describe 'Tool creation service' do
         end
       end
     end
+    describe 'With an invalid descriptor UUID for a parameter' do
+      let!(:payload) do
+        {
+          name: 'TestTool',
+          slots: 10,
+          categoryId: dopefun.id.to_s,
+          parameters: [{descriptorId: 'unknown', targets: ['test']}]
+        }
+      end
+      it 'Returns an error with the first key in error' do
+        expect { service.build_and_validate!(**payload) }.to raise_error(
+          Modusynth::Exceptions::Unknown
+        )
+      end
+      it 'Has the correct message' do
+        begin
+          service.build_and_validate!(**payload)
+        rescue Modusynth::Exceptions::Unknown => exception
+          expect(exception.key).to eq 'parameters[0].descriptorId'
+          expect(exception.error).to eq 'unknown'
+        end
+      end
+    end
+    describe 'With an invalid control' do
+      let!(:payload) do
+        {
+          name: 'TestTool',
+          slots: 10,
+          categoryId: dopefun.id.to_s,
+          controls: [{component: nil, payload: {}}]
+        }
+      end
+      it 'Returns an error with the first key in error' do
+        expect { service.build_and_validate!(**payload) }.to raise_error(
+          Modusynth::Exceptions::Validation
+        )
+      end
+      it 'Has the correct message' do
+        begin
+          service.build_and_validate!(**payload)
+        rescue Modusynth::Exceptions::Validation => exception
+          expect(exception.messages).to eq({:'controls[0].component' => ['required']})
+        end
+      end
+    end
   end
 end

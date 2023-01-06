@@ -33,6 +33,9 @@ module Modusynth
             validation_exception(messages: exception.errors.messages, prefix:)
           rescue ActiveModel::ValidationError => exception
             validation_exception(messages: exception.model.errors.messages, prefix:)
+          rescue Modusynth::Exceptions::Unknown => exception
+            key = "#{prefix}#{prefix == '' ? '' : '.'}#{exception.key}"
+            raise Modusynth::Exceptions::Unknown.new(key, exception.error)
           end
         end
 

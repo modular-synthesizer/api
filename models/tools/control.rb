@@ -22,7 +22,7 @@ module Modusynth
 
         validates :component,
                   presence: { message: 'required' },
-                  format: { with: /\A[A-Z][A-Za-z]*\Z/, message: 'format'}
+                  format: { with: /\A[A-Z][A-Za-z]*\Z/, message: 'format', if: :component? }
       end
     end
   end

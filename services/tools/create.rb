@@ -11,8 +11,8 @@ module Modusynth
             slots:,
             inner_nodes: InnerNodes.instance.build_all(nodes, prefix: 'nodes'),
             inner_links: Links.instance.build_all(links, prefix: 'links'),
-            # parameters: build_parameters(parameters),
-            # controls: build_controls(controls),
+            parameters: Parameters.instance.build_all(parameters, prefix: 'parameters'),
+            controls: Controls.instance.build_all(controls, prefix: 'controls'),
             ports: Ports.instance.build_all(ports, prefix: 'ports'),
             category: Categories.instance.find_or_fail(id: categoryId, field: 'categoryId')
           )
