@@ -14,6 +14,104 @@ RSpec.describe 'Tool creation service' do
     it 'Has returned an object with the correct number of slots' do
       expect(creation.slots).to be 10
     end
+    it 'Has return an object with the correct category' do
+      expect(creation.category.id).to eq dopefun.id
+    end
+  end
+
+  describe 'Alternative cases' do
+    describe 'Tool with a valid inner node' do
+      it 'Has persisted the tool' do
+
+      end
+      describe 'The created inner node' do
+        it 'Has persisted the inner node' do
+
+        end
+        it 'Has affected the correct name' do
+
+        end
+        it 'Has affected the correct generator' do
+
+        end
+      end
+    end
+    describe 'Tool with a valid inner link' do
+      it 'Has persisted the tool' do
+
+      end
+      describe 'The created inner link' do
+        it 'Has persisted the inner link' do
+
+        end
+        it 'Has affected the origin node' do
+
+        end
+        it 'Has affected the origin index' do
+
+        end
+        it 'Has affected the destination node' do
+
+        end
+        it 'Has affected the destination index' do
+
+        end
+      end
+    end
+    describe 'Tool with a valid port' do
+      it 'Has persisted the tool' do
+
+      end
+      describe 'The created port' do
+        it 'Has persisted the port' do
+
+        end
+        it 'Has affected the kind' do
+
+        end
+        it 'Has affected the name' do
+
+        end
+        it 'Has affected the target' do
+
+        end
+        it 'Has affected the index' do
+
+        end
+      end
+    end
+    describe 'Tool with a valid parameter' do
+      it 'Has persisted the tool' do
+
+      end
+      describe 'The created parameter' do
+        it 'Has persisted the parameter' do
+
+        end
+        it 'Has affected the targets' do
+
+        end
+        it 'Has affected the descriptor' do
+
+        end
+      end
+    end
+    describe 'Tool with a valid control' do
+      it 'Has persisted the tool' do
+
+      end
+      describe 'The created control' do
+        it 'Has persisted the control' do
+
+        end
+        it 'Has affected the component' do
+
+        end
+        it 'Has affected the payload' do
+
+        end
+      end
+    end
   end
 
   describe 'Error cases' do
@@ -239,40 +337,47 @@ RSpec.describe 'Tool creation service' do
         )
       end
     end
+    describe 'Ports errors' do
+      it 'Fails if the name is not given' do
 
+      end
+      it 'Fails if the name is given as nil' do
 
-    # describe 'With an invalid port' do
-    #   let!(:payload) do
-    #     create_payload({ports: [{name: nil, kind: 'input', target: 'test', index: 0}]})
-    #   end
-    #   it 'Returns an error with the first key in error' do
-    #     expect { service.build_and_validate!(**payload) }.to raise_error(
-    #       an_instance_of(Modusynth::Exceptions::Service)
-    #       .and having_attributes(key: 'name', error: 'required', prefix: 'ports[0].')
-    #     )
-    #   end
-    # end
-    # describe 'With an invalid descriptor UUID for a parameter' do
-    #   let!(:payload) do
-    #     create_payload({parameters: [{descriptorId: 'unknown', targets: ['test']}]})
-    #   end
-    #   it 'Returns an error with the first key in error' do
-    #     expect { service.build_and_validate!(**payload) }.to raise_error(
-    #       an_instance_of(Modusynth::Exceptions::Service)
-    #       .and having_attributes(key: 'descriptorId', error: 'unknown', prefix: 'parameters[0].')
-    #     )
-    #   end
-    # end
-    # describe 'With an invalid control' do
-    #   let!(:payload) do
-    #     create_payload({controls: [{component: nil, payload: {}}]})
-    #   end
-    #   it 'Returns an error with the first key in error' do
-    #     expect { service.build_and_validate!(**payload) }.to raise_error(
-    #       an_instance_of(Modusynth::Exceptions::Service)
-    #       .and having_attributes(key: 'component', error: 'required', prefix: 'controls[0].')
-    #     )
-    #   end
-    # end
+      end
+      it 'Fails if the name is too short' do
+
+      end
+      it 'Fails if the index is not given' do
+
+      end
+      it 'Fails if the index is given as nil' do
+
+      end
+      it 'Fails if the index is below zero' do
+
+      end
+    end
+    describe 'Parameters errors' do
+      it 'Fails if the descriptor UUID is not given' do
+
+      end
+      it 'Fails if the descriptor UUID is given as nil' do
+
+      end
+      it 'Fails if the descriptor is not found' do
+
+      end
+    end
+    describe 'Controls errors' do
+      it 'Fails if the component is not given' do
+
+      end
+      it 'Fails if the component is given as nil' do
+
+      end
+      it 'Fails if the component has a wrong format' do
+
+      end
+    end
   end
 end

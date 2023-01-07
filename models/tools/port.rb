@@ -19,6 +19,7 @@ module Modusynth
           length: { minimum: 3, message: 'length', if: :name? }
         
         validates :index,
+          presence: { message: 'required' },
           numericality: { greater_than: -1, message: 'value', if: :index? }
 
         scope :inputs, ->{ where(kind: 'input') }
