@@ -30,17 +30,16 @@ module Modusynth
             validate!(prefix:, **payload) if respond_to?(:validate!, true)
             build(**payload)
           rescue Mongoid::Errors::Validations => exception
-            validation_exception(messages: exception.errors.messages, prefix:)
+            exc_klass.from_messages(exception.errors.messages, prefix:)
           rescue ActiveModel::ValidationError => exception
-            validation_exception(messages: exception.model.errors.messages, prefix:)
+            exc_klass.from_messages(exception.model.errors.messages, prefix:)
           rescue Modusynth::Exceptions::Unknown => exception
-            key = "#{prefix}#{prefix == '' ? '' : '.'}#{exception.key}"
-            raise Modusynth::Exceptions::Unknown.new(key, exception.error)
+            exc_klass.from_unknown(exception, prefix:)
           end
         end
-
-        def validation_exception(messages:, prefix:)
-          raise Modusynth::Exceptions::Validation.new(messages:, prefix:)
+        
+        def exc_klass
+          Modusynth::Exceptions::Service
         end
       end
     end

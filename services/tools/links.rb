@@ -13,7 +13,7 @@ module Modusynth
         def validate! prefix: '', **payload
           [:from, :to].each do |link_end|
             unless payload.key?(link_end) && !payload[link_end].nil?
-              raise Modusynth::Exceptions.required("#{prefix}#{prefix == '' ? '' : '.'}#{link_end}")
+              raise Modusynth::Exceptions::Service.new(prefix:, error: 'required', key: link_end)
             end
           end
           item = Modusynth::Models::Tools::InnerLink.new(

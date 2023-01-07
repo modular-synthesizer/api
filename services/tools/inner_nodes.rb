@@ -10,7 +10,7 @@ module Modusynth
           Modusynth::Models::Tools::InnerNode.new(name:, generator:)
         end
 
-        def validate! prefix:, generator:, name:, **others
+        def validate! prefix: nil, generator: nil, name: nil, **others
           build(generator:, name:).validate!
         end
       end

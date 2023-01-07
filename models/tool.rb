@@ -9,7 +9,6 @@ module Modusynth
     class Tool
       include Mongoid::Document
       include Mongoid::Timestamps
-      include Mongoid::EmbeddedErrors
 
       store_in collection: 'tools'
 

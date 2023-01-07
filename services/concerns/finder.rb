@@ -21,7 +21,7 @@ module Modusynth
         #   found in the database.
         # @raise [::Modusynth::Exceptions::Concern] when the concern is not
         #   correctly implemented
-        def find_or_fail(id:, field: 'id')
+        def find_or_fail(id: nil, field: 'id')
           instance = find(id: id)
           raise Modusynth::Exceptions.unknown(field) if instance.nil?
           instance

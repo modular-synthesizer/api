@@ -5,7 +5,17 @@ module Modusynth
         include Modusynth::Services::Concerns::Creator
         include Singleton
 
-        def build name: nil, slots: nil, nodes: [], links: [], parameters: [], controls: [], ports: [], categoryId: nil
+        def build(
+          name: nil,
+          slots: nil,
+          nodes: [],
+          links: [],
+          parameters: [],
+          controls: [],
+          ports: [],
+          categoryId: nil,
+          **rest
+        )
           Modusynth::Models::Tool.new(
             name:,
             slots:,
@@ -16,6 +26,13 @@ module Modusynth
             ports: Ports.instance.build_all(ports, prefix: 'ports'),
             category: Categories.instance.find_or_fail(id: categoryId, field: 'categoryId')
           )
+        end
+
+        def validate! **payload
+          if payload[:categoryId].nil?
+            raise Modusynth::Exceptions::Service.new(key: 'categoryId', error: 'required')
+          end
+          build(**payload).validate!
         end
       end
     end
