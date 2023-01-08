@@ -31,7 +31,7 @@ module Modusynth
       end
 
       def message
-        {key: "#{prefix}#{key}", error:}.to_json
+        {key: "#{prefix}#{key}", message: error}.to_json
       end
     end
   end

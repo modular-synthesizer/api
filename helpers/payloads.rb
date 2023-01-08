@@ -19,6 +19,7 @@ module Modusynth
       end
 
       def symbolize! parameters
+        return parameters.map { |p| symbolize! p } if parameters.is_a? Array
         return parameters unless parameters.is_a?(Hash)
         Hash[parameters.map {|k, v| [k.to_sym, symbolize!(v)]}]
       end

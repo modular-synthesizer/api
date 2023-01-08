@@ -21,7 +21,7 @@ RSpec.describe Modusynth::Controllers::Tools do
 
     describe 'Nominal case' do
       before do
-        post '/', {name: 'VCA', slots: 3, auth_token: session.token, categoryId: dopefun.id.to_s}
+        post '/', {name: 'VCA', slots: 3, auth_token: session.token, categoryId: dopefun.id.to_s}.to_json
       end
 
       it 'Returns a 201 (Created) status code' do
@@ -57,7 +57,15 @@ RSpec.describe Modusynth::Controllers::Tools do
 
     describe 'Alternative cases' do
       describe 'Tool with inner nodes' do
-        before { create_tool_with_inner_node(session) }
+        before do
+          post '/', {
+            name: 'VCA',
+            slots: 3,
+            auth_token: session.token,
+            categoryId: dopefun.id.to_s,
+            nodes: [{ name: 'gain', generator: 'GainNode'}]
+          }.to_json
+        end
 
         it 'Returns a 201 (Created) status code' do
           expect(last_response.status).to be 201
@@ -92,7 +100,15 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
       end
       describe 'Tool with inner links' do
-        before { create_tool_with_inner_link(session) }
+        before do
+          post '/', {
+            name: 'VCA',
+            slots: 3,
+            auth_token: session.token,
+            categoryId: dopefun.id.to_s,
+            links: [{from: {node: 'oscillator', index: 0}, to: {node: 'gain', index: 1}}]
+          }.to_json
+        end
 
         describe 'Created inner link' do
           let!(:tool) { Modusynth::Models::Tool.first }
@@ -128,7 +144,16 @@ RSpec.describe Modusynth::Controllers::Tools do
             'default' => 1
           )
         end
-        before { create_tool_with_parameter(session, param) }
+
+        before do
+          post '/', {
+            name: 'VCA',
+            slots: 3,
+            auth_token: session.token,
+            categoryId: dopefun.id.to_s,
+            parameters: [{descriptorId: param.id.to_s, targets: ['target']}]
+          }.to_json
+        end
 
         it 'Returns a 201 (Created) status code' do
           expect(last_response.status).to be 201
@@ -141,7 +166,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             slots: 3,
             parameters: [{
               name: 'parameter',
-              targets: [],
+              targets: ['target'],
               value: 1,
               constraints: {
                 minimum: 0,
@@ -149,24 +174,27 @@ RSpec.describe Modusynth::Controllers::Tools do
                 step: 1,
                 precision: 0
               },
-              x: 20,
-              y: 30,
-              component: 'MyComponent'
             }]
           )
         end
       end
       describe 'Tool with inputs' do
-        before { create_tool_with_input(session) }
+        before do
+          post '/', {
+            name: 'VCA',
+            slots: 3,
+            auth_token: session.token,
+            categoryId: dopefun.id.to_s,
+            ports: [{kind: 'input', name: 'INPUT', target: 'gain', index: 0}]
+          }.to_json
+        end
 
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
             id: Modusynth::Models::Tool.first.id.to_s,
             name: 'VCA',
             slots: 3,
-            innerNodes: [],
-            innerLinks: [],
-            inputs: [{name: 'INPUT', index: 0, target: 'gain', x: 20, y: 30}],
+            inputs: [{name: 'INPUT', index: 0, target: 'gain'}],
             outputs: []
           )
         end
@@ -186,25 +214,25 @@ RSpec.describe Modusynth::Controllers::Tools do
           it 'Has created a port with the correct index' do
             expect(input.index).to be 0
           end
-          it 'Has created a port with the correct X coordinate' do
-            expect(input.x).to be 20
-          end
-          it 'Has created a port with the correct Y coordinate' do
-            expect(input.y).to be 30
-          end
         end
       end
       describe 'Tool with outputs' do
-        before { create_tool_with_output(session) }
+        before do
+          post '/', {
+            name: 'VCA',
+            slots: 3,
+            auth_token: session.token,
+            categoryId: dopefun.id.to_s,
+            ports: [{kind: 'output', name: 'OUTPUT', target: 'gain', index: 0}]
+          }.to_json
+        end
 
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
             id: Modusynth::Models::Tool.first.id.to_s,
             name: 'VCA',
             slots: 3,
-            innerNodes: [],
-            innerLinks: [],
-            outputs: [{name: 'OUTPUT', index: 0, target: 'gain', x: 20, y: 30}],
+            outputs: [{name: 'OUTPUT', index: 0, target: 'gain'}],
             inputs: []
           )
         end
@@ -224,19 +252,15 @@ RSpec.describe Modusynth::Controllers::Tools do
           it 'Has created a port with the correct index' do
             expect(output.index).to be 0
           end
-          it 'Has created a port with the correct X coordinate' do
-            expect(output.x).to be 20
-          end
-          it 'Has created a port with the correct Y coordinate' do
-            expect(output.y).to be 30
-          end
         end
       end
     end
 
     describe 'Error cases' do
       describe 'No name given' do
-        before { create_empty_tool(session) }
+        before do
+          post '/', {slots: 3, categoryId: dopefun.id.to_s, auth_token: session.token}.to_json
+        end
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
@@ -246,21 +270,23 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         include_examples 'empty lists'
       end
-
       describe 'Name too short' do
-        before { create_empty_tool(session, {name: 'a'}) }
+        before do
+          post '/', {slots: 3, categoryId: dopefun.id.to_s, auth_token: session.token, name: 'a'}.to_json
+        end
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct error body' do
-          expect(last_response.body).to include_json({key: 'name', message: 'length'})
+          expect(last_response.body).to include_json({key: 'name', message: 'minlength'})
         end
         include_examples 'empty lists'
       end
-
       describe 'Slots not given' do
-        before { create_empty_tool(session, {name: 'test'}) }
+        before do
+          post '/', {name: 'foobar', categoryId: dopefun.id.to_s, auth_token: session.token}.to_json
+        end
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
@@ -270,9 +296,15 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         include_examples 'empty lists'
       end
-
       describe 'Slots given with negative value' do
-        before { create_empty_tool(session, {name: 'test', slots: -1}) }
+        before do
+          post '/', {
+            slots: -1,
+            name: 'foobar',
+            categoryId: dopefun.id.to_s,
+            auth_token: session.token
+          }.to_json
+        end
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
@@ -282,9 +314,10 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         include_examples 'empty lists'
       end
-
       describe 'Slots given with zero as value' do
-        before { create_empty_tool(session, {name: 'test', slots: 0}) }
+        before do
+          post '/', {slots: 0, name: 'foobar', categoryId: dopefun.id.to_s, auth_token: session.token}.to_json
+        end
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
@@ -297,134 +330,210 @@ RSpec.describe Modusynth::Controllers::Tools do
     end
 
     describe 'Inner nodes error cases' do
-
-      def create_with_node(session, payload = {})
-        create_empty_tool(session, {name: 'test', slots: 10, innerNodes: [payload]})
-      end
-
       describe 'name not given' do
-        before { create_with_node(session) }
+        before do
+          post '/', {
+            slots: 3,
+            categoryId: dopefun.id.to_s,
+            name: 'testtool',
+            auth_token: session.token,
+            nodes: [{generator: 'GainNode'}]
+          }.to_json
+        end
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct error body' do
-          expect(last_response.body).to include_json({key: 'inner_nodes[0].name', message: 'required'})
+          expect(last_response.body).to include_json({key: 'nodes[0].name', message: 'required'})
         end
         include_examples 'empty lists'
       end
 
       describe 'name too short' do
-        before { create_with_node(session, {name: 'a'}) }
+        before do
+          post '/', {
+            slots: 3,
+            categoryId: dopefun.id.to_s,
+            name: 'testtool',
+            auth_token: session.token,
+            nodes: [{name: 'a', generator: 'GainNode'}]
+          }.to_json
+        end
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct error body' do
-          expect(last_response.body).to include_json({key: 'inner_nodes[0].name', message: 'length'})
+          expect(last_response.body).to include_json({key: 'nodes[0].name', message: 'length'})
         end
         include_examples 'empty lists'
       end
 
       describe 'generator not given' do
-        before { create_with_node(session, {name: 'test'}) }
+        before do
+          post '/', {
+            slots: 3,
+            categoryId: dopefun.id.to_s,
+            name: 'testtool',
+            auth_token: session.token,
+            nodes: [{name: 'testnode'}]
+          }.to_json
+        end
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct error body' do
-          expect(last_response.body).to include_json({key: 'inner_nodes[0].generator', message: 'required'})
+          expect(last_response.body).to include_json({key: 'nodes[0].generator', message: 'required'})
         end
         include_examples 'empty lists'
       end
 
       describe 'generator name too short' do
-        before { create_with_node(session, {name: 'test', generator: 'a'}) }
+        before do
+          post '/', {
+            slots: 3,
+            categoryId: dopefun.id.to_s,
+            name: 'testtool',
+            auth_token: session.token,
+            nodes: [{generator: 'a', name: 'testnode'}]
+          }.to_json
+        end
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct error body' do
-          expect(last_response.body).to include_json({key: 'inner_nodes[0].generator', message: 'length'})
+          expect(last_response.body).to include_json({key: 'nodes[0].generator', message: 'length'})
         end
         include_examples 'empty lists'
       end
     end
 
     describe 'Inner links error cases' do
-      def create_with_link(payload = {})
-        create_empty_tool(session, {
-          name: 'test',
-          slots: 10,
-          innerNodes: [{name: 'foo', generator: 'bar'}],
-          innerLinks: [payload]
-        })
-      end
-
       describe 'The origin is not given' do
-        before { create_with_link({}) }
+        before do
+          post '/', {
+            slots: 3,
+            categoryId: dopefun.id.to_s,
+            name: 'testtool',
+            auth_token: session.token,
+            links: [{to: {node: 'test', index: 0}}]
+          }.to_json
+        end
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
-            key: 'innerLinks[0].from', message: 'required'
+            key: 'links[0].from', message: 'required'
           )
         end
         include_examples 'empty lists'
       end
-
       describe 'The origin node is not given' do
-        before { create_with_link({from: {}}) }
+        before do
+          post '/', {
+            slots: 3,
+            categoryId: dopefun.id.to_s,
+            name: 'testtool',
+            auth_token: session.token,
+            links: [{to: {node: 'test', index: 0}, from: {index: 0}}]
+          }.to_json
+        end
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
-            key: 'innerLinks[0].from.node', message: 'required'
+            key: 'links[0].from.node', message: 'required'
           )
         end
         include_examples 'empty lists'
       end
-
       describe 'The origin index is not given' do
-        before { create_with_link({from: {node: 'foo'}}) }
+        before do
+          post '/', {
+            slots: 3,
+            categoryId: dopefun.id.to_s,
+            name: 'testtool',
+            auth_token: session.token,
+            links: [{to: {node: 'test', index: 0}, from: {node: 'other'}}]
+          }.to_json
+        end
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
-            key: 'innerLinks[0].from.index', message: 'required'
+            key: 'links[0].from.index', message: 'required'
           )
         end
         include_examples 'empty lists'
       end
-
       describe 'The destination is not given' do
-        before { create_with_link({from: { node: 'foo', index: 0 }}) }
+        before do
+          post '/', {
+            slots: 3,
+            categoryId: dopefun.id.to_s,
+            name: 'testtool',
+            auth_token: session.token,
+            links: [{from: {node: 'test', index: 0}}]
+          }.to_json
+        end
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
-            key: 'innerLinks[0].to', message: 'required'
+            key: 'links[0].to', message: 'required'
+          )
+        end
+        include_examples 'empty lists'
+      end
+      describe 'The destination node is not given' do
+        before do
+          post '/', {
+            slots: 3,
+            categoryId: dopefun.id.to_s,
+            name: 'testtool',
+            auth_token: session.token,
+            links: [{from: {node: 'test', index: 0}, to: {index: 0}}]
+          }.to_json
+        end
+
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            key: 'links[0].to.node', message: 'required'
           )
         end
         include_examples 'empty lists'
       end
       describe 'The destination index is not given' do
-        before { create_with_link({from: {node: 'foo', index: 0}, to: {node: 'foo'}}) }
+        before do
+          post '/', {
+            slots: 3,
+            categoryId: dopefun.id.to_s,
+            name: 'testtool',
+            auth_token: session.token,
+            links: [{from: {node: 'test', index: 0}, to: {node: 'other'}}]
+          }.to_json
+        end
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
-            key: 'innerLinks[0].to.index', message: 'required'
+            key: 'links[0].to.index', message: 'required'
           )
         end
         include_examples 'empty lists'
@@ -432,89 +541,82 @@ RSpec.describe Modusynth::Controllers::Tools do
     end
 
     describe 'parameters error cases' do
-      before do
-        create_empty_tool(session, {
-          name: 'test',
-          slots: 10,
-          parameters: [ {descriptor: 'unknown_id'} ]
-        })
-      end
-
-      it 'Returns a 404 (Unknown) status code' do
-        expect(last_response.status).to be 404
-      end
-      it 'Returns the correct body' do
-        expect(last_response.body).to include_json({
-          key: 'parameters[0]', message: 'unknown'
-        })
-      end
-      include_examples 'empty lists'
-    end
-
-    describe 'inputs error cases' do
-
-      def create_with_input *payload
-        create_empty_tool(session, {
-          name: 'test',
-          slots: 10,
-          inputs: [{name: 'test', targets: [], index: 0}] + payload,
-          innerNodes: [{name: 'test', generator: 'test'}]})
-      end
-
-      describe 'The name is not given' do
-        before { create_with_input({}) }
-
-        it 'Returns a 400 (Bad Request) status code' do
+      describe 'When the descriptor UUID is not given' do
+        before do
+          post '/', {
+            slots: 3,
+            categoryId: dopefun.id.to_s,
+            name: 'testtool',
+            auth_token: session.token,
+            parameters:  [ {targets: ['test']} ]
+          }.to_json
+        end
+  
+        it 'Returns a 404 (Unknown) status code' do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json({
-            key: 'ports[1].name', message: 'required'
+            key: 'parameters[0].descriptorId', message: 'required'
           })
         end
         include_examples 'empty lists'
       end
-      describe 'The name is too short' do
-        before { create_with_input({name: 'a'}) }
-
-        it 'Returns a 400 (Bad Request) status code' do
+      describe 'When the descriptor UUID is given as nil' do
+        before do
+          post '/', {
+            slots: 3,
+            categoryId: dopefun.id.to_s,
+            name: 'testtool',
+            auth_token: session.token,
+            parameters:  [ {targets: ['test'], descriptorId: nil} ]
+          }.to_json
+        end
+  
+        it 'Returns a 404 (Unknown) status code' do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json({
-            key: 'ports[1].name', message: 'length'
+            key: 'parameters[0].descriptorId', message: 'required'
           })
         end
         include_examples 'empty lists'
       end
-      describe 'An index is below zero' do
-        before { create_with_input({name: 'foo', targets: [], index: -1}) }
-
-        it 'Returns a 400 (Bad Request) status code' do
-          expect(last_response.status).to be 400
+      describe 'When the descriptor is not found' do
+        before do
+          post '/', {
+            slots: 3,
+            categoryId: dopefun.id.to_s,
+            name: 'testtool',
+            auth_token: session.token,
+            parameters:  [ {targets: ['test'], descriptorId: 'unknown'} ]
+          }.to_json
+        end
+  
+        it 'Returns a 404 (Unknown) status code' do
+          expect(last_response.status).to be 404
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json({
-            key: 'ports[1].index', message: 'value'
+            key: 'parameters[0].descriptorId', message: 'unknown'
           })
         end
         include_examples 'empty lists'
       end
     end
 
-    describe 'outputs error cases' do
-
-      def create_with_output payload
-        create_empty_tool(session, {
-          name: 'test',
-          slots: 10,
-          outputs: [payload],
-          innerNodes: [{name: 'test', generator: 'test'}]
-        })
-      end
-
+    describe 'ports error cases' do
       describe 'The name is not given' do
-        before { create_with_output({}) }
+        before do
+          post '/', {
+            slots: 3,
+            categoryId: dopefun.id.to_s,
+            name: 'testtool',
+            auth_token: session.token,
+            ports:  [{kind: 'input', target: 'test', index: 0}]
+          }.to_json
+        end
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
@@ -527,7 +629,15 @@ RSpec.describe Modusynth::Controllers::Tools do
         include_examples 'empty lists'
       end
       describe 'The name is too short' do
-        before { create_with_output({name: 'a'}) }
+        before do
+          post '/', {
+            slots: 3,
+            categoryId: dopefun.id.to_s,
+            name: 'testtool',
+            auth_token: session.token,
+            ports:  [{kind: 'input', target: 'test', index: 0, name: 'a'}]
+          }.to_json
+        end
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
@@ -540,7 +650,15 @@ RSpec.describe Modusynth::Controllers::Tools do
         include_examples 'empty lists'
       end
       describe 'An index is below zero' do
-        before { create_with_output({name: 'foo', target: 'test', index: -1}) }
+        before do
+          post '/', {
+            slots: 3,
+            categoryId: dopefun.id.to_s,
+            name: 'testtool',
+            auth_token: session.token,
+            ports:  [{kind: 'input', target: 'test', index: -1, name: 'foobar'}]
+          }.to_json
+        end
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400

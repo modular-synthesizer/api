@@ -46,6 +46,10 @@ module Modusynth
         halt 403, { key: exception.key, message: exception.error }.to_json
       end
 
+      error Modusynth::Exceptions::Service do |exception|
+        halt exception.status, exception.message
+      end
+
       error StandardError do |exception|
         halt 500, { message: exception.message }.to_json
       end
