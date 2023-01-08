@@ -10,8 +10,8 @@ module Modusynth
           id: id.to_s,
           name:,
           slots:,
-          innerNodes: inner_nodes,
-          innerLinks: inner_links,
+          nodes: inner_nodes,
+          links: inner_links,
           parameters:,
           inputs: ports(object.inputs),
           outputs: ports(object.outputs)

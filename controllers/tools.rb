@@ -14,12 +14,12 @@ module Modusynth
       end
 
       api_route 'get', '/:id' do
-        tool = Modusynth::Services::Tools::Find.instance.find_or_fail(id: params[:id])
+        tool = Modusynth::Services::Tools::Find.instance.find_or_fail(id: payload[:id])
         halt 200, decorate(tool).to_json
       end
 
       api_route 'post', '/', admin: true do
-        tool = Modusynth::Services::Tools::Create.instance.create(**body_params)
+        tool = Modusynth::Services::Tools::Create.instance.create(**symbolized_params)
         halt 201, decorate(tool).to_json
       end
 

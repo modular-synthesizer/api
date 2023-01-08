@@ -17,20 +17,22 @@ RSpec.describe Modusynth::Controllers::Tools do
 
     let!(:admin) { create(:random_admin) }
     let!(:session) { create(:session, account: admin) }
+    let!(:dopefun) { create(:dopefun) }
 
     describe 'Nominal case' do
-      before { create_simple_tool(session) }
+      before do
+        post '/', {name: 'VCA', slots: 3, auth_token: session.token, categoryId: dopefun.id.to_s}
+      end
 
       it 'Returns a 201 (Created) status code' do
         expect(last_response.status).to be 201
       end
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
-          id: Modusynth::Models::Tool.first.id.to_s,
           name: 'VCA',
           slots: 3,
-          innerNodes: [],
-          innerLinks: [],
+          nodes: [],
+          links: [],
           inputs: [],
           outputs: []
         )
@@ -66,7 +68,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             id: creation.id.to_s,
             name: 'VCA',
             slots: 3,
-            innerNodes: [{
+            nodes: [{
               id: creation.inner_nodes.first.id.to_s,
               name: 'gain',
               generator: 'GainNode'
