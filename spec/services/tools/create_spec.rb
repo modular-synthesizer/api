@@ -1,6 +1,7 @@
 RSpec.describe 'Tool creation service' do
   let!(:service) { Modusynth::Services::Tools::Create.instance }
   let!(:dopefun) { create(:dopefun) }
+  let!(:descriptor) { create(:frequency_descriptor) }
 
   describe 'Nominal case' do
     let!(:creation) { service.create(name: 'TestTool', slots: 10, categoryId: dopefun.id.to_s) }
@@ -21,94 +22,161 @@ RSpec.describe 'Tool creation service' do
 
   describe 'Alternative cases' do
     describe 'Tool with a valid inner node' do
+      let!(:creation) do
+        service.create(
+          name: 'TestTool',
+          slots: 10,
+          categoryId: dopefun.id.to_s,
+          nodes: [{
+            name: 'testnode',
+            generator: 'TestGenerator'
+          }]
+        )
+      end
       it 'Has persisted the tool' do
-
+        expect(creation.persisted?).to be_truthy
       end
       describe 'The created inner node' do
+        let!(:node) { creation.inner_nodes.first }
+
         it 'Has persisted the inner node' do
-
+          expect(node.persisted?).to be_truthy
         end
-        it 'Has affected the correct name' do
-
+        it 'Has set the correct name' do
+          expect(node.name).to eq 'testnode'
         end
-        it 'Has affected the correct generator' do
-
+        it 'Has set the correct generator' do
+          expect(node.generator).to eq 'TestGenerator'
         end
       end
     end
     describe 'Tool with a valid inner link' do
+      let!(:creation) do
+        service.create(
+          name: 'TestTool',
+          slots: 10,
+          categoryId: dopefun.id.to_s,
+          links: [{
+            from: {node: 'origin', index: 0},
+            to: {node: 'destination', index: 1}
+          }]
+        )
+      end
       it 'Has persisted the tool' do
-
+        expect(creation.persisted?).to be_truthy
       end
       describe 'The created inner link' do
+        let!(:link) { creation.inner_links.first }
+
         it 'Has persisted the inner link' do
-
+          expect(link.persisted?).to be_truthy
         end
-        it 'Has affected the origin node' do
-
+        it 'Has set the origin node' do
+          expect(link.from.node).to eq 'origin'
         end
-        it 'Has affected the origin index' do
-
+        it 'Has set the origin index' do
+          expect(link.from.index).to be 0
         end
-        it 'Has affected the destination node' do
-
+        it 'Has set the destination node' do
+          expect(link.to.node).to eq 'destination'
         end
-        it 'Has affected the destination index' do
-
+        it 'Has set the destination index' do
+          expect(link.to.index).to be 1
         end
       end
     end
     describe 'Tool with a valid port' do
+      let!(:creation) do
+        service.create(
+          name: 'TestTool',
+          slots: 10,
+          categoryId: dopefun.id.to_s,
+          ports: [{
+            kind: 'input',
+            name: 'test',
+            target: 'target',
+            index: 0
+          }]
+        )
+      end
       it 'Has persisted the tool' do
-
+        expect(creation.persisted?).to be_truthy
       end
       describe 'The created port' do
+        let!(:port) { creation.ports.first }
+
         it 'Has persisted the port' do
-
+          expect(port.persisted?).to be_truthy
         end
-        it 'Has affected the kind' do
-
+        it 'Has set the kind' do
+          expect(port.kind).to eq 'input'
         end
-        it 'Has affected the name' do
-
+        it 'Has set the name' do
+          expect(port.name).to eq 'test'
         end
-        it 'Has affected the target' do
-
+        it 'Has set the target' do
+          expect(port.target).to eq 'target'
         end
-        it 'Has affected the index' do
-
+        it 'Has set the index' do
+          expect(port.index).to be 0
         end
       end
     end
     describe 'Tool with a valid parameter' do
+      let!(:creation) do
+        service.create(
+          name: 'TestTool',
+          slots: 10,
+          categoryId: dopefun.id.to_s,
+          parameters: [{
+            descriptorId: descriptor.id.to_s,
+            targets: ['first', 'second']
+          }]
+        )
+      end
       it 'Has persisted the tool' do
-
+        expect(creation.persisted?).to be_truthy
       end
       describe 'The created parameter' do
+        let!(:parameter) { creation.parameters.first }
+        
         it 'Has persisted the parameter' do
-
+          expect(parameter.persisted?).to be_truthy
         end
-        it 'Has affected the targets' do
-
+        it 'Has set the targets' do
+          expect(parameter.targets).to eq ['first', 'second']
         end
-        it 'Has affected the descriptor' do
-
+        it 'Has set the descriptor' do
+          expect(parameter.descriptor.id).to eq descriptor.id
         end
       end
     end
     describe 'Tool with a valid control' do
+      let!(:creation) do
+        service.create(
+          name: 'TestTool',
+          slots: 10,
+          categoryId: dopefun.id.to_s,
+          controls: [{
+            component: 'TestComponent',
+            payload: {x: 0, y: 100}
+          }]
+        )
+      end
       it 'Has persisted the tool' do
-
+        expect(creation.persisted?).to be_truthy
       end
       describe 'The created control' do
+        let!(:control) { creation.controls.first }
+
         it 'Has persisted the control' do
-
+          expect(control.persisted?).to be_truthy
         end
-        it 'Has affected the component' do
-
+        it 'Has set the component' do
+          expect(control.component).to eq 'TestComponent'
         end
-        it 'Has affected the payload' do
-
+        it 'Has set the payload' do
+          expect(control.payload).to eq({x: 0, y: 100})
         end
       end
     end
@@ -385,7 +453,6 @@ RSpec.describe 'Tool creation service' do
       end
     end
     describe 'Parameters errors' do
-      let!(:descriptor) { create(:frequency_descriptor) }
       def create_payload parameter
         {name: 'TestTool', slots: 10, categoryId: dopefun.id.to_s, parameters: [parameter]}
       end

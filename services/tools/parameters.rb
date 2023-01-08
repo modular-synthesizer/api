@@ -8,7 +8,7 @@ module Modusynth
 
         def build descriptorId: nil, targets: [], **rest
           descriptor = Descriptors.instance.find_or_fail(id: descriptorId, field: 'descriptorId')
-          Modusynth::Models::Tools::Parameter.new(descriptorId:, targets:)
+          Modusynth::Models::Tools::Parameter.new(descriptor_id: descriptorId, targets:)
         end
 
         def validate! descriptorId: nil, targets: [], prefix: nil, **rest

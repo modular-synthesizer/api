@@ -12,9 +12,15 @@ module Modusynth
 
         # Builds and persists the item with the given parameters after validating the payload.
         def create **payload
-          tool = build_and_validate!(**payload)
-          tool.save!
-          tool
+          record = build_and_validate!(**payload)
+          record.save!
+          # Saves the associations if it has not already been correctly done
+          record.associations.each do |association|
+            if association.last.instance_of? Mongoid::Association::Referenced::HasMany
+              record.send(association.first).each(&:save)
+            end
+          end
+          record
         end
 
         # Syntactic sugar to create an entire list of items easily.

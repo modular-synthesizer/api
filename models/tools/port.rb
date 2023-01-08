@@ -25,6 +25,8 @@ module Modusynth
         scope :inputs, ->{ where(kind: 'input') }
 
         scope :outputs, ->{ where(kind: 'output') }
+
+        belongs_to :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :ports, optional: true
       end
     end
   end

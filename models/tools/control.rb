@@ -23,6 +23,8 @@ module Modusynth
         validates :component,
                   presence: { message: 'required' },
                   format: { with: /\A[A-Z][A-Za-z]*\Z/, message: 'format', if: :component? }
+                  
+        belongs_to :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :controls, optional: true
       end
     end
   end
