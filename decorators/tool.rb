@@ -55,18 +55,13 @@ module Modusynth
       def parameters
         object.parameters.map do |param|
           descriptor = Modusynth::Decorators::Parameter.new(param.descriptor).to_h
-          descriptor.merge({
-                             targets: param.targets,
-                             x: param.x,
-                             y: param.y,
-                             component: param.component
-                           })
+          descriptor.merge({targets: param.targets})
         end
       end
 
       def ports(ports_list)
         ports_list.map do |port|
-          { name: port.name, index: port.index, target: port.target, x: port.x, y: port.y }
+          { name: port.name, index: port.index, target: port.target }
         end
       end
     end

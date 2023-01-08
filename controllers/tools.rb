@@ -9,19 +9,18 @@ module Modusynth
       # The route to build the list of tools. It returns a subset
       # of fields from the tools to make it as light as possible.
       api_route 'get', '/' do
-        halt 200, service.list.to_json
+        items = Modusynth::Services::Tools::Find.instance.list
+        halt 200, items.map { |i| decorate(i) }.to_json
       end
 
       api_route 'get', '/:id' do
-        halt 200, decorate(service.find_or_fail(params['id'])).to_json
+        tool = Modusynth::Services::Tools::Find.instance.find_or_fail(id: params[:id])
+        halt 200, decorate(tool).to_json
       end
 
       api_route 'post', '/', admin: true do
-        halt 201, decorate(service.create(body_params)).to_json
-      end
-
-      def service
-        Modusynth::Services::Tools.instance
+        tool = Modusynth::Services::Tools::Create.instance.create(**body_params)
+        halt 201, decorate(tool).to_json
       end
 
       def decorate(item)

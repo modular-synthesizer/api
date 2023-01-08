@@ -26,11 +26,9 @@ RSpec.describe Modusynth::Controllers::Tools do
         expect(last_response.status).to be 200
       end
       it 'Returns the correct body' do
-        expect(JSON.parse(last_response.body)).to eq({
-          'tools' => [
-            {'id' => tool.id.to_s, 'name' => 'VCA', 'slots' => 3}
-          ]
-        })
+        expect(JSON.parse(last_response.body)).to include_json([
+          {'id' => tool.id.to_s, 'name' => 'VCA', 'slots' => 3}
+        ])
       end
     end
 
