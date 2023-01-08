@@ -11,26 +11,12 @@ module Modusynth
           Modusynth::Models::Tools::Parameter.new(descriptorId:, targets:)
         end
 
-        def validate! **payload
-          build(**payload).validate!
+        def validate! descriptorId: nil, targets: [], prefix: nil, **rest
+          if descriptorId.nil?
+            raise Modusynth::Exceptions::Service.new(key: 'descriptorId', prefix:, error: 'required')
+          end
+          build(descriptorId:, targets:).validate!
         end
-        
-        # results = payload['parameters'].map.with_index do |param, idx|
-        #   if param['descriptor'].nil?
-        #     raise Modusynth::Exceptions.required("parameters[#{idx}].descriptor")
-        #   end
-        #   descriptor = Modusynth::Models::Tools::Descriptor.find_by(id: param['descriptor'])
-        #   raise Modusynth::Exceptions.unknown("parameters[#{idx}]") if descriptor.nil?
-        #   parameter = Modusynth::Models::Tools::Parameter.new(
-        #     descriptor: descriptor,
-        #     targets: param['targets'] || [],
-        #     tool: tool,
-        #     x: param['x'],
-        #     y: param['y'],
-        #     component: param['component']
-        #   )
-        #   parameter.save!
-        #   parameter
       end
     end
   end

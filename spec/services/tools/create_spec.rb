@@ -12,7 +12,7 @@ RSpec.describe 'Tool creation service' do
       expect(creation.name).to eq 'TestTool'
     end
     it 'Has returned an object with the correct number of slots' do
-      expect(creation.slots).to be 10
+      expect(creation.slots).to be 10 
     end
     it 'Has return an object with the correct category' do
       expect(creation.category.id).to eq dopefun.id
@@ -338,45 +338,103 @@ RSpec.describe 'Tool creation service' do
       end
     end
     describe 'Ports errors' do
+      def create_payload port
+        {name: 'TestTool', slots: 10, categoryId: dopefun.id.to_s, ports: [port]}
+      end
       it 'Fails if the name is not given' do
-
+        payload = create_payload({kind: 'input', target: 'test', index: 0})
+        expect { service.build_and_validate!(**payload) }.to raise_error(
+          an_instance_of(Modusynth::Exceptions::Service)
+          .and having_attributes(key: 'name', error: 'required', prefix: 'ports[0].')
+        )
       end
       it 'Fails if the name is given as nil' do
-
+        payload = create_payload({kind: 'input', target: 'test', index: 0, name: nil})
+        expect { service.build_and_validate!(**payload) }.to raise_error(
+          an_instance_of(Modusynth::Exceptions::Service)
+          .and having_attributes(key: 'name', error: 'required', prefix: 'ports[0].')
+        )
       end
       it 'Fails if the name is too short' do
-
+        payload = create_payload({kind: 'input', target: 'test', index: 0, name: 'a'})
+        expect { service.build_and_validate!(**payload) }.to raise_error(
+          an_instance_of(Modusynth::Exceptions::Service)
+          .and having_attributes(key: 'name', error: 'length', prefix: 'ports[0].')
+        )
       end
       it 'Fails if the index is not given' do
-
+        payload = create_payload({kind: 'input', target: 'test', name: 'test'})
+        expect { service.build_and_validate!(**payload) }.to raise_error(
+          an_instance_of(Modusynth::Exceptions::Service)
+          .and having_attributes(key: 'index', error: 'required', prefix: 'ports[0].')
+        )
       end
       it 'Fails if the index is given as nil' do
-
+        payload = create_payload({kind: 'input', target: 'test', name: 'test', index: nil})
+        expect { service.build_and_validate!(**payload) }.to raise_error(
+          an_instance_of(Modusynth::Exceptions::Service)
+          .and having_attributes(key: 'index', error: 'required', prefix: 'ports[0].')
+        )
       end
       it 'Fails if the index is below zero' do
-
+        payload = create_payload({kind: 'input', target: 'test', name: 'test', index: -1})
+        expect { service.build_and_validate!(**payload) }.to raise_error(
+          an_instance_of(Modusynth::Exceptions::Service)
+          .and having_attributes(key: 'index', error: 'value', prefix: 'ports[0].')
+        )
       end
     end
     describe 'Parameters errors' do
+      let!(:descriptor) { create(:frequency_descriptor) }
+      def create_payload parameter
+        {name: 'TestTool', slots: 10, categoryId: dopefun.id.to_s, parameters: [parameter]}
+      end
       it 'Fails if the descriptor UUID is not given' do
-
+        payload = create_payload({targets: ['test']})
+        expect { service.build_and_validate!(**payload) }.to raise_error(
+          an_instance_of(Modusynth::Exceptions::Service)
+          .and having_attributes(key: 'descriptorId', error: 'required', prefix: 'parameters[0].')
+        )
       end
       it 'Fails if the descriptor UUID is given as nil' do
-
+        payload = create_payload({descriptorId: nil, targets: ['test']})
+        expect { service.build_and_validate!(**payload) }.to raise_error(
+          an_instance_of(Modusynth::Exceptions::Service)
+          .and having_attributes(key: 'descriptorId', error: 'required', prefix: 'parameters[0].')
+        )
       end
       it 'Fails if the descriptor is not found' do
-
+        payload = create_payload({descriptorId: 'unknown', targets: ['test']})
+        expect { service.build_and_validate!(**payload) }.to raise_error(
+          an_instance_of(Modusynth::Exceptions::Service)
+          .and having_attributes(key: 'descriptorId', error: 'unknown', prefix: 'parameters[0].')
+        )
       end
     end
     describe 'Controls errors' do
+      def create_payload control
+        {name: 'TestTool', slots: 10, categoryId: dopefun.id.to_s, controls: [control]}
+      end
       it 'Fails if the component is not given' do
-
+        payload = create_payload({payload: {}})
+        expect { service.build_and_validate!(**payload) }.to raise_error(
+          an_instance_of(Modusynth::Exceptions::Service)
+          .and having_attributes(key: 'component', error: 'required', prefix: 'controls[0].')
+        )
       end
       it 'Fails if the component is given as nil' do
-
+        payload = create_payload({component: nil, payload: {}})
+        expect { service.build_and_validate!(**payload) }.to raise_error(
+          an_instance_of(Modusynth::Exceptions::Service)
+          .and having_attributes(key: 'component', error: 'required', prefix: 'controls[0].')
+        )
       end
       it 'Fails if the component has a wrong format' do
-
+        payload = create_payload({component: 'test123', payload: {}})
+        expect { service.build_and_validate!(**payload) }.to raise_error(
+          an_instance_of(Modusynth::Exceptions::Service)
+          .and having_attributes(key: 'component', error: 'format', prefix: 'controls[0].')
+        )
       end
     end
   end
