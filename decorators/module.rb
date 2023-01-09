@@ -24,7 +24,7 @@ module Modusynth
           inputs: ports(object.ports.inputs),
           outputs: ports(object.ports.outputs),
           type: tool.name,
-          category: tool.category.nil? ? 'tools' : tool.category.name
+          category: tool.category.nil? ? 'tools' : tool.category.name,
           controls: tool.controls
         }
       end
@@ -35,6 +35,7 @@ module Modusynth
             id: instance.id.to_s,
             value: instance.value,
             name: instance.parameter.name,
+            field: instance.parameter.descriptor.field,
             input: { id: instance.parameter.id.to_s },
             targets: instance.parameter.targets,
             constraints: {
