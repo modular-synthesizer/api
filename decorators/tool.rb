@@ -14,7 +14,8 @@ module Modusynth
           links: inner_links,
           parameters:,
           inputs: ports(object.inputs),
-          outputs: ports(object.outputs)
+          outputs: ports(object.outputs),
+          category: Category.new(object.category).to_h
         }
       end
 
