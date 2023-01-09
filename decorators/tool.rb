@@ -54,7 +54,7 @@ module Modusynth
 
       def parameters
         object.parameters.map do |param|
-          descriptor = Modusynth::Decorators::Parameter.new(param.descriptor).to_h
+          descriptor = Modusynth::Decorators::Parameter.new(param).to_h
           descriptor.merge({targets: param.targets})
         end
       end

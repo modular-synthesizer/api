@@ -17,7 +17,7 @@ module Modusynth
       end
 
       def decorate(item)
-        Modusynth::Decorators::Parameter.new(item).to_h
+        Modusynth::Decorators::Descriptor.new(item).to_h
       end
     end
   end

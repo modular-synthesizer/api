@@ -20,12 +20,12 @@ RSpec.describe Modusynth::Controllers::Tools do
         expect(last_response.body).to include_json({
           id: tool.id.to_s,
           name: 'VCA',
-          innerNodes: [
+          nodes: [
             {name: 'gain', generator: 'GainNode'}
           ],
           parameters: [
             {
-              name: 'gain',
+              name: 'gainparam',
               value: 1,
               constraints: {
                 minimum: 0,
@@ -36,7 +36,7 @@ RSpec.describe Modusynth::Controllers::Tools do
               targets: ['gain']
             }
           ],
-          innerLinks: [],
+          links: [],
           inputs: [
             {name: 'INPUT', index: 0, target: 'gain'}
           ],

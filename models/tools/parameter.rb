@@ -14,6 +14,11 @@ module Modusynth
         # @!attribute [rw] targets
         #   @return [Array<String>] The names of the inner nodes this parameter is applied onto.
         field :targets, type: Array, default: []
+        # @!attribute [rw] name
+        #   @return [String] The name of the parameter to be able to link controls to it. Supposed uniq.
+        field :name, type: String
+
+        validates :name, presence: { message: 'required' }
 
         # @!attribute [rw] descriptor
         #   @return [Modusynth::Models::Tools::Descriptor] the constraints applied to the current parameter

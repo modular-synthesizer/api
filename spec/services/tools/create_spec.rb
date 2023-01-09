@@ -130,7 +130,8 @@ RSpec.describe 'Tool creation service' do
           categoryId: dopefun.id.to_s,
           parameters: [{
             descriptorId: descriptor.id.to_s,
-            targets: ['first', 'second']
+            targets: ['first', 'second'],
+            name: 'testparam'
           }]
         )
       end
@@ -142,6 +143,9 @@ RSpec.describe 'Tool creation service' do
         
         it 'Has persisted the parameter' do
           expect(parameter.persisted?).to be_truthy
+        end
+        it 'Has set the name' do
+          expect(parameter.name).to eq 'testparam'
         end
         it 'Has set the targets' do
           expect(parameter.targets).to eq ['first', 'second']

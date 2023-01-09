@@ -151,7 +151,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             slots: 3,
             auth_token: session.token,
             categoryId: dopefun.id.to_s,
-            parameters: [{descriptorId: param.id.to_s, targets: ['target']}]
+            parameters: [{descriptorId: param.id.to_s, targets: ['target'], name: 'testparam'}]
           }.to_json
         end
 
@@ -165,7 +165,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             name: 'VCA',
             slots: 3,
             parameters: [{
-              name: 'parameter',
+              name: 'testparam',
               targets: ['target'],
               value: 1,
               constraints: {
