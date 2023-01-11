@@ -49,7 +49,7 @@ commands:
 jobs:
   test-job:
     executor: mongoruby
-    parallelism: 5
+    # parallelism: 5
     steps:
       - checkout
       - run:
@@ -58,8 +58,9 @@ jobs:
       - run:
           name: Run RSpec Tests
           command: |
-            TESTFILES="$(circleci tests glob “spec/**/*_spec.rb” | circleci tests split --split-by=timings)"
-            bundle exec rspec --format progress --format RspecJunitFormatter -o test/reports/rspec.xml -- ${TESTFILES}
+            bundle exec rspec --format progress --format RspecJunitFormatter -o test/reports/rspec.xml
+          # TESTFILES="$(circleci tests glob “spec/**/*_spec.rb” | circleci tests split --split-by=timings)"
+          # bundle exec rspec --format progress --format RspecJunitFormatter -o test/reports/rspec.xml -- ${TESTFILES}
       - store_test_results:
           path: test/reports
       - store_artifacts:
