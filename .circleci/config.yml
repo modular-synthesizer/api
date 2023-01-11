@@ -17,7 +17,7 @@ commands:
     parameters:
       namespace:
         type: string
-        default: synple-dev
+        default: modusynth-dev
       prefix:
         type: string
         default: ""
