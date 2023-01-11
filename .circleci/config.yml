@@ -96,7 +96,7 @@ jobs:
           password: $DOCKER_PASSWORD
     steps:
       - deploy-stack:
-          prefix: /dev
+          prefix: \/dev
   prod-deployment-job:
     docker:
       - image: cimg/base:2022.06
