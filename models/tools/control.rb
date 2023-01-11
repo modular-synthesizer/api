@@ -12,6 +12,8 @@ module Modusynth
       class Control
         include Mongoid::Document
 
+        store_in collection: 'tools_controls'
+
         # @!attribute [rw] component
         #   @return [String] the name of the component, on the client-side, used to render this control.
         field :component, type: String

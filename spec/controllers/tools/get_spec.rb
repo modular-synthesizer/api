@@ -43,6 +43,9 @@ RSpec.describe Modusynth::Controllers::Tools do
           ],
           outputs: [
             {name: 'OUTPUT', index: 0, target: 'gain'}
+          ],
+          controls: [
+            {component: 'Knob', payload: {x: 0, y: 100, target: 'gainparam'}}
           ]
         })
       end
