@@ -50,6 +50,11 @@ jobs:
   test-job:
     executor: mongoruby
     parallelism: 5
+    store_test_results:
+      path: test/reports
+    store_artifacts:
+      path: test/reports/rspec.xml
+      destination: rspec.xml
     steps:
       - checkout
       - run:
