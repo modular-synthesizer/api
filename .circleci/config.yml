@@ -59,11 +59,11 @@ jobs:
           name: Run RSpec Tests
           command: |
             bundle exec rspec --format progress --format RspecJunitFormatter -o test/reports/rspec.xml -- spec/
-      # - store_test_results:
-      #     path: test/reports
-      # - store_artifacts:
-      #     path: test/reports/rspec.xml
-      #     destination: rspec.xml
+      - store_test_results:
+          path: test/reports
+      - store_artifacts:
+          path: test/reports/rspec.xml
+          destination: rspec.xml
   lint-job:
     docker:
       - image: cimg/ruby:3.1.3
