@@ -58,8 +58,9 @@ jobs:
       - run:
           name: Run RSpec Tests
           command: |
-            TESTFILES=$(circleci tests glob “spec/**/*_spec.rb” | circleci tests split)
-            bundle exec rspec ${TESTFILES}
+            TESTFILES=$(circleci tests glob “spec/**/*_spec.rb” | circleci tests split --split-by=timings)
+            echo ${TESTFILES}
+            bundle exec rspec --format progress --format RSpecJunitFormatter -o test/reports/rspec.xml -- ${TESTFILES}
   lint-job:
     docker:
       - image: cimg/ruby:3.1.3
