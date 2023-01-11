@@ -16,7 +16,7 @@ module Modusynth
           inputs: ports(object.inputs),
           outputs: ports(object.outputs),
           category: Category.new(object.category).to_h,
-          controls: object.controls.each do |control|
+          controls: object.controls.map do |control|
             {
               id: control.id.to_s,
               payload: control.payload,
