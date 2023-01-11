@@ -4,6 +4,7 @@ module Modusynth
   module Decorators
     autoload :Account, './decorators/account'
     autoload :Category, './decorators/category'
+    autoload :Descriptor, './decorators/descriptor'
     autoload :Generator, './decorators/generator'
     autoload :Group, './decorators/group'
     autoload :Link, './decorators/link'

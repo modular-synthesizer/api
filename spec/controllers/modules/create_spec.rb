@@ -27,13 +27,13 @@ describe Modusynth::Controllers::Modules do
         expect(last_response.body).to include_json({
           id: have_attributes(size: 24),
           type: 'VCA',
-          innerNodes: [
+          nodes: [
             {name: 'gain', generator: 'GainNode'}
           ],
-          innerLinks: [],
+          links: [],
           parameters: [
             {
-              name: 'gain',
+              name: 'gainparam',
               value: 1,
               targets: ['gain'],
               constraints: {
@@ -68,7 +68,7 @@ describe Modusynth::Controllers::Modules do
           expect(creation.parameters.size).to be 1
         end
         it 'Has the correct name for the gain parameter value' do
-          expect(creation.parameters.first.name).to eq 'gain'
+          expect(creation.parameters.first.name).to eq 'gainparam'
         end
         it 'Has the correct value for the gain parameter value' do
           expect(creation.parameters.first.value).to eq 1.0

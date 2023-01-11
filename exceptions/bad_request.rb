@@ -8,6 +8,10 @@ module Modusynth
         @key = key
         @error = error
       end
+
+      def message
+        {key:, error:}
+      end
     end
   end
 end

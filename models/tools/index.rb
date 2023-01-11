@@ -1,7 +1,7 @@
 module Modusynth
   module Models
     module Tools
-      autoload :Category, './models/tools/category'
+      autoload :Control, './models/tools/control'
       autoload :Descriptor, './models/tools/descriptor'
       autoload :Generator, './models/tools/generator'
       autoload :InnerLink, './models/tools/inner_link'

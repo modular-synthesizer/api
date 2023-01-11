@@ -9,7 +9,6 @@ module Modusynth
     class Tool
       include Mongoid::Document
       include Mongoid::Timestamps
-      include Mongoid::EmbeddedErrors
 
       store_in collection: 'tools'
 
@@ -25,6 +24,10 @@ module Modusynth
 
       embeds_many :inner_links, class_name: '::Modusynth::Models::Tools::InnerLink'
 
+      # @!attribute [rw] controls
+      #   @return [Modusynth::Models::Tools::Control] the list of graphical representation ok knobs, labels, etc.
+      has_many :controls, class_name: '::Modusynth::Models::Tools::Control', inverse_of: :tool
+
       has_many :ports, class_name: '::Modusynth::Models::Tools::Port', inverse_of: :tool
 
       has_many :parameters, class_name: '::Modusynth::Models::Tools::Parameter', inverse_of: :tool
@@ -33,7 +36,7 @@ module Modusynth
       
       validates :name,
         presence: { message: 'required' },
-        length: { minimum: 3, message: 'length', if: :name? }
+        length: { minimum: 3, message: 'minlength', if: :name? }
 
       validates :slots,
         presence: { message: 'required' },

@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: modusynth
+  namespace: <NAMESPACE>
   name: api-deployment
   labels:
     app: modusynth-api

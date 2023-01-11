@@ -12,6 +12,6 @@ module Modusynth
     autoload :Permissions, './services/permissions/index'
     autoload :Sessions, './services/sessions'
     autoload :Synthesizers, './services/synthesizers'
-    autoload :Tools, './services/tools'
+    autoload :Tools, './services/tools/index'
   end
 end

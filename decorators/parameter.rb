@@ -9,12 +9,12 @@ module Modusynth
         {
           id: object.id.to_s,
           name: object.name,
-          value: object.default,
+          value: object.descriptor.default,
           constraints: {
-            minimum: object.minimum,
-            maximum: object.maximum,
-            step: object.step,
-            precision: object.precision
+            minimum: object.descriptor.minimum,
+            maximum: object.descriptor.maximum,
+            step: object.descriptor.step,
+            precision: object.descriptor.precision
           }
         }
       end

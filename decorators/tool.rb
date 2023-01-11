@@ -10,11 +10,19 @@ module Modusynth
           id: id.to_s,
           name:,
           slots:,
-          innerNodes: inner_nodes,
-          innerLinks: inner_links,
+          nodes: inner_nodes,
+          links: inner_links,
           parameters:,
           inputs: ports(object.inputs),
-          outputs: ports(object.outputs)
+          outputs: ports(object.outputs),
+          category: Category.new(object.category).to_h,
+          controls: object.controls.map do |control|
+            {
+              id: control.id.to_s,
+              payload: control.payload,
+              component: control.component
+            }
+          end
         }
       end
 
@@ -54,19 +62,14 @@ module Modusynth
 
       def parameters
         object.parameters.map do |param|
-          descriptor = Modusynth::Decorators::Parameter.new(param.descriptor).to_h
-          descriptor.merge({
-                             targets: param.targets,
-                             x: param.x,
-                             y: param.y,
-                             component: param.component
-                           })
+          descriptor = Modusynth::Decorators::Parameter.new(param).to_h
+          descriptor.merge({targets: param.targets})
         end
       end
 
       def ports(ports_list)
         ports_list.map do |port|
-          { name: port.name, index: port.index, target: port.target, x: port.x, y: port.y }
+          { name: port.name, index: port.index, target: port.target }
         end
       end
     end
