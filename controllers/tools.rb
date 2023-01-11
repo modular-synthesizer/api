@@ -14,7 +14,7 @@ module Modusynth
       end
 
       api_route 'get', '/:id' do
-        tool = Modusynth::Services::Tools::Find.instance.find_or_fail(id: payload[:id])
+        tool = Modusynth::Services::Tools::Find.instance.find_or_fail(id: params[:id])
         halt 200, decorate(tool).to_json
       end
 

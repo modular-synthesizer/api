@@ -8,7 +8,8 @@ RSpec.describe Modusynth::Controllers::Tools do
     let!(:session) { create(:session, account: account) }
 
     describe 'Nominal case' do
-      let!(:tool) { create(:VCA) }
+      let!(:dopefun) { create(:dopefun) }
+      let!(:tool) { create(:VCA, category: dopefun) }
 
       before do
         get "/#{tool.id.to_s}", {auth_token: session.token}

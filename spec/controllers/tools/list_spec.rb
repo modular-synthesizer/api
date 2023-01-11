@@ -19,7 +19,8 @@ RSpec.describe Modusynth::Controllers::Tools do
     end
 
     describe 'not empty list' do
-      let!(:tool) { create(:VCA) }
+      let!(:dopefun) { create(:dopefun) }
+      let!(:tool) { create(:VCA, category: dopefun) }
       before { get '/', {auth_token: session.token} }
       
       it 'Returns a 200 (OK) status code' do
