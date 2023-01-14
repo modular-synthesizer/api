@@ -11,6 +11,12 @@ module Modusynth
       module Finder
         extend ActiveSupport::Concern
 
+        def list
+          check_model_implementation! caller: 'find'
+          model.all
+        end
+
+
         # Tries to find a group given its unique identifier. If it does not
         # find it, fails with a correct esception raised. If the model
         # method is not implemented raises an error to indicate you're not
@@ -21,20 +27,21 @@ module Modusynth
         #   found in the database.
         # @raise [::Modusynth::Exceptions::Concern] when the concern is not
         #   correctly implemented
-        def find_or_fail(id:)
+        def find_or_fail(id: nil, field: 'id')
           instance = find(id: id)
-          raise Modusynth::Exceptions.unknown if instance.nil?
+          raise Modusynth::Exceptions.unknown(field) if instance.nil?
           instance
         end
 
         def find(id:)
-          unless respond_to? :model, true
-            raise Modusynth::Exceptions::Concern.new(
-              caller: 'find_or_fail',
-              called: 'model'
-            )
-          end
+          check_model_implementation! caller: 'find'
           model.where(id: id).first
+        end
+
+        def check_model_implementation! caller:
+          unless respond_to? :model, true
+            raise Modusynth::Exceptions::Concern.new(caller:, called: 'model')
+          end
         end
       end
     end

@@ -10,7 +10,11 @@ module Modusynth
 
         validates :node,
           presence: { message: 'required' },
-          length: { minimum: 3, if: :node? }
+          length: { minimum: 3, if: :node?, message: 'length' }
+        
+        validates :index,
+          presence: { message: 'required' },
+          numericality: { greater_than: -1, message: 'value' }
       end
     end
   end

@@ -3,7 +3,9 @@ module Modusynth
     autoload :BadRequest, './exceptions/bad_request'
     autoload :Concern, './exceptions/concern'
     autoload :Forbidden, './exceptions/forbidden'
+    autoload :Service, './exceptions/service'
     autoload :Unknown, './exceptions/unknown'
+    autoload :Validation, './exceptions/validation'
 
     def self.required field
       raise Modusynth::Exceptions::BadRequest.new(field, 'required')

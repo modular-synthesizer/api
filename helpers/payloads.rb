@@ -13,6 +13,16 @@ module Modusynth
       def payload
         body_params.transform_keys(&:to_sym)
       end
+
+      def symbolized_params
+        symbolize!(body_params)
+      end
+
+      def symbolize! parameters
+        return parameters.map { |p| symbolize! p } if parameters.is_a? Array
+        return parameters unless parameters.is_a?(Hash)
+        Hash[parameters.map {|k, v| [k.to_sym, symbolize!(v)]}]
+      end
     end
   end
 end

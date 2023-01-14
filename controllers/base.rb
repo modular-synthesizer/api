@@ -29,6 +29,11 @@ module Modusynth
         halt 400, { key: exception.key, message: exception.error }.to_json
       end
 
+      error Modusynth::Exceptions::Validation do |error|
+        exception = Modusynth::Exceptions.from_validation error
+        halt 400, { key: exception.key, message: exception.error }.to_json
+      end
+
       error Modusynth::Exceptions::BadRequest do |exception|
         halt 400, { key: exception.key, message: exception.error }.to_json
       end
@@ -39,6 +44,10 @@ module Modusynth
 
       error Modusynth::Exceptions::Forbidden do |exception|
         halt 403, { key: exception.key, message: exception.error }.to_json
+      end
+
+      error Modusynth::Exceptions::Service do |exception|
+        halt exception.status, exception.message
       end
 
       error StandardError do |exception|

@@ -36,22 +36,6 @@ module Modusynth
         node
       end
 
-      # def update id, values
-      #   node = find_or_fail(id)
-      #   values.each do |field, value|
-      #     parameter = node.parameters.called(field)
-      #     unless parameter.nil?
-      #       template = node.tool.parameters.called(field).first
-      #       if value < template.descriptor.minimum || value > template.descriptor.maximum
-      #         raise Modusynth::Exceptions::BadRequest.new(field, 'value')
-      #       end
-      #       parameter.update(value: value)
-      #     end
-      #   end
-      #   node.save!
-      #   node
-      # end
-
       def find_or_fail(id)
         instance = Modusynth::Models::Module.find(id)
         raise Modusynth::Exceptions.unknown('id') if instance.nil?
@@ -70,7 +54,7 @@ module Modusynth
       end
 
       def tool id
-        Modusynth::Services::Tools.instance.find_or_fail(id, 'tool_id')
+        Modusynth::Services::Tools::Find.instance.find_or_fail(id: id, field: 'tool_id')
       end
     end
   end
