@@ -15,7 +15,7 @@ module Modusynth
           parameters:,
           ports: ports.map do |port|
             {
-              id: port.id,
+              id: port.id.to_s,
               name: port.name,
               kind: port.kind,
               index: port.index,
