@@ -13,8 +13,15 @@ module Modusynth
           nodes: inner_nodes,
           links: inner_links,
           parameters:,
-          inputs: ports(object.inputs),
-          outputs: ports(object.outputs),
+          ports: ports.map do |port|
+            {
+              id: port.id,
+              name: port.name,
+              kind: port.kind,
+              index: port.index,
+              target: port.target
+            }
+          end,
           category: Category.new(object.category).to_h,
           controls: object.controls.map do |control|
             {
@@ -64,12 +71,6 @@ module Modusynth
         object.parameters.map do |param|
           descriptor = Modusynth::Decorators::Parameter.new(param).to_h
           descriptor.merge({targets: param.targets})
-        end
-      end
-
-      def ports(ports_list)
-        ports_list.map do |port|
-          { name: port.name, index: port.index, target: port.target }
         end
       end
     end
