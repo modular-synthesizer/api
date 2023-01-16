@@ -10,6 +10,7 @@ module Modusynth
           id: object.id.to_s,
           name: object.name,
           value: object.descriptor.default,
+          descriptorId: object.descriptor.id.to_s,
           constraints: {
             minimum: object.descriptor.minimum,
             maximum: object.descriptor.maximum,
