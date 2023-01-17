@@ -6,16 +6,15 @@ group :development, :production, :test do
   gem 'mongoid-embedded-errors', '4.0.0'
   gem 'sinatra', '2.2.2'
   gem 'draper', '4.0.2'
+  gem 'jbuilder', '2.11.5'
+  gem "tilt-jbuilder", ">= 0.4.0", :require => "sinatra/jbuilder"
   gem 'sinatra-cross_origin', '0.4.0', require: 'sinatra/cross_origin'
   gem 'dotenv', '2.8.1', require: 'dotenv/load'
+  gem 'pry', '0.14.1'
 end
 
 group :development, :production do
   gem 'puma', '5.6.5'
-end
-
-group :development, :test do
-  gem 'pry', '0.14.1'
 end
 
 group :test do

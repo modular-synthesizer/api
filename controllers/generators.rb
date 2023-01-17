@@ -8,11 +8,13 @@ module Modusynth
       end
 
       api_route 'get', '/' do
-        halt 200, service.list.to_json
+        generators = service.list
+        jbuilder :'generators/list', {locals: {generators:}}
       end
 
       api_route 'get', '/:name' do
-        halt 200, service.get_by_name(params[:name]).code
+        generator = service.get_by_name(params[:name])
+        jbuilder :'generators/item', locals: {generator:}
       end
 
       def service

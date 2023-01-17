@@ -22,6 +22,7 @@ module Modusynth
         # This configuration options allow the error handler to work in tests.
         set :show_exceptions, false
         set :raise_errors, false
+        set :views, Proc.new { File.join(root, '..', 'views') }
       end
 
       error Mongoid::Errors::Validations do |error|

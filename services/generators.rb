@@ -10,7 +10,7 @@ module Modusynth
       end
 
       def list
-        model.all.map(&:name)
+        model.all
       end
 
       def get_by_name name
