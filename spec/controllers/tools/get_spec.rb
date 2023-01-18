@@ -38,10 +38,8 @@ RSpec.describe Modusynth::Controllers::Tools do
             }
           ],
           links: [],
-          inputs: [
-            {name: 'INPUT', index: 0, target: 'gain'}
-          ],
-          outputs: [
+          ports: [
+            {name: 'INPUT', index: 0, target: 'gain'},
             {name: 'OUTPUT', index: 0, target: 'gain'}
           ],
           controls: [

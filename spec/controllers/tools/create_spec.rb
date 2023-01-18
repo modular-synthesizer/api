@@ -33,8 +33,7 @@ RSpec.describe Modusynth::Controllers::Tools do
           slots: 3,
           nodes: [],
           links: [],
-          inputs: [],
-          outputs: []
+          ports: []
         )
       end
       describe 'Created tool' do
@@ -194,8 +193,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             id: Modusynth::Models::Tool.first.id.to_s,
             name: 'VCA',
             slots: 3,
-            inputs: [{name: 'INPUT', index: 0, target: 'gain'}],
-            outputs: []
+            ports: [{name: 'INPUT', index: 0, target: 'gain'}]
           )
         end
         describe 'Created input port' do
@@ -232,8 +230,7 @@ RSpec.describe Modusynth::Controllers::Tools do
             id: Modusynth::Models::Tool.first.id.to_s,
             name: 'VCA',
             slots: 3,
-            outputs: [{name: 'OUTPUT', index: 0, target: 'gain'}],
-            inputs: []
+            ports: [{name: 'OUTPUT', index: 0, target: 'gain'}]
           )
         end
         describe 'Created input port' do
