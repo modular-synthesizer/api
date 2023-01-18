@@ -2,15 +2,15 @@ module Modusynth
   module Services
     class Generators
       include Singleton
+      include Modusynth::Services::Concerns::Creator
+      include Modusynth::Services::Concerns::Finder
 
-      def create payload
-        generator = model.new(payload.slice('name', 'code'))
-        generator.save!
-        decorator.new(generator).to_h
+      def build name:, code:, **rest
+        model.new(name:, code:)
       end
 
-      def list
-        model.all
+      def validate! name:, code:, **rest
+        build(name:, code:).validate!
       end
 
       def get_by_name name
@@ -19,10 +19,6 @@ module Modusynth
 
       def model
         Modusynth::Models::Tools::Generator
-      end
-
-      def decorator
-        Modusynth::Decorators::Generator
       end
     end
   end

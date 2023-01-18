@@ -22,7 +22,7 @@ module Modusynth
         # This configuration options allow the error handler to work in tests.
         set :show_exceptions, false
         set :raise_errors, false
-        set :views, Proc.new { File.join(root, '..', 'views') }
+        set :views, proc { File.join(root, '..', 'views') }
       end
 
       error Mongoid::Errors::Validations do |error|
@@ -57,6 +57,11 @@ module Modusynth
 
       options '*' do
         200
+      end
+
+      def render_json filename, status: 200, **locals
+        template = Tilt::JbuilderTemplate.new("#{settings.views}/#{filename}.jbuilder")
+        halt status, template.render(nil, **locals)
       end
     end
   end

@@ -4,17 +4,17 @@ module Modusynth
   module Controllers
     class Generators < Modusynth::Controllers::Base
       api_route 'post', '/', admin: true do
-        halt 201, service.create(body_params).to_json
+        generator = service.create(**symbolized_params)
+        render_json 'generators/item', status: 201, generator:
       end
 
       api_route 'get', '/' do
-        generators = service.list
-        jbuilder :'generators/list', {locals: {generators:}}
+        generators = 
+        render_json 'generators/list', generators: service.list
       end
 
       api_route 'get', '/:name' do
-        generator = service.get_by_name(params[:name])
-        jbuilder :'generators/item', locals: {generator:}
+        render_json 'generators/item', generator: service.get_by_name(params[:name])
       end
 
       def service

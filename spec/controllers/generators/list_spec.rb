@@ -16,7 +16,13 @@ RSpec.describe 'GET /generators' do
       expect(last_response.status).to be 200
     end
     it 'Returns the correct body' do
-      expect(last_response.body).to include_json(['test_generator'])
+      expect(last_response.body).to include_json([
+        {
+          id: generator.id.to_s,
+          name: 'test_generator',
+          code: 'test code to execute();'
+        }
+      ])
     end
   end
   describe 'Empty list' do

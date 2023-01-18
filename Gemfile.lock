@@ -167,7 +167,7 @@ DEPENDENCIES
   rubocop (= 1.36.0)
   sinatra (= 2.2.2)
   sinatra-cross_origin (= 0.4.0)
-  tilt-jbuilder (>= 0.4.0)
+  tilt-jbuilder (= 0.7.1)
 
 BUNDLED WITH
    2.3.26
