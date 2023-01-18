@@ -9,7 +9,7 @@ module Modusynth
       end
 
       api_route 'get', '/' do
-        render_json 'generators/list', generators: service.list
+        render_json 'generators/list', generators: service.list.to_a
       end
 
       api_route 'get', '/:name' do
