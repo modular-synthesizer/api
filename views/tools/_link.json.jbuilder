@@ -1,7 +1,9 @@
 json.id link.id.to_s
 json.from do
-  json.partial! :link_end, link_end: link.from
+  json.node link.from.node
+  json.index link.from.index
 end
 json.to do
-  json.partial! :link_end, link_end: link.to
+  json.to link.from.node
+  json.to link.from.index
 end

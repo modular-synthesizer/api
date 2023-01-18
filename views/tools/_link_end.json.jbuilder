@@ -1,1 +1,0 @@
-json.(link_end, :node, :index)
