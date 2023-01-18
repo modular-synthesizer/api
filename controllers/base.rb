@@ -59,7 +59,7 @@ module Modusynth
         200
       end
 
-      def render_json filename, status: 200, **locals
+      def render_json(filename, status: 200, **locals)
         template = Tilt::JbuilderTemplate.new("#{settings.views}/#{filename}.jbuilder")
         halt status, template.render(nil, **locals)
       end

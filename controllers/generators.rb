@@ -9,7 +9,6 @@ module Modusynth
       end
 
       api_route 'get', '/' do
-        generators = 
         render_json 'generators/list', generators: service.list
       end
 
