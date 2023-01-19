@@ -1,3 +1,6 @@
+require 'dotenv'
+ENV.merge!(Dotenv.load)
+
 env = ENV['RACK_ENV'].to_sym || :development
 
 puts "Running on environnement #{env}"
@@ -6,8 +9,6 @@ require 'bundler'
 Bundler.require(env)
 
 require './module'
-
-Dotenv.load
 Mongoid.load!('config/mongoid.yml', env)
 
 map('/accounts') { run Modusynth::Controllers::Accounts.new }
