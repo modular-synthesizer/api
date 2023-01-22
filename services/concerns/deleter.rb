@@ -12,7 +12,13 @@ module Modusynth
             )
           end
           instance = find(id: id)
-          return instance.nil? ? false : instance.delete
+          if respond_to? :process_delete
+            process_delete(instance)
+          elsif instance.nil?
+            return false
+          else
+            return instance.delete
+          end
         end
       end
     end

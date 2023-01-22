@@ -4,6 +4,6 @@ json.from do
   json.index link.from.index
 end
 json.to do
-  json.to link.from.node
-  json.to link.from.index
+  json.node link.to.node
+  json.index link.to.index
 end

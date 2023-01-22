@@ -45,6 +45,12 @@ module Modusynth
       def delete id
         node = Modusynth::Models::Module.find(id)
         node.delete unless node.nil?
+        Modusynth::Models::Link.where(from: id).each do |link|
+          link.delete
+        end
+        Modusynth::Models::Link.where(to: id).each do |link|
+          link.delete
+        end
       end
 
       private

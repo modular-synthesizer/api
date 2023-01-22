@@ -21,8 +21,7 @@ module Modusynth
           nodes: tool.inner_nodes,
           links: tool.inner_links,
           parameters: parameters,
-          inputs: ports(object.ports.inputs),
-          outputs: ports(object.ports.outputs),
+          ports: ports,
           type: tool.name,
           category: tool.category.nil? ? 'tools' : tool.category.name,
           controls: tool.controls.map do |control|
@@ -54,12 +53,13 @@ module Modusynth
         end
       end
 
-      def ports(list)
-        list.map do |port|
+      def ports
+        object.ports.map do |port|
           {
             id: port.id.to_s,
             name: port.descriptor.name,
             target: port.descriptor.target,
+            kind: port.descriptor.kind,
             index: port.descriptor.index
           }
         end

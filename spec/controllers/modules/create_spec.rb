@@ -47,10 +47,8 @@ describe Modusynth::Controllers::Modules do
               }
             }
           ],
-          inputs: [
-            {name: 'INPUT', target: 'gain', index: 0}
-          ],
-          outputs: [
+          ports: [
+            {name: 'INPUT', target: 'gain', index: 0},
             {name: 'OUTPUT', target: 'gain', index: 0}
           ]
         })

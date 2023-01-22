@@ -21,6 +21,11 @@ module Modusynth
         render_json 'tools/_tool.json', status: 201, tool:
       end
 
+      api_route 'delete', '/:id', admin: true do
+        Modusynth::Services::Tools::Delete.instance.delete(id: params[:id])
+        halt 204
+      end
+
       def service
         Modusynth::Services::Tools::Find.instance
       end
