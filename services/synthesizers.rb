@@ -29,7 +29,9 @@ module Modusynth
       end
 
       def delete synthesizer
-        synthesizer.modules.delete_all
+        synthesizer.modules.each do |mod|
+          Modusynth::Services::Modules.instance.delete(mod.id)
+        end
         synthesizer.delete
       end
 
