@@ -44,12 +44,15 @@ module Modusynth
 
       def delete id
         node = Modusynth::Models::Module.find(id)
-        node.delete unless node.nil?
-        Modusynth::Models::Link.where(from: id).each do |link|
-          link.delete
-        end
-        Modusynth::Models::Link.where(to: id).each do |link|
-          link.delete
+        unless node.nil?
+          ports_ids = node.ports.map(&:id).map(&:to_s)
+          Modusynth::Models::Link.where(:from.in => ports_ids).each do |link|
+            link.delete
+          end
+          Modusynth::Models::Link.where(:to.in => ports_ids).each do |link|
+            link.delete
+          end
+          node.delete
         end
       end
 
