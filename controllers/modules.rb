@@ -19,7 +19,7 @@ module Modusynth
       end
 
       api_route 'delete', '/:id', ownership: true do
-        service.delete(params[:id])
+        service.remove(id: params[:id])
         halt 200, { message: 'deleted' }.to_json
       end
 

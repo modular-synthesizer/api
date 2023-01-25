@@ -2,6 +2,7 @@ module Modusynth
   module Services
     class Synthesizers
       include Singleton
+      include Modusynth::Services::Concerns::Deleter
 
       def list account
         return model.all.to_a if account.admin
@@ -29,13 +30,9 @@ module Modusynth
       end
 
       def delete synthesizer
-        synthesizer.modules.each do |mod|
-          Modusynth::Services::Modules.instance.delete(mod.id)
-        end
+        Modusynth::Services::Modules.instance.remove_all(synthesizer.modules)
         synthesizer.delete
       end
-
-      private
 
       def model
         Modusynth::Models::Synthesizer

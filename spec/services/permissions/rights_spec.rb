@@ -31,7 +31,7 @@ RSpec.describe do
     let!(:creation) { service.create(label: 'Category::Tests') }
 
     describe 'Nominal case' do
-      let!(:result) { service.delete(id: creation.id.to_s) }
+      let!(:result) { service.remove(id: creation.id.to_s) }
       it 'Returns the correct result' do
         expect(result).to be true
       end
@@ -40,7 +40,7 @@ RSpec.describe do
       end
     end
     it 'Returns the correct result if the UUID does not exist' do
-      expect(service.delete(id: 'unknown')).to be false
+      expect(service.remove(id: 'unknown')).to be false
     end
   end
   describe :find_or_fail do

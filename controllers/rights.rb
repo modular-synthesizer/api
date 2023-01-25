@@ -16,7 +16,7 @@ module Modusynth
         halt 201, decorate(scope).to_json
       end
       api_route 'delete', '/:id', admin: true do
-        service.delete(id: params[:id])
+        service.remove(id: params[:id])
         halt 204
       end
 

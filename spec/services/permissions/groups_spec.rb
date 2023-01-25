@@ -32,7 +32,7 @@ RSpec.describe Modusynth::Services::Permissions::Groups do
     let!(:group) { service.create(slug: 'custom-deletion') }
 
     describe 'Nominal case' do
-      let!(:result) { service.delete(id: group.id) }
+      let!(:result) { service.remove(id: group.id) }
       
       it 'Returns the correct result' do
         expect(result).to be true
@@ -42,7 +42,7 @@ RSpec.describe Modusynth::Services::Permissions::Groups do
       end
     end
     it 'does not fail when deleting a non existing record' do
-      expect(service.delete(id: 'any id')).to be false
+      expect(service.remove(id: 'any id')).to be false
     end
   end
   describe :find_or_fail do

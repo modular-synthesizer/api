@@ -4,21 +4,12 @@ module Modusynth
       class Delete
         include Singleton
         include Modusynth::Services::Concerns::Deleter
-        include Modusynth::Services::Concerns::Finder
 
-        def process_delete tool
-          tool.parameters.each do |parameter|
-            parameter.delete
-          end
-          tool.ports.each do |port|
-            port.delete
-          end
-          tool.controls.each do |control|
-            control.delete
-          end
-          tool.modules.each do |mod|
-            Modusynth::Services::Modules.instance.delete(mod.id.to_s)
-          end
+        def delete tool
+          tool.parameters.delete_all
+          tool.ports.delete_all
+          tool.controls.delete_all
+          Modusynth::Services::Modules.instance.remove_all(tool.modules)
           tool.delete
         end
 

@@ -16,8 +16,6 @@ module Modusynth
           model.all.sort(label: 1).to_a
         end
 
-        private
-
         def model
           Modusynth::Models::Permissions::Right
         end

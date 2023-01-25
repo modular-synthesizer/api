@@ -2,6 +2,7 @@ module Modusynth
   module Services
     class Modules
       include Singleton
+      include Modusynth::Services::Concerns::Deleter
 
       def create payload
         creation = Modusynth::Models::Module.new(
@@ -42,19 +43,18 @@ module Modusynth
         instance
       end
 
-      def delete id
-        node = Modusynth::Models::Module.find(id)
-        unless node.nil?
-          ports_ids = node.ports.map(&:id).map(&:to_s)
-          Modusynth::Models::Link.where(:from.in => ports_ids).delete_all
-          Modusynth::Models::Link.where(:to.in => ports_ids).delete_all
-          node.parameters.delete_all
-          node.ports.delete_all
-          node.delete
-        end
+      def delete mod
+        ports_ids = mod.ports.map(&:id).map(&:to_s)
+        Modusynth::Models::Link.where(:from.in => ports_ids).delete_all
+        Modusynth::Models::Link.where(:to.in => ports_ids).delete_all
+        mod.parameters.delete_all
+        mod.ports.delete_all
+        mod.delete
       end
 
-      private
+      def model
+        Modusynth::Models::Module
+      end
 
       def synthesizer id
         Modusynth::Services::Synthesizers.instance.find_or_fail(id, 'synthesizer_id')
