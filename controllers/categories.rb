@@ -12,12 +12,17 @@ module Modusynth
       end
 
       api_route 'put', '/:id', admin: true do
-        halt 200, service.update(params[:id], body_params).to_json
+        category = service.find_and_update(**symbolized_params)
+        halt 200, decorate(category).to_json
       end
 
       api_route 'delete', '/:id', admin: true do
         service.delete(params[:id])
         halt 204
+      end
+
+      def decorate(item)
+        Modusynth::Decorators::Category.new(item).to_h
       end
 
       def service
