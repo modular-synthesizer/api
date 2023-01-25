@@ -21,7 +21,7 @@ module Modusynth
         halt 204
       end
 
-      def decorate item
+      def decorate(item)
         Modusynth::Decorators::Category.new(item).to_h
       end
 
