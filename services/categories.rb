@@ -7,6 +7,7 @@ module Modusynth
     # @author Vincent Courtois <courtois.vincent@outlook.com>
     class Categories
       include Singleton
+      include Modusynth::Services::Concerns::Updater
 
       def create payload
         category = model.new(payload.slice('name'))
@@ -14,11 +15,10 @@ module Modusynth
         decorator.new(category).to_h
       end
 
-      def update id, payload
-        category = find_or_fail(id)
-        category.update(**payload.slice('name'))
+      def update category, **payload
+        category.update(**payload.slice(:name))
         category.save!
-        decorator.new(category).to_h
+        category
       end
 
       def list
