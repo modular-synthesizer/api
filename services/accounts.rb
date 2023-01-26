@@ -3,12 +3,8 @@ module Modusynth
     class Accounts < Modusynth::Services::Base
       include Singleton
 
-      def create payload
-        account = model.new(
-          **payload.slice('username', 'email', 'password', 'password_confirmation')
-        )
-        account.save!
-        decorator.new(account).to_h
+      def build username: nil, email: nil, password: nil, password_confirmation: nil, **rest
+        model.new(username:, email:, password:, password_confirmation:)
       end
 
       def authenticate username, password
@@ -27,10 +23,6 @@ module Modusynth
 
       def model
         Modusynth::Models::Account
-      end
-
-      def decorator
-        Modusynth::Decorators::Account
       end
     end
   end
