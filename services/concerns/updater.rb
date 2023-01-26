@@ -19,8 +19,8 @@ module Modusynth
             payload.each do |value, field|
               instance.send("#{field}=", value) if field.respond_to?(:"#{field}=")
             end
-            instance.save!
           end
+          instance.save!
           instance
         end
       end

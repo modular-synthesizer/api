@@ -15,18 +15,13 @@ RSpec.describe 'DELETE /categories' do
       expect(last_response.status).to be 204
     end
   end
-  describe 'error cases' do
-    describe 'When the ategory ID is not found' do
+  describe 'Alternative cases' do
+    describe 'When the ategory ID does not exist' do
       before do
         delete '/unknown', {auth_token: admin_session.token}
       end
-      it 'Returns a 404 (Not Found) status code' do
-        expect(last_response.status).to be 404
-      end
-      it 'Returns the correct body' do
-        expect(last_response.body).to include_json(
-          key: 'id', message: 'unknown'
-        )
+      it 'Returns a 204 (No Content) status code' do
+        expect(last_response.status).to be 204
       end
     end
   end

@@ -5,44 +5,19 @@ module Modusynth
     # fully implemented as not everyone should be able to create/destroy them.
     #
     # @author Vincent Courtois <courtois.vincent@outlook.com>
-    class Categories
+    class Categories < Modusynth::Services::Base
       include Singleton
-      include Modusynth::Services::Concerns::Updater
 
-      def create payload
-        category = model.new(payload.slice('name'))
-        category.save!
-        decorator.new(category).to_h
+      def build name: nil, **rest
+        model.new(name:)
       end
 
       def update category, **payload
-        category.update(**payload.slice(:name))
-        category.save!
-        category
-      end
-
-      def list
-        model.all.map do |category|
-          decorator.new(category).to_h
-        end
-      end
-
-      def delete id
-        find_or_fail(id).delete
-      end
-
-      def find_or_fail id
-        item = model.where(id: id).first
-        raise Modusynth::Exceptions.unknown if item.nil?
-        item
+        category.update(payload.slice(:name))
       end
 
       def model
         Modusynth::Models::Category
-      end
-
-      def decorator
-        Modusynth::Decorators::Category
       end
     end
   end

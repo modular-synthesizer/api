@@ -1,0 +1,1 @@
+json.partial! 'categories/category', collection: categories, as: :category

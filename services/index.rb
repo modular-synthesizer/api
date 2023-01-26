@@ -2,6 +2,7 @@ module Modusynth
   module Services
     autoload :Accounts, './services/accounts'
     autoload :Authentication, './services/authentication'
+    autoload :Base, './services/base'
     autoload :Categories, './services/categories'
     autoload :Concerns, './services/concerns/index'
     autoload :Generators, './services/generators'

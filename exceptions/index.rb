@@ -4,6 +4,7 @@ module Modusynth
     autoload :Concern, './exceptions/concern'
     autoload :Forbidden, './exceptions/forbidden'
     autoload :Service, './exceptions/service'
+    autoload :ServiceWithoutModel, './exceptions/service_without_model'
     autoload :Unknown, './exceptions/unknown'
     autoload :Validation, './exceptions/validation'
 
