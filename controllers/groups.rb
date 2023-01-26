@@ -4,24 +4,22 @@ module Modusynth
   module Controllers
     class Groups < Modusynth::Controllers::Base
       api_route 'get', '/' do
-        results = service.list.map do |group|
-          decorate(group)
-        end
-        halt 200, results.to_json
+        render_json 'groups/list.json', groups: service.list
       end
 
       get '/:id' do
-        halt 200, find_or_fail(id: payload[:id]).to_h.to_json
+        group = service.find_or_fail(id: payload[:id])
+        render_json 'groups/_group.json', group:
       end
 
       api_route 'post', '/', admin: true do
         group = service.create(slug: payload[:slug])
-        halt 201, decorate(group).to_json
+        render_json 'groups/_group.json', status: 201, group:
       end
 
       api_route 'put', '/:id', admin: true do
         group = service.find_and_update(**symbolized_params)
-        halt 200, decorate(group).to_json
+        render_json 'groups/_group.json', group:
       end
 
       delete '/:id' do
@@ -33,10 +31,6 @@ module Modusynth
 
       def service
         Modusynth::Services::Permissions::Groups.instance
-      end
-
-      def decorate(group)
-        Modusynth::Decorators::Group.new(group).to_h
       end
     end
   end
