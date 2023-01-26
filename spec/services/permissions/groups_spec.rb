@@ -24,7 +24,8 @@ RSpec.describe Modusynth::Services::Permissions::Groups do
     end
     it 'Raises an exception if a scope is not found' do
       expect { service.create(slug: 'custom-slug', scopes: ['unknown']) }.to raise_error(
-        Modusynth::Exceptions::Unknown
+        an_instance_of(Modusynth::Exceptions::Service)
+          .and having_attributes(key: 'scopes[0]', error: 'unknown', prefix: '')
       )
     end
   end
@@ -67,20 +68,20 @@ RSpec.describe Modusynth::Services::Permissions::Groups do
     let!(:creation) { service.create(slug: 'update-slug') }
 
     it 'Correctly update the slug if a correct value is provided' do
-      expect(service.update(id: creation.id, slug: 'new-slug').slug).to eq 'new-slug'
+      expect(service.find_and_update(id: creation.id, slug: 'new-slug').slug).to eq 'new-slug'
     end
     it 'Does not update the group if the slug is given as nil' do
-      expect(->{ service.update(id: creation.id, slug: nil) }).to raise_error(
+      expect(->{ service.find_and_update(id: creation.id, slug: nil) }).to raise_error(
         Mongoid::Errors::Validations
       )
     end
     it 'Does not update the group if the slug is incorrect' do
-      expect(->{ service.update(id: creation.id, slug: 'slug_123') }).to raise_error(
+      expect(->{ service.find_and_update(id: creation.id, slug: 'slug_123') }).to raise_error(
         Mongoid::Errors::Validations
       )
     end
     it 'Does not update the group if a scope is not found' do
-      expect { service.update(scopes: ['unknown']) }.to raise_error(
+      expect { service.find_and_update(id: creation.id, scopes: ['unknown']) }.to raise_error(
         Modusynth::Exceptions::Unknown
       )
     end

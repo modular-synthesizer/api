@@ -20,7 +20,7 @@ module Modusynth
       end
 
       api_route 'put', '/:id', admin: true do
-        group = service.update(payload)
+        group = service.find_and_update(**symbolized_params)
         halt 200, decorate(group).to_json
       end
 

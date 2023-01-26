@@ -8,7 +8,7 @@ module Modusynth
       end
 
       api_route 'get', '/:id' do
-        account = service.find_or_fail(params[:id])
+        account = service.find_or_fail(id: params[:id])
 
         halt 200, Modusynth::Decorators::Account.new(account).to_h.to_json
       end

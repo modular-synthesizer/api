@@ -1,6 +1,6 @@
 module Modusynth
   module Services
-    class Accounts
+    class Accounts < Modusynth::Services::Base
       include Singleton
 
       def create payload
@@ -9,10 +9,6 @@ module Modusynth
         )
         account.save!
         decorator.new(account).to_h
-      end
-
-      def find id
-        return model.where(id: id).first
       end
 
       def authenticate username, password
@@ -28,14 +24,6 @@ module Modusynth
         raise Modusynth::Exceptions.unknown 'username' if account.nil?
         account
       end
-
-      def find_or_fail id
-        account = model.where(id: id).first
-        raise Modusynth::Exceptions.unknown 'id' if account.nil?
-        account
-      end
-
-      private
 
       def model
         Modusynth::Models::Account

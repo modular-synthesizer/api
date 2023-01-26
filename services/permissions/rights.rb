@@ -1,19 +1,15 @@
 module Modusynth
   module Services
     module Permissions
-      class Rights
+      class Rights < Modusynth::Services::Base
         include Singleton
-        include Modusynth::Services::Concerns::Finder
-        include Modusynth::Services::Concerns::Deleter
 
-        def create label: nil
-          record = model.new(label: label)
-          record.save!
-          record
+        def build label: nil
+          model.new(label:)
         end
 
         def list
-          model.all.sort(label: 1).to_a
+          super.sort(label: 1).to_a
         end
 
         def model
