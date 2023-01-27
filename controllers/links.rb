@@ -6,7 +6,7 @@ module Modusynth
     class Links < Modusynth::Controllers::Base
       api_route 'get', '/' do
         links = service.list(params)
-        render_json 'links/list.json', link:
+        render_json 'links/list.json', links:
       end
 
       api_route 'post', '/' do
