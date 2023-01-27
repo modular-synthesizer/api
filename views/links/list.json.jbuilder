@@ -1,0 +1,1 @@
+json.partial! 'links/link', collection: links, as: :link

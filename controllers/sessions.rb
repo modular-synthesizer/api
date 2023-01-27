@@ -4,12 +4,12 @@ module Modusynth
   module Controllers
     class Sessions < Modusynth::Controllers::Base
       api_route 'post', '/', authenticated: false do
-        account = service.create(**symbolized_params)
-        halt 201, decorate(account).to_json
+        session = service.create(**symbolized_params)
+        render_json 'sessions/_session.json', status: 201, session:
       end
 
       api_route 'get', '/:id', ownership: true do
-        halt 200, decorate(@resource).to_json
+        render_json 'sessions/_session.json', session: @resource
       end
 
       api_route 'delete', '/:id' do
@@ -19,10 +19,6 @@ module Modusynth
 
       def service
         Modusynth::Services::Sessions.instance
-      end
-
-      def decorate item
-        return Modusynth::Decorators::Session.new(item).to_h
       end
     end
   end
