@@ -1,9 +1,7 @@
 module Modusynth
   module Services
-    class Generators
+    class Generators < Modusynth::Services::Base
       include Singleton
-      include Modusynth::Services::Concerns::Creator
-      include Modusynth::Services::Concerns::Finder
 
       def build name:, code:, **rest
         model.new(name:, code:)
