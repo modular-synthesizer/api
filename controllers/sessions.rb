@@ -4,20 +4,25 @@ module Modusynth
   module Controllers
     class Sessions < Modusynth::Controllers::Base
       api_route 'post', '/', authenticated: false do
-        halt 201, service.create(body_params).to_json
+        account = service.create(**symbolized_params)
+        halt 201, decorate(account).to_json
       end
 
       api_route 'get', '/:id', ownership: true do
-        halt 200, Modusynth::Decorators::Session.new(@resource).to_h.to_json
+        halt 200, decorate(@resource).to_json
       end
 
-      api_route 'delete', '/:id', ownership: true do
-        service.delete(@resource)
-        halt 200, { token: @resource.token, expired: true }.to_json
+      api_route 'delete', '/:id' do
+        service.remove_if_owner(id: params[:id], account: @session.account)
+        halt 204
       end
 
       def service
         Modusynth::Services::Sessions.instance
+      end
+
+      def decorate item
+        return Modusynth::Decorators::Session.new(item).to_h
       end
     end
   end

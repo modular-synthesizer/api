@@ -4,7 +4,8 @@ module Modusynth
   module Controllers
     class Modules < Modusynth::Controllers::Base
       api_route 'post', '/' do
-        halt 201, decorate(service.create(body_params)).to_json
+        mod = service.create(**symbolized_params)
+        halt 201, decorate(mod).to_json
       end
 
       api_route 'get', '/' do

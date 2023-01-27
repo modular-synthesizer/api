@@ -23,6 +23,15 @@ module Modusynth
           end
         end
 
+        def remove_if_owner(id:, account:)
+          instance = respond_to?(:find) ? find(id:) : model.find(id)
+          if instance.nil? || !instance.respond_to?(:account) || instance.account.id != account.id
+            false
+          else
+            respond_to?(:delete) ? delete(instance) : instance.delete
+          end
+        end
+
         def remove_all(items)
           items.each do |item|
             if item.is_a? String

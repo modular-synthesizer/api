@@ -22,11 +22,11 @@ module Modusynth
       # @return [Modusynth::Models::Session] the authentication session for the
       #   user currently making the request.
       def authenticate payload
-        unless payload.key? 'auth_token'
-          raise Modusynth::Exceptions.required 'auth_token'
+        unless payload.key? :auth_token
+          raise Modusynth::Exceptions.required :auth_token
         end
         # The :find_or_fail method will raise not found errors if needed.
-        session = sessions.find_or_fail payload['auth_token'], 'auth_token'
+        session = sessions.find_or_fail(id: payload[:auth_token], field: 'auth_token')
         if session.account.nil? || session.expired?
           raise Modusynth::Exceptions.forbidden
         end
@@ -62,7 +62,7 @@ module Modusynth
       def ownership payload, session, service
         return unless service.respond_to?(:find_or_fail)
         
-        resource = service.find_or_fail(payload['id'])
+        resource = service.find_or_fail(id: payload[:id])
 
         # Ownership cannot be checked if the model does not respond to :account.
         return unless resource.respond_to? :account

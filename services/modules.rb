@@ -1,28 +1,25 @@
 module Modusynth
   module Services
-    class Modules
+    class Modules < Modusynth::Services::Base
       include Singleton
       include Modusynth::Services::Concerns::Deleter
 
-      def create payload
-        creation = Modusynth::Models::Module.new(
-          synthesizer: synthesizer(payload['synthesizer_id']),
-          tool: tool(payload['tool_id']),
-          slot: payload['slot'] || 0,
-          rack: payload['rack'] || 0
+      def build synthesizer_id: nil, tool_id: nil, slot: 0, rack: 0, **_
+        synthesizer = Modusynth::Services::Synthesizers.instance.find_or_fail(
+          id: synthesizer_id,
+          field: 'synthesizer_id'
         )
-        creation.save!
-        creation
+        tool = Modusynth::Services::Tools::Find.instance.find_or_fail(id: tool_id)
+        model.new(synthesizer:, tool:, slot:, rack:)
       end
 
-      def list(params)
-        search = params.slice(:synthesizer_id)
-        Modusynth::Models::Module.where(**search).to_a
+      def list(synthesizer_id, **_)
+        model.where(synthesizer_id:).to_a
       end
 
       def update id, payload
         attributes = payload.slice('slot', ('rack'))
-        node = find_or_fail(id)
+        node = find_or_fail(id:)
         node.update(**attributes)
         (payload['parameters'] || []).each do |param|
           obj = node.parameters.find(param['id'])
@@ -37,12 +34,6 @@ module Modusynth
         node
       end
 
-      def find_or_fail(id)
-        instance = Modusynth::Models::Module.find(id)
-        raise Modusynth::Exceptions.unknown('id') if instance.nil?
-        instance
-      end
-
       def delete mod
         ports_ids = mod.ports.map(&:id).map(&:to_s)
         Modusynth::Models::Link.where(:from.in => ports_ids).delete_all
@@ -54,14 +45,6 @@ module Modusynth
 
       def model
         Modusynth::Models::Module
-      end
-
-      def synthesizer id
-        Modusynth::Services::Synthesizers.instance.find_or_fail(id, 'synthesizer_id')
-      end
-
-      def tool id
-        Modusynth::Services::Tools::Find.instance.find_or_fail(id: id, field: 'tool_id')
       end
     end
   end
