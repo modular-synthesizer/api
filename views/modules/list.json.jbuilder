@@ -1,0 +1,1 @@
+json.partial! 'modules/module', collection: modules, as: :module
