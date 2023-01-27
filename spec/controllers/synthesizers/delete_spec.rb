@@ -15,10 +15,7 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
       before { delete "/#{synthesizer.id.to_s}", {auth_token: session.token} }
       
       it 'Returns a 200 (OK) status code' do
-        expect(last_response.status).to be 200
-      end
-      it 'Returns the correct body' do
-        expect(last_response.body).to include_json(message: 'deleted')
+        expect(last_response.status).to be 204
       end
       it 'Has deleted the synthesizer' do
         expect(Modusynth::Models::Synthesizer.all.size).to be 0
@@ -34,19 +31,27 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
           delete "/#{synthesizer.id.to_s}", {auth_token: session.token}
         end
 
-        it 'Returns a 404 (Not Found) status code' do
-          expect(last_response.status).to be 404
+        it 'Returns a 204 (No Content) status code' do
+          expect(last_response.status).to be 204
         end
-        it 'Returns the correct body' do
-          expect(last_response.body).to include_json(
-            key: 'id', message: 'unknown'
-          )
+      end
+      describe 'Not owner of the resource' do
+        let!(:attacker) { create(:account) }
+        let!(:attacker_session) { create(:session, account: attacker) }
+
+        before do
+          delete "/#{synthesizer.id.to_s}", {auth_token: attacker_session.token}
+        end
+
+        it 'Returns a 204 (No Content) status code' do
+          expect(last_response.status).to be 204
+        end
+        it 'Has not deleted the synthesizer' do
+          expect(Modusynth::Models::Synthesizer.find(synthesizer.id)).to_not be_nil
         end
       end
     end
   end
 
   include_examples 'authentication', 'delete', "/anything"
-
-  include_examples 'ownership', 'delete', '/:id', :synthesizer
 end

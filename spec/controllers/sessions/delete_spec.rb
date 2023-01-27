@@ -12,14 +12,8 @@ RSpec.describe 'DELETE /:id' do
     before do
       delete "/#{session.token}", {auth_token: session.token}
     end
-    it 'Returns a 200 (OK) status code' do
-      expect(last_response.status).to be 200
-    end
-    it 'Returns the correct body' do
-      expect(last_response.body).to include_json(
-        token: session.token,
-        expired: true
-      )
+    it 'Returns a 204 (No Content) status code' do
+      expect(last_response.status).to be 204
     end
     describe 'Invalidated session' do
       let!(:result) { Modusynth::Models::Session.where(token: session.token).first }
@@ -38,14 +32,8 @@ RSpec.describe 'DELETE /:id' do
     end
 
     describe 'The session token is from another session of the same user' do
-      it 'Returns a 200 (OK) status code' do
-        expect(last_response.status).to be 200
-      end
-      it 'Returns the correct body' do
-        expect(last_response.body).to include_json(
-          token: session.token,
-          expired: true
-        )
+      it 'Returns a 204 (No Content) status code' do
+        expect(last_response.status).to be 204
       end
       describe 'Both sessions' do
         let!(:result) { Modusynth::Models::Session.where(token: session.token).first }
@@ -65,24 +53,16 @@ RSpec.describe 'DELETE /:id' do
         end
       end
     end
-  end
-  describe 'Error cases' do
+
     describe 'The session token is not found' do
       before do
         delete '/unknown', { auth_token: auth_session.token }
       end
-      it 'Returns a 404 (Not Found) status code' do
-        expect(last_response.status).to be 404
-      end
-      it 'Returns the correct body' do
-        expect(last_response.body).to include_json(
-          key: 'id', message: 'unknown'
-        )
+      it 'Returns a 204 (No Content) status code' do
+        expect(last_response.status).to be 204
       end
     end
   end
 
   include_examples 'authentication', 'delete', '/anything'
-
-  include_examples 'ownership', 'delete', '/:id', :session, :token
 end

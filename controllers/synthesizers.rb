@@ -19,12 +19,13 @@ module Modusynth
       end
 
       api_route 'post', '/' do
-        halt 201, decorate(service.create(body_params, @session.account)).to_json
+        synthesizer = service.create(account: @session.account, **symbolized_params)
+        halt 201, decorate(synthesizer).to_json
       end
 
-      api_route 'delete', '/:id', ownership: true do
-        service.remove(id: params[:id])
-        halt 200, { message: 'deleted' }.to_json
+      api_route 'delete', '/:id' do
+        service.remove_if_owner(id: params[:id], account: @session.account)
+        halt 204
       end
 
       def service

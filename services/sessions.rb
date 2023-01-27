@@ -1,43 +1,24 @@
 module Modusynth
   module Services
-    class Sessions
+    class Sessions < Modusynth::Services::Base
       include Singleton
 
-      def create payload
-        account = accounts_service.authenticate payload['username'], payload['password']
-        session = model.create(account: account, **payload.slice('duration'))
-        session.save!
-        decorator.new(session).to_h
+      def build(username: nil, password: nil, duration: 604800, **_)
+        account = Modusynth::Services::Accounts.instance.authenticate(username, password)
+        model.create(account:, duration:)
       end
 
       def delete session
         session.logged_out = true
-        session.save!
-        session
+        session.save
       end
 
-      def find_or_fail token, field = 'id'
-        session = Modusynth::Models::Session.where(token: token).first
-        raise Modusynth::Exceptions.unknown field if session.nil?
-        session
-      end
-
-      private
-
-      def accounts_service
-        Modusynth::Services::Accounts.instance
-      end
-
-      def decorator
-        Modusynth::Decorators::Session
+      def find(id:)
+        model.find_by(token: id)
       end
 
       def model
         Modusynth::Models::Session
-      end
-
-      def ownership
-        Modusynth::Services::Ownership.instance
       end
     end
   end

@@ -1,27 +1,15 @@
 module Modusynth
   module Services
-    class Synthesizers
+    class Synthesizers < Modusynth::Services::Base
       include Singleton
-      include Modusynth::Services::Concerns::Deleter
 
       def list account
         return model.all.to_a if account.admin
         model.where(account: account).to_a
       end
 
-      def find_or_fail id, field = 'id'
-        synthesizer = Modusynth::Models::Synthesizer.find(id)
-        raise Modusynth::Exceptions.unknown(field) if synthesizer.nil?
-        synthesizer
-      end
-
-      def create payload, account
-        payload = payload.slice('name', 'slots', 'racks')
-        synthesizer = Modusynth::Models::Synthesizer.new(
-          account: account, **payload
-        )
-        synthesizer.save!
-        synthesizer
+      def build account:, name: nil, slots: 50, racks: 1, **_
+        model.new(account:, name:, slots:, racks:)
       end
 
       def update synthesizer, payload

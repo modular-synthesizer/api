@@ -135,12 +135,12 @@ RSpec.describe Modusynth::Controllers::Tools do
       describe 'Tool with parameters' do
         let!(:param) do
           Modusynth::Services::Parameters.instance.create(
-            'name' => 'parameter',
-            'minimum' => 0,
-            'maximum' => 10,
-            'step' => 1,
-            'precision' => 0,
-            'default' => 1
+            name: 'parameter',
+            minimum: 0,
+            maximum: 10,
+            step: 1,
+            precision: 0,
+            default: 1
           )
         end
 
