@@ -4,16 +4,16 @@ module Modusynth
   module Controllers
     class Rights < Modusynth::Controllers::Base
       api_route 'get', '/', admin: true do
-        results = service.list.map { |scope| decorate(scope) }
-        halt 200, results.to_json
+        rights = service.list
+        render_json 'rights/list.json', rights:
       end
       api_route 'get', '/:id', admin: true do
-        scope = service.find_or_fail(id: params[:id])
-        halt 200, decorate(scope).to_json
+        right = service.find_or_fail(id: params[:id])
+        render_json 'rights/_right.json', right:
       end
       api_route 'post', '/', admin: true do
-        scope = service.create(label: body_params['label'])
-        halt 201, decorate(scope).to_json
+        right = service.create(**symbolized_params)
+        render_json 'rights/_right.json', status: 201, right:
       end
       api_route 'delete', '/:id', admin: true do
         service.remove(id: params[:id])
@@ -24,10 +24,6 @@ module Modusynth
 
       def service
         Modusynth::Services::Permissions::Rights.instance
-      end
-
-      def decorate(scope)
-        Modusynth::Decorators::Right.new(scope).to_h
       end
     end
   end
