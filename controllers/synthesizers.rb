@@ -4,23 +4,22 @@ module Modusynth
   module Controllers
     class Synthesizers < Modusynth::Controllers::Base
       api_route 'get', '/' do
-        results = service.list(@session.account).map do |synthesizer|
-          Modusynth::Decorators::Synthesizer.new(synthesizer).to_h
-        end
-        halt 200, results.to_json
+        synthesizers = service.list(@session.account)
+        render_json 'synthesizers/list.json', synthesizers:
       end
 
       api_route 'get', '/:id', ownership: true do
-        halt 200, decorate(@resource).to_json
+        render_json 'synthesizers/_synthesizer.json', synthesizer: @resource
       end
 
       api_route 'put', '/:id', ownership: true do
-        halt 200, decorate(service.update(@resource, body_params)).to_json
+        synthesizer = service.update(@resource, body_params)
+        render_json 'synthesizers/_synthesizer.json', synthesizer:
       end
 
       api_route 'post', '/' do
         synthesizer = service.create(account: @session.account, **symbolized_params)
-        halt 201, decorate(synthesizer).to_json
+        render_json 'synthesizers/_synthesizer.json', status: 201, synthesizer:
       end
 
       api_route 'delete', '/:id' do
@@ -30,10 +29,6 @@ module Modusynth
 
       def service
         Modusynth::Services::Synthesizers.instance
-      end
-
-      def decorate(item)
-        Modusynth::Decorators::Synthesizer.new(item).to_h
       end
     end
   end

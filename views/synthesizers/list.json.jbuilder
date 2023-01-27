@@ -1,0 +1,1 @@
+json.partial! 'synthesizers/synthesizer', collection: synthesizers, as: :synthesizer

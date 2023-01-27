@@ -1,6 +1,5 @@
 module Modusynth
   autoload :Controllers, './controllers/index'
-  autoload :Decorators, './decorators/index'
   autoload :Exceptions, './exceptions/index'
   autoload :Helpers, './helpers/index'
   autoload :Models, './models/index'
