@@ -5,27 +5,22 @@ module Modusynth
     class Modules < Modusynth::Controllers::Base
       api_route 'post', '/' do
         mod = service.create(**symbolized_params)
-        halt 201, decorate(mod).to_json
+        render_json 'modules/_module.json', status: 201, mod:
       end
 
       api_route 'get', '/' do
-        results = service.list(params).map do |node|
-          decorate(node).to_h
-        end
-        halt 200, results.to_json
+        mods = service.list(params)
+        render_json 'modules/list.json', mods:
       end
 
       api_route 'put', '/:id', ownership: true do
-        halt 200, decorate(service.update(params[:id], body_params)).to_json
+        mod = service.update(params[:id], body_params)
+        render_json 'modules/_module.json', mod:
       end
 
-      api_route 'delete', '/:id', ownership: true do
-        service.remove(id: params[:id])
-        halt 200, { message: 'deleted' }.to_json
-      end
-
-      def decorate(item)
-        Modusynth::Decorators::Module.new(item).to_h
+      api_route 'delete', '/:id' do
+        service.remove_if_owner(id: params[:id], account: @session.account)
+        halt 204
       end
 
       def service

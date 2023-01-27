@@ -4,7 +4,7 @@ module Modusynth
       class Rights < Modusynth::Services::Base
         include Singleton
 
-        def build label: nil
+        def build label: nil, **_
           model.new(label:)
         end
 

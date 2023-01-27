@@ -1,0 +1,1 @@
+json.partial! 'rights/right', collection: rights, as: :right

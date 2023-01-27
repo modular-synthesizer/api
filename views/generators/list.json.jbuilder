@@ -1,0 +1,1 @@
+json.partial! 'generators/generator', collection: generators, as: :generator

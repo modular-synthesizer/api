@@ -15,36 +15,26 @@ describe Modusynth::Controllers::Modules do
         delete "/#{node.id.to_s}", {auth_token: session.token}
       end
       
-      it 'Returns a 200 (OK) status code' do
-        expect(last_response.status).to be 200
-      end
-      it 'Returns the correct body' do
-        expect(last_response.body).to include_json(message: 'deleted')
+      it 'Returns a 204 (No Content) status code' do
+        expect(last_response.status).to be 204
       end
       it 'Has deleted the module' do
         expect(Modusynth::Models::Module.all.size).to be 0
       end
     end
-    describe 'Error cases' do
+    describe 'Alternative cases' do
       describe 'Two consecutive calls' do
         before do
           delete "/#{node.id.to_s}", {auth_token: session.token}
           delete "/#{node.id.to_s}", {auth_token: session.token}
         end
 
-        it 'Returns a 404 (Not Found) status code' do
-          expect(last_response.status).to be 404
-        end
-        it 'Returns the correct body' do
-          expect(last_response.body).to include_json(
-            key: 'id', message: 'unknown'
-          )
+        it 'Returns a 204 (No Content) status code' do
+          expect(last_response.status).to be 204
         end
       end
     end
 
     include_examples 'authentication', 'delete', '/:id'
-
-    include_examples 'ownership', 'delete', '/:id', :VCA_module
   end
 end
