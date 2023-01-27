@@ -1,23 +1,16 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Services
-    class Parameters
+    class Parameters < Modusynth::Services::Base
       include Singleton
 
-      def list
-        Modusynth::Models::Tools::Descriptor.all.to_a
+      def build(name: nil, default: nil, minimum: nil, maximum: nil, step: nil, precision: nil, **_)
+        model.new(name:, default:, minimum:, maximum:, step:, precision:)
       end
 
-      def create params
-        object = Modusynth::Models::Tools::Descriptor.new(
-          name: params['name'],
-          default: params['default'],
-          minimum: params['minimum'],
-          maximum: params['maximum'],
-          step: params['step'],
-          precision: params['precision']
-        )
-        object.save!
-        object
+      def model
+        Modusynth::Models::Tools::Descriptor
       end
     end
   end

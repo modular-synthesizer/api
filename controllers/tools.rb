@@ -29,10 +29,6 @@ module Modusynth
       def service
         Modusynth::Services::Tools::Find.instance
       end
-
-      def decorate(item)
-        Modusynth::Decorators::Tool.new(item).to_h
-      end
     end
   end
 end
