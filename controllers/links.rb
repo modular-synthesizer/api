@@ -19,7 +19,7 @@ module Modusynth
         render_json 'links/_link.json', link:
       end
 
-      api_route 'delete', '/:id', ownership: true do
+      api_route 'delete', '/:id' do
         service.delete(params[:id])
         halt 204
       end

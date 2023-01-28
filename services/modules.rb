@@ -13,7 +13,7 @@ module Modusynth
         model.new(synthesizer:, tool:, slot:, rack:)
       end
 
-      def list(synthesizer_id, **_)
+      def list(synthesizer_id:, **_)
         model.where(synthesizer_id:).to_a
       end
 

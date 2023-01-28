@@ -9,7 +9,7 @@ module Modusynth
       end
 
       api_route 'get', '/' do
-        mods = service.list(params)
+        mods = service.list(**symbolized_params)
         render_json 'modules/list.json', mods:
       end
 

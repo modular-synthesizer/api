@@ -1,1 +1,1 @@
-json.partial! 'modules/module', collection: modules, as: :module
+json.partial! 'modules/module', collection: mods, as: :mod
