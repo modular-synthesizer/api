@@ -9,9 +9,9 @@ module Modusynth
 
       belongs_to :synthesizer, class_name: '::Modusynth::Models::Synthesizer'
 
-      belongs_to :from, class_name: '::Modusynth::Models::Module'
+      belongs_to :from, class_name: '::Modusynth::Models::Modules::Port'
 
-      belongs_to :to, class_name: '::Modusynth::Models::Module'
+      belongs_to :to, class_name: '::Modusynth::Models::Modules::Port'
     end
   end
 end
