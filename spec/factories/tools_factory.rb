@@ -5,15 +5,6 @@ FactoryBot.define do
       generator { 'GainNode' }
     end
   end
-  factory :port, class: Modusynth::Models::Tools::Port do
-    index { 0 }
-    factory :input_port do
-      kind { 'input' }
-    end
-    factory :output_port do
-      kind { 'output' }
-    end
-  end
   factory :tool, class: Modusynth::Models::Tool do
     name { 'test tool' }
     slots { 5 }

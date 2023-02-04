@@ -28,6 +28,7 @@ module Modusynth
         # @raise [::Modusynth::Exceptions::Concern] when the concern is not
         #   correctly implemented
         def find_or_fail(id: nil, field: 'id')
+          raise Modusynth::Exceptions.required(field) if id.nil?
           instance = find(id: id)
           raise Modusynth::Exceptions.unknown(field) if instance.nil?
           instance

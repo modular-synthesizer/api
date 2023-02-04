@@ -1,6 +1,6 @@
 module Modusynth
   module Services
-    class Links
+    class Links < Modusynth::Services::Base
       include Singleton
 
       def list params
@@ -8,17 +8,20 @@ module Modusynth
         Modusynth::Models::Link.where(**params)
       end
 
-      def create payload
-        payload = payload.slice('from', 'to', 'synthesizer_id', 'color')
+      def build from: nil, to: nil, synthesizer_id: nil, color: 'red', **_
+        synthesizer = Synthesizers.instance.find_or_fail(id: synthesizer_id, field: 'synthesizer_id')
+        from = Ports.instance.find_or_fail(id: from, synthesizer:, field: 'from')
+        to = Ports.instance.find_or_fail(id: to, synthesizer:, field: 'to')
+        Modusynth::Models::Link.new(from:, to:, color:, synthesizer:)
+      end
 
-        link = Modusynth::Models::Link.new(
-          from: payload['from'],
-          to: payload['to'],
-          color: payload['color'],
-          synthesizer: find_synth(payload['synthesizer_id'])
-        )
-        link.save!
-        link
+      def validate!(from: nil, to: nil, synthesizer_id: nil, color: 'red', session: nil, **_)
+        instance = build(synthesizer_id:, from:, to:, color:)
+        raise Modusynth::Exceptions.unknown('synthesizer_id') if instance.synthesizer.account.id != session.account.id
+        if instance.from.kind == instance.to.kind
+          raise Modusynth::Exceptions::BadRequest.new('directions', 'identical')
+        end
+        instance
       end
 
       def update id, payload
@@ -38,8 +41,8 @@ module Modusynth
         link
       end
 
-      def find_synth id
-        Modusynth::Models::Synthesizer.find(id)
+      def model
+        Modusynth::Models::Link
       end
     end
   end

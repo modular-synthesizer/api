@@ -10,8 +10,8 @@ module Modusynth
       end
 
       api_route 'post', '/' do
-        link = service.create(body_params)
-        render_json 'links/_link.json', link:
+        link = service.create(session: @session, **symbolized_params)
+        render_json 'links/_link.json', status: 201, link:
       end
 
       api_route 'put', '/:id', ownership: true do

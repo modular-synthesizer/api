@@ -10,6 +10,7 @@ module Modusynth
     autoload :Modules, './services/modules'
     autoload :Parameters, './services/parameters'
     autoload :Permissions, './services/permissions/index'
+    autoload :Ports, './services/ports'
     autoload :Sessions, './services/sessions'
     autoload :Synthesizers, './services/synthesizers'
     autoload :Tools, './services/tools/index'
