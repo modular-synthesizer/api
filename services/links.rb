@@ -17,7 +17,9 @@ module Modusynth
 
       def validate!(from: nil, to: nil, synthesizer_id: nil, color: 'red', session: nil, **_)
         instance = build(synthesizer_id:, from:, to:, color:)
-        raise Modusynth::Exceptions.unknown('synthesizer_id') if instance.synthesizer.account.id != session.account.id
+        if !session.account.admin && instance.synthesizer.account.id != session.account.id
+          raise Modusynth::Exceptions.unknown('synthesizer_id')
+        end
         if instance.from.kind == instance.to.kind
           raise Modusynth::Exceptions::BadRequest.new('directions', 'identical')
         end
