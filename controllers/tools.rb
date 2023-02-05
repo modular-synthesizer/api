@@ -21,6 +21,12 @@ module Modusynth
         render_json 'tools/_tool.json', status: 201, tool:
       end
 
+
+      api_route 'put', '/:id', admin: true do
+        tool = Modusynth::Services::Tools::Update.instance.find_and_update(**symbolized_params)
+        render_json 'tools/_tool.json', tool:
+      end
+
       api_route 'delete', '/:id', admin: true do
         Modusynth::Services::Tools::Delete.instance.remove(id: params[:id])
         halt 204

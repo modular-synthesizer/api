@@ -11,10 +11,9 @@ module Modusynth
               called: 'model'
             )
           end
-          instance = model.find(id)
-          raise Modusynth::Exceptions.unknown('id') if instance.nil?
+          instance = find_or_fail(id:)
           if respond_to? :update, true
-            update(instance, **payload)
+            instance = update(instance, **payload)
           else
             payload.each do |value, field|
               instance.send("#{field}=", value) if field.respond_to?(:"#{field}=")
