@@ -4,6 +4,10 @@ FactoryBot.define do
       name { 'gain' }
       generator { 'GainNode' }
     end
+    factory :oscillator_node do
+      name { 'oscillator' }
+      generator { 'OscillatorNode' }
+    end
   end
   factory :tool, class: Modusynth::Models::Tool do
     name { 'test tool' }
@@ -13,6 +17,7 @@ FactoryBot.define do
       slots { 3 }
       after(:create) do |tool|
         create_list(:gain_node, 1, tool: tool)
+        create_list(:oscillator_node, 1, tool: tool)
         create_list(:gain, 1, tool: tool, targets: ['gain'])
         tool.ports = [
           build(:input_port, name: 'INPUT', target: 'gain'),

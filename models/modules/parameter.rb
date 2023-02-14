@@ -12,7 +12,7 @@ module Modusynth
 
         field :input, type: BSON::ObjectId, default: ->{ BSON::ObjectId.new }
 
-        belongs_to :parameter, class_name: '::Modusynth::Models::Tools::Parameter'
+        belongs_to :parameter, class_name: '::Modusynth::Models::Tools::Parameter', inverse_of: :instances
 
         belongs_to :module, class_name: '::Modusynth::Models::Module', inverse_of: :value
 

@@ -1,16 +1,26 @@
 module Modusynth
   module Services
     module Tools
-      class Ports
+      class Ports < Modusynth::Services::Base
         include Singleton
-        include Modusynth::Services::Concerns::Creator
 
         def build kind: nil, name: nil, target: nil, index: nil, **others
-          Modusynth::Models::Tools::Port.new(kind:, name:, target:, index:)
+          model.new(kind:, name:, target:, index:)
         end
 
         def validate! **payload
           build(**payload).validate!
+        end
+
+        def delete descriptor
+          Modusynth::Models::Modules::Port.where(descriptor:).each do |mod_port|
+            Modusynth::Services::Ports.instance.remove(id: mod_port.id)
+          end
+          descriptor.delete
+        end
+
+        def model
+          Modusynth::Models::Tools::Port
         end
       end
     end

@@ -1,6 +1,6 @@
 module Modusynth
   module Services
-    class Ports
+    class Ports < Modusynth::Services::Base
       include Singleton
 
       def find_or_fail(id: nil, synthesizer: nil, field: 'from', **_)
@@ -10,6 +10,16 @@ module Modusynth
           return found unless found.nil?
         end
         raise Modusynth::Exceptions.unknown(field)
+      end
+
+      def delete port
+        Modusynth::Models::Link.where(from: port).delete_all
+        Modusynth::Models::Link.where(to: port).delete_all
+        port.delete
+      end
+
+      def model
+        Modusynth::Models::Modules::Port
       end
     end
   end
