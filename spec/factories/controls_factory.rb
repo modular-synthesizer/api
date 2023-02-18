@@ -3,5 +3,8 @@ FactoryBot.define do
     factory :knob do
       component { 'Knob' }
     end
+    factory :button do
+      component { 'Button' }
+    end
   end
 end

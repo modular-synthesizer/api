@@ -249,6 +249,39 @@ RSpec.describe 'PUT /:id' do
         end
       end
     end
+    describe 'Update the controls list' do
+      let!(:control) { build(:button, payload: {foo: 'bar'}) }
+
+      before do
+        put "/#{tool.id.to_s}", {
+          auth_token: session.token,
+          controls: [ {component: 'Button', payload: {foo: 'bar'}} ]
+        }
+      end
+      it 'Returns a 200 (OK) status code' do
+        expect(last_response.status).to be 200
+      end
+      it 'Returns the correct body' do
+        expect(last_response.body).to include_json(
+          controls: [{component: 'Button', payload: {foo: 'bar'}}]
+        )
+      end
+      describe 'The tools list' do
+        before { tool.reload }
+        it 'Has inserted the correct control component' do
+          expect(tool.controls.first.component).to eq 'Button'
+        end
+        it 'Has inserted the correct control payload' do
+          expect(tool.controls.first.payload).to eq({'foo' => 'bar'})
+        end
+        it 'Has deleted the other control correctly' do
+          expect(Modusynth::Models::Tools::Control.where(component: 'Knob').count).to be 0
+        end
+        it 'Has created only one control' do
+          expect(Modusynth::Models::Tools::Control.count).to be 1
+        end
+      end
+    end
   end
 
   describe 'Error cases' do

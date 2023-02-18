@@ -32,6 +32,14 @@ module Modusynth
               prefix: 'parameters'
             )
           end
+          if payload[:controls].instance_of?(Array)
+            instance.controls = update_association(
+              previous: instance.controls,
+              next_list: payload[:controls],
+              service: Controls.instance,
+              prefix: 'controls'
+            )
+          end
           instance
         end
 
