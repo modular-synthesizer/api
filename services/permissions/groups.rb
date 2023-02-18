@@ -20,6 +20,7 @@ module Modusynth
             attrs[:scopes] = find_scopes(ids: attrs[:scopes])
           end
           group.update_attributes(**attrs)
+          group
         end
 
         def find_scopes ids:

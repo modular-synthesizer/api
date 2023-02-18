@@ -14,6 +14,7 @@ module Modusynth
 
       def update category, **payload
         category.update(payload.slice(:name))
+        category
       end
 
       def model
