@@ -52,9 +52,10 @@ module Modusynth
           end
           # Step 2 : insert the items in next that have no UUIDs and return the list
           next_list.map.with_index do |item, idx|
-            if item.key? :id
+            if item.key?(:id) && (item[:id] != '')
               service.find_or_fail(id: item[:id])
             else
+              item.delete(:id)
               service.create(**item, prefix: "#{prefix}[#{idx}]")
             end
           end
