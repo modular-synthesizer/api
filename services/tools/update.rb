@@ -6,6 +6,10 @@ module Modusynth
 
         def update instance, **payload
           instance.update(payload.slice(:name, :slots))
+          if payload.key?(:categoryId)
+            category =  Modusynth::Services::Categories.instance.find_or_fail(id: payload[:categoryId])
+            instance.update(category:)
+          end
           if payload[:nodes].instance_of?(Array)
             instance.inner_nodes = InnerNodes.instance.build_all(payload[:nodes], prefix: 'nodes')
           end

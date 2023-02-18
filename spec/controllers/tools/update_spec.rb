@@ -55,6 +55,31 @@ RSpec.describe 'PUT /:id' do
         )
       end
     end
+    describe 'Update the category' do
+      let!(:category) { create(:category, name: 'common') }
+
+      before do
+        put "/#{tool.id.to_s}", {
+          auth_token: session.token,
+          categoryId: category.id.to_s
+        }
+      end
+      it 'Returns a 200 (OK) status code' do
+        expect(last_response.status).to be 200
+      end
+      it 'Returns the correct body' do
+        expect(last_response.body).to include_json(
+          category: {id: category.id.to_s}
+        )
+      end
+      describe 'The update category' do
+        before { tool.reload }
+
+        it 'Has the correct category' do
+          expect(tool.category.id).to eq category.id
+        end
+      end
+    end
     describe 'Update the inner nodes' do
       before do
         node = tool.inner_nodes.first
