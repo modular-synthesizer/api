@@ -11,6 +11,8 @@ module Modusynth
         include Mongoid::Document
         include Mongoid::Timestamps
 
+        store_in collection: 'oauth_applications'
+
         field :name, type: String
 
         field :public_key, type: String
