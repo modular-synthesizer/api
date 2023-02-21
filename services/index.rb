@@ -8,6 +8,7 @@ module Modusynth
     autoload :Generators, './services/generators'
     autoload :Links, './services/links'
     autoload :Modules, './services/modules'
+    autoload :OAuth, './services/oauth/index'
     autoload :Parameters, './services/parameters'
     autoload :Permissions, './services/permissions/index'
     autoload :Ports, './services/ports'

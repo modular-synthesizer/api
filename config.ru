@@ -12,6 +12,7 @@ require './module'
 Mongoid.load!('config/mongoid.yml', env)
 
 map('/accounts') { run Modusynth::Controllers::Accounts.new }
+map('/applications') { run Modusynth::Controllers::Applications.new }
 map('/categories') { run Modusynth::Controllers::Categories.new }
 map('/generators') { run Modusynth::Controllers::Generators.new }
 map('/groups') { run Modusynth::Controllers::Groups.new }

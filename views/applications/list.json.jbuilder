@@ -1,0 +1,1 @@
+json.partial! 'applications/application', collection: applications, as: :application

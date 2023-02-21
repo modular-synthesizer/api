@@ -3,6 +3,7 @@
 module Modusynth
   module Controllers
     autoload :Accounts, './controllers/accounts'
+    autoload :Applications, './controllers/applications'
     autoload :Base, './controllers/base'
     autoload :Categories, './controllers/categories'
     autoload :Generators, './controllers/generators'

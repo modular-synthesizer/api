@@ -6,6 +6,7 @@ module Modusynth
     autoload :Link, './models/link'
     autoload :Module, './models/module'
     autoload :Modules, './models/modules/index'
+    autoload :OAuth, './models/oauth/index'
     autoload :Permissions, './models/permissions/index'
     autoload :Synthesizer, './models/synthesizer'
     autoload :Session, './models/session'

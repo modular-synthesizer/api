@@ -26,6 +26,8 @@ module Modusynth
 
       has_many :synthesizers, class_name: '::Modusynth::Models::Account', inverse_of: :account
 
+      has_many :applications, class_name: '::Modusynth::Models::OAuth::Application', inverse_of: :account
+
       has_and_belongs_to_many :groups,
         class_name: '::Modusynth::Models::Permissions::Group',
         inverse_of: :accounts
