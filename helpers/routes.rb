@@ -12,6 +12,12 @@ module Modusynth
         auth_service = Modusynth::Services::Authentication.instance
 
         send verb, path do
+          if ENV['RACK_ENV'] != 'test'
+            Modusynth::Services::OAuth::Applications.instance.authenticate(
+              request.env['HTTP_X_PUBLIC_KEY'],
+              request.env['HTTP_X_PRIVATE_KEY'],
+            )
+          end
           if options[:authenticated]
             @session = auth_service.authenticate(symbolized_params)
             auth_service.check_privileges(@session) if options[:admin]
@@ -37,6 +43,10 @@ module Modusynth
           admin: false
         }
         defaults.merge options
+      end
+
+      def check_application_authentication
+        binding.pry
       end
     end
   end
