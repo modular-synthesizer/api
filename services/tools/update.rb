@@ -31,6 +31,15 @@ module Modusynth
               service: Parameters.instance,
               prefix: 'parameters'
             )
+            instance.parameters.each do |parameter|
+              instance.modules.each do |mod|
+                if mod.parameters.where(parameter:).first.nil?
+                  Modusynth::Models::Modules::Parameter.create(
+                    module: mod, parameter:, value: parameter.descriptor.default
+                  )
+                end
+              end
+            end
           end
           if payload[:controls].instance_of?(Array)
             instance.controls = update_association(

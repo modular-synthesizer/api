@@ -215,7 +215,7 @@ RSpec.describe 'PUT /:id' do
     describe 'Update the parameters list' do
       let!(:synthesizer) { create(:synthesizer, account:) }
       let!(:mod) { create(:module, tool: tool, synthesizer:) }
-      let!(:descriptor) { Modusynth::Models::Tools::Descriptor.first }
+      let!(:descriptor) { create(:frequency_descriptor, name: 'lowFrequency') }
 
       before do
         put "/#{tool.id.to_s}", {

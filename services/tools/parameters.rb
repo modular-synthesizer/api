@@ -18,7 +18,9 @@ module Modusynth
         end
 
         def delete descriptor, **_
-          descriptor.instances.delete_all
+          descriptor.tool.modules.each do |mod|
+            mod.parameters.where(parameter: descriptor).all.delete
+          end
           descriptor.delete
         end
 
