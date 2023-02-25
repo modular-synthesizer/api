@@ -22,3 +22,7 @@ If you execute the project in development, you do not need environment variables
 ## Run the application
 
 Go to your application folder and run the `rackup` command, you can access the application at `http://localhost:9292`
+
+## Run tests
+
+To run tests, just go to a terminal and run `bundle exec rspec`
