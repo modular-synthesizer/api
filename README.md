@@ -26,3 +26,7 @@ Go to your application folder and run the `rackup` command, you can access the a
 ## Run tests
 
 To run tests, just go to a terminal and run `bundle exec rspec`
+
+## Lint the application
+
+TO run the linter, use the `rubocop` gem with the command `bundle exec rubocop`. For now only controllers have been linted.
