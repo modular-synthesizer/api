@@ -8,7 +8,12 @@ module Modusynth
         render_json 'accounts/account.json', status: 201, account:
       end
 
-      api_route 'get', '/:id' do
+      api_route 'get', '/own' do
+        account = service.find_or_fail(id: @session.account.id)
+        render_json 'accounts/account.json', account:
+      end
+
+      api_route 'get', '/:id', admin: true do
         account = service.find_or_fail(id: params[:id])
         render_json 'accounts/account.json', account:
       end

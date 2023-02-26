@@ -4,7 +4,12 @@ RSpec.describe 'GET /accounts/:id' do
   end
 
   let!(:account) { create(:account) }
-  let!(:session) { create(:session, account: account) }
+
+  let!(:admin) { create(:account, admin: true) }
+  let!(:session) { create(:session, account: admin) }
+
+  let!(:forbidden_user) { create(:account, admin: false) }
+  let!(:forbidden_session) { create(:session, account: forbidden_user) }
 
   describe 'Nominal case' do
     before do
@@ -22,5 +27,20 @@ RSpec.describe 'GET /accounts/:id' do
     end
   end
 
-  include_examples 'authentication', 'get', "/anything"
+  describe 'Error cases' do
+    before do
+      get "/#{account.id.to_s}", {auth_token: forbidden_session.token}
+    end
+    it 'Returns a 403 (Forbidden) status code' do
+      expect(last_response.status).to be 403
+    end
+    it 'Returns the correct body' do
+      expect(last_response.body).to include_json(
+        key: 'auth_token',
+        message: 'forbidden'
+      )
+    end
+  end
+
+  include_examples 'authentication', 'get', "/own"
 end
