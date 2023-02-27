@@ -18,6 +18,11 @@ module Modusynth
         render_json 'accounts/account.json', account:
       end
 
+      api_route 'put', '/:id/groups', admin: true do
+        account = service.find_and_update_groups(**symbolized_params)
+        render_json 'accounts/account.json', account:
+      end
+
       def service
         Modusynth::Services::Accounts.instance
       end

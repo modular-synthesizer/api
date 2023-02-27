@@ -2,6 +2,9 @@ RSpec.describe 'POST /accounts' do
   def app
     Modusynth::Controllers::Accounts
   end
+
+  let!(:group) { create(:group, is_default: true, slug: 'default-group') }
+
   describe 'Nominal case' do
     before do
       payload = {
@@ -18,7 +21,10 @@ RSpec.describe 'POST /accounts' do
     it 'Returns the correct body' do
       expect(last_response.body).to include_json(
         username: 'babausse',
-        email: 'courtois.vincent@outlook.com'
+        email: 'courtois.vincent@outlook.com',
+        groups: [
+          {id: group.id.to_s, slug: 'default-group'}
+        ]
       )
     end
     describe 'The created account' do
@@ -32,6 +38,12 @@ RSpec.describe 'POST /accounts' do
       end
       it 'Has the correct password' do
         expect(account.authenticate('testpassword')).to be_truthy
+      end
+      it 'Has no proper group' do
+        expect(account.groups.count).to be 0
+      end
+      it 'Has groups counting the default groups' do
+        expect(account.all_groups.count).to be 1
       end
     end
   end

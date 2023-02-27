@@ -21,6 +21,19 @@ module Modusynth
         account
       end
 
+      def update instance, **payload
+        if payload[:groups].is_a? Array
+          instance.groups = payload[:groups].map.with_index do |group, index|
+            Permissions::Groups.instance.find_or_fail(id: group[:id], field: "groups[#{index}].id")
+          end
+        end
+        instance
+      end
+
+      def find_and_update_groups id: nil, groups: [], **_
+        find_and_update(id:, groups:)
+      end
+
       def model
         Modusynth::Models::Account
       end

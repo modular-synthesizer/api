@@ -58,6 +58,11 @@ module Modusynth
       def account
         self
       end
+
+      def all_groups
+        default_groups = Modusynth::Models::Permissions::Group.where(is_default: true).to_a
+        (default_groups + groups.to_a).uniq(&:id)
+      end
     end
   end
 end
