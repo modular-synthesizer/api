@@ -30,6 +30,7 @@ RSpec.describe Modusynth::Controllers::Parameters do
           'parameters' => [
             {
               'id': Modusynth::Models::Tools::Descriptor.first.id.to_s,
+              'field' => 'frequency',
               'name' => 'frequency',
               'value' => 440,
               'constraints' => {

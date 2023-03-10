@@ -5,8 +5,8 @@ module Modusynth
     class Parameters < Modusynth::Services::Base
       include Singleton
 
-      def build(name: nil, default: nil, minimum: nil, maximum: nil, step: nil, precision: nil, **_)
-        model.new(name:, default:, minimum:, maximum:, step:, precision:)
+      def build(name: nil, default: nil, minimum: nil, maximum: nil, step: nil, precision: nil, field: nil, **_)
+        model.new(name:, default:, minimum:, maximum:, step:, precision:, field:)
       end
 
       def model

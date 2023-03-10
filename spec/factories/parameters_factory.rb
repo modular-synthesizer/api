@@ -2,6 +2,7 @@ FactoryBot.define do
   factory :descriptor, class: Modusynth::Models::Tools::Descriptor do
     factory :frequency_descriptor do
       name { 'frequency' }
+      field { 'frequency' }
       default { 440 }
       minimum { 20 }
       maximum { 2020 }
