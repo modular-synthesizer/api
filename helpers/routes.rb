@@ -44,10 +44,6 @@ module Modusynth
         }
         defaults.merge options
       end
-
-      def check_application_authentication
-        binding.pry
-      end
     end
   end
 end

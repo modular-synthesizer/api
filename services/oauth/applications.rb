@@ -15,7 +15,6 @@ module Modusynth
 
         def authenticate public_key, private_key
           application = model.find_by(public_key:, private_key:)
-          binding.pry
           raise Modusynth::Exceptions.forbidden 'application' if application.nil?
         end
 

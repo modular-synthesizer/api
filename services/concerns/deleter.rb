@@ -25,8 +25,10 @@ module Modusynth
 
         def remove_if_owner(id:, account:)
           instance = respond_to?(:find) ? find(id:) : model.find(id)
-          if instance.nil? || !instance.respond_to?(:account) || instance.account.id != account.id
-            false
+          if instance.nil? ||
+            !instance.respond_to?(:account) ||
+            (instance.account.id != account.id && !account.admin)
+              false
           else
             respond_to?(:delete) ? delete(instance) : instance.delete
           end
