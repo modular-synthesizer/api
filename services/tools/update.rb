@@ -42,10 +42,9 @@ module Modusynth
             end
           end
           if payload[:controls].instance_of?(Array)
-            instance.controls = update_association(
-              previous: instance.controls,
-              next_list: payload[:controls],
-              service: Controls.instance,
+            instance.controls.delete_all
+            instance.controls = Modusynth::Services::Tools::Controls.instance.build_all(
+              payload[:controls],
               prefix: 'controls'
             )
           end
