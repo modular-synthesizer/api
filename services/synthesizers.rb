@@ -13,7 +13,7 @@ module Modusynth
       end
 
       def update synthesizer, payload
-        synthesizer.update(**payload.slice('x', 'y', 'scale'))
+        synthesizer.update(**payload.slice('x', 'y', 'scale', 'racks', 'slots'))
         synthesizer
       end
 
