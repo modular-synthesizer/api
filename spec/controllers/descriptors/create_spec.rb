@@ -1,6 +1,6 @@
-RSpec.describe Modusynth::Controllers::Parameters do
+RSpec.describe Modusynth::Controllers::Descriptors do
   def app
-    Modusynth::Controllers::Parameters
+    Modusynth::Controllers::Descriptors
   end
 
   describe 'POST /' do
@@ -11,7 +11,6 @@ RSpec.describe Modusynth::Controllers::Parameters do
       before do
         post '/', {
           name: 'foo',
-          field: 'gain',
           minimum: 0,
           maximum: 10,
           default: 0,
@@ -26,23 +25,17 @@ RSpec.describe Modusynth::Controllers::Parameters do
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
           name: 'foo',
-          field: 'gain',
-          value: 0,
-          constraints: {
-            minimum: 0,
-            maximum: 10,
-            step: 1,
-            precision: 0
-          }
+          default: 0,
+          minimum: 0,
+          maximum: 10,
+          step: 1,
+          precision: 0
         )
       end
       describe 'Created parameter' do
         let!(:param) { Modusynth::Models::Tools::Descriptor.first }
         it 'Has the correct name' do
           expect(param.name).to eq 'foo'
-        end
-        it 'Targets the correct field' do
-          expect(param.field).to eq 'gain'
         end
         it 'Has the correct minimum' do
           expect(param.minimum).to be 0

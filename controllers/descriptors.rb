@@ -2,7 +2,7 @@
 
 module Modusynth
   module Controllers
-    class Parameters < Modusynth::Controllers::Base
+    class Descriptors < Modusynth::Controllers::Base
       api_route 'get', '/' do
         descriptors = service.list
         render_json 'descriptors/list.json', descriptors:
@@ -14,7 +14,7 @@ module Modusynth
       end
 
       def service
-        Modusynth::Services::Parameters.instance
+        Modusynth::Services::Descriptors.instance
       end
     end
   end

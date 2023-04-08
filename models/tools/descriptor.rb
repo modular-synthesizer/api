@@ -9,9 +9,6 @@ module Modusynth
 
         store_in collection: 'tools_descriptors'
 
-        # @!attribute [rw] field
-        #   @return [String] the name of the field the parameters linked to this descriptor will be applied on.
-        field :field, type: String
         # @!attribute [rw] name
         #   @return [String] the identifying name of the descriptor, the name is supposedly uniq, but can not be.
         field :name, type: String

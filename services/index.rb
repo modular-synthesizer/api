@@ -9,7 +9,7 @@ module Modusynth
     autoload :Links, './services/links'
     autoload :Modules, './services/modules'
     autoload :OAuth, './services/oauth/index'
-    autoload :Parameters, './services/parameters'
+    autoload :Descriptors, './services/descriptors'
     autoload :Permissions, './services/permissions/index'
     autoload :Ports, './services/ports'
     autoload :Sessions, './services/sessions'

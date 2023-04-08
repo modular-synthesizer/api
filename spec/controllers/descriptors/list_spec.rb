@@ -1,6 +1,6 @@
-RSpec.describe Modusynth::Controllers::Parameters do
+RSpec.describe Modusynth::Controllers::Descriptors do
   def app
-    Modusynth::Controllers::Parameters
+    Modusynth::Controllers::Descriptors
   end
 
   describe 'GET /' do
@@ -14,7 +14,7 @@ RSpec.describe Modusynth::Controllers::Parameters do
         expect(last_response.status).to be 200
       end
       it 'Returns the correct body' do
-        expect(last_response.body).to include_json(parameters: [])
+        expect(last_response.body).to eq('[]')
       end
     end
     describe 'List with items' do
@@ -26,22 +26,17 @@ RSpec.describe Modusynth::Controllers::Parameters do
         expect(last_response.status).to be 200
       end
       it 'Returns the correct body' do
-        expect(last_response.body).to include_json({
-          'parameters' => [
-            {
-              'id': Modusynth::Models::Tools::Descriptor.first.id.to_s,
-              'field' => 'frequency',
-              'name' => 'frequency',
-              'value' => 440,
-              'constraints' => {
-                'minimum' => 20,
-                'maximum' => 2020,
-                'step' => 1.0,
-                'precision' => 0,
-              }
-            }
-          ]
-        })
+        expect(last_response.body).to include_json([
+          {
+            id: Modusynth::Models::Tools::Descriptor.first.id.to_s,
+            name: 'frequency',
+            default: 440,
+            minimum: 20,
+            maximum: 2020,
+            step: 1.0,
+            precision: 0,
+          }
+        ])
       end
     end
 
