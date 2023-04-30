@@ -4,20 +4,20 @@ metadata:
   namespace: <NAMESPACE>
   name: api-deployment
   labels:
-    app: modusynth-api
+    app: synple-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: modusynth-api
+      app: synple-api
   template:
     metadata:
       labels:
-        app: modusynth-api
+        app: synple-api
     spec:
       dnsPolicy: Default
       containers:
-        - name: modusynth-api
+        - name: synple-api
           image: virtuatable/modusynth-api:<VERSION>
           args:
             - web

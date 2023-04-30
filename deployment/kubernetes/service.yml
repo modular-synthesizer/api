@@ -4,10 +4,10 @@ metadata:
   namespace: <NAMESPACE>
   name: api-service
   labels:
-    app: modusynth-api
+    app: synple-api
 spec:
   selector:
-    app: modusynth-api
+    app: synple-api
   ports:
     - name: http
       protocol: TCP
