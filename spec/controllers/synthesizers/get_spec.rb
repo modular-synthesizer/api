@@ -19,6 +19,10 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
           id: synthesizer.id.to_s,
+          creator: {
+            username: babausse.username,
+            id: babausse.id.to_s
+          },
           name: synthesizer.name,
           x: 0,
           y: 0,
