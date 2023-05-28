@@ -14,11 +14,13 @@ module Modusynth
           controls: [],
           ports: [],
           categoryId: nil,
+          experimental: true,
           **rest
         )
           Modusynth::Models::Tool.new(
             name:,
             slots:,
+            experimental:,
             inner_nodes: InnerNodes.instance.build_all(nodes, prefix: 'nodes'),
             inner_links: Links.instance.build_all(links, prefix: 'links'),
             parameters: Parameters.instance.build_all(parameters, prefix: 'parameters'),

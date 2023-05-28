@@ -12,11 +12,15 @@ module Modusynth
 
       store_in collection: 'tools'
 
+      # @!attribute [rw] name
+      #   @return [String] the name, not necessarily uniq, of the tool to get the translation from.
       field :name, type: String
-
       # @!attribute [rw] slots
-      # @return [Integer] The number of slots the tool will take in each rack.
+      #   @return [Integer] The number of slots the tool will take in each rack.
       field :slots, type: Integer
+      # @!attribute [rw] experimental
+      #   @return [Boolean] TRUE if the tool is still an experimentation and not ready to be released, FALSE otherwise.
+      field :experimental, type: Boolean, default: true
 
       belongs_to :category, class_name: '::Modusynth::Models::Category', inverse_of: :tools, optional: true
 
@@ -25,9 +29,10 @@ module Modusynth
       embeds_many :inner_links, class_name: '::Modusynth::Models::Tools::InnerLink'
 
       # @!attribute [rw] controls
-      #   @return [Modusynth::Models::Tools::Control] the list of graphical representation ok knobs, labels, etc.
+      #   @return [Array<Modusynth::Models::Tools::Control>] the list of graphical representation ok knobs, labels, etc.
       has_many :controls, class_name: '::Modusynth::Models::Tools::Control', inverse_of: :tool
-
+      # @!attribute [rw] ports
+      #   @return [Array<Modusynth::Models::Tools::Port>] the list of exposed input/output ports for the module.
       has_many :ports, class_name: '::Modusynth::Models::Tools::Port', inverse_of: :tool
 
       has_many :parameters, class_name: '::Modusynth::Models::Tools::Parameter', inverse_of: :tool

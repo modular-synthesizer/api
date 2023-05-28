@@ -11,9 +11,9 @@ module Modusynth
       module Finder
         extend ActiveSupport::Concern
 
-        def list
+        def list **criteria
           check_model_implementation! caller: 'find'
-          model.all
+          model.where(**criteria)
         end
 
 

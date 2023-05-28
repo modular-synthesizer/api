@@ -1,5 +1,5 @@
 json.id tool.id.to_s
-json.(tool, :name, :slots)
+json.(tool, :name, :slots, :experimental)
 json.ports do
   json.partial! 'tools/port', collection: tool.ports, as: :port
 end
