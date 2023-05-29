@@ -1,6 +1,7 @@
 module Modusynth
   module Services
     autoload :Accounts, './services/accounts'
+    autoload :AudioProcessors, './services/audio_processors'
     autoload :Authentication, './services/authentication'
     autoload :Base, './services/base'
     autoload :Categories, './services/categories'

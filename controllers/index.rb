@@ -2,6 +2,7 @@
 
 module Modusynth
   module Controllers
+    autoload :AudioProcessors, './controllers/audio_processors'
     autoload :Accounts, './controllers/accounts'
     autoload :Applications, './controllers/applications'
     autoload :Base, './controllers/base'
