@@ -98,6 +98,45 @@ RSpec.describe Modusynth::Controllers::Tools do
           end
         end
       end
+      describe 'Tools with placed inner nodes' do
+        before do
+          post '/', {
+            name: 'VCA',
+            slots: 3,
+            auth_token: session.token,
+            categoryId: dopefun.id.to_s,
+            nodes: [{ name: 'gain', generator: 'GainNode', x: 100, y: 200}]
+          }.to_json
+        end
+        it 'Returns a 201 (Created) status code' do
+          expect(last_response.status).to be 201
+        end
+        it 'Returns the correct body' do
+          creation = Modusynth::Models::Tool.first
+          expect(last_response.body).to include_json(
+            id: creation.id.to_s,
+            name: 'VCA',
+            slots: 3,
+            nodes: [{
+              id: creation.inner_nodes.first.id.to_s,
+              name: 'gain',
+              generator: 'GainNode',
+              x: 100,
+              y: 200
+            }]
+          )
+        end
+        describe 'The created node coordinates' do
+          let!(:creation) { Modusynth::Models::Tool.first.inner_nodes.first }
+
+          it 'Has the correct X coordinate' do
+            expect(creation.x).to be 100
+          end
+          it 'Has the correct Y coordinate' do
+            expect(creation.y).to be 200
+          end
+        end
+      end
       describe 'Tool with inner links' do
         before do
           post '/', {

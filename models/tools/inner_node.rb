@@ -8,8 +8,15 @@ module Modusynth
         include Mongoid::Document
 
         field :name, type: String
-
+        
         field :generator, type: String
+
+        # @!attribute [rw] x
+        #   @return [Integer] the X coordinate of the graphical representation of the node.
+        field :x, type: Integer, default: 0
+        # @!attribute [rw] y
+        #   @return [Integer] the Y coordinate of the graphical representation of the node.
+        field :y, type: Integer, default: 0
 
         validates :name,
           presence: { message: 'required' },
