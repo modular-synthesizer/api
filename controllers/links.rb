@@ -20,7 +20,7 @@ module Modusynth
       end
 
       api_route 'delete', '/:id' do
-        service.delete(params[:id])
+        service.remove(id: params[:id])
         halt 204
       end
 

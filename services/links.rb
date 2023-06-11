@@ -33,16 +33,6 @@ module Modusynth
         link
       end
 
-      def delete id
-        find_or_fail(id).delete
-      end
-
-      def find_or_fail id
-        link = Modusynth::Models::Link.find(id)
-        raise Modusynth::Exceptions.unknown 'id' if link.nil?
-        link
-      end
-
       def model
         Modusynth::Models::Link
       end
