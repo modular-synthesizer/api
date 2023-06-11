@@ -23,7 +23,7 @@ module Modusynth
       end
 
       delete '/:id' do
-        service.delete(id: payload[:id])
+        service.remove(id: payload[:id])
         halt 204
       end
 
