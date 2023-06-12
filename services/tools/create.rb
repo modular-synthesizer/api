@@ -17,7 +17,7 @@ module Modusynth
           experimental: true,
           **rest
         )
-          Modusynth::Models::Tool.new(
+          tool = Modusynth::Models::Tool.new(
             name:,
             slots:,
             experimental:,
@@ -25,9 +25,13 @@ module Modusynth
             inner_links: Links.instance.build_all(links, prefix: 'links'),
             parameters: Parameters.instance.build_all(parameters, prefix: 'parameters'),
             controls: Controls.instance.build_all(controls, prefix: 'controls'),
-            ports: Ports.instance.build_all(ports, prefix: 'ports'),
             category: Categories.instance.find_or_fail(id: categoryId, field: 'categoryId')
           )
+          ports = ports.map do |p|
+            p[:tool] = tool; p
+          end
+          Ports.instance.build_all(ports, prefix: 'ports')
+          tool
         end
 
         def validate! **payload

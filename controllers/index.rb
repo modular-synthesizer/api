@@ -12,6 +12,7 @@ module Modusynth
     autoload :Links, './controllers/links'
     autoload :Modules, './controllers/modules'
     autoload :Parameters, './controllers/parameters'
+    autoload :Ports, './controllers/ports'
     autoload :Rights, './controllers/rights'
     autoload :Sessions, './controllers/sessions'
     autoload :Synthesizers, './controllers/synthesizers'
