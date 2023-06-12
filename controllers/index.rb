@@ -17,5 +17,6 @@ module Modusynth
     autoload :Sessions, './controllers/sessions'
     autoload :Synthesizers, './controllers/synthesizers'
     autoload :Tools, './controllers/tools'
+    autoload :ToolsResources, './controllers/tools_resources/index'
   end
 end

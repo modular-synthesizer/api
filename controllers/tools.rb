@@ -32,28 +32,8 @@ module Modusynth
         halt 204
       end
 
-      # The following routes are used when editing a tool to add or remove items from resources.
-
-      [:ports].each do |resource|
-        api_route 'post', "/:tool_id/#{resource}", admin: true do
-          port = services[resource].create(**symbolized_params)
-          render_json "tools/#{services[resource].view}.json", status: 201, port:
-        end
-
-        api_route 'delete', '/:tool_id/:resource/:id', admin: true do
-          services[resource].remove_in(**symbolized_params)
-          halt 204
-        end
-      end
-
       def service
         Modusynth::Services::Tools::Find.instance
-      end
-
-      def services
-        {
-          ports: Modusynth::Services::Tools::Ports.instance
-        }
       end
     end
   end

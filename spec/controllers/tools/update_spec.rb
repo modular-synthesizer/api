@@ -149,69 +149,6 @@ RSpec.describe 'PUT /:id' do
         end
       end
     end
-    describe "Update the ports list" do
-      # We first create a tool with the desired ports
-      let!(:input) { build(:input_port, name: 'INPUT1') }
-      let!(:output) { build(:output_port, name: 'OUTPUT1') }
-      let!(:other_output) { build(:output_port, name: 'OUTPUT2') }
-      let!(:ports_tool) {
-        tool = create(:tool, category: dopefun, ports: [ input, output, other_output ])
-        tool.ports.map(&:save!)
-        tool
-      }
-      # We then instanciate the tool in a synthesizer
-      let!(:synthesizer) { create(:synthesizer, account:) }
-      let!(:mod) { create(:module, tool: ports_tool, synthesizer:) }
-      # Lastly, we create the links from the ports in the mod
-      # We affect variables for the mod ports so that we can manipulate them in specs
-      let!(:m_input) { mod.ports.where(descriptor: input).first }
-      let!(:m_output) { mod.ports.where(descriptor: output).first }
-      let!(:m_other_output) { mod.ports.where(descriptor: other_output).first }
-      let!(:link) { create(:link, from: m_input, to: m_output, synthesizer:) }
-      let!(:other_link) { create(:link, from: m_input, to: m_other_output, synthesizer:) }
-
-      before do
-        put "/#{ports_tool.id.to_s}", {
-          auth_token: session.token,
-          ports: [
-            {name: 'INPUT2', kind: 'input', target: 'any_target', index: 0},
-            {id: other_output.id.to_s},
-            {id: input.id.to_s}
-          ]
-        }.to_json
-      end
-      it 'Returns a 200 (OK) status code' do
-        expect(last_response.status).to be 200
-      end
-      it 'Returns the correct body' do
-        expect(last_response.body).to include_json(
-          ports: [
-            {name: 'INPUT1'},
-            {name: 'OUTPUT2'},
-            {name: 'INPUT2'}
-          ]
-        )
-      end
-      describe 'The updated tool' do
-        let!(:reload) { ports_tool.reload }
-
-        it 'Has deleted the output port' do
-          expect(ports_tool.ports.where(name: 'OUTPUT1').first).to be_nil
-        end
-        it 'Has not deleted the output port' do
-          expect(ports_tool.ports.where(name: 'OUTPUT2').count).to be 1
-        end
-        it 'Has created the second input port' do
-          expect(ports_tool.ports.where(name: 'INPUT2').count).to be 1
-        end
-        it 'Has not deleted the link that should not be deleted' do
-          expect(Modusynth::Models::Link.where(to: m_output).count).to be 0
-        end
-        it 'Has deleted the other link' do
-          expect(Modusynth::Models::Link.where(to: m_other_output).count).to be 1
-        end
-      end
-    end
     describe 'Update the parameters list' do
       let!(:synthesizer) { create(:synthesizer, account:) }
       let!(:mod) { create(:module, tool: tool, synthesizer:) }

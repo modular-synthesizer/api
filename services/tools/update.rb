@@ -16,15 +16,6 @@ module Modusynth
           if payload[:links].instance_of?(Array)
             instance.inner_links = Links.instance.build_all(payload[:links], prefix: 'links')
           end
-          if payload[:ports].instance_of?(Array)
-            instance.ports = update_association(
-              previous: instance.ports,
-              next_list: payload[:ports],
-              service: Ports.instance,
-              prefix: 'ports',
-              tool: instance
-            )
-          end
           if payload[:parameters].instance_of?(Array)
             instance.parameters = update_association(
               previous: instance.parameters,
@@ -52,7 +43,7 @@ module Modusynth
           instance
         end
 
-        def update_association previous:, next_list:, service:, prefix:, tool:
+        def update_association previous:, next_list:, service:, prefix:
           # Step 1 : delete items from previous not in next (+ mod ports and links)
           previous.each do |item|
             if next_list.select { |i| i[:id] == item.id.to_s }.count == 0
@@ -65,7 +56,7 @@ module Modusynth
               service.find_or_fail(id: item[:id], field: "#{prefix}[#{idx}].id")
             else
               item.delete(:id)
-              service.create(**item, prefix: "#{prefix}[#{idx}]", tool:)
+              service.create(**item, prefix: "#{prefix}[#{idx}]")
             end
           end
         end

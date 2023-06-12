@@ -12,8 +12,6 @@ module Modusynth
           descriptor
         end
 
-        def build_all_with(items, prefix: '', **payload)
-
         def validate! **payload
           build(**payload).validate!
         end
@@ -27,10 +25,6 @@ module Modusynth
 
         def model
           Modusynth::Models::Tools::Port
-        end
-
-        def view
-          '_port'
         end
       end
     end

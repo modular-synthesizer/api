@@ -1,7 +1,7 @@
 RSpec.describe 'POST /tools/:tool_id/ports' do
 
   def app
-    Modusynth::Controllers::Ports
+    Modusynth::Controllers::ToolsResources::Ports
   end
 
   let!(:account) { create(:account, admin: true) }

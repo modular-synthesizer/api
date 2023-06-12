@@ -1,7 +1,7 @@
 RSpec.describe 'DELETE /:tool_id/ports/:id' do
 
   def app
-    Modusynth::Controllers::Ports
+    Modusynth::Controllers::ToolsResources::Ports
   end
   
   let!(:account) { create(:account, admin: true) }

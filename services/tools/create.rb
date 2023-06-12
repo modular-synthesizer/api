@@ -12,12 +12,11 @@ module Modusynth
           links: [],
           parameters: [],
           controls: [],
-          ports: [],
           categoryId: nil,
           experimental: true,
           **rest
         )
-          tool = Modusynth::Models::Tool.new(
+          Modusynth::Models::Tool.new(
             name:,
             slots:,
             experimental:,
@@ -27,11 +26,6 @@ module Modusynth
             controls: Controls.instance.build_all(controls, prefix: 'controls'),
             category: Categories.instance.find_or_fail(id: categoryId, field: 'categoryId')
           )
-          ports = ports.map do |p|
-            p[:tool] = tool; p
-          end
-          Ports.instance.build_all(ports, prefix: 'ports')
-          tool
         end
 
         def validate! **payload

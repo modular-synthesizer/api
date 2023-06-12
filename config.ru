@@ -24,3 +24,4 @@ map('/rights') { run Modusynth::Controllers::Rights.new }
 map('/sessions') { run Modusynth::Controllers::Sessions.new }
 map('/synthesizers') { run Modusynth::Controllers::Synthesizers.new }
 map('/tools') { run Modusynth::Controllers::Tools.new }
+map('/tools/ports') { run Modusynth::Controllers::ToolsResources::Ports.new }

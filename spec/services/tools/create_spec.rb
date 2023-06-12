@@ -85,43 +85,6 @@ RSpec.describe 'Tool creation service' do
         end
       end
     end
-    describe 'Tool with a valid port' do
-      let!(:creation) do
-        service.create(
-          name: 'TestTool',
-          slots: 10,
-          categoryId: dopefun.id.to_s,
-          ports: [{
-            kind: 'input',
-            name: 'test',
-            target: 'target',
-            index: 0
-          }]
-        )
-      end
-      it 'Has persisted the tool' do
-        expect(creation.persisted?).to be_truthy
-      end
-      describe 'The created port' do
-        let!(:port) { creation.ports.first }
-
-        it 'Has persisted the port' do
-          expect(port.persisted?).to be_truthy
-        end
-        it 'Has set the kind' do
-          expect(port.kind).to eq 'input'
-        end
-        it 'Has set the name' do
-          expect(port.name).to eq 'test'
-        end
-        it 'Has set the target' do
-          expect(port.target).to eq 'target'
-        end
-        it 'Has set the index' do
-          expect(port.index).to be 0
-        end
-      end
-    end
     describe 'Tool with a valid parameter' do
       let!(:creation) do
         service.create(
@@ -406,53 +369,6 @@ RSpec.describe 'Tool creation service' do
         expect { service.build_and_validate!(**payload) }.to raise_error(
           an_instance_of(Modusynth::Exceptions::Service)
           .and having_attributes(key: 'index', error: 'value', prefix: 'links[0].to.')
-        )
-      end
-    end
-    describe 'Ports errors' do
-      def create_payload port
-        {name: 'TestTool', slots: 10, categoryId: dopefun.id.to_s, ports: [port]}
-      end
-      it 'Fails if the name is not given' do
-        payload = create_payload({kind: 'input', target: 'test', index: 0})
-        expect { service.build_and_validate!(**payload) }.to raise_error(
-          an_instance_of(Modusynth::Exceptions::Service)
-          .and having_attributes(key: 'name', error: 'required', prefix: 'ports[0].')
-        )
-      end
-      it 'Fails if the name is given as nil' do
-        payload = create_payload({kind: 'input', target: 'test', index: 0, name: nil})
-        expect { service.build_and_validate!(**payload) }.to raise_error(
-          an_instance_of(Modusynth::Exceptions::Service)
-          .and having_attributes(key: 'name', error: 'required', prefix: 'ports[0].')
-        )
-      end
-      it 'Fails if the name is too short' do
-        payload = create_payload({kind: 'input', target: 'test', index: 0, name: 'a'})
-        expect { service.build_and_validate!(**payload) }.to raise_error(
-          an_instance_of(Modusynth::Exceptions::Service)
-          .and having_attributes(key: 'name', error: 'length', prefix: 'ports[0].')
-        )
-      end
-      it 'Fails if the index is not given' do
-        payload = create_payload({kind: 'input', target: 'test', name: 'test'})
-        expect { service.build_and_validate!(**payload) }.to raise_error(
-          an_instance_of(Modusynth::Exceptions::Service)
-          .and having_attributes(key: 'index', error: 'required', prefix: 'ports[0].')
-        )
-      end
-      it 'Fails if the index is given as nil' do
-        payload = create_payload({kind: 'input', target: 'test', name: 'test', index: nil})
-        expect { service.build_and_validate!(**payload) }.to raise_error(
-          an_instance_of(Modusynth::Exceptions::Service)
-          .and having_attributes(key: 'index', error: 'required', prefix: 'ports[0].')
-        )
-      end
-      it 'Fails if the index is below zero' do
-        payload = create_payload({kind: 'input', target: 'test', name: 'test', index: -1})
-        expect { service.build_and_validate!(**payload) }.to raise_error(
-          an_instance_of(Modusynth::Exceptions::Service)
-          .and having_attributes(key: 'index', error: 'value', prefix: 'ports[0].')
         )
       end
     end
