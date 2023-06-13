@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Controllers
     module ToolsResources
       class Ports < Modusynth::Controllers::Base
-
         api_route 'post', '/', admin: true do
           tool = tools_service.find_or_fail(id: symbolized_params[:tool_id], field: 'tool_id')
           port = service.create(**symbolized_params, tool:)
