@@ -30,6 +30,11 @@ module Modusynth
           end
         end
 
+        def build_with_tool tool, items, prefix: ''
+          items_with_tool = items.map { |i| i.merge(tool:) }
+          build_all items_with_tool, prefix:
+        end
+
         # Validates the payload with the rules defined in the service, and builds the item without persisting it.
         def build_and_validate! prefix: '', **payload
           begin

@@ -216,6 +216,80 @@ RSpec.describe Modusynth::Controllers::Tools do
           )
         end
       end
+      describe 'Tool with inputs' do
+        before do
+          post '/', {
+            name: 'VCA',
+            slots: 3,
+            auth_token: session.token,
+            categoryId: dopefun.id.to_s,
+            ports: [{kind: 'input', name: 'INPUT', target: 'gain', index: 0}]
+          }.to_json
+        end
+
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            id: Modusynth::Models::Tool.first.id.to_s,
+            name: 'VCA',
+            slots: 3,
+            ports: [{name: 'INPUT', index: 0, target: 'gain'}]
+          )
+        end
+        describe 'Created input port' do
+          let!(:tool) { Modusynth::Models::Tool.first }
+          let!(:input) { tool.inputs.first }
+
+          it 'Has created only one input' do
+            expect(tool.inputs.size).to be 1
+          end
+          it 'Has created a port with the correct name' do
+            expect(input.name).to eq 'INPUT'
+          end
+          it 'Has created a port with the correct targets' do
+            expect(input.target).to eq 'gain'
+          end
+          it 'Has created a port with the correct index' do
+            expect(input.index).to be 0
+          end
+        end
+      end
+      describe 'Tool with outputs' do
+        before do
+          post '/', {
+            name: 'VCA',
+            slots: 3,
+            auth_token: session.token,
+            categoryId: dopefun.id.to_s,
+            ports: [{kind: 'output', name: 'OUTPUT', target: 'gain', index: 0}]
+          }.to_json
+        end
+
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            id: Modusynth::Models::Tool.first.id.to_s,
+            name: 'VCA',
+            slots: 3,
+            ports: [{name: 'OUTPUT', index: 0, target: 'gain'}]
+          )
+        end
+        describe 'Created input port' do
+          let!(:tool) { Modusynth::Models::Tool.first }
+          let!(:output) { tool.outputs.first }
+
+          it 'Has created only one input' do
+            expect(tool.outputs.size).to be 1
+          end
+          it 'Has created a port with the correct name' do
+            expect(output.name).to eq 'OUTPUT'
+          end
+          it 'Has created a port with the correct targets' do
+            expect(output.target).to eq 'gain'
+          end
+          it 'Has created a port with the correct index' do
+            expect(output.index).to be 0
+          end
+        end
+      end
     end
 
     describe 'Error cases' do

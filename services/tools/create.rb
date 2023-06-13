@@ -10,13 +10,14 @@ module Modusynth
           slots: nil,
           nodes: [],
           links: [],
+          ports: [],
           parameters: [],
           controls: [],
           categoryId: nil,
           experimental: true,
           **rest
         )
-          Modusynth::Models::Tool.new(
+          tool = Modusynth::Models::Tool.new(
             name:,
             slots:,
             experimental:,
@@ -26,6 +27,8 @@ module Modusynth
             controls: Controls.instance.build_all(controls, prefix: 'controls'),
             category: Categories.instance.find_or_fail(id: categoryId, field: 'categoryId')
           )
+          tool.ports = ports_service.build_with_tool(tool, ports, prefix: 'ports')
+          tool
         end
 
         def validate! **payload
@@ -33,6 +36,12 @@ module Modusynth
             raise Modusynth::Exceptions::Service.new(key: 'categoryId', error: 'required')
           end
           build(**payload).validate!
+        end
+
+        private
+
+        def ports_service
+          Modusynth::Services::ToolsResources::Ports.instance
         end
       end
     end
