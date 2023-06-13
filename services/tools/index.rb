@@ -11,7 +11,6 @@ module Modusynth
       autoload :LinkEnds, './services/tools/link_ends'
       autoload :Links, './services/tools/links'
       autoload :Parameters, './services/tools/parameters'
-      autoload :Ports, './services/tools/ports'
       autoload :Update, './services/tools/update'
     end
   end

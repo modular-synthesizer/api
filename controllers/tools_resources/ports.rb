@@ -21,7 +21,7 @@ module Modusynth
         end
 
         def service
-          Modusynth::Services::Tools::Ports.instance
+          Modusynth::Services::ToolsResources::Ports.instance
         end
 
         def tools_service
