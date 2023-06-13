@@ -141,7 +141,7 @@ RSpec.describe 'POST /tools/:tool_id/ports' do
             auth_token: session.token,
             name: 'custom port',
             kind: 'input',
-            index: -0,
+            index: 0,
             target: 'test target'
           }
         end
@@ -161,7 +161,7 @@ RSpec.describe 'POST /tools/:tool_id/ports' do
             tool_id: 'unknown',
             name: 'custom port',
             kind: 'input',
-            index: -0,
+            index: 0,
             target: 'test target'
           }
         end
@@ -171,6 +171,45 @@ RSpec.describe 'POST /tools/:tool_id/ports' do
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
             key: 'tool_id', message: 'unknown'
+          )
+        end
+      end
+      describe 'When the kind is not given' do
+        before do
+          post '/', {
+            auth_token: session.token,
+            tool_id: tool.id.to_s,
+            name: 'custom port',
+            index: 0,
+            target: 'test target'
+          }
+        end
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            key: 'kind', message: 'required'
+          )
+        end
+      end
+      describe 'When the kind is not in the possible values' do
+        before do
+          post '/', {
+            auth_token: session.token,
+            tool_id: tool.id.to_s,
+            name: 'custom port',
+            kind: 'unknown',
+            index: 0,
+            target: 'test target'
+          }
+        end
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            key: 'kind', message: 'value'
           )
         end
       end

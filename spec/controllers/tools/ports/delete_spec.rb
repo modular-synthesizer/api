@@ -13,6 +13,8 @@ RSpec.describe 'DELETE /:tool_id/ports/:id' do
   let!(:mod) { create(:module, tool:, synthesizer:) }
 
   describe 'Nominal case' do
+    let!(:link) { create(:link, from: mod.ports.first, to: mod.ports.last, synthesizer:) }
+    
     before do
       delete "/#{port.id.to_s}", { auth_token: session.token }
     end
@@ -24,6 +26,11 @@ RSpec.describe 'DELETE /:tool_id/ports/:id' do
     end
     it 'Has deleted the port in the associated modules' do
       expect(mod.ports.where(descriptor_id: port.id).count).to be 0
+    end
+    describe 'Links deletion' do
+      it 'Has deleted every link targetting this port' do
+        expect(Modusynth::Models::Link.count).to be 0
+      end
     end
   end
   describe 'Alternative cases' do
