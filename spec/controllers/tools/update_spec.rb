@@ -149,43 +149,6 @@ RSpec.describe 'PUT /:id' do
         end
       end
     end
-    describe 'Update the parameters list' do
-      let!(:synthesizer) { create(:synthesizer, account:) }
-      let!(:mod) { create(:module, tool: tool, synthesizer:) }
-      let!(:descriptor) { create(:frequency_descriptor, name: 'lowFrequency') }
-
-      before do
-        put "/#{tool.id.to_s}", {
-          auth_token: session.token,
-          parameters: [{descriptorId: descriptor.id.to_s, targets: ['target'], name: 'testparam'}]
-        }
-      end
-      it 'Returns a 200 (OK) status code' do
-        expect(last_response.status).to be 200
-      end
-      it 'Returns the correct body' do
-        expect(last_response.body).to include_json(
-          parameters: [ {name: 'testparam'} ]
-        )
-      end
-      describe 'The updated parameters' do
-        before do
-          tool.reload
-        end
-        it 'Has not created more parameters' do
-          expect(tool.parameters.count).to be 1
-        end
-        it 'Has created the correzct parameter' do
-          expect(tool.parameters.first.name).to eq 'testparam'
-        end
-        it 'Has deleted the parameter from the module' do
-          expect(mod.parameters.count).to be 1
-        end
-        it 'Has created the parameter in the module with the correct descriptor' do
-          expect(mod.parameters.first.parameter.descriptor.id.to_s).to eq descriptor.id.to_s
-        end
-      end
-    end
     describe 'Update the controls list' do
       let!(:control) { build(:button, payload: {foo: 'bar'}) }
 

@@ -1,4 +1,4 @@
-RSpec.describe 'DELETE /:tool_id/ports/:id' do
+RSpec.describe 'DELETE /tools/ports/:id' do
 
   def app
     Modusynth::Controllers::ToolsResources::Ports

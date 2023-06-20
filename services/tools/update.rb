@@ -16,23 +16,6 @@ module Modusynth
           if payload[:links].instance_of?(Array)
             instance.inner_links = Links.instance.build_all(payload[:links], prefix: 'links')
           end
-          if payload[:parameters].instance_of?(Array)
-            instance.parameters = update_association(
-              previous: instance.parameters,
-              next_list: payload[:parameters],
-              service: Parameters.instance,
-              prefix: 'parameters'
-            )
-            instance.parameters.each do |parameter|
-              instance.modules.each do |mod|
-                if mod.parameters.where(parameter:).first.nil?
-                  Modusynth::Models::Modules::Parameter.create(
-                    module: mod, parameter:, value: parameter.descriptor.default
-                  )
-                end
-              end
-            end
-          end
           if payload[:controls].instance_of?(Array)
             instance.controls.delete_all
             instance.controls = Modusynth::Services::Tools::Controls.instance.build_all(

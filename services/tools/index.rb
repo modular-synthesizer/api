@@ -10,7 +10,6 @@ module Modusynth
       autoload :InnerNodes, './services/tools/inner_nodes'
       autoload :LinkEnds, './services/tools/link_ends'
       autoload :Links, './services/tools/links'
-      autoload :Parameters, './services/tools/parameters'
       autoload :Update, './services/tools/update'
     end
   end

@@ -46,6 +46,8 @@ module Modusynth
             exc_klass.from_messages(exception.model.errors.messages, prefix:)
           rescue Modusynth::Exceptions::Unknown => exception
             exc_klass.from_unknown(exception, prefix:)
+          rescue Modusynth::Exceptions::BadRequest => exception
+            exc_klass.from_bad_request(exception, prefix:)
           end
         end
         

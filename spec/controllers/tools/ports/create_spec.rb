@@ -1,4 +1,4 @@
-RSpec.describe 'POST /tools/:tool_id/ports' do
+RSpec.describe 'POST /tools/ports' do
 
   def app
     Modusynth::Controllers::ToolsResources::Ports
