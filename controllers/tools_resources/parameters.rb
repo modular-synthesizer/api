@@ -14,7 +14,7 @@ module Modusynth
           parameter = service.find_and_update(**symbolized_params)
           render_json 'tools/_parameter.json', parameter:
         end
-        
+
         api_route 'delete', '/:id', admin: true do
           service.remove(id: symbolized_params[:id])
           halt 204
