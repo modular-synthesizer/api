@@ -9,6 +9,11 @@ module Modusynth
           parameter = service.create(**symbolized_params, tool:)
           render_json 'tools/_parameter.json', status: 201, parameter:
         end
+
+        api_route 'put', '/:id', admin: true do
+          parameter = service.find_and_update(**symbolized_params)
+          render_json 'tools/_parameter.json', parameter:
+        end
         
         api_route 'delete', '/:id', admin: true do
           service.remove(id: symbolized_params[:id])

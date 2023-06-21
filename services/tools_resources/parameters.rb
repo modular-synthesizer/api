@@ -16,18 +16,18 @@ module Modusynth
           parameter
         end
         
-        def update port, **payload
-          delete_links = [:target, :kind, :index].any? do |field|
-            # The to_s here is given because params return a string index, not an integer
-            payload.key?(field) && payload[field] != port[field].to_s
-          end
-          port.update(payload.slice(:name, :target, :kind, :index))
-          if delete_links && port.valid?
-            Modusynth::Models::Modules::Port.where(descriptor: port).each do |mod_port|
-              mod_ports_service.delete_links mod_port
+        def update parameter, **payload
+          parameter.update(payload.slice(:name, :targets))
+          if payload.key? :descriptorId
+            descriptor = Descriptors.instance.find_or_fail(id: payload[:descriptorId], field: 'descriptorId')
+            parameter.update(descriptor:)
+            parameter.instances.each do |ins|
+              descriptor = parameter.descriptor
+              # Clamps the value of the instanciated parameters to avoid illegal values in new descriptor
+              ins.update(value: [descriptor.minimum, descriptor.maximum, ins.value].sort[1])
             end
           end
-          port
+          parameter
         end
 
         def validate! **payload
