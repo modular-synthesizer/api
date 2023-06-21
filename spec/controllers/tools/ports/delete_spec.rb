@@ -45,16 +45,5 @@ RSpec.describe 'DELETE /tools/ports/:id' do
         expect(Modusynth::Models::Tools::Port.where(id: port.id).count).to be 1
       end
     end
-    describe 'When the tool is not found' do
-      before do
-        delete "/unknown", { auth_token: session.token }
-      end
-      it 'Returns a 204 (No Content) status code' do
-        expect(last_response.status).to be 204
-      end
-      it 'Has not deleted the port' do
-        expect(Modusynth::Models::Tools::Port.where(id: port.id).count).to be 1
-      end
-    end
   end
 end

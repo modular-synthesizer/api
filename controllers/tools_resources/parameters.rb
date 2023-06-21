@@ -9,6 +9,11 @@ module Modusynth
           parameter = service.create(**symbolized_params, tool:)
           render_json 'tools/_parameter.json', status: 201, parameter:
         end
+        
+        api_route 'delete', '/:id', admin: true do
+          service.remove(id: symbolized_params[:id])
+          halt 204
+        end
 
         def service
           Modusynth::Services::ToolsResources::Parameters.instance

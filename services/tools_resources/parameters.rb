@@ -34,19 +34,13 @@ module Modusynth
           build(**payload).validate!
         end
 
-        def delete descriptor
-          Modusynth::Models::Modules::Port.where(descriptor:).each do |mod_port|
-            mod_ports_service.remove(id: mod_port.id)
-          end
-          descriptor.delete
+        def delete parameter
+          parameter.instances.each(&:delete)
+          parameter.delete
         end
 
         def model
           Modusynth::Models::Tools::Parameter
-        end
-
-        def mod_ports_service
-          Modusynth::Services::Ports.instance
         end
       end
     end
