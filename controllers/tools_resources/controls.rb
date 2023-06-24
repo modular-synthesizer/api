@@ -10,6 +10,11 @@ module Modusynth
           render_json 'tools/_control.json', status: 201, control:
         end
 
+        api_route 'put', '/:id', admin: true do
+          control = service.find_and_update(**symbolized_params)
+          render_json 'tools/_control.json', control:
+        end
+
         api_route 'delete', '/:id', admin: true do
           service.remove(**symbolized_params)
           halt 204

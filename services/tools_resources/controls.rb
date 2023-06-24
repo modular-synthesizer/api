@@ -10,6 +10,11 @@ module Modusynth
           model.new(tool:, component:, payload:)
         end
 
+        def update control, **payload
+          control.update(payload.slice(:component, :payload))
+          control
+        end
+
         def model
           Modusynth::Models::Tools::Control
         end
