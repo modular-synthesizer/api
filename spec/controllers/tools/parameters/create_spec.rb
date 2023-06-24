@@ -18,8 +18,7 @@ RSpec.describe 'POST /tools/parameters' do
         auth_token: session.token,
         name: 'custom parameter',
         targets: ['node1', 'node2'],
-        descriptorId: descriptor.id.to_s,
-        tool_id: tool.id.to_s
+        descriptorId: descriptor.id.to_s
       }
     end
     it 'Returns a 201 (Created) status code' do
