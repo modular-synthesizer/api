@@ -10,6 +10,11 @@ module Modusynth
           render_json 'tools/_control.json', status: 201, control:
         end
 
+        api_route 'delete', '/:id', admin: true do
+          service.remove(**symbolized_params)
+          halt 204
+        end
+
         def service
           Modusynth::Services::ToolsResources::Controls.instance
         end
