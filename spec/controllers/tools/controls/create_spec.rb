@@ -88,5 +88,25 @@ RSpec.describe 'POST /tools/controls' do
         expect(tool.controls.count).to be 1
       end
     end
+    describe 'When the component has an incorrect format' do
+      before do
+        post '/', {
+          auth_token: session.token,
+          tool_id: tool.id.to_s,
+          component: 'wrong format'
+        }
+      end
+      it 'Returns a 400 (Bad Request) status code' do
+        expect(last_response.status).to be 400
+      end
+      it 'Returns the correct body' do
+        expect(last_response.body).to include_json(
+          key: 'component', message: 'format'
+        )
+      end
+      it 'Has not created a control' do
+        expect(tool.controls.count).to be 1
+      end
+    end
   end
 end

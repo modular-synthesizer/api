@@ -88,5 +88,24 @@ RSpec.describe 'PUT /tools/controls/:id' do
         expect(control.payload).to eq({x: 0, y: 100, target: 'gainparam'})
       end
     end
+    describe 'When the component has an incorrect format' do
+      before do
+        put "/#{control.id.to_s}", { auth_token: session.token, component: 'wrong format' }
+      end
+      it 'Returns a 400 (Bad Request) status code' do
+        expect(last_response.status).to be 400
+      end
+      it 'Returns the correct body' do
+        expect(last_response.body).to include_json(
+          key: 'component', message: 'format'
+        )
+      end
+      it 'Has not updated the component of the control' do
+        expect(control.component).to eq 'Knob'
+      end
+      it 'Has not updated the payload of the control' do
+        expect(control.payload).to eq({x: 0, y: 100, target: 'gainparam'})
+      end
+    end
   end
 end

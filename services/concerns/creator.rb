@@ -43,6 +43,7 @@ module Modusynth
           rescue Mongoid::Errors::Validations => exception
             exc_klass.from_messages(exception.errors.messages, prefix:)
           rescue ActiveModel::ValidationError => exception
+            binding.pry
             exc_klass.from_messages(exception.model.errors.messages, prefix:)
           rescue Modusynth::Exceptions::Unknown => exception
             exc_klass.from_unknown(exception, prefix:)
