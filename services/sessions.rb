@@ -13,7 +13,7 @@ module Modusynth
         session.save
       end
 
-      def find(id:)
+      def find(id:, **_)
         model.find_by(token: id)
       end
 
