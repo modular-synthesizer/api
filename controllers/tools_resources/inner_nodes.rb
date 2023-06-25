@@ -10,6 +10,10 @@ module Modusynth
         def service
           Modusynth::Services::ToolsResources::InnerNodes.instance
         end
+
+        def container
+          tool.inner_nodes
+        end
       end
     end
   end
