@@ -41,7 +41,7 @@ module Modusynth
             validate!(prefix:, **payload) if respond_to?(:validate!, true)
             build(**payload)
           rescue Mongoid::Errors::Validations => exception
-            exc_klass.from_messages(exception.errors.messages, prefix:)
+            exc_klass.from_messages(exception.document.errors.messages, prefix:)
           rescue ActiveModel::ValidationError => exception
             exc_klass.from_messages(exception.model.errors.messages, prefix:)
           rescue Modusynth::Exceptions::Unknown => exception

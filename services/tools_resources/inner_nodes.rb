@@ -10,6 +10,10 @@ module Modusynth
           model.new(name:, generator:, x:, y:, tool:)
         end
 
+        def validate! **payload
+          build(**payload).validate!
+        end
+
         def model
           Modusynth::Models::Tools::InnerNode
         end

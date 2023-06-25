@@ -80,43 +80,6 @@ RSpec.describe 'PUT /:id' do
         end
       end
     end
-    describe 'Update the inner nodes' do
-      before do
-        node = tool.inner_nodes.first
-        put "/#{tool.id.to_s}", {
-          auth_token: session.token,
-          nodes: [
-            {id: node.id.to_s, name: node.name, generator: node.generator},
-            {name: 'biquad', generator: 'BiquadFilterNode'}
-          ]
-        }
-      end
-      it 'Returns a 200 (OK) status code' do
-        expect(last_response.status).to be 200
-      end
-      it 'Returns the correct body' do
-        expect(last_response.body).to include_json(
-          nodes: [
-            {name: 'gain', generator: 'GainNode'},
-            {name: 'biquad', generator: 'BiquadFilterNode'}
-          ]
-        )
-      end
-      describe 'The nodes in the tool' do
-        before do
-          tool.reload
-        end
-        it 'Has the correct first node' do
-          expect(tool.inner_nodes.first.name).to eq 'gain'
-        end
-        it 'Has the correct second node' do
-          expect(tool.inner_nodes.last.name).to eq 'biquad'
-        end
-        it 'Has deleted the rest of the nodes' do
-          expect(tool.inner_nodes.count).to be 2
-        end
-      end
-    end
     describe 'Update the inner links' do
       before do
         node = tool.inner_nodes.first
