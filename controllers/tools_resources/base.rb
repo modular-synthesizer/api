@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Controllers
     module ToolsResources
       class Base < Modusynth::Controllers::Base
-
         def tools_service
           Modusynth::Services::Tools::Find.instance
         end
