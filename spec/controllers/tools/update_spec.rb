@@ -80,38 +80,6 @@ RSpec.describe 'PUT /:id' do
         end
       end
     end
-    describe 'Update the inner links' do
-      before do
-        node = tool.inner_nodes.first
-        put "/#{tool.id.to_s}", {
-          auth_token: session.token,
-          links: [
-            {from: {node: 'gain', index: 0}, to: {node: 'gain', index: 0}}
-          ]
-        }
-      end
-      it 'Returns a 200 (OK) status code' do
-        expect(last_response.status).to be 200
-      end
-      it 'Returns the correct body' do
-        expect(last_response.body).to include_json(
-          links: [
-            {from: {node: 'gain', index: 0}, to: {node: 'gain', index: 0}}
-          ]
-        )
-      end
-      describe 'The links in the tool' do
-        before do
-          tool.reload
-        end
-        it 'Has the correct link' do
-          expect(tool.inner_links.first.from.node).to eq 'gain'
-        end
-        it 'Has created only one link' do
-          expect(tool.inner_links.count).to be 1
-        end
-      end
-    end
   end
 
   describe 'Error cases' do

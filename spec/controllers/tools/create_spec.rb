@@ -170,6 +170,52 @@ RSpec.describe Modusynth::Controllers::Tools do
             expect(to.index).to be 1
           end
         end
+        
+        describe 'The origin index is not given' do
+          before do
+            post '/', {
+              slots: 3,
+              categoryId: dopefun.id.to_s,
+              name: 'testtool',
+              auth_token: session.token,
+              links: [{to: {node: 'test', index: 0}, from: {node: 'other'}}]
+            }.to_json
+          end
+
+          it 'Returns a 201 (Created) status code' do
+            expect(last_response.status).to be 201
+          end
+          it 'Returns the correct body' do
+            expect(last_response.body).to include_json(
+              links: [
+                { from: { index: 0 } }
+              ]
+            )
+          end
+        end
+        
+        describe 'The destination index is not given' do
+          before do
+            post '/', {
+              slots: 3,
+              categoryId: dopefun.id.to_s,
+              name: 'testtool',
+              auth_token: session.token,
+              links: [{to: {node: 'test'}, from: {node: 'other', index: 0}}]
+            }.to_json
+          end
+
+          it 'Returns a 201 (Created) status code' do
+            expect(last_response.status).to be 201
+          end
+          it 'Returns the correct body' do
+            expect(last_response.body).to include_json(
+              links: [
+                { to: { index: 0 } }
+              ]
+            )
+          end
+        end
       end
       describe 'Tool with parameters' do
         let!(:param) do
@@ -490,27 +536,6 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
         include_examples 'empty lists'
       end
-      describe 'The origin index is not given' do
-        before do
-          post '/', {
-            slots: 3,
-            categoryId: dopefun.id.to_s,
-            name: 'testtool',
-            auth_token: session.token,
-            links: [{to: {node: 'test', index: 0}, from: {node: 'other'}}]
-          }.to_json
-        end
-
-        it 'Returns a 400 (Bad Request) status code' do
-          expect(last_response.status).to be 400
-        end
-        it 'Returns the correct body' do
-          expect(last_response.body).to include_json(
-            key: 'links[0].from.index', message: 'required'
-          )
-        end
-        include_examples 'empty lists'
-      end
       describe 'The destination is not given' do
         before do
           post '/', {
@@ -549,27 +574,6 @@ RSpec.describe Modusynth::Controllers::Tools do
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
             key: 'links[0].to.node', message: 'required'
-          )
-        end
-        include_examples 'empty lists'
-      end
-      describe 'The destination index is not given' do
-        before do
-          post '/', {
-            slots: 3,
-            categoryId: dopefun.id.to_s,
-            name: 'testtool',
-            auth_token: session.token,
-            links: [{from: {node: 'test', index: 0}, to: {node: 'other'}}]
-          }.to_json
-        end
-
-        it 'Returns a 400 (Bad Request) status code' do
-          expect(last_response.status).to be 400
-        end
-        it 'Returns the correct body' do
-          expect(last_response.body).to include_json(
-            key: 'links[0].to.index', message: 'required'
           )
         end
         include_examples 'empty lists'

@@ -10,40 +10,9 @@ module Modusynth
             category =  Modusynth::Services::Categories.instance.find_or_fail(id: payload[:categoryId])
             instance.update(category:)
           end
-          if payload[:nodes].instance_of?(Array)
-            instance.inner_nodes = InnerNodes.instance.build_all(payload[:nodes], prefix: 'nodes')
-          end
-          if payload[:links].instance_of?(Array)
-            instance.inner_links = Links.instance.build_all(payload[:links], prefix: 'links')
-          end
-          if payload[:controls].instance_of?(Array)
-            instance.controls.delete_all
-            instance.controls = Modusynth::Services::Tools::Controls.instance.build_all(
-              payload[:controls],
-              prefix: 'controls'
-            )
-          end
           instance
         end
-
-        def update_association previous:, next_list:, service:, prefix:
-          # Step 1 : delete items from previous not in next (+ mod ports and links)
-          previous.each do |item|
-            if next_list.select { |i| i[:id] == item.id.to_s }.count == 0
-              service.remove(id: item.id)
-            end
-          end
-          # Step 2 : insert the items in next that have no UUIDs and return the list
-          next_list.map.with_index do |item, idx|
-            if item.key?(:id) && (item[:id] != '')
-              service.find_or_fail(id: item[:id], field: "#{prefix}[#{idx}].id")
-            else
-              item.delete(:id)
-              service.create(**item, prefix: "#{prefix}[#{idx}]")
-            end
-          end
-        end
-
+        
         def model
           Modusynth::Models::Tool
         end

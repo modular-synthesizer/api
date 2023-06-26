@@ -21,13 +21,13 @@ module Modusynth
             name:,
             slots:,
             experimental:,
-            inner_links: Links.instance.build_all(links, prefix: 'links'),
             category: Categories.instance.find_or_fail(id: categoryId, field: 'categoryId')
           )
           tool.ports = ports_service.build_with_tool(tool, ports, prefix: 'ports')
           tool.parameters = params_service.build_with_tool(tool, parameters, prefix: 'parameters')
           tool.controls = controls_service.build_with_tool(tool, controls, prefix: 'controls')
           tool.inner_nodes = nodes_service.build_with_tool(tool, nodes, prefix: 'nodes')
+          tool.inner_links = links_service.build_with_tool(tool, links, prefix: 'links')
           tool
         end
 
@@ -54,6 +54,10 @@ module Modusynth
 
         def nodes_service
           Modusynth::Services::ToolsResources::InnerNodes.instance
+        end
+
+        def links_service
+          Modusynth::Services::ToolsResources::InnerLinks.instance
         end
       end
     end
