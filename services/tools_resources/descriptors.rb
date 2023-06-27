@@ -1,10 +1,9 @@
 module Modusynth
   module Services
-    module Tools
-      class Descriptors
+    module ToolsResources
+      class Descriptors < Modusynth::Services::Base
         include Singleton
-        include Modusynth::Services::Concerns::Finder
-
+        
         def model
           Modusynth::Models::Tools::Descriptor
         end

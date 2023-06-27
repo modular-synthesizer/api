@@ -27,16 +27,17 @@ module Modusynth
         #   found in the database.
         # @raise [::Modusynth::Exceptions::Concern] when the concern is not
         #   correctly implemented
-        def find_or_fail(id: nil, field: 'id')
+        def find_or_fail(id: nil, container: nil, field: 'id', **_)
           raise Modusynth::Exceptions.required(field) if id.nil?
-          instance = find(id: id)
+          instance = find(id: id, container:)
           raise Modusynth::Exceptions.unknown(field) if instance.nil?
           instance
         end
 
-        def find(id:)
+        def find(id:, container: nil, **_)
           check_model_implementation! caller: 'find'
-          model.where(id: id).first
+          container = model if container.nil?
+          container.where(id: id).first
         end
 
         def check_model_implementation! caller:

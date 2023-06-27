@@ -25,6 +25,10 @@ module Modusynth
         raise Service.new key: exception.key, error: exception.error, status: 404, prefix:
       end
 
+      def self.from_bad_request exception, prefix: nil
+        raise Service.new key: exception.key, error: exception.error, status: 400, prefix:
+      end
+
       def self.from_messages messages, prefix: nil
         key = messages.keys.first
         raise Service.new(key:, prefix:, error: messages[key].first)

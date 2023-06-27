@@ -26,7 +26,7 @@ module Modusynth
 
         belongs_to :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :parameters, optional: true
 
-        has_many :instances, class_name: '::Modusynth::Models::Modules::Parameter', inverse_of: :descriptor
+        has_many :instances, class_name: '::Modusynth::Models::Modules::Parameter', inverse_of: :parameter
 
         scope :called, ->(name) {
           descriptors = Modusynth::Models::Tools::Descriptor.where(name: name)

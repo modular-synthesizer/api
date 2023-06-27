@@ -30,17 +30,24 @@ module Modusynth
           end
         end
 
+        def build_with_tool tool, items, prefix: ''
+          items_with_tool = items.map { |i| i.merge(tool:) }
+          build_all items_with_tool, prefix:
+        end
+
         # Validates the payload with the rules defined in the service, and builds the item without persisting it.
         def build_and_validate! prefix: '', **payload
           begin
             validate!(prefix:, **payload) if respond_to?(:validate!, true)
             build(**payload)
           rescue Mongoid::Errors::Validations => exception
-            exc_klass.from_messages(exception.errors.messages, prefix:)
+            exc_klass.from_messages(exception.document.errors.messages, prefix:)
           rescue ActiveModel::ValidationError => exception
             exc_klass.from_messages(exception.model.errors.messages, prefix:)
           rescue Modusynth::Exceptions::Unknown => exception
             exc_klass.from_unknown(exception, prefix:)
+          rescue Modusynth::Exceptions::BadRequest => exception
+            exc_klass.from_bad_request(exception, prefix:)
           end
         end
         
