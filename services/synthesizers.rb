@@ -8,12 +8,12 @@ module Modusynth
         model.where(account: account).to_a
       end
 
-      def build account:, name: nil, slots: 50, racks: 1, **_
-        model.new(account:, name:, slots:, racks:)
+      def build account:, name: nil, slots: 50, racks: 1, voices: 1, **_
+        model.new(account:, name:, slots:, racks:, voices:)
       end
 
-      def update synthesizer, payload
-        synthesizer.update(**payload.slice('x', 'y', 'scale', 'racks', 'slots'))
+      def update synthesizer, **payload
+        synthesizer.update(**payload.slice(:name, :racks, :scale, :slots, :voices, :x, :y))
         synthesizer
       end
 

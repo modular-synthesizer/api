@@ -13,7 +13,7 @@ module Modusynth
       end
 
       api_route 'put', '/:id', ownership: true do
-        synthesizer = service.update(@resource, body_params)
+        synthesizer = service.find_and_update(id: params[:id], **symbolized_params)
         render_json 'synthesizers/_synthesizer.json', synthesizer:
       end
 

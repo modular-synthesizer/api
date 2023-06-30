@@ -21,7 +21,8 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
           slots: 50,
           x: 0,
           y: 0,
-          scale: 1.0
+          scale: 1.0,
+          voices: 1
         )
       end
       describe 'Created synthesizer' do
@@ -56,6 +57,16 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
           expect(last_response.body).to include_json(slots: 100)
         end
       end
+      describe 'The number of polyphony voices is given' do
+        before { post '/', {name: 'test synth', voices: 64, auth_token: session.token}.to_json }
+
+        it 'Returns a 201 (Created) status code' do
+          expect(last_response.status).to be 201
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(voices: 64)
+        end
+      end
     end
     describe 'Error cases' do
       describe 'Name not given' do
@@ -79,6 +90,30 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
             key: 'name', message: 'length'
+          )
+        end
+      end
+      describe 'Voices number below 1' do
+        before { post '/', {name: 'test-name', voices: 0, auth_token: session.token}.to_json }
+        
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            key: 'voices', message: 'value'
+          )
+        end
+      end
+      describe 'Voices over 256' do
+        before { post '/', {name: 'test-name', voices: 257, auth_token: session.token}.to_json }
+        
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            key: 'voices', message: 'value'
           )
         end
       end

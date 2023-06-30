@@ -23,6 +23,10 @@ module Modusynth
 
       field :scale, type: Float, default: 1.0
 
+      # @!attribute [rw] voices
+      #  @return [Integer] the number of polyphony voices in the synthesizer, 1 means it's monophonic.
+      field :voices, type: Integer, default: 1
+
       has_many :modules, class_name: '::Modusynth::Models::Module', inverse_of: :synthesizer
 
       has_many :links, class_name: '::Modusynth::Models::Link', inverse_of: :synthesizer
@@ -32,6 +36,18 @@ module Modusynth
       validates :name,
         presence: { message: 'required' },
         length: { minimum: 6, message: 'length'}
+      
+      validates :voices,
+        numericality: { greater_than: 0, less_than: 257, message: 'value' }
+      
+      validates :slots,
+        numericality: { greater_than: 0, message: 'value' }
+      
+      validates :racks,
+        numericality: { greater_than: 0, message: 'value' }
+      
+      validates :scale,
+        numericality: { greater_than_or_equal_to: 1.0, message: 'value' }
     end
   end
 end
