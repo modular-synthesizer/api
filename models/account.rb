@@ -16,6 +16,8 @@ module Modusynth
 
       field :admin, type: Boolean, default: false
 
+      field :sample_rate, type: Integer, default: 44100
+
       # @!attribute [w] password
       #   @return [String] password, in clear, of the user ; do not attempt to get the value, just set it when changing the password.
       # @!attribute [w] password_confirmation
@@ -49,6 +51,9 @@ module Modusynth
           message: 'format',
           if: :email?
         }
+      
+      validates :sample_rate,
+        numericality: { greater_than: 44099, less_than: 192001, message: 'value' }  
 
       validates :password,
         presence: {message: 'required', if: ->{ !persisted? || password_digest_changed? }},

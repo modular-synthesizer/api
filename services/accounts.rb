@@ -30,6 +30,13 @@ module Modusynth
         instance
       end
 
+      def update account, session: nil, **payload
+        requester = session.account
+        raise Modusynth::Exceptions.forbidden if requester != account && !requester.admin
+        account.update(payload.slice(:sample_rate))
+        account
+      end
+
       def find_and_update_groups id: nil, groups: [], **_
         find_and_update(id:, groups:)
       end

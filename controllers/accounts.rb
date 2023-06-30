@@ -23,6 +23,11 @@ module Modusynth
         render_json 'accounts/account.json', account:
       end
 
+      api_route 'put', '/:id' do
+        account = service.find_and_update(**symbolized_params, session: @session)
+        render_json 'accounts/account.json', account:
+      end
+
       def service
         Modusynth::Services::Accounts.instance
       end

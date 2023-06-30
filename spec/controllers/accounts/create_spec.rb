@@ -24,7 +24,8 @@ RSpec.describe 'POST /accounts' do
         email: 'courtois.vincent@outlook.com',
         groups: [
           {id: group.id.to_s, slug: 'default-group'}
-        ]
+        ],
+        sample_rate: 44100
       )
     end
     describe 'The created account' do
@@ -44,6 +45,9 @@ RSpec.describe 'POST /accounts' do
       end
       it 'Has groups counting the default groups' do
         expect(account.all_groups.count).to be 1
+      end
+      it 'Has the correct sample_rate' do
+        expect(account.sample_rate).to be 44100
       end
     end
   end
