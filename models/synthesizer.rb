@@ -47,7 +47,7 @@ module Modusynth
         numericality: { greater_than: 0, message: 'value' }
       
       validates :scale,
-        numericality: { greater_than_or_equal_to: 1.0, message: 'value' }
+        numericality: { greater_than: 0, message: 'value' }
     end
   end
 end
