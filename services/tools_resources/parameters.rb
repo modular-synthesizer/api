@@ -4,16 +4,27 @@ module Modusynth
       class Parameters < Modusynth::Services::Base
         include Singleton
 
-        def build name: nil, targets: [], descriptorId: nil, tool: nil, prefix: '', **others
-          descriptor = Descriptors.instance.find_or_fail(id: descriptorId, field: 'descriptorId')
-          parameter = model.new(name:, targets:, descriptor:, tool:)
+        def build(
+          name: nil,
+          targets: [],
+          tool: nil,
+          field: nil,
+          minimum: 0,
+          maximum: 100,
+          step: 1,
+          precision: 0,
+          default: 50,
+          prefix: '',
+          **_
+        )
+          template = model.new(name:, targets:, tool:, minimum:, maximum:, step:, precision:, field:, default:)
           tool.modules.each do |mod|
             mod.parameters << Modusynth::Models::Modules::Parameter.new(
-              parameter:,
-              value: parameter.descriptor.default
+              template:,
+              value: template.default
             )
           end
-          parameter
+          template
         end
         
         def update parameter, **payload

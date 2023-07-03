@@ -17,12 +17,28 @@ module Modusynth
         # @!attribute [rw] name
         #   @return [String] The name of the parameter to be able to link controls to it. Supposed uniq.
         field :name, type: String
+        # @!attribute [rw] field
+        #   @return [String] the name of the field the parameters linked to this descriptor will be applied on.
+        field :field, type: String
+        # @!attribute [rw] default
+        #   @return [Float] the value that will be given to the parameter when instanciating it, before any edit.
+        field :default, type: Float, default: 50
+        # @!attribute [rw] minimum
+        #   @return [Integer] the minimal value the parameter can have to be considered valid.
+        field :minimum, type: Integer, default: 0
+        # @!attribute [rw] maximum
+        #   @return [Integer] the maximal value the parameter can have to be considered valid.
+        field :maximum, type: Integer, default: 100
+        # @!attribute [rw] precision
+        #   @return [Integer] the number of digits to display after the comma for decimal numbers.
+        field :precision, type: Integer, default: 0
+        # @!attribute [rw] step
+        #   @return [Float] a value can only be modified by this amount when editing it via a knob.
+        field :step, type: Float, default: 1
 
         validates :name, presence: { message: 'required' }
 
-        # @!attribute [rw] descriptor
-        #   @return [Modusynth::Models::Tools::Descriptor] the constraints applied to the current parameter
-        belongs_to :descriptor, class_name: '::Modusynth::Models::Tools::Descriptor', inverse_of: :parameter
+        validates :field, presence: { message: 'required' }
 
         belongs_to :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :parameters, optional: true
 
@@ -32,6 +48,20 @@ module Modusynth
           descriptors = Modusynth::Models::Tools::Descriptor.where(name: name)
           return where(:descriptor_id.in => descriptors.map(&:id))
         }
+        
+        validate :boundaries
+
+        validate :default_value
+
+        def boundaries
+          return if minimum.nil? || maximum.nil?
+          errors.add(:boundaries, 'order') unless minimum <= maximum
+        end
+
+        def default_value
+          return if default.nil? || minimum.nil? || maximum.nil?
+          errors.add(:default, 'value') unless minimum <= default && maximum >= default
+        end
       end
     end
   end
