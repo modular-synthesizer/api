@@ -27,13 +27,12 @@ RSpec.describe Modusynth::Controllers::Tools do
           parameters: [
             {
               name: 'gainparam',
-              value: 1,
-              constraints: {
-                minimum: 0,
-                maximum: 10,
-                step: 0.05,
-                precision: 2
-              },
+              field: 'gain',
+              default: 50.0,
+              minimum: 0,
+              maximum: 100,
+              step: 1,
+              precision: 0,
               targets: ['gain']
             }
           ],

@@ -15,7 +15,7 @@ module Modusynth
         belongs_to :module, class_name: '::Modusynth::Models::Module', inverse_of: :value
 
         def name
-          parameter.name
+          template.name
         end
 
         [:minimum, :maximum, :step, :precision].each do |field|

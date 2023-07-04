@@ -28,15 +28,10 @@ module Modusynth
         end
         
         def update parameter, **payload
-          parameter.update(payload.slice(:name, :targets))
-          if payload.key? :descriptorId
-            descriptor = Descriptors.instance.find_or_fail(id: payload[:descriptorId], field: 'descriptorId')
-            parameter.update(descriptor:)
-            parameter.instances.each do |ins|
-              descriptor = parameter.descriptor
-              # Clamps the value of the instanciated parameters to avoid illegal values in new descriptor
-              ins.update(value: [descriptor.minimum, descriptor.maximum, ins.value].sort[1])
-            end
+          parameter.update(payload.slice(:name, :targets, :field, :minimum, :default, :maximum, :step, :precision))
+          # If the thresholds have been edited, some values in modules might be out of bound so we clamp them.
+          parameter.instances.each do |ins|
+            ins.update(value: [parameter.minimum, parameter.maximum, ins.value].sort[1])
           end
           parameter
         end

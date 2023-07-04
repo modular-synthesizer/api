@@ -7,8 +7,8 @@ RSpec.describe 'DELETE /tools/parameters/:id' do
   let!(:account) { create(:account, admin: true) }
   let!(:session) { create(:session, account:) }
   let!(:category) { create(:dopefun) }
-  let!(:tool) { create(:VCA, category:, experimental: false) }
-  let!(:parameter) { tool.parameters.first }
+  let!(:tool) { create(:tool, category:, experimental: false) }
+  let!(:parameter) { create(:frequency, tool:) }
   let!(:synthesizer) { create(:synthesizer, account:) }
   let!(:mod) { create(:module, tool:, synthesizer:) }
 
