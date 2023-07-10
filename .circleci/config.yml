@@ -7,44 +7,8 @@ executors:
       - image: mongo:5.0.12
 
 orbs:
-  kube: circleci/kubernetes@1.3.0
   virtuaexecutors: virtuaorbs/executors@0.1.0
   virtuacommands: virtuaorbs/commands@0.5.1
-
-commands:
-  deploy-stack:
-    description: Deployes the whole stack (deployment, service, ingress) on a given namespace
-    parameters:
-      namespace:
-        type: string
-        default: synple-dev
-      prefix:
-        type: string
-        default: ""
-    steps:
-      - checkout
-      - kube/install-kubectl
-      - kube/install-kubeconfig
-      - setup_remote_docker:
-          version: 20.10.14
-      - run:
-          name: Authenticate on Docker HUB from environment variable
-          command: echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
-      - run:
-          name: Store tags in a JSON file
-          command: curl https://hub.docker.com/v2/repositories/${DOCKER_USERNAME}/${DOCKER_REPOSITORY}/tags -o tags.json
-      - run:
-          name: Add trace to ensure that validation is ok and to display latest tag for Docker
-          command: export LAST_VERSION=$(cat tags.json | jq .results | jq .[0] | jq .name) && echo "export VERSION=${LAST_VERSION}" >> $BASH_ENV
-      - run:
-          name: Create the deployment on the production cluster
-          command: sed -e "s/<VERSION>/${VERSION}/g" -e "s/<NAMESPACE>/<< parameters.namespace >>/g" deployment/kubernetes/deployment.yml | kubectl apply -f -
-      - run:
-          name: Create the service for the API
-          command: sed -e "s/<NAMESPACE>/<< parameters.namespace >>/g" deployment/kubernetes/service.yml |kubectl apply -f -
-      - run:
-          name: Create the ingress for the API
-          command: sed -e "s/<NAMESPACE>/<< parameters.namespace >>/g" -e "s/<PREFIX>/<< parameters.prefix >>/g" deployment/kubernetes/ingress.yml | kubectl apply -f -
 
 jobs:
   test-job:
@@ -94,24 +58,6 @@ jobs:
       - run:
           name: Push the image to Docker HUB
           command: docker push ${DOCKER_USERNAME}/${DOCKER_REPOSITORY}:${VERSION}
-  dev-deployment-job:
-    docker:
-      - image: cimg/base:2022.06
-        auth:
-          username: $DOCKER_USERNAME
-          password: $DOCKER_PASSWORD
-    steps:
-      - deploy-stack:
-          prefix: \/dev
-  prod-deployment-job:
-    docker:
-      - image: cimg/base:2022.06
-        auth:
-          username: $DOCKER_USERNAME
-          password: $DOCKER_PASSWORD
-    steps:
-      - deploy-stack:
-          namespace: synple
 
 workflows:
   version: 2.1
@@ -123,19 +69,3 @@ workflows:
           requires:
             - test-job
             - lint-job
-      - dev-deployment-job:
-          requires:
-            - docker-job
-      - deployment-approval:
-          type: approval
-          requires:
-            - docker-job
-          filters:
-            branches:
-              only: main
-      - prod-deployment-job:
-          requires:
-            - deployment-approval
-          filters:
-            branches:
-              only: main
