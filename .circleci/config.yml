@@ -21,7 +21,7 @@ jobs:
           command: gem install bundler && bundle install
       - run:
           name: tests glob traces
-          command: echo $(circleci tests glob "spec/**/*_spec.rb")
+          command: echo $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=filesize)
       - run:
           name: Run RSpec Tests
           command: |
