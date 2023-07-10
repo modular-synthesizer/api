@@ -22,7 +22,7 @@ jobs:
       - run:
           name: Run RSpec Tests
           command: |
-            TESTFILES="$(circleci tests glob “spec/**/*_spec.rb” | circleci tests split --split-by=timings)"
+            TESTFILES="$(circleci tests glob “spec/**/*_spec.rb” | circleci tests split --split-by=filesize)"
             bundle exec rspec --format progress --format RspecJunitFormatter -o test/reports/rspec.xml ${TESTFILES}
       - store_test_results:
           path: test/reports
