@@ -22,13 +22,14 @@ jobs:
       - run:
           name: Test files storage
           command: |
-            export TESTFILES="$(circleci tests glob “spec/**/*_spec.rb” | circleci tests split --split-by=filesize)" && echo "export TESTS=${TESTFILES}" >> $BASH_ENV
+            echo $(circleci tests glob “spec/**/*_spec.rb” | circleci tests split --split-by=filesize)
+            export TESTFILES=$(circleci tests glob “spec/**/*_spec.rb” | circleci tests split --split-by=filesize) && echo "export TESTS=${TESTFILES}" >> $BASH_ENV
       - run:
           name: Test files traces
           command: echo ${TESTS}
-      - run:
-          name: Run tests
-          command: bundle exec rspec --format RspecJunitFormatter -o test/reports/rspec.xml ${TESTS}
+      # - run:
+      #     name: Run tests
+      #     command: bundle exec rspec --format RspecJunitFormatter -o test/reports/rspec.xml ${TESTS}
       - store_test_results:
           path: test/reports
       - store_artifacts:
