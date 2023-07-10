@@ -20,10 +20,15 @@ jobs:
           name: Install dependencies
           command: gem install bundler && bundle install
       - run:
-          name: Run RSpec Tests
+          name: Test files storage
           command: |
-            TESTFILES="$(circleci tests glob “spec/**/*_spec.rb” | circleci tests split --split-by=filesize)"
-            bundle exec rspec --format progress --format RspecJunitFormatter -o test/reports/rspec.xml ${TESTFILES}
+            export TESTFILES="$(circleci tests glob “spec/**/*_spec.rb” | circleci tests split --split-by=filesize)" && echo "export TESTS=${TESTFILES}" >> $BASH_ENV
+      - run:
+          name: Test files traces
+          command: echo ${TESTS}
+      - run:
+          name: Run tests
+          command: bundle exec rspec --format RspecJunitFormatter -o test/reports/rspec.xml ${TESTS}
       - store_test_results:
           path: test/reports
       - store_artifacts:
