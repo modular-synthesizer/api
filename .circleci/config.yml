@@ -13,6 +13,7 @@ orbs:
 jobs:
   test-job:
     executor: mongoruby
+    parallelism: 2
     steps:
       - checkout
       - run:
