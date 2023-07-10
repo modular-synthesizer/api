@@ -12,6 +12,10 @@ orbs:
 
 jobs:
   test-job:
+    parameters:
+      folders:
+        type: string
+        default: ""
     executor: mongoruby
     steps:
       - checkout
@@ -20,7 +24,7 @@ jobs:
           command: gem install bundler && bundle install
       - run:
           name: Run tests
-          command: bundle exec rspec --format RspecJunitFormatter -o test/reports/rspec.xml
+          command: bundle exec rspec --format RspecJunitFormatter -o test/reports/rspec.xml << parameters.folders >>
       - store_test_results:
           path: test/reports
       - store_artifacts:
@@ -59,9 +63,23 @@ workflows:
   version: 2.1
   build:
     jobs:
-      - test-job
+      - test-job:
+          name: tools-tests
+          folders: controllers/tools
+      - test-job:
+          name: synthesizers-tests
+          folders: "controllers/synthesizers controllers/modules controllers/links"
+      - test-job:
+          name: authorizations-tests
+          folders: "controllers/accounts controllers/applications controllers/groups controllers/rights controllers/sessions"
+      - test-job:
+          name: rest-of-tests
+          folders: " controllers/audio_processors controllers/categories controllers/generators"
       - lint-job
       - docker-job:
           requires:
-            - test-job
+            - tools-tests
+            - synthesizers-tests
+            - authorizations-tests
+            - rest-of-tests
             - lint-job
