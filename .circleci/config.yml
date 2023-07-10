@@ -68,13 +68,13 @@ workflows:
           folders: controllers/tools
       - test-job:
           name: synthesizers-tests
-          folders: "controllers/synthesizers controllers/modules controllers/links"
+          folders: "spec/controllers/synthesizers spec/controllers/modules spec/controllers/links"
       - test-job:
           name: authorizations-tests
-          folders: "controllers/accounts controllers/applications controllers/groups controllers/rights controllers/sessions"
+          folders: "spec/controllers/accounts spec/controllers/applications spec/controllers/groups spec/controllers/rights spec/controllers/sessions"
       - test-job:
           name: rest-of-tests
-          folders: " controllers/audio_processors controllers/categories controllers/generators"
+          folders: "spec/controllers/audio_processors spec/controllers/categories spec/controllers/generators"
       - lint-job
       - docker-job:
           requires:
