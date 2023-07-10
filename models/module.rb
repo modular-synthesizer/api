@@ -31,8 +31,8 @@ module Modusynth
       after_create do |document|
         document.tool.parameters.each do |parameter|
           document.parameters << Modusynth::Models::Modules::Parameter.new(
-            parameter: parameter,
-            value: parameter.descriptor.default
+            template: parameter,
+            value: parameter.default
           )
         end
         document.tool.ports.each do |port|

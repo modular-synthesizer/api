@@ -4,28 +4,34 @@ module Modusynth
       class Parameters < Modusynth::Services::Base
         include Singleton
 
-        def build name: nil, targets: [], descriptorId: nil, tool: nil, prefix: '', **others
-          descriptor = Descriptors.instance.find_or_fail(id: descriptorId, field: 'descriptorId')
-          parameter = model.new(name:, targets:, descriptor:, tool:)
+        def build(
+          name: nil,
+          targets: [],
+          tool: nil,
+          field: nil,
+          minimum: 0,
+          maximum: 100,
+          step: 1,
+          precision: 0,
+          default: 50,
+          prefix: '',
+          **_
+        )
+          template = model.new(name:, targets:, tool:, minimum:, maximum:, step:, precision:, field:, default:)
           tool.modules.each do |mod|
             mod.parameters << Modusynth::Models::Modules::Parameter.new(
-              parameter:,
-              value: parameter.descriptor.default
+              template:,
+              value: template.default
             )
           end
-          parameter
+          template
         end
         
         def update parameter, **payload
-          parameter.update(payload.slice(:name, :targets))
-          if payload.key? :descriptorId
-            descriptor = Descriptors.instance.find_or_fail(id: payload[:descriptorId], field: 'descriptorId')
-            parameter.update(descriptor:)
-            parameter.instances.each do |ins|
-              descriptor = parameter.descriptor
-              # Clamps the value of the instanciated parameters to avoid illegal values in new descriptor
-              ins.update(value: [descriptor.minimum, descriptor.maximum, ins.value].sort[1])
-            end
+          parameter.update(payload.slice(:name, :targets, :field, :minimum, :default, :maximum, :step, :precision))
+          # If the thresholds have been edited, some values in modules might be out of bound so we clamp them.
+          parameter.instances.each do |ins|
+            ins.update(value: [parameter.minimum, parameter.maximum, ins.value].sort[1])
           end
           parameter
         end

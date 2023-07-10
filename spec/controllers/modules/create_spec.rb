@@ -34,17 +34,13 @@ describe Modusynth::Controllers::Modules do
           parameters: [
             {
               name: 'gainparam',
-              value: 1,
+              field: 'gain',
+              value: 50,
               targets: ['gain'],
-              constraints: {
-                minimum: 0,
-                maximum: 10,
-                step: 0.05,
-                precision: 2
-              },
-              input: {
-                id: have_attributes(size: 24)
-              }
+              minimum: 0,
+              maximum: 100,
+              step: 1,
+              precision: 0
             }
           ],
           ports: [
@@ -69,7 +65,7 @@ describe Modusynth::Controllers::Modules do
           expect(creation.parameters.first.name).to eq 'gainparam'
         end
         it 'Has the correct value for the gain parameter value' do
-          expect(creation.parameters.first.value).to eq 1.0
+          expect(creation.parameters.first.value).to eq 50.0
         end
       end
     end

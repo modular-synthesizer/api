@@ -218,24 +218,13 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
       end
       describe 'Tool with parameters' do
-        let!(:param) do
-          Modusynth::Services::Parameters.instance.create(
-            name: 'parameter',
-            minimum: 0,
-            maximum: 10,
-            step: 1,
-            precision: 0,
-            default: 1
-          )
-        end
-
         before do
           post '/', {
             name: 'VCA',
             slots: 3,
             auth_token: session.token,
             categoryId: dopefun.id.to_s,
-            parameters: [{descriptorId: param.id.to_s, targets: ['target'], name: 'testparam'}]
+            parameters: [{targets: ['target'], name: 'testparam', field: 'testfield'}]
           }.to_json
         end
 
@@ -251,13 +240,12 @@ RSpec.describe Modusynth::Controllers::Tools do
             parameters: [{
               name: 'testparam',
               targets: ['target'],
-              value: 1,
-              constraints: {
-                minimum: 0,
-                maximum: 10,
-                step: 1,
-                precision: 0
-              },
+              field: 'testfield',
+              default: 50,
+              minimum: 0,
+              maximum: 100,
+              step: 1,
+              precision: 0
             }]
           )
         end
@@ -575,72 +563,6 @@ RSpec.describe Modusynth::Controllers::Tools do
           expect(last_response.body).to include_json(
             key: 'links[0].to.node', message: 'required'
           )
-        end
-        include_examples 'empty lists'
-      end
-    end
-
-    describe 'parameters error cases' do
-      describe 'When the descriptor UUID is not given' do
-        before do
-          post '/', {
-            slots: 3,
-            categoryId: dopefun.id.to_s,
-            name: 'testtool',
-            auth_token: session.token,
-            parameters:  [ {targets: ['test']} ]
-          }.to_json
-        end
-  
-        it 'Returns a 404 (Unknown) status code' do
-          expect(last_response.status).to be 400
-        end
-        it 'Returns the correct body' do
-          expect(last_response.body).to include_json({
-            key: 'parameters[0].descriptorId', message: 'required'
-          })
-        end
-        include_examples 'empty lists'
-      end
-      describe 'When the descriptor UUID is given as nil' do
-        before do
-          post '/', {
-            slots: 3,
-            categoryId: dopefun.id.to_s,
-            name: 'testtool',
-            auth_token: session.token,
-            parameters:  [ {targets: ['test'], descriptorId: nil} ]
-          }.to_json
-        end
-  
-        it 'Returns a 404 (Unknown) status code' do
-          expect(last_response.status).to be 400
-        end
-        it 'Returns the correct body' do
-          expect(last_response.body).to include_json({
-            key: 'parameters[0].descriptorId', message: 'required'
-          })
-        end
-        include_examples 'empty lists'
-      end
-      describe 'When the descriptor is not found' do
-        before do
-          post '/', {
-            slots: 3,
-            categoryId: dopefun.id.to_s,
-            name: 'testtool',
-            auth_token: session.token,
-            parameters:  [ {targets: ['test'], descriptorId: 'unknown'} ]
-          }.to_json
-        end
-  
-        it 'Returns a 404 (Unknown) status code' do
-          expect(last_response.status).to be 404
-        end
-        it 'Returns the correct body' do
-          expect(last_response.body).to include_json({
-            key: 'parameters[0].descriptorId', message: 'unknown'
-          })
         end
         include_examples 'empty lists'
       end

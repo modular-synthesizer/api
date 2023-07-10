@@ -23,9 +23,8 @@ describe Modusynth::Controllers::Modules do
         expect(last_response.status).to be 200
       end
       it 'Has update the gain value' do
-        updated = Modusynth::Models::Module.where(id: node.id.to_s).first
-        value = updated.parameters.called('gain').first
-        expect(value.value).to be 2.0
+        node.reload
+        expect(node.parameters.first.value).to be 2.0
       end
     end
     describe 'Error cases' do
@@ -43,14 +42,14 @@ describe Modusynth::Controllers::Modules do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
-            key: 'gain', message: 'value'
+            key: 'gainparam', message: 'value'
           )
         end
       end
       describe 'When the value is above the maximum' do
         before do
           payload = {
-            parameters: [{value: 11, id: param_id}],
+            parameters: [{value: 101, id: param_id}],
             auth_token: session.token
           }
           put "/#{node.id.to_s}", payload.to_json
@@ -61,7 +60,7 @@ describe Modusynth::Controllers::Modules do
         end
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
-            key: 'gain', message: 'value'
+            key: 'gainparam', message: 'value'
           )
         end
       end
