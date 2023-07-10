@@ -20,6 +20,9 @@ jobs:
           name: Install dependencies
           command: gem install bundler && bundle install
       - run:
+          name: tests glob traces
+          command: echo $(circleci tests glob "spec/**/*_spec.rb")
+      - run:
           name: Run RSpec Tests
           command: |
             bundle exec rspec --format progress --format RspecJunitFormatter -o test/reports/rspec.xml
