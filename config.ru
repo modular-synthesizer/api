@@ -18,7 +18,6 @@ map('/generators') { run Modusynth::Controllers::Generators.new }
 map('/groups') { run Modusynth::Controllers::Groups.new }
 map('/links') { run Modusynth::Controllers::Links.new }
 map('/modules') { run Modusynth::Controllers::Modules.new }
-map('/parameters') { run Modusynth::Controllers::Parameters.new }
 map('/processors') { run Modusynth::Controllers::AudioProcessors.new }
 map('/rights') { run Modusynth::Controllers::Rights.new }
 map('/sessions') { run Modusynth::Controllers::Sessions.new }

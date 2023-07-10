@@ -11,7 +11,6 @@ module Modusynth
     autoload :Groups, './controllers/groups'
     autoload :Links, './controllers/links'
     autoload :Modules, './controllers/modules'
-    autoload :Parameters, './controllers/parameters'
     autoload :Ports, './controllers/ports'
     autoload :Rights, './controllers/rights'
     autoload :Sessions, './controllers/sessions'
