@@ -1,6 +1,6 @@
 module Modusynth
   module Services
-    module Initialization
+    class Initialization
       include Singleton
 
       attr_reader :client
