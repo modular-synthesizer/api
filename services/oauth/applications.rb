@@ -5,9 +5,13 @@ module Modusynth
         include Singleton
 
         def build(name: nil, session:, **_)
+          build_with_account(name:, account: session.account)
+        end
+
+        def build_with_account(name: nil, account: nil, **_)
           model.new(
             name:,
-            account: session.account,
+            account:,
             public_key: SecureRandom.hex(16),
             private_key: SecureRandom.hex(64)
           )

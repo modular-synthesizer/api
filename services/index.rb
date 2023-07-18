@@ -7,6 +7,7 @@ module Modusynth
     autoload :Categories, './services/categories'
     autoload :Concerns, './services/concerns/index'
     autoload :Generators, './services/generators'
+    autoload :Initialization, './services/initialization'
     autoload :Links, './services/links'
     autoload :Modules, './services/modules'
     autoload :OAuth, './services/oauth/index'

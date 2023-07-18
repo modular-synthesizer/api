@@ -11,6 +11,8 @@ Bundler.require(env)
 require './module'
 Mongoid.load!('config/mongoid.yml', env)
 
+Modusynth::Services::Initialization.instance.run
+
 map('/accounts') { run Modusynth::Controllers::Accounts.new }
 map('/applications') { run Modusynth::Controllers::Applications.new }
 map('/categories') { run Modusynth::Controllers::Categories.new }

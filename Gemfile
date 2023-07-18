@@ -15,6 +15,7 @@ end
 
 group :development, :production do
   gem 'puma', '5.6.5'
+  gem 'k8s-ruby', '0.14.0'
 end
 
 group :test do
