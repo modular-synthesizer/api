@@ -31,10 +31,11 @@ module Modusynth
         if Modusynth::Models::Account.where(admin: true).to_a.empty?
           puts 'No administrator found. Creating a first account with random password.'
           password = SecureRandom.hex(32)
-          account = Modusynth::Services::Accounts.instance.create(
+          account = Modusynth::Models::Account.create(
             username: 'administrator',
             email: 'contact@synple.app',
-            password:, password_confirmation: password,
+            password:,
+            password_confirmation: password,
             admin: true
           )
           puts 'Storing the password in the Kubernetes cluster secrets'
