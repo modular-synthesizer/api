@@ -47,10 +47,11 @@ module Modusynth
         puts 'Searching for an application'
         if Modusynth::Models::OAuth::Application.all.to_a.empty?
           puts 'No application found. Creating a first application'
-          application = Modusynth::Services::OAuth::Applications.instance.create(
+          application = Modusynth::Services::OAuth::Applications.instance.build_with_account(
             name: 'frontend app',
             account: Modusynth::Models::Account.where(username: 'administrator').first
           )
+          application.save!
           puts 'Storing the identifiers in the corresponding secret'
           store_secret('public-key', application.public_key)
           store_secret('private-key', application.private_key)
@@ -60,7 +61,7 @@ module Modusynth
 
       def store_secret(name, value)
         creds = client.api('v1').resource('secrets', namespace:).get('frontend-credentials')
-        creds[:data][name.to_sym] = value
+        creds[:data][name.to_sym] = Base64.encode64(value)
         client.api('v1').resource('secrets', namespace:).update_resource(creds)
       end
     end
