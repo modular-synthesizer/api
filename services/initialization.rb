@@ -31,7 +31,7 @@ module Modusynth
         if Modusynth::Models::Account.where(admin: true).to_a.empty?
           puts 'No administrator found. Creating a first account with random password.'
           password = SecureRandom.hex(32)
-          account = Modusynth::Services::Accounts.create(
+          account = Modusynth::Services::Accounts.instance.create(
             username: 'administrator',
             email: 'contact@synple.app',
             password:, password_confirmation: password,
