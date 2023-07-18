@@ -61,7 +61,7 @@ module Modusynth
       def store_secret(name, value)
         creds = client.api('v1').resource('secrets', namespace:).get('frontend-credentials')
         creds[:data][name.to_sym] = value
-        client.api('v1').resource('secrets', namespace:).update(creds)
+        client.api('v1').resource('secrets', namespace:).update_resource(creds)
       end
     end
   end
