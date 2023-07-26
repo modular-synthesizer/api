@@ -7,7 +7,6 @@ module Modusynth
     class Synthesizer
       include Mongoid::Document
       include Mongoid::Timestamps
-      include Modusynth::Models::Concerns::Ownable
 
       store_in collection: 'synthesizers'
 
@@ -17,12 +16,6 @@ module Modusynth
 
       field :racks, type: Integer, default: 1
 
-      field :x, type: Integer, default: 0
-
-      field :y, type: Integer, default: 0
-
-      field :scale, type: Float, default: 1.0
-
       # @!attribute [rw] voices
       #  @return [Integer] the number of polyphony voices in the synthesizer, 1 means it's monophonic.
       field :voices, type: Integer, default: 1
@@ -31,7 +24,8 @@ module Modusynth
 
       has_many :links, class_name: '::Modusynth::Models::Link', inverse_of: :synthesizer
 
-      belongs_to :account, class_name: '::Modusynth::Models::Account', inverse_of: :synthesizers
+      # belongs_to :account, class_name: '::Modusynth::Models::Account', inverse_of: :synthesizers
+      has_many :memberships, class_name: '::Modusynth::Models::Social::Membership', inverse_of: :synthesizer
 
       validates :name,
         presence: { message: 'required' },
@@ -45,9 +39,18 @@ module Modusynth
       
       validates :racks,
         numericality: { greater_than: 0, message: 'value' }
-      
-      validates :scale,
-        numericality: { greater_than: 0, message: 'value' }
+
+      def creator
+        memberships.where(enum_type: 'creator').first
+      end
+
+      def guests
+        memberships.where(:enum_type.ne => 'creator').to_a
+      end
+
+      def guest account:
+        memberships.where(account:).first
+      end
     end
   end
 end

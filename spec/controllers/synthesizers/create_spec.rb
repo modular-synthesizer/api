@@ -31,8 +31,34 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
         it 'has the correct name' do
           expect(synth.name).to eq 'test synth'
         end
-        it 'Has the correct owner' do
-          expect(synth.account.username).to eq 'babausse'
+        it 'Has the correct number of racks' do
+          expect(synth.racks).to be 1
+        end
+        it 'Has the correct number of slots' do
+          expect(synth.slots).to be 50
+        end
+        it 'Has the correct number of voices' do
+          expect(synth.voices).to be 1
+        end
+      end
+      describe 'The created membership' do
+        let!(:synth) { Modusynth::Models::Synthesizer.first }
+        let!(:membership) { synth.memberships.first }
+
+        it 'Has created only one membership' do
+          expect(synth.memberships.count).to be 1
+        end
+        it 'Has created a membership with the correct account' do
+          expect(membership.account.id).to eq babausse.id
+        end
+        it 'Has initialized the membership with the correct X' do
+          expect(membership.x).to be 0
+        end
+        it 'Has initialized the membership with the correct Y' do
+          expect(membership.y).to be 0
+        end
+        it 'Has initialized the membership with the correct scale' do
+          expect(membership.scale).to eq 1.0
         end
       end
     end

@@ -1,1 +1,1 @@
-json.partial! 'synthesizers/synthesizer', collection: synthesizers, as: :synthesizer
+json.partial! 'synthesizers/synthesizer', collection: memberships, as: :membership

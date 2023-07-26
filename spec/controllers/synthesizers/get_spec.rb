@@ -9,7 +9,9 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
 
   describe 'GET /:id' do
     describe 'Nominal case' do
-      let!(:synthesizer) { create(:synthesizer, account: babausse) }
+      let!(:synthesizer) do
+        Modusynth::Services::Synthesizers.instance.create(account: babausse, name: 'test synth')
+      end
       before do
         get "/#{synthesizer.id.to_s}", {auth_token: session.token}
       end
@@ -50,6 +52,4 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
   end
 
   include_examples 'authentication', 'get', "/anything"
-
-  include_examples 'ownership', 'get', '/:id', :synthesizer
 end

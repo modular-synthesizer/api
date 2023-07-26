@@ -26,7 +26,8 @@ module Modusynth
 
       has_many :sessions, class_name: '::Modusynth::Models::Session', inverse_of: :account
 
-      has_many :synthesizers, class_name: '::Modusynth::Models::Account', inverse_of: :account
+      # has_many :synthesizers, class_name: '::Modusynth::Models::Account', inverse_of: :account
+      has_many :memberships, class_name: '::Modusynth::Models::Social::Membership', inverse_of: :account
 
       has_many :applications, class_name: '::Modusynth::Models::OAuth::Application', inverse_of: :account
 
