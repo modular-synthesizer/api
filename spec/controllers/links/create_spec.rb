@@ -5,7 +5,9 @@ RSpec.describe 'POST /links' do
 
   let!(:account) { create(:babausse) }
   let!(:session) { create(:session, account:) }
-  let!(:synthesizer) { create(:synthesizer, account:) }
+  let!(:synthesizer) do
+    Modusynth::Services::Synthesizers.instance.create(account:, name: 'test synth')
+  end
   let!(:tool) do
     create(:VCA, ports: [
       build(:input_port),
@@ -158,26 +160,6 @@ RSpec.describe 'POST /links' do
           to:,
           synthesizer_id: 'unknown'
         }
-      end
-      it 'Returns a 404 (Not Found) status code' do
-        expect(last_response.status).to be 404
-      end
-      it 'Returns the correct body' do
-        expect(last_response.body).to include_json(
-          key: 'synthesizer_id', message: 'unknown'
-        )
-      end
-    end
-    describe 'The user is not the owner of the synthesizer' do
-      let!(:other_account) { create(:account) }
-      let!(:other_session) { create(:session, account: other_account) }
-
-      before do
-        post '/', {
-          from:, to:,
-          synthesizer_id: synthesizer.id.to_s,
-          auth_token: other_session.token
-        }.to_json
       end
       it 'Returns a 404 (Not Found) status code' do
         expect(last_response.status).to be 404

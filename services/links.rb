@@ -8,18 +8,18 @@ module Modusynth
         Modusynth::Models::Link.where(**params)
       end
 
-      def build from: nil, to: nil, synthesizer_id: nil, color: 'red', **_
+      def build from: nil, to: nil, synthesizer_id: nil, color: 'red', session: nil, **_
         synthesizer = Synthesizers.instance.find_or_fail(id: synthesizer_id, field: 'synthesizer_id')
+        membership = Memberships.instance.find_or_fail_by(synthesizer:, session:)
+        raise Modusynth::Exceptions.forbidden('auth_token') if membership.type_read?
         from = Ports.instance.find_or_fail(id: from, synthesizer:, field: 'from')
         to = Ports.instance.find_or_fail(id: to, synthesizer:, field: 'to')
-        Modusynth::Models::Link.new(from:, to:, color:, synthesizer:)
+        link = Modusynth::Models::Link.new(from:, to:, color:, synthesizer:)
+        link
       end
 
       def validate!(from: nil, to: nil, synthesizer_id: nil, color: 'red', session: nil, **_)
-        instance = build(synthesizer_id:, from:, to:, color:)
-        if !session.account.admin && instance.synthesizer.account.id != session.account.id
-          raise Modusynth::Exceptions.unknown('synthesizer_id')
-        end
+        instance = build(synthesizer_id:, from:, to:, color:, session:)
         if instance.from.kind == instance.to.kind
           raise Modusynth::Exceptions::BadRequest.new('directions', 'identical')
         end

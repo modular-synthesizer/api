@@ -62,6 +62,10 @@ module Modusynth
       def render_json(filename, status: 200, **locals)
         halt status, jbuilder(filename.to_sym, locals:)
       end
+
+      def session
+        @session
+      end
     end
   end
 end
