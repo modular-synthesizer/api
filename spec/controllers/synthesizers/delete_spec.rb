@@ -8,7 +8,9 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
   let!(:session) { create(:session, account: babausse) }
 
   describe 'DELETE /:id' do
-    let!(:synthesizer) { create(:synthesizer, account: babausse) }
+    let!(:synthesizer) do
+      Modusynth::Services::Synthesizers.instance.create(account: babausse, name: 'test synth')
+    end
     let!(:node) { create(:VCA_module, synthesizer: synthesizer) }
     
     describe 'Nominal case' do

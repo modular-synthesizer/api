@@ -5,7 +5,12 @@ RSpec.describe 'PUT /:id' do
 
   let!(:account) { create(:account) }
   let!(:session) { create(:session, account:) }
-  let!(:synthesizer) { create(:synthesizer, account:) }
+  let!(:synthesizer) {
+    Modusynth::Services::Synthesizers.instance.create(
+      account:, name: 'test synth'
+    )
+  }
+  let!(:membership) { synthesizer.memberships.first }
 
   describe 'Nominal case' do
     describe 'When nothing is updated' do
@@ -37,13 +42,13 @@ RSpec.describe 'PUT /:id' do
           expect(synthesizer.racks).to be 1
         end
         it 'Has the correct X coordinate' do
-          expect(synthesizer.x).to be 0
+          expect(membership.x).to be 0
         end
         it 'Has the correct Y coordinate' do
-          expect(synthesizer.y).to be 0
+          expect(membership.y).to be 0
         end
         it 'Has the correct scale' do
-          expect(synthesizer.scale).to be 1.0
+          expect(membership.scale).to be 1.0
         end
         it 'Has the correct number of polyphony voices' do
           expect(synthesizer.voices).to be 1
@@ -118,8 +123,8 @@ RSpec.describe 'PUT /:id' do
         expect(last_response.body).to include_json(x: 100)
       end
       it 'Has updated the name correctly' do
-        synthesizer.reload
-        expect(synthesizer.x).to be 100
+        membership.reload
+        expect(membership.x).to be 100
       end
     end
     describe 'When updating the Y coordinate' do
@@ -133,8 +138,8 @@ RSpec.describe 'PUT /:id' do
         expect(last_response.body).to include_json(y: 100)
       end
       it 'Has updated the name correctly' do
-        synthesizer.reload
-        expect(synthesizer.y).to be 100
+        membership.reload
+        expect(membership.y).to be 100
       end
     end
     describe 'When updating the scale' do
@@ -148,8 +153,8 @@ RSpec.describe 'PUT /:id' do
         expect(last_response.body).to include_json(scale: 2.0)
       end
       it 'Has updated the name correctly' do
-        synthesizer.reload
-        expect(synthesizer.scale).to be 2.0
+        membership.reload
+        expect(membership.scale).to be 2.0
       end
     end
     describe 'When updating the number of polyphony voices' do
@@ -264,8 +269,8 @@ RSpec.describe 'PUT /:id' do
         )
       end
       it 'Has not updated the scale of the synthesizer' do
-        synthesizer.reload
-        expect(synthesizer.scale).to be 1.0
+        membership.reload
+        expect(membership.scale).to be 1.0
       end
     end
     describe 'When the number of voices is too low' do

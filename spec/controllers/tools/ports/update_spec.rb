@@ -8,7 +8,7 @@ RSpec.describe 'PUT /tools/ports/:id' do
   let!(:session) { create(:session, account:) }
   let!(:category) { create(:dopefun) }
   let!(:tool) { create(:VCA, category:, experimental: false) }
-  let!(:synthesizer) { create(:synthesizer, account:) }
+  let!(:synthesizer) { Modusynth::Services::Synthesizers.instance.create(account:, name: 'test synth') }
   let!(:mod) { create(:module, tool:, synthesizer:) }
   let!(:link) { create(:link, from: mod.ports.first, to: mod.ports.last, synthesizer:) }
   let!(:port) { tool.ports.first }

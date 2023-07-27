@@ -11,6 +11,7 @@ module Modusynth
     autoload :Permissions, './models/permissions/index'
     autoload :Synthesizer, './models/synthesizer'
     autoload :Session, './models/session'
+    autoload :Social, './models/social/index'
     autoload :Tools, './models/tools/index'
     autoload :Tool, './models/tool'
   end

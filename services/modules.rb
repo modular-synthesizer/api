@@ -2,9 +2,8 @@ module Modusynth
   module Services
     class Modules < Modusynth::Services::Base
       include Singleton
-      include Modusynth::Services::Concerns::Deleter
 
-      def build synthesizer_id: nil, tool_id: nil, slot: 0, rack: 0, **_
+      def build synthesizer_id: nil, tool_id: nil, slot: 0, rack: 0, session: nil, **_
         synthesizer = Modusynth::Services::Synthesizers.instance.find_or_fail(
           id: synthesizer_id,
           field: 'synthesizer_id'
@@ -17,21 +16,24 @@ module Modusynth
         model.where(synthesizer_id:).to_a
       end
 
-      def update id, payload
-        attributes = payload.slice('slot', ('rack'))
-        node = find_or_fail(id:)
-        node.update(**attributes)
-        (payload['parameters'] || []).each do |param|
-          obj = node.parameters.find(param['id'])
-          obj.value = param['value']
+      def update id: nil, session: nil, parameters: [], **payload
+        mod = find_or_fail(id:)
+        membership = Memberships.instance.find_or_fail_by(session:, synthesizer: mod.synthesizer)
+        raise Modusynth::Exceptions.forbidden('auth_token') if membership.nil? or membership.type_read?
+
+        attributes = payload.slice('slot', 'rack')
+        mod.update(**attributes)
+        parameters.each do |param|
+          obj = mod.parameters.find(param[:id])
+          obj.value = param[:value]
           template = obj.template
           if obj.value < template.minimum || obj.value > template.maximum
             raise Modusynth::Exceptions::BadRequest.new(template.name, 'value')
           end
           obj.save!
         end
-        node.save!
-        node
+        mod.save!
+        mod
       end
 
       def delete mod
@@ -41,6 +43,13 @@ module Modusynth
         mod.parameters.delete_all
         mod.ports.delete_all
         mod.delete
+      end
+
+      def remove(session:, id:, **_)
+        mod = find(id:)
+        return if mod.nil?
+        membership = Memberships.instance.find_by(session:, synthesizer: mod.synthesizer)
+        delete mod unless membership.nil? or membership.type_read?
       end
 
       def model

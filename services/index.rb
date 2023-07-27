@@ -9,6 +9,7 @@ module Modusynth
     autoload :Generators, './services/generators'
     autoload :Initialization, './services/initialization'
     autoload :Links, './services/links'
+    autoload :Memberships, './services/memberships'
     autoload :Modules, './services/modules'
     autoload :OAuth, './services/oauth/index'
     autoload :Parameters, './services/parameters'

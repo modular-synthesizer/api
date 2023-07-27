@@ -13,13 +13,13 @@ module Modusynth
         render_json 'modules/list.json', mods:
       end
 
-      api_route 'put', '/:id', ownership: true do
-        mod = service.update(params[:id], body_params)
+      api_route 'put', '/:id' do
+        mod = service.update(session:, **symbolized_params)
         render_json 'modules/_module.json', mod:
       end
 
       api_route 'delete', '/:id' do
-        service.remove_if_owner(id: params[:id], account: @session.account)
+        service.remove(session:, **symbolized_params)
         halt 204
       end
 
