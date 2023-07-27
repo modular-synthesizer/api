@@ -40,15 +40,16 @@ module Modusynth
         )
       end
 
-      def remove_if_owner id:, account:
+      def remove id: nil, session: nil, **_
         synthesizer = find(id:)
-        return if synthesizer.nil? || synthesizer.creator.account.id != account.id
-        delete(synthesizer)
-      end
-
-      def delete synthesizer
-        Modusynth::Services::Modules.instance.remove_all(synthesizer.modules)
-        synthesizer.delete
+        return if synthesizer.nil?
+        membership = Memberships.instance.find_by(session:, synthesizer:)
+        unless membership.nil? or membership.type_read?
+          synthesizer.modules.each do |mod|
+            Modusynth::Services::Modules.instance.remove(session:, id: mod.id)
+          end
+          synthesizer.delete
+        end
       end
 
       def model

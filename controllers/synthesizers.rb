@@ -27,7 +27,7 @@ module Modusynth
       end
 
       api_route 'delete', '/:id' do
-        service.remove_if_owner(id: params[:id], account: @session.account)
+        service.remove(session:, **symbolized_params)
         halt 204
       end
 
