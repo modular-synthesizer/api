@@ -63,9 +63,7 @@ module Modusynth
         halt status, jbuilder(filename.to_sym, locals:)
       end
 
-      def session
-        @session
-      end
+      attr_reader :session
     end
   end
 end
