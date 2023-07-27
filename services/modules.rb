@@ -2,9 +2,8 @@ module Modusynth
   module Services
     class Modules < Modusynth::Services::Base
       include Singleton
-      include Modusynth::Services::Concerns::Deleter
 
-      def build synthesizer_id: nil, tool_id: nil, slot: 0, rack: 0, **_
+      def build synthesizer_id: nil, tool_id: nil, slot: 0, rack: 0, session: nil, **_
         synthesizer = Modusynth::Services::Synthesizers.instance.find_or_fail(
           id: synthesizer_id,
           field: 'synthesizer_id'
@@ -41,6 +40,13 @@ module Modusynth
         mod.parameters.delete_all
         mod.ports.delete_all
         mod.delete
+      end
+
+      def remove(session:, id:, **_)
+        mod = find(id:)
+        return if mod.nil?
+        membership = Memberships.instance.find_by(session:, synthesizer: mod.synthesizer)
+        delete mod unless membership.nil? or membership.type_read?
       end
 
       def model

@@ -5,7 +5,7 @@ describe Modusynth::Controllers::Modules do
 
   let!(:account) { create(:account) }
   let!(:session) { create(:session, account: account) }
-  let!(:synthesizer) { create(:synthesizer, account: account) }
+  let!(:synthesizer) { Modusynth::Services::Synthesizers.instance.create(account:, name: 'test synth') }
 
   describe 'DELETE /:id' do
     let(:node) { create(:VCA_module, synthesizer: synthesizer) }
