@@ -9,10 +9,7 @@ RSpec.describe 'POST /links' do
     Modusynth::Services::Synthesizers.instance.create(account:, name: 'test synth')
   end
   let!(:tool) do
-    create(:VCA, ports: [
-      build(:input_port),
-      build(:output_port)
-    ])
+    create(:VCA, ports: [ build(:input_port), build(:output_port) ])
   end
   let!(:mod) { create(:module, tool:, synthesizer:) }
   let!(:from) { mod.ports.first.id.to_s }
@@ -61,6 +58,25 @@ RSpec.describe 'POST /links' do
         it 'Has the correct color' do
           expect(link.color).to eq 'yellow'
         end
+      end
+    end
+    describe 'The link is created by another user with a write permission' do
+      let!(:other_account) { create(:account) }
+      let!(:other_session) { create(:session, account: other_account) }
+      let!(:membership) { create(:membership, account: other_account, synthesizer:, enum_type: 'write') }
+
+      before do
+        post '/', {
+          auth_token: other_session.token, from:, to:, synthesizer_id: synthesizer.id.to_s
+        }
+      end
+      it 'Returns a 201 (Created) status code' do
+        expect(last_response.status).to be 201
+      end
+      it 'Returns the correct body' do
+        expect(last_response.body).to include_json(
+          from:, to:, synthesizer_id: synthesizer.id.to_s,
+        )
       end
     end
   end
@@ -167,6 +183,25 @@ RSpec.describe 'POST /links' do
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
           key: 'synthesizer_id', message: 'unknown'
+        )
+      end
+    end
+    describe 'The user has no write permissions on the synthesizer' do
+      let!(:other_account) { create(:account) }
+      let!(:other_session) { create(:session, account: other_account) }
+      let!(:membership) { create(:membership, account: other_account, synthesizer:, enum_type: 'read') }
+
+      before do
+        post '/', {
+          auth_token: other_session.token, from:, to:, synthesizer_id: synthesizer.id.to_s
+        }
+      end
+      it 'Returns a 403 (Forbidden) status code' do
+        expect(last_response.status).to be 403
+      end
+      it 'Returns the correct body' do
+        expect(last_response.body).to include_json(
+          key: 'auth_token', message: 'forbidden'
         )
       end
     end
