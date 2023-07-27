@@ -7,7 +7,7 @@ RSpec.describe 'POST /tools/parameters' do
   let!(:session) { create(:session, account:) }
   let!(:category) { create(:dopefun) }
   let!(:tool) { create(:tool, category:, experimental: false) }
-  let!(:synthesizer) { create(:synthesizer, account:) }
+  let!(:synthesizer) { Modusynth::Services::Synthesizers.instance.create(account:, name: 'test synth') }
   let!(:mod) { create(:module, tool:, synthesizer:) }
 
   describe 'Nominal case' do

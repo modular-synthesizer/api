@@ -9,7 +9,7 @@ RSpec.describe 'PUT /tools/parameters/:id' do
   let!(:category) { create(:dopefun) }
   let!(:tool) { create(:tool, category:, name: 'test-tool') }
   let!(:parameter) { create(:parameter, name: 'test-param', field: 'gain', tool:) }
-  let!(:synthesizer) { create(:synthesizer, account:) }
+  let!(:synthesizer) { Modusynth::Services::Synthesizers.instance.create(account:, name: 'test synth') }
   let!(:mod) { create(:module, tool:, synthesizer:) }
 
   describe 'Nominal case' do

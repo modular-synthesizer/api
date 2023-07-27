@@ -9,7 +9,7 @@ RSpec.describe 'DELETE /tools/ports/:id' do
   let!(:category) { create(:dopefun) }
   let!(:tool) { create(:VCA, category:, experimental: false) }
   let!(:port) { tool.ports.first }
-  let!(:synthesizer) { create(:synthesizer, account:) }
+  let!(:synthesizer) { Modusynth::Services::Synthesizers.instance.create(account:, name: 'test synth') }
   let!(:mod) { create(:module, tool:, synthesizer:) }
 
   describe 'Nominal case' do

@@ -9,7 +9,7 @@ RSpec.describe 'DELETE /tools/parameters/:id' do
   let!(:category) { create(:dopefun) }
   let!(:tool) { create(:tool, category:, experimental: false) }
   let!(:parameter) { create(:frequency, tool:) }
-  let!(:synthesizer) { create(:synthesizer, account:) }
+  let!(:synthesizer) { Modusynth::Services::Synthesizers.instance.create(account:, name: 'test synth') }
   let!(:mod) { create(:module, tool:, synthesizer:) }
 
   describe 'Nominal case' do
