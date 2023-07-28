@@ -10,6 +10,7 @@ module Modusynth
     autoload :Generators, './controllers/generators'
     autoload :Groups, './controllers/groups'
     autoload :Links, './controllers/links'
+    autoload :Memberships, './controllers/memberships'
     autoload :Modules, './controllers/modules'
     autoload :Ports, './controllers/ports'
     autoload :Rights, './controllers/rights'

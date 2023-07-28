@@ -1,7 +1,7 @@
-RSpec.describe 'GET /synthesizers/:id/memberships' do
+RSpec.describe 'POST /memberships' do
 
   def app
-    Modusynth::Controllers::Synthesizers
+    Modusynth::Controllers::Memberships
   end
 
   let!(:account) { create(:account) }
@@ -15,7 +15,8 @@ RSpec.describe 'GET /synthesizers/:id/memberships' do
 
   describe 'Nominal case' do
     before do
-      post "/#{synthesizer.id.to_s}/memberships", {
+      post '/', {
+        synthesizer_id: synthesizer.id.to_s,
         auth_token: session.token,
         account_id: guest.id.to_s
       }
@@ -68,7 +69,8 @@ RSpec.describe 'GET /synthesizers/:id/memberships' do
   describe 'Alternative cases' do
     describe 'Creating with a write permission' do
       before do
-        post "/#{synthesizer.id.to_s}/memberships", {
+        post '/', {
+          synthesizer_id: synthesizer.id.to_s,
           auth_token: session.token,
           account_id: guest.id.to_s,
           type: 'write'
@@ -101,7 +103,8 @@ RSpec.describe 'GET /synthesizers/:id/memberships' do
   describe 'Error cases' do
     describe 'When the account is not given' do
       before do
-        post "/#{synthesizer.id.to_s}/memberships", {
+        post '/', {
+          synthesizer_id: synthesizer.id.to_s,
           auth_token: session.token,
           type: 'write'
         }
@@ -123,7 +126,8 @@ RSpec.describe 'GET /synthesizers/:id/memberships' do
     end
     describe 'When the account is not found' do
       before do
-        post "/#{synthesizer.id.to_s}/memberships", {
+        post '/', {
+          synthesizer_id: synthesizer.id.to_s,
           auth_token: session.token,
           account_id: 'unknown',
           type: 'write'
@@ -144,9 +148,33 @@ RSpec.describe 'GET /synthesizers/:id/memberships' do
         expect(guest.memberships.count).to be 0
       end
     end
+    describe 'When the synthesizer is not given' do
+      before do
+        post '/', {
+          auth_token: session.token,
+          account_id: account.id.to_s,
+          type: 'write'
+        }
+      end
+      it 'Returns a 400 (Bad Request) status code ' do
+        expect(last_response.status).to be 400
+      end
+      it 'Returns the correct body' do
+        expect(last_response.body).to include_json(
+          key: 'synthesizer_id', message: 'required'
+        )
+      end
+      it 'Has created no more membership in the synthesizer' do
+        expect(synthesizer.memberships.count).to be 1
+      end
+      it 'Has created no membership in the account' do
+        expect(guest.memberships.count).to be 0
+      end
+    end
     describe 'When the synthesizer is not found' do
       before do
-        post '/unknown/memberships', {
+        post '/', {
+          synthesizer_id: 'unknown',
           auth_token: session.token,
           account_id: account.id.to_s,
           type: 'write'
@@ -157,7 +185,7 @@ RSpec.describe 'GET /synthesizers/:id/memberships' do
       end
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
-          key: 'id', message: 'unknown'
+          key: 'synthesizer_id', message: 'unknown'
         )
       end
       it 'Has created no more membership in the synthesizer' do
@@ -169,7 +197,8 @@ RSpec.describe 'GET /synthesizers/:id/memberships' do
     end
     describe 'When the user is not the creator of the synthesizer' do
       before do
-        post "/#{synthesizer.id.to_s}/memberships", {
+        post '/', {
+          synthesizer_id: synthesizer.id.to_s,
           auth_token: guest_session.token,
           account_id: account.id.to_s,
           type: 'write'
@@ -192,7 +221,8 @@ RSpec.describe 'GET /synthesizers/:id/memberships' do
     end
     describe 'when you try to create another :creator type membership' do
       before do
-        post "/#{synthesizer.id.to_s}/memberships", {
+        post '/', {
+          synthesizer_id: synthesizer.id.to_s,
           auth_token: session.token,
           account_id: guest.id.to_s,
           type: 'creator'
@@ -215,7 +245,8 @@ RSpec.describe 'GET /synthesizers/:id/memberships' do
     end
     describe 'When the membership already exists' do
       before do
-        post "/#{synthesizer.id.to_s}/memberships", {
+        post '/', {
+          synthesizer_id: synthesizer.id.to_s,
           auth_token: session.token,
           account_id: account.id.to_s,
           type: 'creator'

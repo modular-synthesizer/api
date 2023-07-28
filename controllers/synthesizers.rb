@@ -31,17 +31,8 @@ module Modusynth
         halt 204
       end
 
-      api_route 'post', '/:id/memberships' do
-        membership = membership_service.create(session:, **symbolized_params)
-        render_json 'synthesizers/_membership.json', status: 201, membership:
-      end
-
       def service
         Modusynth::Services::Synthesizers.instance
-      end
-
-      def membership_service
-        Modusynth::Services::Memberships.instance
       end
     end
   end

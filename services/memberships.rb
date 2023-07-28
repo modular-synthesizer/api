@@ -3,8 +3,8 @@ module Modusynth
     class Memberships < Modusynth::Services::Base
       include Singleton
 
-      def build(session: nil, id: nil, account_id: nil, type: 'read', **_)
-        synthesizer = Synthesizers.instance.find_or_fail(id:)
+      def build(session: nil, synthesizer_id: nil, account_id: nil, type: 'read', **_)
+        synthesizer = Synthesizers.instance.find_or_fail(id: synthesizer_id, field: 'synthesizer_id')
         if session.nil? or !synthesizer.memberships.where(account: session.account, enum_type: 'creator').exists?
           raise Modusynth::Exceptions.forbidden('auth_token')
         end
@@ -18,8 +18,8 @@ module Modusynth
         model.new(synthesizer:, account:, enum_type: type, x: 0, y: 0, scale: 1.0)
       end
 
-      def validate!(session: nil, id: nil, account_id: nil, type: 'read', **_)
-        membership = build(session:, id:, account_id:, type:)
+      def validate!(session: nil, synthesizer_id: nil, account_id: nil, type: 'read', **_)
+        membership = build(session:, synthesizer_id:, account_id:, type:)
         membership.validate!
         membership
       end
