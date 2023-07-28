@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Controllers
     class Memberships < Modusynth::Controllers::Base
