@@ -32,11 +32,16 @@ module Modusynth
       end
 
       api_route 'post', '/:id/memberships' do
-        service.add_user(**symbolized_params)
+        membership = membership_service.create(session:, **symbolized_params)
+        render_json 'synthesizers/_membership.json', status: 201, membership:
       end
 
       def service
         Modusynth::Services::Synthesizers.instance
+      end
+
+      def membership_service
+        Modusynth::Services::Memberships.instance
       end
     end
   end
