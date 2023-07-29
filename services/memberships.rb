@@ -34,6 +34,16 @@ module Modusynth
         Modusynth::Models::Social::Membership.where(synthesizer:, account: session.account).first
       end
 
+      def remove id:, session:, **_
+        membership = find(id:)
+        return if membership.nil? or membership.type_creator?
+        requester = find_by(synthesizer: membership.synthesizer, session:)
+        return if requester.nil?
+        if requester.type_creator? || membership.account.id == session.account.id
+          membership.delete
+        end
+      end
+
       def model
         Modusynth::Models::Social::Membership
       end
