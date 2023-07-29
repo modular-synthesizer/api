@@ -31,10 +31,6 @@ module Modusynth
         halt 204
       end
 
-      api_route 'post', '/:id/memberships' do
-        service.add_user(**symbolized_params)
-      end
-
       def service
         Modusynth::Services::Synthesizers.instance
       end
