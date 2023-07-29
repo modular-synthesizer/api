@@ -3,6 +3,11 @@ module Modusynth
     class Accounts < Modusynth::Services::Base
       include Singleton
 
+      def search session:, query: '', **_
+        return [] if query.size < 3
+        return model.where(username: /#{query}/).limit(10).to_a
+      end
+
       def build username: nil, email: nil, password: nil, password_confirmation: nil, **rest
         model.new(username:, email:, password:, password_confirmation:)
       end
