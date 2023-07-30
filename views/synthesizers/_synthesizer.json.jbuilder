@@ -5,3 +5,10 @@ json.creator do
   json.username membership.synthesizer.creator.account.username
   json.id membership.synthesizer.creator.account.id.to_s
 end
+json.members do
+  json.array! membership.synthesizer.guests do |m|
+    json.id m.account.id.to_s
+    json.username m.account.username
+    json.type m.type.to_s
+  end
+end
