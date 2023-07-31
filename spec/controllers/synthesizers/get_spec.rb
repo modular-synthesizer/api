@@ -21,10 +21,14 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
           id: synthesizer.id.to_s,
-          creator: {
-            username: babausse.username,
-            id: babausse.id.to_s
-          },
+          members: [
+            {
+              id: synthesizer.creator.id.to_s,
+              username: babausse.username,
+              account_id: babausse.id.to_s,
+              type: 'creator'
+            }
+          ],
           name: synthesizer.name,
           x: 0,
           y: 0,
@@ -55,11 +59,13 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
             id: synthesizer.id.to_s,
-            creator: {
-              username: babausse.username,
-              id: babausse.id.to_s
-            },
             members: [
+              {
+                id: synthesizer.creator.id.to_s,
+                username: babausse.username,
+                account_id: babausse.id.to_s,
+                type: 'creator'
+              },
               {
                 id: membership_1.id.to_s,
                 account_id: guest_1.id.to_s,

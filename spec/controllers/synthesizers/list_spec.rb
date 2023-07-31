@@ -34,10 +34,14 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
         expect(last_response.body).to include_json([
           {
             id: a_kind_of(String),
-            creator: {
-              username: babausse.username,
-              id: babausse.id.to_s
-            },
+            members: [
+              {
+                id: synthesizer.creator.id.to_s,
+                username: babausse.username,
+                account_id: babausse.id.to_s,
+                type: 'creator'
+              }
+            ],
             name: 'test synth',
             racks: 1,
             slots: 50,
