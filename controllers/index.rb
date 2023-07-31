@@ -18,5 +18,6 @@ module Modusynth
     autoload :Synthesizers, './controllers/synthesizers'
     autoload :Tools, './controllers/tools'
     autoload :ToolsResources, './controllers/tools_resources/index'
+    autoload :Websockets, './controllers/websockets'
   end
 end

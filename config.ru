@@ -32,3 +32,5 @@ map('/tools/links') { run Modusynth::Controllers::ToolsResources::InnerLinks.new
 map('/tools/nodes') { run Modusynth::Controllers::ToolsResources::InnerNodes.new }
 map('/tools/parameters') { run Modusynth::Controllers::ToolsResources::Parameters.new }
 map('/tools/ports') { run Modusynth::Controllers::ToolsResources::Ports.new }
+
+map('/websockets') { run Modusynth::Controllers::Websockets.new }

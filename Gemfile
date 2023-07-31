@@ -5,6 +5,7 @@ group :development, :production, :test do
   gem 'mongoid', '8.0.2'
   gem 'mongoid-embedded-errors', '4.0.0'
   gem 'sinatra', '2.2.2'
+  gem 'sinatra-websocket', '0.3.1'
   gem 'draper', '4.0.2'
   gem 'jbuilder', '2.11.5'
   gem "tilt-jbuilder", "0.7.1", :require => "sinatra/jbuilder"
