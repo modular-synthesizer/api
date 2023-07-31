@@ -60,8 +60,18 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
               id: babausse.id.to_s
             },
             members: [
-              { id: guest_1.id.to_s, username: guest_1.username, type: 'read' },
-              { id: guest_2.id.to_s, username: guest_2.username, type: 'write' }
+              {
+                id: membership_1.id.to_s,
+                account_id: guest_1.id.to_s,
+                username: guest_1.username,
+                type: 'read'
+              },
+              {
+                id: membership_2.id.to_s,
+                account_id: guest_2.id.to_s,
+                username: guest_2.username,
+                type: 'write'
+              }
             ]
           )
         end

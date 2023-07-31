@@ -7,7 +7,8 @@ json.creator do
 end
 json.members do
   json.array! membership.synthesizer.guests do |m|
-    json.id m.account.id.to_s
+    json.id m.id.to_s
+    json.account_id m.account.id.to_s
     json.username m.account.username
     json.type m.type.to_s
   end
