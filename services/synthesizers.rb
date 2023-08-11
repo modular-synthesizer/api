@@ -48,6 +48,7 @@ module Modusynth
           synthesizer.modules.each do |mod|
             Modusynth::Services::Modules.instance.remove(session:, id: mod.id)
           end
+          synthesizer.memberships.each { |m| m.delete }
           synthesizer.delete
         end
       end
