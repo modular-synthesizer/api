@@ -17,11 +17,17 @@ bundler install
 
 ## Environment variable
 
-If you execute the project in development, you do not need environment variables. In production though, you need a `API_URL` variable with the URL to the API without the trailing slash (example : `http://localhost:9292`, __NOT__ `http://localhost:9292/`).
+Copy the template in a .env file
+
+```bash
+cp env.template .env
+```
+
+Edit the `.env` file to add a valid value to the `MONGODB_URL` variable to plug the API on your database.
 
 ## Run the application
 
-Go to your application folder and run the `rackup` command, you can access the application at `http://localhost:9292`
+Go to your application folder and run the `bundle exec rackup` command, you can access the application at `http://localhost:9292`
 
 ## Run tests
 
