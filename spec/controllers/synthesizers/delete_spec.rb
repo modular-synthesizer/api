@@ -27,6 +27,26 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
       end
     end
     describe 'Alternative cases' do
+      describe 'THere were memberships in the synthesizer' do
+        let!(:guest) { create(:account) }
+        let!(:guest_membership) { create(:membership, synthesizer:, account: guest) }
+
+        before do
+          delete "/#{synthesizer.id.to_s}", {auth_token: session.token}
+        end
+        it 'Returns a 204 (No Content) status code' do
+          expect(last_response.status).to be 204
+        end
+        it 'Has deleted the guest membership' do
+          expect(guest.memberships.count).to be 0
+        end
+        it 'Has deleted the creator membership' do
+          expect(babausse.memberships.count).to be 0
+        end
+        it 'Has deleted the synthesizer' do
+          expect(Modusynth::Models::Synthesizer.count).to be 0
+        end
+      end
       describe 'Two consecutive calls' do
         before do
           delete "/#{synthesizer.id.to_s}", {auth_token: session.token}

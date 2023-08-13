@@ -39,14 +39,7 @@ module Modusynth
         return if membership.nil? or membership.type_creator?
         requester = find_by(synthesizer: membership.synthesizer, session:)
         return if requester.nil?
-        if requester.type_creator? || membership.account.id == session.account.id
-          if membership.type === 'creator'
-            synthesizer = membership.synthesizer
-            Modusynth::Services::Synthesizers.instance.remove(id: synthesizer.id, session:)
-          else
-            membership.delete
-          end
-        end
+        membership.delete if requester.type_creator? || membership.account.id == session.account.id
       end
 
       def model
