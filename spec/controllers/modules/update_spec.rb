@@ -8,7 +8,7 @@ describe Modusynth::Controllers::Modules do
 
   describe 'PUT /:id' do
     let!(:synth) do
-      Modusynth::Services::Synthesizers.instance.create(account:, name: 'test synth')
+      Modusynth::Services::Synthesizers.instance.create(account:, name: 'test synth', racks: 2)
     end
     let!(:node) { create(:VCA_module, synthesizer: synth) }
     let!(:param_id) { node.parameters.first.id.to_s }
@@ -48,6 +48,38 @@ describe Modusynth::Controllers::Modules do
         it 'Has updated the value' do
           node.reload
           expect(node.parameters.first.value).to be 2.0
+        end
+      end
+      describe 'When updating the slot of the module' do
+        before do
+          payload = { slot: 10, auth_token: session.token }
+          put "/#{node.id.to_s}", payload.to_json
+        end
+        it 'Returns a 200 (OK) status code' do
+          expect(last_response.status).to be 200
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json({ slot: 10 })
+        end
+        it 'Has updated the slot of the module' do
+          node.reload
+          expect(node.slot).to be 10
+        end
+      end
+      describe 'When updating the rack of the module' do
+        before do
+          payload = { rack: 1, auth_token: session.token }
+          put "/#{node.id.to_s}", payload.to_json
+        end
+        it 'Returns a 200 (OK) status code' do
+          expect(last_response.status).to be 200
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json({ rack: 1 })
+        end
+        it 'Has updated the slot of the module' do
+          node.reload
+          expect(node.rack).to be 1
         end
       end
     end
@@ -107,6 +139,78 @@ describe Modusynth::Controllers::Modules do
           expect(last_response.body).to include_json(
             key: 'auth_token', message: 'forbidden'
           )
+        end
+      end
+      describe 'When the slot is below 0' do
+        before do
+          payload = { slot: -1, auth_token: session.token }
+          put "/#{node.id.to_s}", payload.to_json
+        end
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            key: 'slot', message: 'value'
+          )
+        end
+        it 'Has not updated the slot of the module' do
+          node.reload
+          expect(node.slot).to be 0
+        end
+      end
+      describe 'When the rack is below 0' do
+        before do
+          payload = { rack: -1, auth_token: session.token }
+          put "/#{node.id.to_s}", payload.to_json
+        end
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            key: 'rack', message: 'value'
+          )
+        end
+        it 'Has not updated the slot of the module' do
+          node.reload
+          expect(node.rack).to be 0
+        end
+      end
+      describe 'When the slot cannot accept such a large mod' do
+        before do
+          payload = { slot: synth.slots - node.tool.slots + 1, auth_token: session.token }
+          put "/#{node.id.to_s}", payload.to_json
+        end
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            key: 'slot', message: 'value'
+          )
+        end
+        it 'Has not updated the slot of the module' do
+          node.reload
+          expect(node.slot).to be 0
+        end
+      end
+      describe 'When the slot is above the maximum' do
+        before do
+          payload = { slot: synth.slots + 1, auth_token: session.token }
+          put "/#{node.id.to_s}", payload.to_json
+        end
+        it 'Returns a 400 (Bad Request) status code' do
+          expect(last_response.status).to be 400
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            key: 'slot', message: 'value'
+          )
+        end
+        it 'Has not updated the slot of the module' do
+          node.reload
+          expect(node.slot).to be 0
         end
       end
     end

@@ -21,7 +21,8 @@ module Modusynth
         membership = Memberships.instance.find_or_fail_by(session:, synthesizer: mod.synthesizer)
         raise Modusynth::Exceptions.forbidden('auth_token') if membership.nil? or membership.type_read?
 
-        attributes = payload.slice('slot', 'rack')
+        attributes = payload.slice(:slot, :rack)
+
         mod.update(**attributes)
         parameters.each do |param|
           obj = mod.parameters.find(param[:id])
