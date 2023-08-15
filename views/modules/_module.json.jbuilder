@@ -2,7 +2,7 @@ json.id mod.id.to_s
 json.(mod, :slot, :rack)
 json.(mod.tool, :slots)
 json.type mod.tool.name
-json.tools (mod.tool.category.nil? ? 'tools' : mod.tool.category.name)
+json.category (mod.tool.category.nil? ? 'tools' : mod.tool.category.name)
 json.nodes do
   json.partial! 'tools/node', collection: mod.tool.inner_nodes, as: :node
 end

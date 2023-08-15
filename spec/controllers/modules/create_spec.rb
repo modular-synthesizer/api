@@ -26,6 +26,7 @@ describe Modusynth::Controllers::Modules do
       it 'Returns the correct body' do
         expect(last_response.body).to include_json({
           id: have_attributes(size: 24),
+          category: 'tools',
           type: 'VCA',
           nodes: [
             {name: 'gain', generator: 'GainNode'}
