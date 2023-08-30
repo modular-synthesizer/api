@@ -23,6 +23,8 @@ module Modusynth
         #   @return [Integer] the index on which to connect this port on the inner node (above or equal zero).
         field :index, type: Integer, default: 0
 
+        has_many :ports, class_name: '::Modusynth::Models::Modules::Port', inverse_of: :descriptor
+
         validates :name,
           presence: { message: 'required' },
           length: { minimum: 3, message: 'length', if: :name? }

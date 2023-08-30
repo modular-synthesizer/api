@@ -43,11 +43,6 @@ module Modusynth
         belongs_to :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :parameters, optional: true
 
         has_many :instances, class_name: '::Modusynth::Models::Modules::Parameter', inverse_of: :template
-
-        scope :called, ->(name) {
-          descriptors = Modusynth::Models::Tools::Descriptor.where(name: name)
-          return where(:descriptor_id.in => descriptors.map(&:id))
-        }
         
         validate :boundaries
 

@@ -17,13 +17,20 @@ module Modusynth
           prefix: '',
           **_
         )
-          template = model.new(name:, targets:, tool:, minimum:, maximum:, step:, precision:, field:, default:)
-          tool.modules.each do |mod|
-            mod.parameters << Modusynth::Models::Modules::Parameter.new(
-              template:,
-              value: template.default
-            )
-          end
+          template = model.new(
+            name:,
+            targets:,
+            tool:,
+            minimum:,
+            maximum:,
+            step:,
+            precision:,
+            field:,
+            default:,
+            instances: tool.modules.map do |mod|
+              Modusynth::Models::Modules::Parameter.new(value: default, module: mod)
+            end
+          )
           template
         end
         

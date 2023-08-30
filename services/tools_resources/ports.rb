@@ -5,10 +5,16 @@ module Modusynth
         include Singleton
 
         def build kind: nil, name: nil, target: nil, index: nil, tool: nil, **others
-          descriptor = model.new(kind:, name:, target:, index:, tool:)
-          tool.modules.each do |mod|
-            mod.ports << Modusynth::Models::Modules::Port.new(descriptor:)
-          end
+          descriptor = model.new(
+            kind:,
+            name:,
+            target:,
+            index:,
+            tool:,
+            ports: tool.modules.map do |mod|
+              Modusynth::Models::Modules::Port.new(module: mod)
+            end
+          )
           descriptor
         end
         
