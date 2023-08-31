@@ -15,6 +15,13 @@ module Modusynth
         # @!attribute [rw] code
         #   @return [String] the code executed when instanciating this generator.
         field :code, type: String
+        # @!attribute [rw] parameters
+        #   @eturn [String] the JSON encoded object containing the parameters of the generator
+        field :parameters, type: String
+
+        def complete_code
+          /^[a-zA-Z]+$/.match(self.code) ? "return new #{code}(context, payload);" : self.code
+        end
       end
     end
   end
