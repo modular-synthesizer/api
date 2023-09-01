@@ -19,6 +19,10 @@ module Modusynth
         #   @eturn [String] the JSON encoded object containing the parameters of the generator
         field :parameters, type: String
 
+        validates :name, presence: { message: 'required' }
+
+        validates :code, presence: { message: 'required' }
+
         def complete_code
           /^[a-zA-Z]+$/.match(self.code) ? "return new #{code}(context, payload);" : self.code
         end

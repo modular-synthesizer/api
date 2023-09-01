@@ -4,12 +4,12 @@ RSpec.describe 'POST /generators' do
   end
 
   let!(:admin) { create(:random_admin) }
-  let!(:admin_session) { create(:session, account: admin) }
+  let!(:session) { create(:session, account: admin) }
   
   describe 'Nominal case' do
     before do
       payload = {
-        auth_token: admin_session.token,
+        auth_token: session.token,
         name: 'square_oscillator',
         code: 'return context.createOscillator({type: "square"});'
       }
@@ -43,12 +43,10 @@ RSpec.describe 'POST /generators' do
     describe 'When creating a generator with only the classname and parameters' do
       before do
         post '/', {
-          auth_token: admin_session.token,
+          auth_token: session.token,
           name: 'createGain',
           code: 'GainNode',
-          parameters: [
-            {name: 'gain', value: 1}
-          ]
+          parameters: [ 'gain' ]
         }
       end
       it 'Returns a 201 (Created) status code' do
@@ -58,9 +56,7 @@ RSpec.describe 'POST /generators' do
         expect(last_response.body).to include_json(
           name: 'createGain',
           code: 'return new GainNode(context, payload);',
-          parameters: [
-            {name: 'gain', value: '1'}
-          ]
+          parameters: [ 'gain' ]
         )
       end
       describe 'Created generator' do
@@ -73,8 +69,63 @@ RSpec.describe 'POST /generators' do
           expect(generator.code).to eq 'GainNode'
         end
         it 'has the correct parameter name' do
-          expect(generator.parameters).to include_json [{name: 'gain', value: '1'}]
+          expect(generator.parameters).to include_json [ 'gain' ]
         end
+      end
+    end
+  end
+
+  describe 'Error cases' do
+    describe 'When the name is not given' do
+      before do
+        post '/', { code: 'GainNode', auth_token: session.token }
+      end
+      it 'Returns a 400 (Bad Request) status code' do
+        expect(last_response.status).to be 400
+      end
+      it 'Returns the correct body' do
+        expect(last_response.body).to include_json(
+          key: 'name', message: 'required'
+        )
+      end
+    end
+    describe 'When the code is not given' do
+      before do
+        post '/', { name: 'testNode', auth_token: session.token }
+      end
+      it 'Returns a 400 (Bad Request) status code' do
+        expect(last_response.status).to be 400
+      end
+      it 'Returns the correct body' do
+        expect(last_response.body).to include_json(
+          key: 'code', message: 'required'
+        )
+      end
+    end
+    describe 'When the parameters are not given as an array' do
+      before do
+        post '/', { name: 'testNode', code: 'GainNode', parameters: 'test', auth_token: session.token }
+      end
+      it 'Returns a 400 (Bad Request) status code' do
+        expect(last_response.status).to be 400
+      end
+      it 'Returns the correct body' do
+        expect(last_response.body).to include_json(
+          key: 'parameters', message: 'type'
+        )
+      end
+    end
+    describe 'When a parameter is not a string' do
+      before do
+        post '/', { name: 'testNode', code: 'GainNode', parameters: [{foo: 'bar'}], auth_token: session.token }
+      end
+      it 'Returns a 400 (Bad Request) status code' do
+        expect(last_response.status).to be 400
+      end
+      it 'Returns the correct body' do
+        expect(last_response.body).to include_json(
+          key: 'parameters', message: 'type'
+        )
       end
     end
   end
