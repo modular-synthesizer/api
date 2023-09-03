@@ -17,7 +17,7 @@ module Modusynth
         field :code, type: String
         # @!attribute [rw] parameters
         #   @eturn [String] the JSON encoded object containing the parameters of the generator
-        field :parameters, type: String, default: '[]'
+        field :parameters, type: Array, default: []
 
         validates :name, presence: { message: 'required' }
 

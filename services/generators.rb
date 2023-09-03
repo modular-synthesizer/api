@@ -5,7 +5,7 @@ module Modusynth
 
       def build name: '', code: '', parameters: [], **_
         check_parameters_type(parameters:)
-        model.new(name:, code:, parameters: JSON.generate(parameters))
+        model.new(name:, code:, parameters:)
       end
 
       def validate! name: '', code: '', parameters: [], **_

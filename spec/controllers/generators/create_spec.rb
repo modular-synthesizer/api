@@ -34,7 +34,7 @@ RSpec.describe 'POST /generators' do
         expect(generator.code).to eq 'return context.createOscillator({type: "square"});'
       end
       it 'Has no parameters' do
-        expect(generator.parameters).to eq '[]'
+        expect(generator.parameters).to eq []
       end
     end
   end
