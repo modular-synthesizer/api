@@ -3,12 +3,12 @@ module Modusynth
     class Generators < Modusynth::Services::Base
       include Singleton
 
-      def build name: '', code: '', parameters: [], **_
+      def build name: '', code: '', parameters: [], inputs: 1, outputs: 1, **_
         check_parameters_type(parameters:)
-        model.new(name:, code:, parameters:)
+        model.new(name:, code:, parameters:, inputs:, outputs:)
       end
 
-      def validate! name: '', code: '', parameters: [], **_
+      def validate! name: '', code: '', parameters: [], inputs: 1, outputs: 1, **_
         build(name:, code:, parameters:).validate!
       end
 

@@ -20,7 +20,9 @@ RSpec.describe 'GET /generators' do
         {
           id: generator.id.to_s,
           name: 'test_generator',
-          code: 'test code to execute();'
+          code: 'test code to execute();',
+          inputs: 1,
+          outputs: 1
         }
       ])
     end

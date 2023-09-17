@@ -56,7 +56,9 @@ RSpec.describe 'POST /generators' do
         expect(last_response.body).to include_json(
           name: 'createGain',
           code: 'return new GainNode(context, payload);',
-          parameters: [ 'gain' ]
+          parameters: [ 'gain' ],
+          inputs: 1,
+          outputs: 1
         )
       end
       describe 'Created generator' do
@@ -70,6 +72,39 @@ RSpec.describe 'POST /generators' do
         end
         it 'has the correct parameter name' do
           expect(generator.parameters).to include_json [ 'gain' ]
+        end
+      end
+    end
+    describe 'When specifying the number of inputs and outputs' do
+      before do
+        post '/', {
+          auth_token: session.token,
+          name: 'createGain',
+          code: 'GainNode',
+          inputs: 6,
+          outputs: 6
+        }
+      end
+      it 'Returns a 201 (Created) status code' do
+        expect(last_response.status).to be 201
+      end
+      it 'Returns the correct body' do
+        expect(last_response.body).to include_json(
+          name: 'createGain',
+          code: 'return new GainNode(context, payload);',
+          inputs: 6,
+          outputs: 6,
+          parameters: []
+        )
+      end
+      describe 'The created generator' do
+        let!(:generator) { Modusynth::Models::Tools::Generator.first }
+
+        it 'Has the correct number of inputs' do
+          expect(generator.inputs).to be 6
+        end
+        it 'Has the correct number of outputs' do
+          expect(generator.outputs).to be 6
         end
       end
     end
