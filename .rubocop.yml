@@ -4,3 +4,5 @@ Naming/BlockForwarding:
   Enabled: false
 AllCops:
   NewCops: enable
+Layout/EndOfLine:
+   Enabled: False
