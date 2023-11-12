@@ -7,8 +7,8 @@ RSpec.describe 'GET /processors' do
   let!(:session) { create(:session, account:) }
 
   describe 'Nominal case' do
-    let!(:processor) { create(:audio_processor, registration_name: 'testname', account:) }
-    let!(:public_processor) { create(:audio_processor, registration_name: 'public', public: true, account:) }
+    let!(:processor) { create(:audio_processor, account:) }
+    let!(:public_processor) { create(:audio_processor, url: 'https://other.com/', public: true, account:) }
 
     describe 'From the owner point of view' do
       before do

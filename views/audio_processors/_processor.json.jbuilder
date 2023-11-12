@@ -3,4 +3,4 @@ json.creator do
   json.id processor.account.id.to_s
   json.username processor.account.username
 end
-json.(processor, :registration_name, :process_function)
+json.(processor, :url, :public)

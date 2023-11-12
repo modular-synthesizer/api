@@ -8,27 +8,26 @@ module Modusynth
       include Mongoid::Document
       include Mongoid::Timestamps
 
-      # @!attribute [rw] process_function
-      #   @return [String] the code content of the process function.
-      field :process_function, type: String
-      # @!attribute [rw] registration_name
-      #   @return [String] the UNIQ name passed to the registerProcessor function, used to infer class name.
-      field :registration_name, type: String
+      store_in collection: 'audio_processors'
+
+      # @!attribute [rw] url
+      #   @return [String] the universal resource locator where the processor can be found.
+      field :url, type: String
       # @!attribute [rw] public
       #   @return [Boolean] TRUE to allow other users to use the processor too, FALSE otherwise.
-      field :public, type: String, default: false
+      field :public, type: Boolean, default: false
 
       # @!attribute [rw] account
       #   @return [Account] the creator of the processor.
       belongs_to :account, class_name: '::Modusynth::Models::Account', inverse_of: :audio_processors
 
-      validates :process_function,
-        presence: { message: 'required' }
-
-      validates :registration_name,
+      validates :url,
         presence: { message: 'required' },
-        uniqueness: { message: 'uniq', if: :registration_name? },
-        format: { with: /\A([a-z]+\-)*[a-z]+\Z/, message: 'format', if: :registration_name? }
+        format: {
+          with: /\Ahttps?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)\z/,
+          message: 'format',
+          if: :url?
+        }
     end
   end
 end

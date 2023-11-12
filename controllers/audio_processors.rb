@@ -10,8 +10,7 @@ module Modusynth
       end
 
       api_route 'get', '/:id' do
-        content_type 'text/javascript'
-        halt 200, service.get_and_format(**symbolized_params)
+        render_json 'audio_processors/_processor.json', processor: service.find_or_fail(**symbolized_params)
       end
 
       api_route 'post', '/', admin: true do

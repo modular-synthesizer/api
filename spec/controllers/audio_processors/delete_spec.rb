@@ -6,7 +6,7 @@ RSpec.describe 'DELETE /:id' do
 
   let!(:account) { create(:account, admin: true) }
   let!(:session) { create(:session, account:) }
-  let!(:processor) { create(:audio_processor, registration_name: 'testname', account:) }
+  let!(:processor) { create(:audio_processor, account:) }
 
   describe 'Nominal case' do
     before do
