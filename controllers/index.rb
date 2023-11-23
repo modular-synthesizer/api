@@ -9,6 +9,7 @@ module Modusynth
     autoload :Categories, './controllers/categories'
     autoload :Generators, './controllers/generators'
     autoload :Groups, './controllers/groups'
+    autoload :Iut, './controllers/iut'
     autoload :Links, './controllers/links'
     autoload :Memberships, './controllers/memberships'
     autoload :Modules, './controllers/modules'
