@@ -2,5 +2,7 @@ Style/Documentation:
   Enabled: false
 Naming/BlockForwarding:
   Enabled: false
+Layout/EndOfLine:
+  Enabled: false
 AllCops:
   NewCops: enable
