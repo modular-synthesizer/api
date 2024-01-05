@@ -3,12 +3,6 @@ module Modusynth
     class Initialization
       include Singleton
 
-      attr_reader :client
-
-      def initialize
-        @client = K8s::Client.config(K8s::Config.from_kubeconfig_env)
-      end
-
       # Creates some needed elements if the application has not been correctly initialized :
       # * A first administrator account with a random password that MUST be changed after init.
       # * A first application used to connect to the API
@@ -38,8 +32,6 @@ module Modusynth
             password_confirmation: password,
             admin: true
           )
-          puts 'Storing the password in the Kubernetes cluster secrets'
-          store_secret('admin_password', password)
         end
       end
 
@@ -53,16 +45,10 @@ module Modusynth
           )
           application.save!
           puts 'Storing the identifiers in the corresponding secret'
-          store_secret('public-key', application.public_key)
-          store_secret('private-key', application.private_key)
           puts 'Identifiers stored, this will need a frontend restart to properly work'
+        else
+          puts 'An application already exists in the database, no need to initialize it.'
         end
-      end
-
-      def store_secret(name, value)
-        creds = client.api('v1').resource('secrets', namespace:).get('frontend-credentials')
-        creds[:data][name.to_sym] = Base64.encode64(value)
-        client.api('v1').resource('secrets', namespace:).update_resource(creds)
       end
     end
   end
