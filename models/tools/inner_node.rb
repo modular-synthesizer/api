@@ -7,9 +7,15 @@ module Modusynth
       class InnerNode
         include Mongoid::Document
 
+        # @!attribute [rw] name
+        #   @return [String] the name of the inner node, not neceesarily uniq, usef to reference it in links/ports/parameters.
         field :name, type: String
-        
+        # @!attribute [rw] generator
+        #   @return [String] the name of the generator used to build this inner node.
         field :generator, type: String
+        # @!attribute [rw] polyphonic
+        #   @return [Boolean] TRUE if the node is meant to be duplicated for polyphony, FALSE otherwise.
+        field :polyphonic, type: Boolean, default: false
 
         # @!attribute [rw] x
         #   @return [Integer] the X coordinate of the graphical representation of the node.
