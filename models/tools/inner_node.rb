@@ -24,6 +24,10 @@ module Modusynth
         #   @return [Integer] the Y coordinate of the graphical representation of the node.
         field :y, type: Integer, default: 0
 
+        def generator_object
+          Modusynth::Models::Tools::Generator.find_by(name: generator)
+        end
+
         validates :name,
           presence: { message: 'required' },
           length: { minimum: 3, message: 'length', if: :name? }
