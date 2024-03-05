@@ -32,9 +32,7 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
           name: synthesizer.name,
           x: 0,
           y: 0,
-          scale: 1.0,
-          racks: 1,
-          slots: 50
+          scale: 1.0
         )
       end
     end

@@ -1,5 +1,5 @@
 json.id membership.synthesizer.id.to_s
-json.(membership.synthesizer, :name, :slots, :racks, :voices)
+json.(membership.synthesizer, :name, :voices)
 json.(membership, :x, :y, :scale)
 json.members do
   json.array! membership.synthesizer.memberships do |m|

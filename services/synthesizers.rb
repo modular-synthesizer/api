@@ -7,8 +7,8 @@ module Modusynth
         Modusynth::Models::Social::Membership.where(account:).to_a
       end
 
-      def build account:, name: nil, slots: 50, racks: 1, voices: 1, **_
-        instance = model.new(name:, slots:, racks:, voices:)
+      def build account:, name: nil, voices: 1, **_
+        instance = model.new(name:, voices:)
         instance.memberships << membership_model.new(account:, enum_type: 'creator')
         instance
       end
