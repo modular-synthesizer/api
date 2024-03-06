@@ -43,8 +43,6 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
               }
             ],
             name: 'test synth',
-            racks: 1,
-            slots: 50,
             x: 0,
             y: 0,
             scale: 1

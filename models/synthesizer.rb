@@ -12,10 +12,6 @@ module Modusynth
 
       field :name, type: String
 
-      field :slots, type: Integer, default: 50
-
-      field :racks, type: Integer, default: 1
-
       # @!attribute [rw] voices
       #  @return [Integer] the number of polyphony voices in the synthesizer, 1 means it's monophonic.
       field :voices, type: Integer, default: 1
@@ -33,12 +29,6 @@ module Modusynth
       
       validates :voices,
         numericality: { greater_than: 0, less_than: 257, message: 'value' }
-      
-      validates :slots,
-        numericality: { greater_than: 0, message: 'value' }
-      
-      validates :racks,
-        numericality: { greater_than: 0, message: 'value' }
 
       def creator
         memberships.where(enum_type: 'creator').first

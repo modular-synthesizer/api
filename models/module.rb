@@ -23,18 +23,6 @@ module Modusynth
 
       has_many :ports, class_name: '::Modusynth::Models::Modules::Port', inverse_of: :module
 
-      validates :slot, numericality: {
-        greater_than: -1,
-        less_than: ->(m){ m.synthesizer.slots - m.tool.slots },
-        message: 'value'
-      }
-
-      validates :rack, numericality: {
-        greater_than: -1,
-        less_than: ->(m) { m.synthesizer.racks },
-        message: 'value'
-      }
-
       def account
         synthesizer.account
       end
