@@ -3,7 +3,6 @@
 module Modusynth
   module Controllers
     class Accounts < Modusynth::Controllers::Base
-
       ACCOUNT_VIEW = 'accounts/account.json'
 
       api_route 'post', '/', authenticated: false do
