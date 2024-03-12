@@ -36,29 +36,6 @@ jobs:
     steps:
       - virtuacommands/perform-rubocop-analysis:
           directories: controllers/
-  docker-job:
-    docker:
-      - image: cimg/base:2022.06
-        auth:
-          username: $DOCKER_USERNAME
-          password: $DOCKER_PASSWORD
-    steps:
-      - checkout
-      - setup_remote_docker:
-          version: 20.10.14
-      - run:
-          name: Authenticate on Docker HUB from environment variable
-          command: echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
-      - run:
-          name: Set the version to be used in later steps
-          command: export DATETIME=`date +%Y-%m-%d_%H.%M.%S` && echo "export VERSION=${DATETIME}" >> $BASH_ENV
-      - run:
-          name: Build the docker image from the Dockerfile
-          command: docker build -t ${DOCKER_USERNAME}/${DOCKER_REPOSITORY}:${VERSION} -f deployment/Dockerfile .
-      - run:
-          name: Push the image to Docker HUB
-          command: docker push ${DOCKER_USERNAME}/${DOCKER_REPOSITORY}:${VERSION}
-
 workflows:
   version: 2.1
   build:
@@ -76,10 +53,3 @@ workflows:
           name: rest-of-tests
           folders: "spec/controllers/audio_processors spec/controllers/categories spec/controllers/generators spec/controllers/memberships"
       - lint-job
-      - docker-job:
-          requires:
-            - tools-tests
-            - synthesizers-tests
-            - authorizations-tests
-            - rest-of-tests
-            - lint-job
