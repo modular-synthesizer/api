@@ -28,7 +28,7 @@ module Modusynth
       end
 
       api_route 'delete', '/:id', admin: true do
-        Modusynth::Services::Tools::Delete.instance.remove(id: params[:id])
+        Modusynth::Services::Tools::Delete.instance.remove(session:, **symbolized_params)
         halt 204
       end
 

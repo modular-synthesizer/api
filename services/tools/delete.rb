@@ -5,11 +5,13 @@ module Modusynth
         include Singleton
         include Modusynth::Services::Concerns::Deleter
 
-        def delete tool
+        def delete tool, session: nil, **_
           tool.parameters.delete_all
           tool.ports.delete_all
           tool.controls.delete_all
-          Modusynth::Services::Modules.instance.remove_all(tool.modules)
+          tool.modules.each do |mod|
+            Modusynth::Services::Modules.instance.delete mod
+          end
           tool.delete
         end
 

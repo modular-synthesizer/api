@@ -6,3 +6,5 @@ Layout/EndOfLine:
   Enabled: false
 AllCops:
   NewCops: enable
+Layout/EndOfLine:
+   Enabled: False
