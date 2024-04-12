@@ -4,7 +4,7 @@ module Modusynth
   module Controllers
     class Synthesizers < Modusynth::Controllers::Base
       api_route 'get', '/' do
-        memberships = service.list(@session.account)
+        memberships = service.list(@session.account, **symbolized_params)
         render_json 'synthesizers/list.json', memberships:
       end
 

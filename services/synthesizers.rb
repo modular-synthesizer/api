@@ -3,8 +3,16 @@ module Modusynth
     class Synthesizers < Modusynth::Services::Base
       include Singleton
 
-      def list account
-        Modusynth::Models::Social::Membership.where(account:).to_a
+      def list account, **payload
+        query = { account: }
+        if payload.has_key?(:type)
+          if payload[:type].kind_of? Array
+            query[:enum_type.in] = payload[:type]
+          else
+            query[:enum_type] = payload[:type]
+          end
+        end
+        Modusynth::Models::Social::Membership.where(**query).to_a
       end
 
       def build account:, name: nil, voices: 1, **_
