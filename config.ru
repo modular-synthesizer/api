@@ -21,7 +21,6 @@ map('/groups') { run Modusynth::Controllers::Groups.new }
 map('/links') { run Modusynth::Controllers::Links.new }
 map('/memberships') { run Modusynth::Controllers::Memberships.new }
 map('/modules') { run Modusynth::Controllers::Modules.new }
-map('/processors') { run Modusynth::Controllers::AudioProcessors.new }
 map('/rights') { run Modusynth::Controllers::Rights.new }
 map('/sessions') { run Modusynth::Controllers::Sessions.new }
 map('/synthesizers') { run Modusynth::Controllers::Synthesizers.new }
