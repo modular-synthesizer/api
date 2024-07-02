@@ -3,7 +3,7 @@ RSpec.describe 'GET /categories' do
     Modusynth::Controllers::Categories
   end
 
-  let!(:account) { create(:account, admin: true) }
+  let!(:account) { create(:babausse) }
   let!(:session) { create(:session, account: account) }
 
   describe 'Nominal case' do
@@ -38,4 +38,5 @@ RSpec.describe 'GET /categories' do
   end
 
   include_examples 'authentication', 'get', '/'
+  include_examples 'scopes', 'get', '/'
 end

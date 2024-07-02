@@ -43,6 +43,12 @@ module Modusynth
         raise Modusynth::Exceptions.forbidden unless session.account.admin
       end
 
+      def check_rights session, rights
+        rights = [ rights ] unless rights.kind_of?(Array)
+        account_rights = Modusynth::Services::Permissions::Rights.instance.for_session(session).map(&:label)
+        raise Modusynth::Exceptions.forbidden if account_rights.intersection(rights).empty?
+      end
+
       # Checks if the user making the request has access to the resource. To
       # find the resource, the UUID is extracted from the payoad.
       #

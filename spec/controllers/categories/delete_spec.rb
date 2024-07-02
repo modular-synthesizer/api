@@ -26,5 +26,5 @@ RSpec.describe 'DELETE /categories' do
     end
   end
 
-  include_examples 'admin', 'delete', '/anything'
+  include_examples 'scopes', 'delete', '/any_id'
 end

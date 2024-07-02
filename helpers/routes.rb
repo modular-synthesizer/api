@@ -21,6 +21,7 @@ module Modusynth
           if options[:authenticated]
             @session = auth_service.authenticate(symbolized_params)
             auth_service.check_privileges(@session) if options[:admin]
+            auth_service.check_rights(@session, options[:rights]) if options[:rights]
             if options[:ownership] == true && respond_to?(:service)
               @resource = auth_service.ownership(symbolized_params, @session, service)
             end
