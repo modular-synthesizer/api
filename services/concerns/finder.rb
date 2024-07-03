@@ -40,6 +40,10 @@ module Modusynth
           container.where(id: id).first
         end
 
+        def find_by(**payload)
+          model.find_by(**payload)
+        end
+
         def check_model_implementation! caller:
           unless respond_to? :model, true
             raise Modusynth::Exceptions::Concern.new(caller:, called: 'model')

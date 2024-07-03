@@ -23,6 +23,14 @@ module Modusynth
           record
         end
 
+        def create_if_not_exists query: {}, payload: {}, merge_query: true, verbose: false
+          return nil unless respond_to?(:find_by)
+          found_item = find_by(**query)
+          return nil unless found_item.nil?
+          puts "Creating element with payload #{payload} from query #{query}"
+          return create(**(merge_query ? (query.merge(payload)) : payload))
+        end
+
         # Syntactic sugar to create an entire list of items easily.
         def build_all items, prefix: ''
           items.map.with_index do |item, index|

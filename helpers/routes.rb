@@ -11,6 +11,8 @@ module Modusynth
         options = with_defaults options
         auth_service = Modusynth::Services::Authentication.instance
 
+        create_rights(options[:rights] || [])
+
         send verb, path do
           if ENV['RACK_ENV'] != 'test'
             Modusynth::Services::OAuth::Applications.instance.authenticate(
@@ -27,6 +29,13 @@ module Modusynth
             end
           end
           instance_eval(&block)
+        end
+      end
+
+      def create_rights label = []
+        service = Modusynth::Services::Permissions::Rights.instance
+        (label.kind_of?(Array) ? label : [label]).each do |label|
+          service.create_if_not_exists(query: { label: label }, verbose: true)
         end
       end
 
