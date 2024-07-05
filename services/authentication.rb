@@ -43,10 +43,9 @@ module Modusynth
         raise Modusynth::Exceptions.forbidden unless session.account.admin
       end
 
-      def check_rights session, rights
-        rights = [ rights ] unless rights.kind_of?(Array)
+      def check_rights session, right
         account_rights = Modusynth::Services::Permissions::Rights.instance.for_session(session).map(&:label)
-        raise Modusynth::Exceptions.forbidden if account_rights.intersection(rights).empty?
+        raise Modusynth::Exceptions.forbidden unless account_rights.include? right
       end
 
       # Checks if the user making the request has access to the resource. To

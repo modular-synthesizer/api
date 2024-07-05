@@ -11,7 +11,7 @@ module Modusynth
         options = with_defaults options
         auth_service = Modusynth::Services::Authentication.instance
 
-        create_rights(options[:rights] || [])
+        create_right options[:right] if options.has_key? :right
 
         send verb, path do
           if ENV['RACK_ENV'] != 'test'
@@ -23,7 +23,7 @@ module Modusynth
           if options[:authenticated]
             @session = auth_service.authenticate(symbolized_params)
             auth_service.check_privileges(@session) if options[:admin]
-            auth_service.check_rights(@session, options[:rights]) if options[:rights]
+            auth_service.check_rights(@session, options[:right]) if options.has_key? :right
             if options[:ownership] == true && respond_to?(:service)
               @resource = auth_service.ownership(symbolized_params, @session, service)
             end
@@ -32,11 +32,9 @@ module Modusynth
         end
       end
 
-      def create_rights label = []
+      def create_right label
         service = Modusynth::Services::Permissions::Rights.instance
-        (label.kind_of?(Array) ? label : [label]).each do |label|
-          service.create_if_not_exists(query: { label: label }, verbose: true)
-        end
+        service.create_if_not_exists(query: { label: label }, verbose: true)
       end
 
       # Add the default values for all fields in the options hash.
