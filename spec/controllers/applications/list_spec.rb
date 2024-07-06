@@ -33,4 +33,5 @@ RSpec.describe 'GET /applications' do
       expect(last_response.body).to include_json([])
     end
   end
+  include_examples 'scopes', 'get', '/'
 end

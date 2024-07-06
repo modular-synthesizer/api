@@ -102,4 +102,5 @@ RSpec.describe 'POST /applications' do
       end
     end
   end
+  include_examples 'scopes', 'post', '/'
 end
