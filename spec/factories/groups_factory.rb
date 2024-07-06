@@ -7,10 +7,7 @@ FactoryBot.define do
     factory :full_rights do
       slug { 'full-rights' }
       after :create do |group|
-        group.scopes = [
-          create(:scope, label: Rights::CATEGORIES_WRITE),
-          create(:scope, label: Rights::CATEGORIES_READ)
-        ]
+        group.scopes = Rights.constants.map { |c| create(:scope, label: Rights.const_get(c)) }
         group.save!
       end
     end
