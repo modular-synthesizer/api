@@ -3,7 +3,7 @@ RSpec.describe 'GET /accounts/:id' do
     Modusynth::Controllers::Accounts
   end
 
-  let!(:account) { create(:account) }
+  let!(:account) { create(:babausse) }
   let!(:session) { create(:session, account: account) }
 
   describe 'Nominal case' do
@@ -23,4 +23,5 @@ RSpec.describe 'GET /accounts/:id' do
   end
 
   include_examples 'authentication', 'get', "/own"
+  include_examples 'scopes', 'get', "/own"
 end

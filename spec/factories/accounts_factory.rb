@@ -31,7 +31,12 @@ FactoryBot.define do
     factory(:random_admin) do
       admin { true }
       after :create do |account|
-        account.groups = [ create(:full_rights) ]
+        group = Modusynth::Models::Permissions::Group.find_by(slug: 'full-rights')
+        if group.nil?
+          account.groups = [ create(:full_rights) ]
+        else
+          account.groups.push(group)
+        end
         account.save!
       end
     end
