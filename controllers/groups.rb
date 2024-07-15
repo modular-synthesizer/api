@@ -3,26 +3,26 @@
 module Modusynth
   module Controllers
     class Groups < Modusynth::Controllers::Base
-      api_route 'get', '/' do
+      api_route 'get', '/', right: ::Rights::GROUPS_READ do
         render_json 'groups/list.json', groups: service.list
       end
 
-      get '/:id' do
+      api_route 'get', '/:id', right: ::Rights::GROUPS_READ do
         group = service.find_or_fail(id: payload[:id])
         render_json 'groups/_group.json', group:
       end
 
-      api_route 'post', '/', admin: true do
+      api_route 'post', '/', right: ::Rights::GROUPS_WRITE do
         group = service.create(slug: payload[:slug])
         render_json 'groups/_group.json', status: 201, group:
       end
 
-      api_route 'put', '/:id', admin: true do
+      api_route 'put', '/:id', right: ::Rights::GROUPS_WRITE do
         group = service.find_and_update(**symbolized_params)
         render_json 'groups/_group.json', group:
       end
 
-      delete '/:id' do
+      api_route 'delete', '/:id', right: ::Rights::GROUPS_WRITE do
         service.remove(id: payload[:id])
         halt 204
       end

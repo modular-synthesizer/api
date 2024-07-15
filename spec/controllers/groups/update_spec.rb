@@ -3,7 +3,7 @@ RSpec.describe 'PUT /:id' do
     Modusynth::Controllers::Groups.new
   end
 
-  let!(:account) { create(:account, admin: true) }
+  let!(:account) { create(:random_admin) }
   let!(:session) { create(:session, account: account) }
   let!(:scopes) { [
     create(:scope, label: 'Scopes::First'),
@@ -36,7 +36,7 @@ RSpec.describe 'PUT /:id' do
       )
     end
     describe 'Attributes of the updated record' do
-      let!(:updated) { Modusynth::Models::Permissions::Group.first }
+      let!(:updated) { Modusynth::Models::Permissions::Group.where(slug: 'new-slug').first }
       
       it 'Has updated the slug' do
         expect(updated.slug).to eq 'new-slug'
@@ -71,7 +71,7 @@ RSpec.describe 'PUT /:id' do
         )
       end
       describe 'Attributes of the updated record' do
-        let!(:record) { Modusynth::Models::Permissions::Group.first }
+        let!(:record) { Modusynth::Models::Permissions::Group.last }
 
         it 'Has not update the slug of the group' do
           expect(record.slug).to eq 'test-group'
@@ -103,7 +103,7 @@ RSpec.describe 'PUT /:id' do
         )
       end
       describe 'Attributes of the updated record' do
-        let!(:record) { Modusynth::Models::Permissions::Group.first }
+        let!(:record) { Modusynth::Models::Permissions::Group.last }
 
         it 'Has not modified the list of scopes' do
           expect(record.scopes.map(&:id)).to eq scopes.map(&:id)
@@ -142,4 +142,7 @@ RSpec.describe 'PUT /:id' do
       end
     end
   end
+
+  include_examples 'authentication', 'put', '/id'
+  include_examples 'scopes', 'put', '/id'
 end

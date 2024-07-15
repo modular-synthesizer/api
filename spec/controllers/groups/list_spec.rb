@@ -3,7 +3,7 @@ RSpec.describe 'GET /groups' do
     Modusynth::Controllers::Groups.new
   end
 
-  let!(:account) { create(:account) }
+  let!(:account) { create(:random_admin) }
   let!(:session) { create(:session, account: account) }
 
   describe 'Nominal case' do
@@ -25,19 +25,7 @@ RSpec.describe 'GET /groups' do
       ])
     end
   end
-  describe 'Alternative cases' do
-    describe 'With an empty list' do
-      before do
-        get '/', { auth_token: session.token }
-      end
-      it 'Returns a 200 (OK) status code' do
-        expect(last_response.status).to be 200
-      end
-      it 'Returns the correct body' do
-        expect(last_response.body).to eq '[]'
-      end
-    end
-  end
 
   include_examples 'authentication', 'get', '/'
+  include_examples 'scopes', 'get', '/'
 end
