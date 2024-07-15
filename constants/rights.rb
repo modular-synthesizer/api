@@ -8,4 +8,7 @@ module Rights
   
   CATEGORIES_READ = 'categories::read'
   CATEGORIES_WRITE = 'categories::write'
+
+  GENERATORS_READ = 'generators::read'
+  GENERATORS_WRITE = 'generators::write'
 end
