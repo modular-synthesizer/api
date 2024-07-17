@@ -4,7 +4,7 @@ RSpec.describe 'PUT /tools/parameters/:id' do
     Modusynth::Controllers::ToolsResources::Parameters
   end
 
-  let!(:account) { create(:account, admin: true) }
+  let!(:account) { create(:random_admin) }
   let!(:session) { create(:session, account:) }
   let!(:category) { create(:dopefun) }
   let!(:tool) { create(:tool, category:, name: 'test-tool') }

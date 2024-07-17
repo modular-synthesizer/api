@@ -568,6 +568,7 @@ RSpec.describe Modusynth::Controllers::Tools do
       end
     end
 
-    include_examples 'admin', 'post', '/'
+    include_examples 'authentication', 'post', '/'
+    include_examples 'scopes', 'post', '/'
   end
 end

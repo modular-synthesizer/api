@@ -3,7 +3,7 @@ RSpec.describe 'PUT /:id' do
     Modusynth::Controllers::Tools
   end
 
-  let!(:account) { create(:babausse, admin: true) }
+  let!(:account) { create(:random_admin) }
   let!(:session) { create(:session, account:) }
   let!(:dopefun) { create(:dopefun) }
   let!(:tool) { create(:VCA, category: dopefun) }
@@ -97,4 +97,7 @@ RSpec.describe 'PUT /:id' do
       end
     end
   end
+
+  include_examples 'authentication', 'put', '/id'
+  include_examples 'scopes', 'put', '/id'
 end

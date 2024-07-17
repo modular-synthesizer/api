@@ -17,4 +17,7 @@ module Rights
 
   SYNTHESIZERS_READ = 'synthesizers::read'
   SYNTHESIZERS_WRITE = 'synthesizers::write'
+
+  TOOLS_READ = 'tools::read'
+  TOOLS_WRITE = 'tools::write'
 end
