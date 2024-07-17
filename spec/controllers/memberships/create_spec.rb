@@ -4,7 +4,7 @@ RSpec.describe 'POST /memberships' do
     Modusynth::Controllers::Memberships
   end
 
-  let!(:account) { create(:account) }
+  let!(:account) { create(:random_admin) }
   let!(:session) { create(:session, account:) }
   let!(:synthesizer) do
     Modusynth::Services::Synthesizers.instance.create(account:, name: 'test synth')
@@ -268,4 +268,7 @@ RSpec.describe 'POST /memberships' do
       end
     end
   end
+
+  include_examples 'authentication', 'post', '/'
+  include_examples 'scopes', 'post', '/'
 end

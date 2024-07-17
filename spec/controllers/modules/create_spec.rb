@@ -3,7 +3,7 @@ describe Modusynth::Controllers::Modules do
     Modusynth::Controllers::Modules
   end
 
-  let!(:account) { create(:account) }
+  let!(:account) { create(:random_admin) }
   let!(:session) { create(:session, account: account) }
 
   describe 'POST /' do
@@ -84,7 +84,8 @@ describe Modusynth::Controllers::Modules do
         end
       end
     end
-
-  include_examples 'authentication', 'post', '/'
   end
+  
+  include_examples 'authentication', 'post', '/'
+  include_examples 'scopes', 'post', '/'
 end

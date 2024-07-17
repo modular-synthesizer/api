@@ -3,10 +3,10 @@ RSpec.describe 'DELETE /memberships/:id' do
     Modusynth::Controllers::Memberships
   end
 
-  let!(:account) { create(:account) }
+  let!(:account) { create(:random_admin) }
   let!(:session) { create(:session, account:) }
 
-  let!(:guest) { create(:account) }
+  let!(:guest) { create(:random_admin) }
   let!(:guest_session) { create(:session, account: guest) }
 
   let!(:synthesizer) do
@@ -64,7 +64,7 @@ RSpec.describe 'DELETE /memberships/:id' do
     end
     describe 'The account is nor the creator of the synthesizer, neither the user in the membership' do
       let!(:membership) { create(:membership, account: guest, synthesizer:) }
-      let!(:attacker) { create(:account) }
+      let!(:attacker) { create(:random_admin) }
       let!(:attacker_session) { create(:session, account: attacker) }
 
       before do
@@ -89,4 +89,7 @@ RSpec.describe 'DELETE /memberships/:id' do
       end
     end
   end
+
+  include_examples 'authentication', 'delete', '/id'
+  include_examples 'scopes', 'delete', '/id'
 end

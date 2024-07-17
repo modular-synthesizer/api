@@ -3,7 +3,7 @@ RSpec.describe 'PUT /:id' do
     Modusynth::Controllers::Synthesizers
   end
 
-  let!(:account) { create(:account) }
+  let!(:account) { create(:random_admin) }
   let!(:session) { create(:session, account:) }
   let!(:synthesizer) {
     Modusynth::Services::Synthesizers.instance.create(
@@ -231,4 +231,7 @@ RSpec.describe 'PUT /:id' do
       end
     end 
   end
+
+  include_examples 'authentication', 'put', '/id'
+  include_examples 'scopes', 'put', '/id'
 end

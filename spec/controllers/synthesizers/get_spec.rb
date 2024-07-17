@@ -42,8 +42,8 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
           Modusynth::Services::Synthesizers.instance.create(account: babausse, name: 'test synth')
         end
 
-        let!(:guest_1) { create(:account) }
-        let!(:guest_2) { create(:account) }
+        let!(:guest_1) { create(:random_admin) }
+        let!(:guest_2) { create(:random_admin) }
 
         let!(:membership_1) { create(:membership, account: guest_1, synthesizer:, enum_type: :read) }
         let!(:membership_2) { create(:membership, account: guest_2, synthesizer:, enum_type: :write) }
@@ -99,4 +99,5 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
   end
 
   include_examples 'authentication', 'get', "/anything"
+  include_examples 'scopes', 'get', "/anything"
 end

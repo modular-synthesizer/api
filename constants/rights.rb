@@ -14,4 +14,7 @@ module Rights
 
   GROUPS_READ = 'groups::read'
   GROUPS_WRITE = 'groups::write'
+
+  SYNTHESIZERS_READ = 'synthesizers::read'
+  SYNTHESIZERS_WRITE = 'synthesizers::write'
 end

@@ -32,7 +32,7 @@ module Modusynth
 
       api_route 'put', '/own', right: ::Rights::ACCOUNTS_WRITE do
         account = service.find_and_update(
-          **(symbolized_params.merge({ id: @session.account.id.to_s })),
+          **symbolized_params.merge({ id: @session.account.id.to_s }),
           session: @session
         )
         render_json ACCOUNT_VIEW, account:
