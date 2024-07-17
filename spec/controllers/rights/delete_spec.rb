@@ -3,7 +3,7 @@ RSpec.describe 'DELETE /scopes/:id' do
     Modusynth::Controllers::Rights.new
   end
 
-  let!(:account) { create(:account, admin: true) }
+  let!(:account) { create(:random_admin) }
   let!(:session) { create(:session, account: account) }
   let!(:scope) { create(:scope, label: 'Test::Deletion') }
 
@@ -28,5 +28,6 @@ RSpec.describe 'DELETE /scopes/:id' do
       end
     end
   end
-  include_examples 'admin', 'delete', '/:id'
+  include_examples 'authentication', 'delete', '/:id'
+  include_examples 'scopes', 'delete', '/:id'
 end

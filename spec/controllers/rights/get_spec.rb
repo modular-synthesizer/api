@@ -3,7 +3,7 @@ RSpec.describe 'GET /scopes/:id' do
     Modusynth::Controllers::Rights.new
   end
 
-  let!(:account) { create(:account, admin: true) }
+  let!(:account) { create(:random_admin) }
   let!(:session) { create(:session, account: account) }
   let!(:group) { create(:group, slug: 'test-get') }
   let!(:scope) { create(:scope, label: 'Test::Get', groups: [group]) }
@@ -41,5 +41,6 @@ RSpec.describe 'GET /scopes/:id' do
     end
   end
 
-  include_examples 'admin', 'get', '/:id'
+  include_examples 'authentication', 'get', '/:id'
+  include_examples 'scopes', 'get', '/:id'
 end

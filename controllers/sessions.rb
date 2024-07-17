@@ -12,7 +12,7 @@ module Modusynth
         render_json 'sessions/_session.json', session: @resource
       end
 
-      api_route 'delete', '/:id' do
+      api_route 'delete', '/:id', ownership: true do
         service.remove_if_owner(id: params[:id], account: @session.account)
         halt 204
       end
