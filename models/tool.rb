@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Models
     # Represents a tool able to create new nodes when instanciated.
@@ -38,17 +40,17 @@ module Modusynth
       has_many :parameters, class_name: '::Modusynth::Models::Tools::Parameter', inverse_of: :tool
 
       has_many :modules, class_name: '::Modusynth::Models::Module', inverse_of: :tool
-      
+
       validates :name,
-        presence: { message: 'required' },
-        length: { minimum: 3, message: 'minlength', if: :name? }
+                presence: { message: 'required' },
+                length: { minimum: 3, message: 'minlength', if: :name? }
 
       validates :slots,
-        presence: { message: 'required' },
-        numericality: { greater_than: 0, message: 'value', if: :slots? }
+                presence: { message: 'required' },
+                numericality: { greater_than: 0, message: 'value', if: :slots? }
 
-      def param name
-        descriptors = Modusynth::Models::Tools::Descriptor.where(name: name)
+      def param(name)
+        descriptors = Modusynth::Models::Tools::Descriptor.where(name:)
         parameters.where(:descriptor_id.in => descriptors.map(&:id).map(&:to_s)).first
       end
 

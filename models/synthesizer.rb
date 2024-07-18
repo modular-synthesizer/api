@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Models
     # A synthesizer is the base object of the business in our application. It creates one of the
@@ -24,11 +26,11 @@ module Modusynth
       has_many :memberships, class_name: '::Modusynth::Models::Social::Membership', inverse_of: :synthesizer
 
       validates :name,
-        presence: { message: 'required' },
-        length: { minimum: 6, message: 'length'}
-      
+                presence: { message: 'required' },
+                length: { minimum: 6, message: 'length' }
+
       validates :voices,
-        numericality: { greater_than: 0, less_than: 257, message: 'value' }
+                numericality: { greater_than: 0, less_than: 257, message: 'value' }
 
       def creator
         memberships.where(enum_type: 'creator').first
@@ -38,7 +40,7 @@ module Modusynth
         memberships.where(:enum_type.ne => 'creator').to_a
       end
 
-      def guest account:
+      def guest(account:)
         memberships.where(account:).first
       end
     end

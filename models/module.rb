@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Models
     # A module is what we called a "node" in ancient versions of the application.
@@ -42,13 +44,17 @@ module Modusynth
         end
       end
 
-      def method_missing name, *args, &block
+      def method_missing(name, *args, &block)
         if /[a-z_]+=/.match name
-          parameter = parameters.where(name: name[0..-1]).first
+          parameter = parameters.where(name: name[0..]).first
           parameter.value = args[0] unless parameter.nil?
         else
           super
         end
+      end
+
+      def respond_to_missing?(_name, _include_private = false)
+        super
       end
     end
   end
