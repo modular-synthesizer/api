@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Models
     module Tools
@@ -43,18 +45,20 @@ module Modusynth
         belongs_to :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :parameters, optional: true
 
         has_many :instances, class_name: '::Modusynth::Models::Modules::Parameter', inverse_of: :template
-        
+
         validate :boundaries
 
         validate :default_value
 
         def boundaries
           return if minimum.nil? || maximum.nil?
+
           errors.add(:boundaries, 'order') unless minimum <= maximum
         end
 
         def default_value
           return if default.nil? || minimum.nil? || maximum.nil?
+
           errors.add(:default, 'value') unless minimum <= default && maximum >= default
         end
       end

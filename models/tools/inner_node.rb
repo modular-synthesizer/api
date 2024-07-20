@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Models
     module Tools
@@ -8,7 +10,7 @@ module Modusynth
         include Mongoid::Document
 
         # @!attribute [rw] name
-        #   @return [String] the name of the inner node, not neceesarily uniq, usef to reference it in links/ports/parameters.
+        #   @return [String] the name of the inner node, not neceesarily uniq, usef to reference it
         field :name, type: String
         # @!attribute [rw] generator
         #   @return [String] the name of the generator used to build this inner node.
@@ -29,13 +31,13 @@ module Modusynth
         end
 
         validates :name,
-          presence: { message: 'required' },
-          length: { minimum: 3, message: 'length', if: :name? }
-        
+                  presence: { message: 'required' },
+                  length: { minimum: 3, message: 'length', if: :name? }
+
         validates :generator,
-          presence: { message: 'required' },
-          length: { minimum: 3, message: 'length', if: :generator? }
-        
+                  presence: { message: 'required' },
+                  length: { minimum: 3, message: 'length', if: :generator? }
+
         embedded_in :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :inner_nodes
       end
     end

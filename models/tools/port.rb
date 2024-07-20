@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Models
     module Tools
@@ -26,20 +28,20 @@ module Modusynth
         has_many :ports, class_name: '::Modusynth::Models::Modules::Port', inverse_of: :descriptor
 
         validates :name,
-          presence: { message: 'required' },
-          length: { minimum: 3, message: 'length', if: :name? }
-        
+                  presence: { message: 'required' },
+                  length: { minimum: 3, message: 'length', if: :name? }
+
         validates :index,
-          presence: { message: 'required' },
-          numericality: { greater_than: -1, message: 'value', if: :index? }
+                  presence: { message: 'required' },
+                  numericality: { greater_than: -1, message: 'value', if: :index? }
 
         validates :kind,
-          presence: { message: 'required' },
-          inclusion: { in: %w(input output), message: 'value' }
+                  presence: { message: 'required' },
+                  inclusion: { in: %w[input output], message: 'value' }
 
-        scope :inputs, ->{ where(kind: 'input') }
+        scope :inputs, -> { where(kind: 'input') }
 
-        scope :outputs, ->{ where(kind: 'output') }
+        scope :outputs, -> { where(kind: 'output') }
 
         # @!attribute [rw] tool
         #   @return [Modusynth::Models::Tool] the tool in which the port is declared.

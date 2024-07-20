@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Models
     module Modules
       # This represents the value a module has given to a parameter declared in its
-      # tool descriptor. The value will be replacing the 
+      # tool descriptor. The value will be replacing the
       class Parameter
         include Mongoid::Document
 
@@ -18,14 +20,14 @@ module Modusynth
           template.name
         end
 
-        [:minimum, :maximum, :step, :precision].each do |field|
+        %i[minimum maximum step precision].each do |field|
           define_method field do
             parameter.descriptor.send(field)
           end
         end
 
-        scope :called, ->(name) {
-          where(:parameter_id.in => Modusynth::Models::Tools::Parameter.called(name).map(&:id) )
+        scope :called, lambda { |name|
+          where(:parameter_id.in => Modusynth::Models::Tools::Parameter.called(name).map(&:id))
         }
       end
     end

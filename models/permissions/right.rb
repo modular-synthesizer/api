@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Models
     module Permissions
@@ -18,14 +20,14 @@ module Modusynth
         # @!attribute [rw] groups
         #   @return [Iterable] the groups this right has been granted to.
         has_and_belongs_to_many :groups,
-          class_name: '::Modusynth::Models::Permissions::Group',
-          inverse_of: :scopes
+                                class_name: '::Modusynth::Models::Permissions::Group',
+                                inverse_of: :scopes
 
         validates :label,
-          presence: { message: 'required' },
-          format: { with: /\A[A-Z]?[a-z_]+(::[A-Z]?[a-z_]+)*\Z/, message: 'format', if: :label? },
-          length: { minimum: 5, message: 'minlength', if: :label? },
-          uniqueness: { message: 'uniq', if: :label? }
+                  presence: { message: 'required' },
+                  format: { with: /\A[A-Z]?[a-z_]+(::[A-Z]?[a-z_]+)*\Z/, message: 'format', if: :label? },
+                  length: { minimum: 5, message: 'minlength', if: :label? },
+                  uniqueness: { message: 'uniq', if: :label? }
       end
     end
   end

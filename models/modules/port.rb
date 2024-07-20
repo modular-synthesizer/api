@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Models
     module Modules
@@ -8,7 +10,7 @@ module Modusynth
         include Mongoid::Document
 
         store_in collection: 'ports'
-        
+
         belongs_to :module, class_name: '::Modusynth::Models::Module'
 
         belongs_to :descriptor, class_name: '::Modusynth::Models::Tools::Port', inverse_of: :ports
@@ -17,8 +19,8 @@ module Modusynth
           descriptor.kind
         end
 
-        scope :inputs, ->{ where(:descriptor.in => Modusynth::Models::Tools::Port.all.inputs.to_a) }
-        scope :outputs, ->{ where(:descriptor.in => Modusynth::Models::Tools::Port.all.outputs.to_a) }
+        scope :inputs, -> { where(:descriptor.in => Modusynth::Models::Tools::Port.all.inputs.to_a) }
+        scope :outputs, -> { where(:descriptor.in => Modusynth::Models::Tools::Port.all.outputs.to_a) }
       end
     end
   end

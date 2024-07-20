@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Models
     module Tools
@@ -9,12 +11,12 @@ module Modusynth
         field :index, type: Integer
 
         validates :node,
-          presence: { message: 'required' },
-          length: { minimum: 3, if: :node?, message: 'length' }
-        
+                  presence: { message: 'required' },
+                  length: { minimum: 3, if: :node?, message: 'length' }
+
         validates :index,
-          presence: { message: 'required' },
-          numericality: { greater_than: -1, message: 'value' }
+                  presence: { message: 'required' },
+                  numericality: { greater_than: -1, message: 'value' }
       end
     end
   end
