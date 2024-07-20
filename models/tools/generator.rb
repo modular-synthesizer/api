@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Models
     module Tools
@@ -6,7 +8,7 @@ module Modusynth
       # @author Vincent Courtois <courtois.vincent@outlook.com>
       class Generator
         include Mongoid::Document
-        
+
         store_in collection: 'generators'
 
         # @!attribute [rw] name
@@ -34,7 +36,7 @@ module Modusynth
         validates :outputs, numericality: { greater_than: 0, message: 'value' }
 
         def complete_code
-          /^[a-zA-Z]+$/.match(self.code) ? "return new #{code}(context, payload);" : self.code
+          /^[a-zA-Z]+$/.match(code) ? "return new #{code}(context, payload);" : code
         end
       end
     end

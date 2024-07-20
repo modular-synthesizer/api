@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Models
     module Permissions
@@ -21,20 +23,20 @@ module Modusynth
         # @!attribute [rw] scopes
         #   @return [Iterable] the scopes this group can access through the application.
         has_and_belongs_to_many :scopes,
-          class_name: '::Modusynth::Models::Permissions::Right',
-          inverse_of: :groups
+                                class_name: '::Modusynth::Models::Permissions::Right',
+                                inverse_of: :groups
 
         # @!attribute [rw] accounts
         #   @return [Iterable] the accounts having a membership in this group.
         has_and_belongs_to_many :accounts,
-          class_name: '::Modusynth::Models::Account',
-          inverse_of: :groups
+                                class_name: '::Modusynth::Models::Account',
+                                inverse_of: :groups
 
         validates :slug,
-          presence: { message: 'required' },
-          format: { with: /\A[a-z]+(\-[a-z]+)*\Z/, message: 'format', if: :slug? },
-          length: { minimum: 5, message: 'minlength', if: :slug? },
-          uniqueness: { message: 'uniq' }
+                  presence: { message: 'required' },
+                  format: { with: /\A[a-z]+(-[a-z]+)*\Z/, message: 'format', if: :slug? },
+                  length: { minimum: 5, message: 'minlength', if: :slug? },
+                  uniqueness: { message: 'uniq' }
       end
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Models
     module Social
@@ -22,14 +24,14 @@ module Modusynth
         #   @return [Float] the level of zoom (higher = more zoomed) for the synthesizer.
         field :scale, type: Float, default: 1.0
 
-        enum_field :type, ['read', 'write', 'creator'], default: 'read'
+        enum_field :type, %w[read write creator], default: 'read'
 
         belongs_to :account, class_name: '::Modusynth::Models::Account', inverse_of: :memberships
 
         belongs_to :synthesizer, class_name: '::Modusynth::Models::Synthesizer', inverse_of: :memberships
 
         validates :scale,
-          numericality: { greater_than: 0, message: 'value' }
+                  numericality: { greater_than: 0, message: 'value' }
       end
     end
   end

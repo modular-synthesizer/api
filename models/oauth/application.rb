@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Models
     module OAuth
@@ -22,9 +24,9 @@ module Modusynth
         belongs_to :account, class_name: 'Modusynth::Models::Account', inverse_of: :application
 
         validates :name,
-          presence: { message: 'required' },
-          uniqueness: { message: 'uniq', if: :name? },
-          length: { minimum: 5, message: 'length', if: :name? }
+                  presence: { message: 'required' },
+                  uniqueness: { message: 'uniq', if: :name? },
+                  length: { minimum: 5, message: 'length', if: :name? }
       end
     end
   end

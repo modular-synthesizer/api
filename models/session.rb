@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Models
     # A session represents the persisted connection of a user on the application. It is
@@ -13,16 +15,16 @@ module Modusynth
 
       store_in collection: 'sessions'
 
-      field :duration, type: Integer, default: 604800
+      field :duration, type: Integer, default: 604_800
 
-      field :token, type: String, default: ->{ BSON::ObjectId.new.to_s }
+      field :token, type: String, default: -> { BSON::ObjectId.new.to_s }
 
       field :logged_out, type: Boolean, default: false
 
       belongs_to :account, class_name: '::Modusynth::Models::Account', inverse_of: :sessions
-      
+
       def expired?
-        logged_out || created_at + 1000 * duration < DateTime.now
+        logged_out || created_at + (1000 * duration) < DateTime.now
       end
     end
   end
