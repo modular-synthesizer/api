@@ -4,7 +4,7 @@ RSpec.describe Modusynth::Controllers::Tools do
   end
 
   describe 'GET /:id' do
-    let!(:account) { create(:account) }
+    let!(:account) { create(:random_admin) }
     let!(:session) { create(:session, account: account) }
 
     describe 'Nominal case' do
@@ -62,7 +62,8 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
       end
     end
-
-    include_examples 'authentication', 'get', '/anything'
   end
+
+  include_examples 'authentication', 'get', '/anything'
+  include_examples 'scopes', 'get', '/anything'
 end

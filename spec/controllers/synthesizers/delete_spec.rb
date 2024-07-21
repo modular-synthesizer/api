@@ -28,7 +28,7 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
     end
     describe 'Alternative cases' do
       describe 'THere were memberships in the synthesizer' do
-        let!(:guest) { create(:account) }
+        let!(:guest) { create(:random_admin) }
         let!(:guest_membership) { create(:membership, synthesizer:, account: guest) }
 
         before do
@@ -58,7 +58,7 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
         end
       end
       describe 'Not owner of the resource' do
-        let!(:attacker) { create(:account) }
+        let!(:attacker) { create(:random_admin) }
         let!(:attacker_session) { create(:session, account: attacker) }
 
         before do
@@ -76,4 +76,5 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
   end
 
   include_examples 'authentication', 'delete', "/anything"
+  include_examples 'scopes', 'delete', "/anything"
 end

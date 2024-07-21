@@ -90,5 +90,5 @@ RSpec.describe 'PUT /categories/:id' do
     end
   end
 
-  include_examples 'admin', 'put', '/anything'
+  include_examples 'scopes', 'put', '/any_id'
 end

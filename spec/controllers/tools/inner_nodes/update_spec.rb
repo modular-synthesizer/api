@@ -3,7 +3,7 @@ RSpec.describe 'PUT /tools/nodes/:id' do
     Modusynth::Controllers::ToolsResources::InnerNodes
   end
   
-  let!(:account) { create(:account, admin: true) }
+  let!(:account) { create(:random_admin) }
   let!(:session) { create(:session, account:) }
   let!(:category) { create(:dopefun) }
   let!(:tool) { create(:VCA, category:, experimental: false) }

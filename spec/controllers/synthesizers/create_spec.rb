@@ -119,4 +119,5 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
   end
 
   include_examples 'authentication', 'post', '/'
+  include_examples 'scopes', 'post', '/'
 end

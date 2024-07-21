@@ -3,7 +3,7 @@ describe Modusynth::Controllers::Modules do
     Modusynth::Controllers::Modules
   end
 
-  let!(:account) { create(:account) }
+  let!(:account) { create(:random_admin) }
   let!(:session) { create(:session, account: account) }
 
   describe 'PUT /:id' do
@@ -31,7 +31,7 @@ describe Modusynth::Controllers::Modules do
     end
     describe 'Alternative cases' do
       describe 'When the update is done by another user with the write permission' do
-        let!(:other_account) { create(:account) }
+        let!(:other_account) { create(:random_admin) }
         let!(:other_session) { create(:session, account: other_account) }
         let!(:membership) { create(:membership, account: other_account, synthesizer: synth, enum_type: 'write') }
 
@@ -121,7 +121,7 @@ describe Modusynth::Controllers::Modules do
         end
       end
       describe 'When the update is made by another user with the read permissions' do
-        let!(:other_account) { create(:account) }
+        let!(:other_account) { create(:random_admin) }
         let!(:other_session) { create(:session, account: other_account) }
         let!(:membership) { create(:membership, account: other_account, synthesizer: synth, enum_type: 'read') }
 
@@ -144,5 +144,6 @@ describe Modusynth::Controllers::Modules do
     end
 
     include_examples 'authentication', 'put', '/:id'
+    include_examples 'scopes', 'put', '/:id'
   end
 end

@@ -3,8 +3,8 @@ describe 'POST /groups' do
     Modusynth::Controllers::Groups
   end
 
-  let!(:account) { create(:account, admin: true) }
-  let!(:session) { create(:session, account: account) }
+  let!(:account) { create(:random_admin) }
+  let!(:session) { create(:session, account:) }
 
   describe 'Nominal case' do
     before do
@@ -22,15 +22,8 @@ describe 'POST /groups' do
         slug: 'custom-slug'
       )
     end
-    describe 'Created group' do
-      let!(:group_model) { Modusynth::Models::Permissions::Group }
-      
-      it 'Has created only one group' do
-        expect(group_model.all.count).to be 1
-      end
-      it 'Has created a group with the correct slug' do
-        expect(group_model.first.slug).to eq 'custom-slug'
-      end
+    it 'Has created a group with the correct slug' do
+      expect(Modusynth::Models::Permissions::Group.where(slug: 'custom-slug').count).to be 1
     end
   end
 
@@ -89,5 +82,6 @@ describe 'POST /groups' do
     end
   end
 
-  include_examples 'admin', 'post', '/'
+  include_examples 'authentication', 'post', '/'
+  include_examples 'scopes', 'post', '/'
 end

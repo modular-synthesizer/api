@@ -6,9 +6,15 @@ FactoryBot.define do
     password { 'testpassword' }
     password_confirmation { 'testpassword' }
 
+    factory :account_without_rights do; end
+
     factory :babausse do
       username { 'babausse' }
       email { 'courtois.vincent@outlook.com' }
+      after :create do |account|
+        account.groups = [ create(:full_rights) ]
+        account.save!
+      end
     end
 
     factory :cidualia do
@@ -24,6 +30,15 @@ FactoryBot.define do
 
     factory(:random_admin) do
       admin { true }
+      after :create do |account|
+        group = Modusynth::Models::Permissions::Group.find_by(slug: 'full-rights')
+        if group.nil?
+          account.groups = [ create(:full_rights) ]
+        else
+          account.groups.push(group)
+        end
+        account.save!
+      end
     end
   end
 end

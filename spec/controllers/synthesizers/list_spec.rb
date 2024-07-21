@@ -51,7 +51,7 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
       end
     end
     describe 'Restricted list depending on the ownership' do
-      let!(:other_user) { create(:account) }
+      let!(:other_user) { create(:random_admin) }
       let!(:other_session) { create(:session, account: other_user) }
       let!(:synthesizer) { create(:synthesizer, name: 'test synth') }
       let!(:other_synth) { create(:synthesizer, name: 'test synth') }
@@ -111,4 +111,5 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
   end
 
   include_examples 'authentication', 'get', '/'
+  include_examples 'scopes', 'get', '/'
 end

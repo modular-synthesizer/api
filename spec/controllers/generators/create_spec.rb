@@ -165,5 +165,6 @@ RSpec.describe 'POST /generators' do
     end
   end
 
-  include_examples 'admin', 'post', '/'
+  include_examples 'authentication', 'post', '/'
+  include_examples 'scopes', 'post', '/'
 end

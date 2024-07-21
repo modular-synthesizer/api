@@ -88,5 +88,5 @@ RSpec.describe 'POST /categories' do
     end
   end
 
-  include_examples 'admin', 'post', '/'
+  include_examples 'scopes', 'post', '/'
 end

@@ -3,7 +3,7 @@ RSpec.describe 'POST /scopes' do
     Modusynth::Controllers::Rights.new
   end
 
-  let!(:account) { create(:account, admin: true) }
+  let!(:account) { create(:random_admin) }
   let!(:session) { create(:session, account: account) }
 
   describe 'Nominal case' do
@@ -17,7 +17,8 @@ RSpec.describe 'POST /scopes' do
       expect(last_response.body).to include_json(label: 'Test::Scopes', groups: [])
     end
     describe 'The created scope' do
-      let!(:creation) { Modusynth::Models::Permissions::Right.first }
+      let!(:creation) { Modusynth::Models::Permissions::Right.last }
+      
       it 'Has the correct label' do
         expect(creation.label).to eq 'Test::Scopes'
       end
@@ -94,5 +95,7 @@ RSpec.describe 'POST /scopes' do
       end
     end
   end
-  include_examples 'admin', 'post', '/'
+
+  include_examples 'authentication', 'post', '/'
+  include_examples 'scopes', 'post', '/'
 end

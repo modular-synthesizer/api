@@ -3,7 +3,7 @@ RSpec.describe 'PUT /accounts/:id' do
     Modusynth::Controllers::Accounts
   end
 
-  let!(:account) { create(:account) }
+  let!(:account) { create(:babausse) }
   let!(:session) { create(:session, account:) }
 
   describe 'Nominal case' do
@@ -33,7 +33,7 @@ RSpec.describe 'PUT /accounts/:id' do
 
   describe 'Alternative cases' do
     describe 'An administrator updates another account' do
-      let!(:admin) { create(:account, admin: true) }
+      let!(:admin) { create(:random_admin) }
       let!(:session) { create(:session, account: admin) }
 
       before do

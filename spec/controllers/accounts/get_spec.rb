@@ -3,9 +3,9 @@ RSpec.describe 'GET /accounts/:id' do
     Modusynth::Controllers::Accounts
   end
 
-  let!(:account) { create(:account) }
+  let!(:account) { create(:babausse) }
 
-  let!(:admin) { create(:account, admin: true) }
+  let!(:admin) { create(:random_admin) }
   let!(:session) { create(:session, account: admin) }
 
   let!(:forbidden_user) { create(:account, admin: false) }
@@ -43,4 +43,5 @@ RSpec.describe 'GET /accounts/:id' do
   end
 
   include_examples 'authentication', 'get', "/own"
+  include_examples 'scopes', 'get', "/own"
 end

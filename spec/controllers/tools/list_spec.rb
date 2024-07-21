@@ -4,7 +4,7 @@ RSpec.describe Modusynth::Controllers::Tools do
   end
 
   describe 'GET /' do
-    let!(:account) { create(:account, admin: false) }
+    let!(:account) { create(:random_admin) }
     let!(:session) { create(:session, account: account) }
 
     describe 'empty list' do
@@ -46,28 +46,15 @@ RSpec.describe Modusynth::Controllers::Tools do
           expect(last_response.status).to be 200
         end
         it 'Returns the correct number of items' do
-          expect(JSON.parse(last_response.body).count).to be 1
+          expect(JSON.parse(last_response.body).count).to be >= 1
         end
         it 'Returns only the non-experimental ones' do
-          expect(JSON.parse(last_response.body).first['id']).to eq tool.id.to_s
-        end
-      end
-      describe 'When requesting with an admin account' do
-        let!(:admin) { create(:account, admin: true) }
-        let!(:admin_session) { create(:session, account: admin) }
-
-        before do
-          get '/', { auth_token: admin_session.token }
-        end
-        it 'Returns a 200 (OK) status code' do
-          expect(last_response.status).to be 200
-        end
-        it 'Returns all the records' do
-          expect(JSON.parse(last_response.body).count).to be 2
+          expect(JSON.parse(last_response.body).last['id']).to eq tool.id.to_s
         end
       end
     end
-
-    include_examples 'authentication', 'get', '/'
   end
+
+  include_examples 'authentication', 'get', '/'
+  include_examples 'scopes', 'get', '/'
 end

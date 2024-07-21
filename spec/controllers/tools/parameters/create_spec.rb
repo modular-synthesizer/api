@@ -3,7 +3,7 @@ RSpec.describe 'POST /tools/parameters' do
     Modusynth::Controllers::ToolsResources::Parameters
   end
   
-  let!(:account) { create(:account, admin: true) }
+  let!(:account) { create(:random_admin) }
   let!(:session) { create(:session, account:) }
   let!(:category) { create(:dopefun) }
   let!(:tool) { create(:tool, category:, experimental: false) }

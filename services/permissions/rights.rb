@@ -12,6 +12,10 @@ module Modusynth
           super.sort(label: 1).to_a
         end
 
+        def for_session session
+          session.account.groups.map(&:scopes).flatten.uniq
+        end
+
         def model
           Modusynth::Models::Permissions::Right
         end

@@ -3,11 +3,11 @@ describe Modusynth::Controllers::Modules do
     Modusynth::Controllers::Modules
   end
 
-  let!(:account) { create(:account) }
+  let!(:account) { create(:random_admin) }
   let!(:session) { create(:session, account: account) }
   let!(:synthesizer) { Modusynth::Services::Synthesizers.instance.create(account:, name: 'test synth') }
 
-  let!(:guest) { create(:account) }
+  let!(:guest) { create(:random_admin) }
   let!(:guest_session) { create(:session, account: guest) }
 
   describe 'DELETE /:id' do
@@ -69,5 +69,6 @@ describe Modusynth::Controllers::Modules do
     end
 
     include_examples 'authentication', 'delete', '/:id'
+    include_examples 'scopes', 'delete', '/:id'
   end
 end

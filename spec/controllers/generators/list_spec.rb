@@ -3,8 +3,8 @@ RSpec.describe 'GET /generators' do
     Modusynth::Controllers::Generators
   end
 
-  let!(:account) { create(:account, admin: true) }
-  let!(:session) { create(:session, account: account) }
+  let!(:account) { create(:random_admin) }
+  let!(:session) { create(:session, account:) }
 
   describe 'Nominal case' do
     let!(:generator) { create(:generator) }
@@ -40,4 +40,5 @@ RSpec.describe 'GET /generators' do
   end
 
   include_examples 'authentication', 'get', '/'
+  include_examples 'scopes', 'get', '/'
 end

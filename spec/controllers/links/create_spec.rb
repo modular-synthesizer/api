@@ -61,7 +61,7 @@ RSpec.describe 'POST /links' do
       end
     end
     describe 'The link is created by another user with a write permission' do
-      let!(:other_account) { create(:account) }
+      let!(:other_account) { create(:random_admin) }
       let!(:other_session) { create(:session, account: other_account) }
       let!(:membership) { create(:membership, account: other_account, synthesizer:, enum_type: 'write') }
 
@@ -224,4 +224,7 @@ RSpec.describe 'POST /links' do
       end
     end
   end
+
+  include_examples 'authentication', 'post', '/'
+  include_examples 'scopes', 'post', '/'
 end

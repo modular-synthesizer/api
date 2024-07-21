@@ -3,7 +3,7 @@ RSpec.describe 'GET /scopes' do
     Modusynth::Controllers::Rights.new
   end
 
-  let!(:account) { create(:account, admin: true) }
+  let!(:account) { create(:random_admin) }
   let!(:session) { create(:session, account: account) }
   let!(:first_scope) { create(:scope, label: 'Test::Bscope') }
   let!(:second_scope) { create(:scope, label: 'Test::Ascope') }
@@ -35,5 +35,7 @@ RSpec.describe 'GET /scopes' do
       end
     end
   end
-  include_examples 'admin', 'get', '/'
+  
+  include_examples 'authentication', 'get', '/'
+  include_examples 'scopes', 'get', '/'
 end
