@@ -9,7 +9,8 @@ module Modusynth
       end
 
       api_route 'get', '/:id', ownership: true do
-        render_json 'sessions/_session.json', session: @resource
+        rights = Modusynth::Services::Permissions::Rights.instance.for_session(@session).map(&:label).uniq
+        render_json 'sessions/_session.json', session: @resource, rights:
       end
 
       api_route 'delete', '/:id' do
