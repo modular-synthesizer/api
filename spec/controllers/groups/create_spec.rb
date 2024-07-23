@@ -27,6 +27,42 @@ describe 'POST /groups' do
     end
   end
 
+  describe 'Alternative cases' do
+    let!(:right) { create(:scope) }
+
+    describe 'With the default flag given at creation with true' do
+      before do
+        payload = {
+          slug: 'custom-slug-def',
+          auth_token: session.token,
+          is_default: true
+        }
+        post '/', payload.to_json
+      end
+      it 'Creates the group with the correct value for the flag' do
+        expect(Modusynth::Models::Permissions::Group.find_by(slug: 'custom-slug-def').is_default).to be true
+      end
+    end
+
+    describe 'With scopes given at creation' do
+      before do
+        payload = {
+          slug: 'custom-slug-rights',
+          scopes: [ right.id.to_s ],
+          auth_token: session.token
+        }
+        post '/', payload.to_json
+      end
+      it 'Creates the group correctly' do
+        expect(Modusynth::Models::Permissions::Group.where(slug: 'custom-slug-rights').count).to be 1
+      end
+      it 'Has created the group with the correct scopes' do
+        group = Modusynth::Models::Permissions::Group.find_by(slug: 'custom-slug-rights')
+        expect(group.scopes.first.id).to eq right.id
+      end
+    end
+  end
+
   describe 'Error cases' do
     describe 'The slug is not given' do
       before do

@@ -13,7 +13,7 @@ module Modusynth
       end
 
       api_route 'post', '/', right: ::Rights::GROUPS_WRITE do
-        group = service.create(slug: payload[:slug])
+        group = service.create(**symbolized_params)
         render_json 'groups/_group.json', status: 201, group:
       end
 

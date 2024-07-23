@@ -6,8 +6,8 @@ module Modusynth
       class Groups < Modusynth::Services::Base
         include Singleton
 
-        def build(slug:, scopes: [])
-          model.new(slug:, scopes: find_scopes(ids: scopes))
+        def build(slug: nil, is_default: false, scopes: [], **_)
+          model.new(slug:, is_default:, scopes: find_scopes(ids: scopes))
         end
 
         def list
