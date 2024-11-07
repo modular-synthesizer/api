@@ -4,13 +4,14 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
     Modusynth::Controllers::Synthesizers
   end
 
+  let!(:service) { Modusynth::Services::Synthesizers.instance }
   let!(:babausse) { create(:babausse) }
   let!(:session) { create(:session, account: babausse) }
 
   describe 'GET /:id' do
     describe 'Nominal case' do
       let!(:synthesizer) do
-        Modusynth::Services::Synthesizers.instance.create(account: babausse, name: 'test synth')
+        service.create(account: babausse, name: 'test synth')
       end
       before do
         get "/#{synthesizer.id.to_s}", {auth_token: session.token}
@@ -39,7 +40,7 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
     describe 'Alternative cases' do
       describe 'When the synthesizer has memberships' do
         let!(:synthesizer) do
-          Modusynth::Services::Synthesizers.instance.create(account: babausse, name: 'test synth')
+          service.create(account: babausse, name: 'test synth')
         end
 
         let!(:guest_1) { create(:random_admin) }
@@ -85,6 +86,23 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
       describe 'The synthesizer does not exist' do
         before do
           get '/unknown', {auth_token: session.token}
+        end
+        it 'Returns a 404 (Not Found) status code' do
+          expect(last_response.status).to be 404
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(
+            key: 'id', message: 'unknown'
+          )
+        end
+      end
+      describe 'The synthesizer has been deleted' do
+        let!(:synthesizer) do
+          service.create(account: babausse, name: 'test synth')
+        end
+        before do
+          service.remove(id: synthesizer.id, session:)
+          get "#{synthesizer.id.to_s}", { auth_token: session.token }
         end
         it 'Returns a 404 (Not Found) status code' do
           expect(last_response.status).to be 404

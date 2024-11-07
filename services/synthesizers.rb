@@ -3,6 +3,12 @@ module Modusynth
     class Synthesizers < Modusynth::Services::Base
       include Singleton
 
+      def find_or_fail id:, **_
+        synthesizer = super(id:)
+        raise Modusynth::Exceptions.unknown('id') if synthesizer.deleted?
+        synthesizer
+      end
+
       def list account, **payload
         query = { account: }
         if payload.has_key?(:type)
@@ -12,7 +18,7 @@ module Modusynth
             query[:enum_type] = payload[:type]
           end
         end
-        Modusynth::Models::Social::Membership.where(**query).to_a
+        Modusynth::Models::Social::Membership.where(**query).not.deleted.to_a
       end
 
       def build account:, name: nil, voices: 1, **_
@@ -55,6 +61,9 @@ module Modusynth
         return if membership.nil? or !membership.type_creator?
 
         synthesizer.update(deleted_at: DateTime.now, deleted_by: membership.account)
+        synthesizer.memberships.each do |ms|
+          ms.update(deleted_at: DateTime.now, deleted_by: membership.account)
+        end
       end
 
       def model
