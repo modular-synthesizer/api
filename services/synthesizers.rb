@@ -52,13 +52,9 @@ module Modusynth
         synthesizer = find(id:)
         return if synthesizer.nil?
         membership = Memberships.instance.find_by(session:, synthesizer:)
-        unless membership.nil? or membership.type_read?
-          synthesizer.modules.each do |mod|
-            Modusynth::Services::Modules.instance.remove(session:, id: mod.id)
-          end
-          synthesizer.memberships.each { |m| m.delete }
-          synthesizer.delete
-        end
+        return if membership.nil? or !membership.type_creator?
+
+        synthesizer.update(deleted_at: DateTime.now, deleted_by: membership.account)
       end
 
       def model
