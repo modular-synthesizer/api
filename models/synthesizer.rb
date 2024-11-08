@@ -27,7 +27,7 @@ module Modusynth
       #   @return [Array<Modusynth::Models::Link>] the array of the links between the synthesizers' modules.
       has_many :links, class_name: '::Modusynth::Models::Link', inverse_of: :synthesizer
       # @!attributes [r] memberships
-      #   @return [Array<Modusynth::Models::Social::Membership>] the memberships of people allowed to read/write this synthesizer.
+      #   @return [Array<Modusynth::Models::Social::Membership>] the memberships of people allowed to r/w this synth.
       has_many :memberships, class_name: '::Modusynth::Models::Social::Membership', inverse_of: :synthesizer
 
       validates :name,
