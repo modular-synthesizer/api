@@ -3,9 +3,9 @@ module Modusynth
     class Synthesizers < Modusynth::Services::Base
       include Singleton
 
-      def find_or_fail id:, **_
-        synthesizer = super(id:)
-        raise Modusynth::Exceptions.unknown('id') if synthesizer.deleted?
+      def find_or_fail id:, field: 'synthesizer_id', **_
+        synthesizer = super(id:, field:)
+        raise Modusynth::Exceptions.unknown(field) if synthesizer.deleted?
         synthesizer
       end
 

@@ -141,7 +141,7 @@ RSpec.describe 'PUT /:id' do
       end
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
-          key: 'id', message: 'unknown'
+          key: 'synthesizer_id', message: 'unknown'
         )
       end
     end
