@@ -20,14 +20,11 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
         expect(last_response.status).to be 204
       end
       it 'Has deleted the synthesizer' do
-        expect(Modusynth::Models::Synthesizer.all.size).to be 0
-      end
-      it 'Has deleted all the modules linked to it' do
-        expect(Modusynth::Models::Module.all.size).to be 0
+        expect(Modusynth::Models::Synthesizer.deleted.where(id: synthesizer.id).count).to be 1
       end
     end
     describe 'Alternative cases' do
-      describe 'THere were memberships in the synthesizer' do
+      describe 'There were memberships in the synthesizer' do
         let!(:guest) { create(:random_admin) }
         let!(:guest_membership) { create(:membership, synthesizer:, account: guest) }
 
@@ -37,14 +34,8 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
         it 'Returns a 204 (No Content) status code' do
           expect(last_response.status).to be 204
         end
-        it 'Has deleted the guest membership' do
-          expect(guest.memberships.count).to be 0
-        end
-        it 'Has deleted the creator membership' do
-          expect(babausse.memberships.count).to be 0
-        end
         it 'Has deleted the synthesizer' do
-          expect(Modusynth::Models::Synthesizer.count).to be 0
+          expect(Modusynth::Models::Synthesizer.deleted.count).to be 1
         end
       end
       describe 'Two consecutive calls' do

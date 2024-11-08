@@ -11,6 +11,7 @@ module Modusynth
         include Mongoid::Document
         include Mongoid::Timestamps
         include ::Modusynth::Models::Concerns::Enumerable
+        include ::Modusynth::Models::Concerns::Deletable
 
         store_in collection: 'synthesizer_memberships'
 
@@ -32,6 +33,8 @@ module Modusynth
 
         validates :scale,
                   numericality: { greater_than: 0, message: 'value' }
+
+        scope :deleted, -> { where(:deleted_at.ne => nil) }
       end
     end
   end
