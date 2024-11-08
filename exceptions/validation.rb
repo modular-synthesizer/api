@@ -1,20 +1,20 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Exceptions
     class Validation < StandardError
-
-      attr_reader :prefix
-
-      attr_reader :raw_messages
+      attr_reader :prefix, :raw_messages
 
       def initialize(messages: {}, prefix: '')
+        super "#{prefix}.errors"
         @raw_messages = messages
         @prefix = prefix
       end
 
       def messages
-        Hash[raw_messages.map.each do |key, value|
-          ["#{prefix}#{prefix != '' ? '.' : ''}#{key.to_s}".to_sym, value]
-        end]
+        raw_messages.transform_keys do |key|
+          "#{prefix}#{prefix == '' ? '' : '.'}#{key}".to_sym
+        end
       end
     end
   end

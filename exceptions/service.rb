@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Exceptions
     class Service < StandardError
@@ -14,28 +16,29 @@ module Modusynth
       #   @return [String] the path to the :key attribute in the payload if it is nested
       attr_reader :prefix
 
-      def initialize key:, error:, prefix: nil, status: 400, **rest
+      def initialize(key:, error:, prefix: nil, status: 400, **_rest)
+        super "#{key}.#{error}"
         @key = key.to_s
         @error = error.to_s
         @status = status.to_i
         @prefix = prefix.nil? || prefix.empty? ? '' : "#{prefix}."
       end
 
-      def self.from_unknown exception, prefix: nil
+      def self.from_unknown(exception, prefix: nil)
         raise Service.new key: exception.key, error: exception.error, status: 404, prefix:
       end
 
-      def self.from_bad_request exception, prefix: nil
+      def self.from_bad_request(exception, prefix: nil)
         raise Service.new key: exception.key, error: exception.error, status: 400, prefix:
       end
 
-      def self.from_messages messages, prefix: nil
+      def self.from_messages(messages, prefix: nil)
         key = messages.keys.first
         raise Service.new(key:, prefix:, error: messages[key].first)
       end
 
       def message
-        {key: "#{prefix}#{key}", message: error}.to_json
+        { key: "#{prefix}#{key}", message: error }.to_json
       end
     end
   end

@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Exceptions
     class Unknown < StandardError
-      attr_reader :key
-      attr_reader :error
+      attr_reader :key, :error
 
-      def initialize key, error
+      def initialize(key, error)
+        super "#{key}.#{error}"
         @key = key
         @error = error
       end
