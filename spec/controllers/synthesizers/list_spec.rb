@@ -108,6 +108,26 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
         end
       end
     end
+    describe 'List with deleted synthesizers in it' do
+
+      let!(:service) { Modusynth::Services::Synthesizers.instance }
+      let!(:synthesizer) { service.create(name: 'test synth', account: session.account) }
+
+      before do
+        service.remove(id: synthesizer.id, session:)
+      end
+
+      before do
+        get '/', {auth_token: session.token}
+      end
+
+      it 'Returns a 200 (OK) status code' do
+        expect(last_response.status).to be 200
+      end
+      it 'Returns an empty list' do
+        expect(JSON.parse(last_response.body)).to eq([])
+      end
+    end
   end
 
   include_examples 'authentication', 'get', '/'
