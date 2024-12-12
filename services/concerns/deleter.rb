@@ -34,16 +34,6 @@ module Modusynth
             respond_to?(:delete) ? delete(instance) : instance.delete
           end
         end
-
-        def remove_all(items)
-          items.each do |item|
-            if item.is_a? String
-              remove id: item
-            elsif item.respond_to? :id
-              remove id: item.id.to_s
-            end
-          end
-        end
       end
     end
   end
