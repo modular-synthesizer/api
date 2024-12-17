@@ -23,10 +23,12 @@ RSpec.describe 'POST /sessions' do
         token: have_attributes(size: 24),
         duration: 3600,
         created_at: date_matcher,
-        account_id: babausse.id.to_s,
-        username: babausse.username,
-        email: babausse.email,
-        admin: babausse.admin
+        admin: babausse.admin,
+        account: {
+          id: babausse.id.to_s,
+          username: babausse.username,
+          email: babausse.email
+        }
       )
     end
     describe 'The created session' do
