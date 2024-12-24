@@ -13,7 +13,7 @@ module Modusynth
         end
 
         def for_session session
-          session.account.groups.map(&:scopes).flatten.uniq
+          session.account.all_groups.map(&:scopes).flatten.uniq
         end
 
         def model

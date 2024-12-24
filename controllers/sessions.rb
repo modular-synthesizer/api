@@ -5,7 +5,8 @@ module Modusynth
     class Sessions < Modusynth::Controllers::Base
       api_route 'post', '/', authenticated: false do
         session = service.create(**symbolized_params)
-        render_json 'sessions/_session.json', status: 201, session:, rights: []
+        rights = Modusynth::Services::Permissions::Rights.instance.for_session(session)
+        render_json 'sessions/_session.json', status: 201, session:, rights:
       end
 
       api_route 'get', '/:id', ownership: true do

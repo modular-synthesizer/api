@@ -19,6 +19,7 @@ RSpec.describe 'POST /accounts' do
       expect(last_response.status).to be 201
     end
     it 'Returns the correct body' do
+      binding.pry
       expect(last_response.body).to include_json(
         username: 'babausse',
         email: 'courtois.vincent@outlook.com',
