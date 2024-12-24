@@ -4,9 +4,9 @@ group :development, :production, :test do
   gem 'bcrypt', '3.1.18'
   gem 'mongoid', '8.0.2'
   gem 'mongoid-embedded-errors', '4.0.0'
-  gem 'sinatra', '2.2.2'
-  gem 'draper', '4.0.2'
-  gem 'jbuilder', '2.11.5'
+  gem 'rack', '3.1.8'
+  gem 'sinatra', '4.1.0'
+  gem 'jbuilder', '2.13.0'
   gem "tilt-jbuilder", "0.7.1", :require => "sinatra/jbuilder"
   gem 'sinatra-cross_origin', '0.4.0', require: 'sinatra/cross_origin'
   gem 'dotenv', '2.8.1', require: 'dotenv/load'
