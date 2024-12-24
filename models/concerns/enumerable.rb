@@ -21,7 +21,7 @@ module Modusynth
             validates :"enum_#{field_name}", inclusion: { in: values.map(&:to_sym), message: 'inclusion' }
 
             define_method field_name do
-              return self["enum_#{field_name}"]
+              self["enum_#{field_name}"]
             end
 
             define_method "#{field_name}=" do |value|

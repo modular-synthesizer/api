@@ -6,7 +6,7 @@ module Modusynth
       attr_reader :key, :error
 
       def initialize(key, error)
-        super "#{key}.#{error}"
+        super("#{key}.#{error}")
         @key = key
         @error = error
       end

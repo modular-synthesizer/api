@@ -7,7 +7,7 @@ module Modusynth
         extend ActiveSupport::Concern
 
         def belongs_to?(session)
-          return unless respond_to? :account
+          return false unless respond_to? :account
           raise forbidden if session.expired?
           raise forbidden if account != session.account
 

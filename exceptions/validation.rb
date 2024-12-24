@@ -6,14 +6,14 @@ module Modusynth
       attr_reader :prefix, :raw_messages
 
       def initialize(messages: {}, prefix: '')
-        super "#{prefix}.errors"
+        super("#{prefix}.errors")
         @raw_messages = messages
         @prefix = prefix
       end
 
       def messages
         raw_messages.transform_keys do |key|
-          "#{prefix}#{prefix == '' ? '' : '.'}#{key}".to_sym
+          :"#{prefix}#{prefix == '' ? '' : '.'}#{key}"
         end
       end
     end

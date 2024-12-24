@@ -14,7 +14,7 @@ group :development, :production, :test do
 end
 
 group :development, :production do
-  gem 'puma', '5.6.5'
+  gem 'puma', '6.5.0'
   gem 'k8s-ruby', '0.14.0'
 end
 
@@ -26,5 +26,5 @@ group :test do
   gem 'rspec', '3.11.0'
   gem 'rspec_junit_formatter', '0.6.0'
   gem 'rspec-json_expectations', '2.2.0'
-  gem 'rubocop', '1.36.0'
+  gem 'rubocop', '1.69.2'
 end

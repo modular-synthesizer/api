@@ -17,7 +17,7 @@ module Modusynth
       attr_reader :prefix
 
       def initialize(key:, error:, prefix: nil, status: 400, **_rest)
-        super "#{key}.#{error}"
+        super("#{key}.#{error}")
         @key = key.to_s
         @error = error.to_s
         @status = status.to_i

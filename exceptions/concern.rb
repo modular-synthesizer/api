@@ -6,7 +6,7 @@ module Modusynth
       attr_reader :caller, :called
 
       def initialize(caller:, called:)
-        super "#{caller}.#{called}"
+        super("#{caller}.#{called}")
         @caller = caller
         @called = called
       end
