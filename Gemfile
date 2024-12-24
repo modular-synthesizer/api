@@ -1,8 +1,9 @@
 source 'https://rubygems.org/'
 
 group :development, :production, :test do
+  gem 'actionview', '8.0.1'
   gem 'bcrypt', '3.1.18'
-  gem 'mongoid', '8.0.2'
+  gem 'mongoid', '8.1.7'
   gem 'mongoid-embedded-errors', '4.0.0'
   gem 'rack', '3.1.8'
   gem 'sinatra', '4.1.0'
@@ -15,7 +16,6 @@ end
 
 group :development, :production do
   gem 'puma', '6.5.0'
-  gem 'k8s-ruby', '0.14.0'
 end
 
 group :test do

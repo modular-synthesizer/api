@@ -2,6 +2,7 @@ module Modusynth
   module Helpers
     module Payloads
       def body_params
+        return params if request.body.nil?
         request.body.rewind
         JSON.parse(request.body.read.to_s).merge(params)
       rescue JSON::ParserError
