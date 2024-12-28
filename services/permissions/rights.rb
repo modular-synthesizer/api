@@ -16,6 +16,10 @@ module Modusynth
           session.account.all_groups.map(&:scopes).flatten.uniq
         end
 
+        def has_right session: nil, right: ''
+          for_session(session).map(&:label).include?(right)
+        end
+
         def model
           Modusynth::Models::Permissions::Right
         end

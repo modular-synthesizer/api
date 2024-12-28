@@ -12,6 +12,10 @@ module Modusynth
         extend ActiveSupport::Concern
 
         def list **criteria
+          do_list **criteria
+        end
+
+        def do_list **criteria
           check_model_implementation! caller: 'find'
           model.where(**criteria)
         end

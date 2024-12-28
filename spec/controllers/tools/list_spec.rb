@@ -46,10 +46,36 @@ RSpec.describe Modusynth::Controllers::Tools do
           expect(last_response.status).to be 200
         end
         it 'Returns the correct number of items' do
-          expect(JSON.parse(last_response.body).count).to be >= 1
+          expect(JSON.parse(last_response.body).count).to be 2
         end
         it 'Returns only the non-experimental ones' do
-          expect(JSON.parse(last_response.body).last['id']).to eq tool.id.to_s
+          expect(JSON.parse(last_response.body).map { |t| t['id'] }).to eq [experimental_tool.id.to_s, tool.id.to_s]
+        end
+      end
+    end
+
+    describe 'when the user can not access the experimental tools' do
+      let!(:scope) { create(:scope, label: Rights::TOOLS_READ) }
+      let!(:group) { create(:group, slug: 'test-group', scopes: [ scope ]) }
+      let!(:account) { create(:account, groups: [ group ]) }
+      let!(:session) { create(:session, account:) }
+      
+      let!(:dopefun) { create(:dopefun) }
+      let!(:experimental_tool) { create(:VCA, category: dopefun) }
+      let!(:tool) { create(:VCA, category: dopefun, experimental: false) }
+
+      describe 'When requesting with a non admin account' do
+        before do
+          get '/', { auth_token: session.token }
+        end
+        it 'Returns a 200 (OK) status code' do
+          expect(last_response.status).to be 200
+        end
+        it 'Returns the correct number of items' do
+          expect(JSON.parse(last_response.body).count).to be 1
+        end
+        it 'Returns only the non-experimental ones' do
+          expect(JSON.parse(last_response.body).first['id']).to eq tool.id.to_s
         end
       end
     end

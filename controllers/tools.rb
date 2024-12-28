@@ -9,9 +9,7 @@ module Modusynth
       # The route to build the list of tools. It returns a subset
       # of fields from the tools to make it as light as possible.
       api_route 'get', '/', right: ::Rights::TOOLS_READ do
-        criteria = @session.account.admin ? {} : { experimental: false }
-        tools = service.list(**criteria).to_a
-        render_json 'tools/list.json', tools:
+        render_json 'tools/list.json', tools: service.list(session:).to_a
       end
 
       api_route 'get', '/:id', right: ::Rights::TOOLS_READ do

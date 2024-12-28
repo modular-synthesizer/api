@@ -25,4 +25,5 @@ module Rights
 
   TOOLS_READ = 'tools::read'
   TOOLS_WRITE = 'tools::write'
+  TOOLS_EXP = 'tools::experimental'
 end
