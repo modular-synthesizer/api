@@ -4,12 +4,12 @@ module Modusynth
   module Controllers
     module ToolsResources
       class Parameters < Modusynth::Controllers::ToolsResources::Base
-        api_route 'post', '/', admin: true do
+        api_route 'post', '/', right: ::Rights::TOOLS_WRITE do
           parameter = service.create(**symbolized_params, tool:)
           render_json 'tools/_parameter.json', status: 201, parameter:
         end
 
-        api_route 'put', '/:id', admin: true do
+        api_route 'put', '/:id', right: ::Rights::TOOLS_WRITE do
           parameter = service.find_and_update(**symbolized_params)
           render_json 'tools/_parameter.json', parameter:
         end

@@ -4,7 +4,7 @@ RSpec.describe 'DELETE /tools/ports/:id' do
     Modusynth::Controllers::ToolsResources::Ports
   end
   
-  let!(:account) { create(:account, admin: true) }
+  let!(:account) { create(:random_admin) }
   let!(:session) { create(:session, account:) }
   let!(:category) { create(:dopefun) }
   let!(:tool) { create(:VCA, category:, experimental: false) }

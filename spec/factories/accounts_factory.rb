@@ -17,11 +17,6 @@ FactoryBot.define do
       end
     end
 
-    factory :cidualia do
-      username { 'Cidualia' }
-      email { 'cidualia@modusynth.com' }
-    end
-
     # Used ONLY for authentication errors in controllers tests.
     factory :authenticator do
       username { 'authenticator' }

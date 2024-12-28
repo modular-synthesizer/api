@@ -8,7 +8,7 @@ module Modusynth
           Modusynth::Services::Tools::Find.instance
         end
 
-        api_route 'delete', '/:id', admin: true do
+        api_route 'delete', '/:id', right: ::Rights::TOOLS_WRITE do
           service.remove(**symbolized_params, container:)
           halt 204
         end

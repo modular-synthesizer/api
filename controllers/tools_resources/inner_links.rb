@@ -4,7 +4,7 @@ module Modusynth
   module Controllers
     module ToolsResources
       class InnerLinks < Modusynth::Controllers::ToolsResources::Base
-        api_route 'post', '/', admin: true do
+        api_route 'post', '/', right: ::Rights::TOOLS_WRITE do
           link = service.create(**symbolized_params, tool:)
           render_json 'tools/_link.json', status: 201, link:
         end
