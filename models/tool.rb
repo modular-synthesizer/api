@@ -24,6 +24,10 @@ module Modusynth
       #   @return [Boolean] TRUE if the tool is still an experimentation and not ready to be released, FALSE otherwise.
       field :experimental, type: Boolean, default: true
 
+      field :x, type: Integer, default: 0
+
+      field :y, type: Integer, default: 0
+
       belongs_to :category, class_name: '::Modusynth::Models::Category', inverse_of: :tools, optional: true
 
       embeds_many :inner_nodes, class_name: '::Modusynth::Models::Tools::InnerNode'

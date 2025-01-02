@@ -5,7 +5,7 @@ module Modusynth
         include Singleton
 
         def update instance, **payload
-          instance.update(payload.slice(:name, :slots, :experimental))
+          instance.update(payload.slice(:name, :slots, :experimental, :x, :y))
           if payload.key?(:categoryId)
             category =  Modusynth::Services::Categories.instance.find_or_fail(id: payload[:categoryId])
             instance.update(category:)
