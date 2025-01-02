@@ -28,6 +28,8 @@ module Modusynth
 
       field :y, type: Integer, default: 0
 
+      field :scale, type: Float, default: 1.0
+
       belongs_to :category, class_name: '::Modusynth::Models::Category', inverse_of: :tools, optional: true
 
       embeds_many :inner_nodes, class_name: '::Modusynth::Models::Tools::InnerNode'
