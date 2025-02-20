@@ -29,7 +29,8 @@ module Modusynth
       def send(prefix, operation, session, payload)
         return if @connection.nil? || session.expired?
 
-        queue = channel.queue("#{prefix}.#{session.token}", arguments: { 'x-message-ttl': 1_000 })
+        queue_name = "#{ENV.fetch('RACK_ENV', 'development')}.#{prefix}.#{session.token}"
+        queue = channel.queue(queue_name, arguments: { 'x-message-ttl': ENV.fetch('COMMANDS_TTL', 0) })
         queue.publish({ operation: operation, payload: JSON.parse(payload) }.to_json)
       end
     end
