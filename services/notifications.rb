@@ -1,0 +1,37 @@
+# frozen_string_literal: true
+
+module Modusynth
+  module Services
+    class Notifications
+      include Singleton
+
+      attr_reader :channel, :connection
+
+      def initialize
+        return if ENV['RACK_ENV'] == 'test'
+
+        @connection = Bunny.new ENV.fetch('RMQ_URI', nil)
+        @connection.start
+        @channel = connection.create_channel
+      end
+
+      # Sends a notification payload to several users' sessions that could want to be notified.
+      # These sessions do not need to be connected as the TTL for these command messages are very short.
+      #
+      # @param sessions [Array<Modusynth::Models::Session>] the sessions to send the notification to.
+      # @param payload [string] a JSON representation of the payload object we want to send the user.
+      def command(operation, sessions, payload)
+        sessions.each do |session|
+          send('commands', operation, session, payload)
+        end
+      end
+
+      def send(prefix, operation, session, payload)
+        return if @connection.nil? || session.expired?
+
+        queue = channel.queue("#{prefix}.#{session.token}", arguments: { 'x-message-ttl': 1_000 })
+        queue.publish({ operation: operation, payload: JSON.parse(payload) }.to_json)
+      end
+    end
+  end
+end

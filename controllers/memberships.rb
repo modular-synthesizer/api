@@ -5,7 +5,9 @@ module Modusynth
     class Memberships < Modusynth::Controllers::Base
       api_route 'post', '/', right: ::Rights::SYNTHESIZERS_WRITE do
         membership = service.create(session:, **symbolized_params)
-        render_json 'synthesizers/_membership.json', status: 201, membership:
+        rendered = jbuilder :'synthesizers/_membership.json', locals: {membership:}
+        notify.command('add.membership', membership.account.sessions, rendered)
+        halt 201, rendered
       end
 
       api_route 'delete', '/:id', right: ::Rights::SYNTHESIZERS_WRITE do
