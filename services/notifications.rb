@@ -26,13 +26,10 @@ module Modusynth
         end
       end
 
-      def send(prefix, operation, session, payload, check_existence: true)
+      def send(prefix, operation, session, payload)
         return if @connection.nil? || session.expired?
 
         queue_name = "#{ENV.fetch('RACK_ENV', 'development')}.#{prefix}.#{session.token}"
-
-        # If the queue does not exist, the client is not connected, thus do not need to receive commands
-        return if check_existence && !connection.queue_exists?(queue_name)
 
         queue = channel.queue(queue_name, auto_delete: true)
         queue.publish({ operation: operation, payload: JSON.parse(payload) }.to_json)
