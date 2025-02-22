@@ -30,7 +30,7 @@ module Modusynth
         return if @connection.nil? || session.expired?
 
         queue_name = "#{ENV.fetch('RACK_ENV', 'development')}.#{prefix}.#{session.token}"
-        queue = channel.queue(queue_name, arguments: { 'x-message-ttl': ENV.fetch('COMMANDS_TTL', 0) })
+        queue = channel.queue(queue_name, auto_delete: true)
         queue.publish({ operation: operation, payload: JSON.parse(payload) }.to_json)
       end
     end
