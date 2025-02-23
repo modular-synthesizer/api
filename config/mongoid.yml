@@ -18,7 +18,5 @@ production:
   clients:
     default:
       uri: <%= ENV['MONGODB_URL'] %>
-    iut:
-      uri: <%= (ENV['MONGODB_URL'] || '').gsub('/synple', '/iut') %>
   options:
     raise_not_found_error: false
