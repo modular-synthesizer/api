@@ -31,7 +31,7 @@ module Modusynth
 
         queue_name = "#{ENV.fetch('RACK_ENV', 'development')}.#{prefix}"
 
-        exchange = channel.topic(queue_name, durable: true, auto_delete: true)
+        exchange = channel.topic(queue_name, durable: true)
         body = { operation: operation, payload: JSON.parse(payload) }.to_json
         exchange.publish(body, routing_key: session.token)
       end
