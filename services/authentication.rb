@@ -21,15 +21,14 @@ module Modusynth
       #
       # @return [Modusynth::Models::Session] the authentication session for the
       #   user currently making the request.
-      def authenticate payload
-        unless payload.key? :auth_token
-          raise Modusynth::Exceptions.required :auth_token
-        end
+      def authenticate(payload)
+        raise Modusynth::Exceptions.required :auth_token unless payload.key? :auth_token
+
         # The :find_or_fail method will raise not found errors if needed.
         session = sessions.find_or_fail(id: payload[:auth_token], field: 'auth_token')
-        if session.account.nil? || session.expired?
-          raise Modusynth::Exceptions.forbidden
-        end
+        raise Modusynth::Exceptions.forbidden if session.account.nil? || session.expired?
+
+        session.update_attribute(:last_activity_date, DateTime.now)
         session
       end
 
@@ -39,11 +38,11 @@ module Modusynth
       #
       # @param session [Modusynth::Models::Session] the session makind the request.
       # @raise [Modusynth::Exceptions::Forbidden] if the user is not admin.
-      def check_privileges session
+      def check_privileges(session)
         raise Modusynth::Exceptions.forbidden unless session.account.admin
       end
 
-      def check_rights session, right
+      def check_rights(session, right)
         account_rights = Modusynth::Services::Permissions::Rights.instance.for_session(session).map(&:label)
         raise Modusynth::Exceptions.forbidden unless account_rights.include? right
       end
@@ -64,7 +63,7 @@ module Modusynth
       #
       # @return [Object] the instance of the resource found if not exception
       #   has been raised.
-      def ownership payload, session, service
+      def ownership(payload, session, service)
         return unless service.respond_to?(:find_or_fail)
         
         resource = service.find_or_fail(id: payload[:id])
@@ -74,9 +73,8 @@ module Modusynth
 
         return resource if session.account.admin
 
-        if resource.account != session.account 
-          raise Modusynth::Exceptions.forbidden
-        end
+        raise Modusynth::Exceptions.forbidden if resource.account != session.account
+
         resource
       end
 
