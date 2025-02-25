@@ -29,10 +29,11 @@ module Modusynth
       def send(prefix, operation, session, payload)
         return if @connection.nil? || session.expired?
 
-        queue_name = "#{ENV.fetch('RACK_ENV', 'development')}.#{prefix}.#{session.token}"
+        queue_name = "#{ENV.fetch('RACK_ENV', 'development')}.#{prefix}"
 
-        queue = channel.queue(queue_name, auto_delete: true)
-        queue.publish({ operation: operation, payload: JSON.parse(payload) }.to_json)
+        exchange = channel.topic(queue_name)
+        body = { operation: operation, payload: JSON.parse(payload) }.to_json
+        exchange.publish(body, routing_key: session.token)
       end
     end
   end

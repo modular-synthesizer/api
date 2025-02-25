@@ -5,18 +5,27 @@ module Modusynth
     class Memberships < Modusynth::Controllers::Base
       api_route 'post', '/', right: ::Rights::SYNTHESIZERS_WRITE do
         membership = service.create(session:, **symbolized_params)
-        rendered = jbuilder :'synthesizers/_membership.json', locals: { membership: }
-        notify.command('add.membership', membership.account.sessions, rendered)
-        halt 201, rendered
+        synthesizer = render_synthesizer(membership)
+        notify.command('add.membership', membership.account.sessions, synthesizer)
+        render_json 'synthesizers/_membership.json', status: 201, membership:
       end
 
       api_route 'delete', '/:id', right: ::Rights::SYNTHESIZERS_WRITE do
+        membership = service.find(id: symbolized_params[:id])
+        unless membership.nil?
+          synthesizer = render_synthesizer(membership)
+          notify.command('remove.membership', membership.account.sessions, synthesizer)
+        end
         service.remove(session:, **symbolized_params)
         halt 204
       end
 
       def service
         Modusynth::Services::Memberships.instance
+      end
+
+      def render_synthesizer(membership)
+        jbuilder :'synthesizers/_synthesizer.json', locals: { membership: }
       end
     end
   end
