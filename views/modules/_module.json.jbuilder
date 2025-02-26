@@ -10,7 +10,7 @@ json.links do
   json.partial! 'tools/link', collection: mod.tool.inner_links, as: :link
 end
 json.parameters do
-  json.partial! 'modules/parameter', collection: mod.parameters, as: :parameter
+  json.partial! 'modules/parameter', collection: mod.parameters, as: :parameter, locals: { session: }
 end
 json.ports do
   json.partial! 'modules/port', collection: mod.ports, as: :port

@@ -1,1 +1,1 @@
-json.partial! 'modules/module', collection: mods, as: :mod
+json.partial! 'modules/module', collection: mods, as: :mod, locals: { session: }

@@ -16,23 +16,12 @@ module Modusynth
         model.where(synthesizer_id:).to_a
       end
 
-      def update id: nil, session: nil, parameters: [], **payload
+      def update id: nil, session: nil, **payload
         mod = find_or_fail(id:)
         membership = Memberships.instance.find_or_fail_by(session:, synthesizer: mod.synthesizer)
         raise Modusynth::Exceptions.forbidden('auth_token') if membership.nil? or membership.type_read?
 
-        attributes = payload.slice(:slot, :rack)
-
-        mod.update(**attributes)
-        parameters.each do |param|
-          obj = mod.parameters.find(param[:id])
-          obj.value = param[:value]
-          template = obj.template
-          if obj.value < template.minimum || obj.value > template.maximum
-            raise Modusynth::Exceptions::BadRequest.new(template.name, 'value')
-          end
-          obj.save!
-        end
+        mod.update(**payload.slice(:slot, :rack))
         mod.save!
         mod
       end
