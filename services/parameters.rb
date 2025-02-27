@@ -52,8 +52,21 @@ module Modusynth
         parameter
       end
 
+      def sessions(parameter)
+        parameter.module.synthesizer.memberships.map(&:account).map(&:sessions).flatten
+      end
+
+      def notify_update(parameter, payload)
+        sessions = parameter.module.synthesizer.memberships.map(&:account).map(&:sessions).flatten
+        notify.command('parameter.update', sessions, payload)
+      end
+
       def modules
         Modusynth::Services::Modules.instance
+      end
+
+      def notify
+        Modusynth::Services::Notifications.instance
       end
     end
   end

@@ -25,6 +25,7 @@ module Modusynth
 
       api_route 'put', '/:module_id/parameters/:id', right: ::Rights::SYNTHESIZERS_WRITE do
         parameter = parameters_service.update(session:, **symbolized_params)
+        parameters_service.notify_update(parameter, render_parameter(s, parameter))
         render_json 'modules/_parameter.json', parameter:, session:
       end
 
@@ -34,6 +35,10 @@ module Modusynth
 
       def parameters_service
         Modusynth::Services::Parameters.instance
+      end
+
+      def render_parameter(parameter)
+        jbuilder :'modules/_parameter.json', locals: { parameter: }
       end
     end
   end

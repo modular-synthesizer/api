@@ -248,6 +248,45 @@ RSpec.describe Modusynth::Controllers::Modules do
         end
       end
     end
+    describe 'Notifications' do
+      let!(:guest) { create(:random_admin) }
+      let!(:guest_session) { create(:session, account: guest) }
+      let!(:membership) { create(:membership, type: :read, account: guest, synthesizer:) }
+      describe 'Blockade of a parameter' do
+        it 'Notifies all relevant users when blocking a parameter' do
+          service = Modusynth::Services::Notifications.instance
+          allow(service).to receive(:command)
+
+          payload = { auth_token: session.token, blocked: true }
+          put "/#{node.id}/parameters/#{parameter.id}", payload.to_json
+
+          expect(service).to have_received(:command).with(
+            'parameter.update',
+            [session, guest_session],
+            {
+              id: parameter.id.to_s,
+              value: 50.0,
+              field: 'gain',
+              name: 'gainparam',
+              targets: ['gain'],
+              minimum: 0,
+              maximum: 100,
+              step: 1.0,
+              precision: 0,
+              blocked: true
+            }.to_json
+          )
+        end
+      end
+      describe 'Unblock a parameter' do
+        it 'Notifies all relevant users when blocking a parameter' do
+        end
+      end
+      describe 'Setting of a value' do
+        it 'Notifies all relevant users when blocking a parameter' do
+        end
+      end
+    end
   end
 end
 
