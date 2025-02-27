@@ -56,9 +56,9 @@ module Modusynth
         parameter.module.synthesizer.memberships.map(&:account).map(&:sessions).flatten
       end
 
-      def notify_update(parameter, payload)
+      def notify_update(notifier, parameter, payload)
         sessions = parameter.module.synthesizer.memberships.map(&:account).map(&:sessions).flatten
-        notify.command('parameter.update', sessions, payload)
+        command('parameter.update', sessions, payload)
       end
 
       def modules

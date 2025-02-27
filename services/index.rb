@@ -10,7 +10,7 @@ module Modusynth
     autoload :Links, './services/links'
     autoload :Memberships, './services/memberships'
     autoload :Modules, './services/modules'
-    autoload :Notifications, './services/notifications'
+    autoload :Notifications, './services/notifications/index'
     autoload :OAuth, './services/oauth/index'
     autoload :Parameters, './services/parameters'
     autoload :Permissions, './services/permissions/index'
