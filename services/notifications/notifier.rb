@@ -24,11 +24,11 @@ module Modusynth
         end
 
         def connection
-          Modusynth::Services::Notifications::Connection.instance.connection
+          Modusynth::Services::Notifications::Connection.instance
         end
 
         def send(prefix, operation, session, payload)
-          return if @connection.nil? || session.expired?
+          return if @channel.nil? || session.expired?
 
           queue = "#{ENV.fetch('RACK_ENV', 'development')}.#{prefix}"
           exchange = channel.topic(queue)

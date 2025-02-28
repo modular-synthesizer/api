@@ -25,7 +25,7 @@ module Modusynth
 
       api_route 'put', '/:module_id/parameters/:id', right: ::Rights::SYNTHESIZERS_WRITE do
         parameter = parameters_service.update(session:, **symbolized_params)
-        parameters_service.notify_update(notifier, parameter, render_parameter(s, parameter))
+        parameters_service.notify_update(notifier:, parameter:, tab_id:)
         render_json 'modules/_parameter.json', parameter:, session:
       end
 

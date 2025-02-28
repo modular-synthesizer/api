@@ -7,7 +7,7 @@ module Modusynth
       register Modusynth::Helpers::Routes
       helpers Modusynth::Helpers::Payloads
 
-      attr_accessor :notifier
+      attr_accessor :notifier, :tab_id
 
       before do
         content_type :json
@@ -15,7 +15,7 @@ module Modusynth
                   'Access-Control-Allow-Origin' => '*',
                   'Access-Control-Allow-Methods' => '*'
                 })
-        tab_id = symbolized_params[:tabId] ?? ''
+        @tab_id = symbolized_params[:tabId] || ''
         @notifier = Modusynth::Services::Notifications::Notifier.new(tab_id)
       end
 

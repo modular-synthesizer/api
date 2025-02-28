@@ -56,17 +56,18 @@ module Modusynth
         parameter.module.synthesizer.memberships.map(&:account).map(&:sessions).flatten
       end
 
-      def notify_update(notifier, parameter, payload)
+      def notify_update(notifier: nil, parameter: nil, tab_id: nil)
+        serialized = serializer.new(parameter).to_h(tab_id).to_json
         sessions = parameter.module.synthesizer.memberships.map(&:account).map(&:sessions).flatten
-        command('parameter.update', sessions, payload)
+        notifier.command('parameter.update', sessions, serialized)
       end
 
       def modules
         Modusynth::Services::Modules.instance
       end
 
-      def notify
-        Modusynth::Services::Notifications.instance
+      def serializer
+        Modusynth::Serializers::Parameter
       end
     end
   end

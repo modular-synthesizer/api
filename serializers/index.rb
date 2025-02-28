@@ -2,7 +2,7 @@
 
 module Modusynth
   module Serializers
-    autoload :Base, 'serializers/base'
+    autoload :Base, './serializers/base'
     autoload :Parameter, './serializers/parameter'
   end
 end
