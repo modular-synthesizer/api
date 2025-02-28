@@ -15,11 +15,11 @@ module Modusynth
         #   @return [Float] the current value for this parameter.
         field :value, type: Float
         # @!attributes [rw] last_blocked_date
-        #   @return [DateTime] the last date and time at which the param has been blocked (a user has started an edition)
+        #   @return [DateTime] the last date and time at which the param has been blocked (a user has started editing)
         field :last_blocked_date, type: DateTime, default: nil
 
         # @!attributes [rw] template
-        #   @return [Modusynth::Models::Tools::Parameter] the parameter template from which the parameter has been created.
+        #   @return [Modusynth::Models::Tools::Parameter] the template from which the parameter has been created.
         belongs_to :template, class_name: '::Modusynth::Models::Tools::Parameter', inverse_of: :instances
         # @!attributes [rw] module
         #   @return [Modusynth::Models::Module] the instanciated module in which this parameter is placed.
