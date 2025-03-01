@@ -48,6 +48,10 @@ module Modusynth
       def guest(account:)
         memberships.where(account:).first
       end
+
+      def sessions
+        memberships.map(&:account).map(&:sessions).flatten.reject(&:expired?)
+      end
     end
   end
 end

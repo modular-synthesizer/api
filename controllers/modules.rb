@@ -5,7 +5,9 @@ module Modusynth
     class Modules < Modusynth::Controllers::Base
       api_route 'post', '/', right: ::Rights::SYNTHESIZERS_WRITE do
         mod = service.create(**symbolized_params)
-        render_json 'modules/_module.json', status: 201, mod:
+        rendered = jbuilder :'modules/_module.json', locals: { mod: }
+        notifier.command(Commands::ADD_MODULE, mod.synthesizer.sessions, rendered)
+        halt 201, rendered
       end
 
       api_route 'get', '/', right: ::Rights::SYNTHESIZERS_READ do
