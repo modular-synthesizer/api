@@ -8,7 +8,7 @@ puts "Running on environnement #{env}"
 require 'bundler'
 Bundler.require(env)
 
-require './constants/rights'
+require './constants/index'
 require './module'
 Mongoid.load!('config/mongoid.yml', env)
 

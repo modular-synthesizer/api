@@ -7,12 +7,16 @@ module Modusynth
       register Modusynth::Helpers::Routes
       helpers Modusynth::Helpers::Payloads
 
+      attr_accessor :notifier, :tab_id
+
       before do
         content_type :json
         headers({
                   'Access-Control-Allow-Origin' => '*',
                   'Access-Control-Allow-Methods' => '*'
                 })
+        @tab_id = symbolized_params[:tab_id] || 'unknown'
+        @notifier = Modusynth::Services::Notifications::Notifier.new(@tab_id)
       end
 
       configure do
@@ -61,10 +65,6 @@ module Modusynth
 
       def render_json(filename, status: 200, **locals)
         halt status, jbuilder(filename.to_sym, locals:)
-      end
-
-      def notify
-        Modusynth::Services::Notifications.instance
       end
 
       attr_reader :session

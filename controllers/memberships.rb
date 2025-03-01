@@ -6,7 +6,7 @@ module Modusynth
       api_route 'post', '/', right: ::Rights::SYNTHESIZERS_WRITE do
         membership = service.create(session:, **symbolized_params)
         synthesizer = render_synthesizer(membership)
-        notify.command('add.membership', membership.account.sessions, synthesizer)
+        notifier.command(Commands::ADD_MEMBERSHIP, membership.account.sessions, synthesizer)
         render_json 'synthesizers/_membership.json', status: 201, membership:
       end
 
@@ -14,7 +14,7 @@ module Modusynth
         membership = service.find(id: symbolized_params[:id])
         unless membership.nil?
           synthesizer = render_synthesizer(membership)
-          notify.command('remove.membership', membership.account.sessions, synthesizer)
+          notifier.command(Commands::REMOVE_MEMBERSHIP, membership.account.sessions, synthesizer)
         end
         service.remove(session:, **symbolized_params)
         halt 204
