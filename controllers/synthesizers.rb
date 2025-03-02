@@ -27,12 +27,21 @@ module Modusynth
       end
 
       api_route 'delete', '/:id', right: ::Rights::SYNTHESIZERS_WRITE do
+        synthesizer = service.find(**symbolized_params)
+        synthesizer&.memberships&.each do |m|
+          puts "Sending delete to #{m.account.username}"
+          notifier.command(Commands::REMOVE_MEMBERSHIP, m.account.sessions, render_synthesizer(m))
+        end
         service.remove(session:, **symbolized_params)
         halt 204
       end
 
       def service
         Modusynth::Services::Synthesizers.instance
+      end
+
+      def render_synthesizer(membership)
+        jbuilder :'synthesizers/_synthesizer.json', locals: { membership: }
       end
     end
   end
