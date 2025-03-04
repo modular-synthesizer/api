@@ -22,8 +22,10 @@ module Modusynth
 
       api_route 'delete', '/:id', right: ::Rights::SYNTHESIZERS_WRITE do
         mod = service.remove(session:, **symbolized_params)
-        rendered = jbuilder :'modules/_module.json', locals: { mod: }
-        notifier.command(Commands.remove_module(mod), mod.synthesizer.sessions, rendered)
+        if mod
+          rendered = jbuilder :'modules/_module.json', locals: { mod: }
+          notifier.command(Commands.remove_module(mod), mod.synthesizer.sessions, rendered)
+        end
         halt 204
       end
 
