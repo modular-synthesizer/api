@@ -6,7 +6,7 @@ module Modusynth
       api_route 'post', '/', right: ::Rights::SYNTHESIZERS_WRITE do
         mod = service.create(**symbolized_params)
         rendered = jbuilder :'modules/_module.json', locals: { mod: }
-        notifier.command(Commands::ADD_MODULE, mod.synthesizer.sessions, rendered)
+        notifier.command(Commands.add_module(mod), mod.synthesizer.sessions, rendered)
         halt 201, rendered
       end
 
