@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Services
     class Modules < Modusynth::Services::Base
       include Singleton
 
-      def build synthesizer_id: nil, tool_id: nil, slot: 0, rack: 0, session: nil, **_
+      def build synthesizer_id: nil, tool_id: nil, slot: 0, rack: 0, **_
         synthesizer = Modusynth::Services::Synthesizers.instance.find_or_fail(
           id: synthesizer_id,
           field: 'synthesizer_id'
@@ -19,7 +21,7 @@ module Modusynth
       def update id: nil, session: nil, parameters: [], **payload
         mod = find_or_fail(id:)
         membership = Memberships.instance.find_or_fail_by(session:, synthesizer: mod.synthesizer)
-        raise Modusynth::Exceptions.forbidden('auth_token') if membership.nil? or membership.type_read?
+        raise Modusynth::Exceptions.forbidden('auth_token') if membership.nil? || membership.type_read?
 
         attributes = payload.slice(:slot, :rack)
 
@@ -31,6 +33,7 @@ module Modusynth
           if obj.value < template.minimum || obj.value > template.maximum
             raise Modusynth::Exceptions::BadRequest.new(template.name, 'value')
           end
+
           obj.save!
         end
         mod.save!
@@ -49,8 +52,10 @@ module Modusynth
       def remove(session:, id:, **_)
         mod = find(id:)
         return if mod.nil?
+
         membership = Memberships.instance.find_by(session:, synthesizer: mod.synthesizer)
-        delete mod unless membership.nil? or membership.type_read?
+        delete mod unless membership.nil? || membership.type_read?
+        mod
       end
 
       def model
