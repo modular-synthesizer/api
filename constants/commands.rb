@@ -6,6 +6,7 @@ module Commands
   REMOVE_MEMBERSHIP = 'remove.membership'
   REMOVE_MODULE = 'remove.module'
   UPDATE_MODULE = 'update.module'
+  UPDATE_PARAM =  'update.parameter'
 
   class << self
     def add_module(mod)
@@ -18,6 +19,10 @@ module Commands
 
     def update_module(mod)
       "#{mod.synthesizer.id}.#{UPDATE_MODULE}"
+    end
+
+    def update_param(parameter)
+      "#{parameter.id}.#{UPDATE_PARAM}"
     end
   end
 end
