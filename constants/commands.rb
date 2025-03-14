@@ -4,6 +4,7 @@ module Commands
   ADD_CABLE = 'add.cable'
   ADD_MEMBERSHIP = 'add.membership'
   ADD_MODULE = 'add.module'
+  REMOVE_CABLE = 'remove.cable'
   REMOVE_MEMBERSHIP = 'remove.membership'
   REMOVE_MODULE = 'remove.module'
   UPDATE_MODULE = 'update.module'
@@ -16,6 +17,10 @@ module Commands
 
     def add_module(mod)
       "#{mod.synthesizer.id}.#{ADD_MODULE}"
+    end
+
+    def remove_cable(link)
+      "#{link.synthesizer.id}.#{REMOVE_CABLE}"
     end
 
     def remove_module(mod)

@@ -22,7 +22,12 @@ module Modusynth
       end
 
       api_route 'delete', '/:id', ownership: true, right: ::Rights::SYNTHESIZERS_WRITE do
-        service.remove(id: params[:id])
+        link = service.find(**symbolized_params)
+        service.remove(**symbolized_params)
+        unless link.nil?
+          rendered = jbuilder :'links/_link.json', locals: { link: }
+          notifier.command(Commands.remove_cable(link), link.synthesizer.sessions, rendered)
+        end
         halt 204
       end
 
