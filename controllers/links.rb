@@ -11,7 +11,9 @@ module Modusynth
 
       api_route 'post', '/', right: ::Rights::SYNTHESIZERS_WRITE do
         link = service.create(session: @session, **symbolized_params)
-        render_json 'links/_link.json', status: 201, link:
+        rendered = jbuilder :'links/_link.json', locals: { link: }
+        notifier.command(Commands.add_cable(link), link.synthesizer.sessions, rendered)
+        halt 201, rendered
       end
 
       api_route 'put', '/:id', ownership: true, right: ::Rights::SYNTHESIZERS_WRITE do

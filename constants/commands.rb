@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Commands
+  ADD_CABLE = 'add.cable'
   ADD_MEMBERSHIP = 'add.membership'
   ADD_MODULE = 'add.module'
   REMOVE_MEMBERSHIP = 'remove.membership'
@@ -9,6 +10,10 @@ module Commands
   UPDATE_PARAM =  'update.parameter'
 
   class << self
+    def add_cable(link)
+      "#{link.synthesizer.id}.#{ADD_CABLE}"
+    end
+
     def add_module(mod)
       "#{mod.synthesizer.id}.#{ADD_MODULE}"
     end
