@@ -6,6 +6,7 @@ module Modusynth
     autoload :Applications, './controllers/applications'
     autoload :Base, './controllers/base'
     autoload :Categories, './controllers/categories'
+    autoload :Components, './controllers/components'
     autoload :Generators, './controllers/generators'
     autoload :Groups, './controllers/groups'
     autoload :Iut, './controllers/iut'

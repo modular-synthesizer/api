@@ -3,6 +3,8 @@
 module Modusynth
   module Models
     module Tools
+      autoload :Component, './models/tools/component'
+      autoload :ComponentAttribute, './models/tools/component'
       autoload :Control, './models/tools/control'
       autoload :Descriptor, './models/tools/descriptor'
       autoload :Generator, './models/tools/generator'

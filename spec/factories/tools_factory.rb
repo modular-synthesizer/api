@@ -23,9 +23,7 @@ FactoryBot.define do
           build(:input_port, name: 'INPUT', target: 'gain'),
           build(:output_port, name: 'OUTPUT', target: 'gain')
         ]
-        tool.controls = [
-          build(:knob, payload: {x: 0, y: 100, target: 'gainparam'})
-        ]
+        tool.controls = [build(:knob)]
         tool.save!
       end
     end
