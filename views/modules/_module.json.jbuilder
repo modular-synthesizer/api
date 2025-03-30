@@ -2,6 +2,7 @@ json.id mod.id.to_s
 json.(mod, :slot, :rack)
 json.(mod.tool, :slots)
 json.synthesizer_id mod.synthesizer.id.to_s
+json.voices mod.synthesizer.voices
 json.type mod.tool.name
 json.category (mod.tool.category.nil? ? 'tools' : mod.tool.category.name)
 json.nodes do

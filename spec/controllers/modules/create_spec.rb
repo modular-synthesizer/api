@@ -32,6 +32,7 @@ describe Modusynth::Controllers::Modules do
             {name: 'gain', generator: 'GainNode'}
           ],
           links: [],
+          voices: 1,
           parameters: [
             {
               name: 'gainparam',

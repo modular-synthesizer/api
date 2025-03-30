@@ -15,11 +15,16 @@ describe Modusynth::Controllers::Parameters do
 
     describe 'Nominal case' do
       before do
-        payload = {value: 2, auth_token: session.token }
+        payload = {value: 2, auth_token: session.token, t: 1989 }
         put "/#{param_id}", payload.to_json
       end
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
+      end
+      it 'Returns the timestamp correctly' do
+        expect(last_response.body).to include_json(
+          t: 1989
+        )
       end
       it 'Has update the gain value' do
         node.reload
