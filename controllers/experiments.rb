@@ -4,7 +4,6 @@ module Modusynth
   module Controllers
     class Experiments < Modusynth::Controllers::Base
       get '/' do
-        Mongo::Logger.logger = Logger.new("./logs/#{DateTime.now}.log")
         mods = Modusynth::Models::Module
                .includes(:parameters, :ports)
                .where(synthesizer_id: symbolized_params[:synthesizer_id])
@@ -15,8 +14,6 @@ module Modusynth
         mods.each do |mod|
           mod.tool = tools[mod.tool_id]
         end
-        Mongo::Logger.logger = Logger.new($stdout)
-        Mongo::Logger.level = 1
         render_json 'modules/list.json', mods:
       end
     end
