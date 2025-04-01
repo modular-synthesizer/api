@@ -14,6 +14,12 @@ module Modusynth
           do_list(**criteria)
         end
 
+        def find_by_ids(ids: [], **_)
+          Modusynth::Models::Tool
+            .includes(:ports, :parameters, :controls)
+            .where(:id.in => ids)
+        end
+
         def find_if_allowed id: nil, session:, **_
           tool = find_or_fail(id:)
           if tool.experimental && can_see_experimentals(session:)

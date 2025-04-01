@@ -17,7 +17,6 @@ module Modusynth
       def list(synthesizer_id:, **_)
         model
           .where(synthesizer_id:)
-          .includes(:synthesizer, :parameters, :ports, tool: %i[category inner_nodes inner_links controls])
       end
 
       def update id: nil, session: nil, **payload
