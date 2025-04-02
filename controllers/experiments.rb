@@ -3,7 +3,7 @@
 module Modusynth
   module Controllers
     class Experiments < Modusynth::Controllers::Base
-      api_route 'get', '/' do
+      api_route 'get', '/', right: ::Rights::SYNTHESIZERS_READ do
         halt 200, 'ok'
       end
     end

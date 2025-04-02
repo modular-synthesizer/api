@@ -14,6 +14,7 @@ module Modusynth
         create_right(**options) if options.key? :right
 
         send verb, path do
+          Mongo::Logger.level = 0
           if ENV['RACK_ENV'] != 'test'
             Modusynth::Services::OAuth::Applications.instance.authenticate(
               request.env['HTTP_X_PUBLIC_KEY'],
@@ -23,7 +24,7 @@ module Modusynth
           if options[:authenticated]
             @session = auth_service.authenticate(symbolized_params)
             auth_service.check_privileges(@session) if options[:admin]
-            auth_service.check_rights(@session, options[:right]) if options.has_key? :right
+            auth_service.check_rights(@session, options[:right]) if options.key? :right
             if options[:ownership] == true && respond_to?(:service)
               @resource = auth_service.ownership(symbolized_params, @session, service)
             end

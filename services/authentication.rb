@@ -42,9 +42,11 @@ module Modusynth
         raise Modusynth::Exceptions.forbidden unless session.account.admin
       end
 
-      def check_rights(session, right)
-        account_rights = Modusynth::Services::Permissions::Rights.instance.for_session(session).map(&:label)
-        raise Modusynth::Exceptions.forbidden unless account_rights.include? right
+      def check_rights(session, label)
+        rights = Modusynth::Models::Permissions::Right.where(
+          :group_ids.in => session.account.group_ids, label:
+        )
+        raise Modusynth::Exceptions.forbidden unless rights.exists?
       end
 
       # Checks if the user making the request has access to the resource. To
@@ -65,7 +67,7 @@ module Modusynth
       #   has been raised.
       def ownership(payload, session, service)
         return unless service.respond_to?(:find_or_fail)
-        
+
         resource = service.find_or_fail(id: payload[:id])
 
         # Ownership cannot be checked if the model does not respond to :account.
