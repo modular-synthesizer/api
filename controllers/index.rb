@@ -4,12 +4,12 @@ module Modusynth
   module Controllers
     autoload :Accounts, './controllers/accounts'
     autoload :Applications, './controllers/applications'
+    autoload :Bare, './controllers/experiments'
     autoload :Base, './controllers/base'
     autoload :Categories, './controllers/categories'
     autoload :Experiments, './controllers/experiments'
     autoload :Generators, './controllers/generators'
     autoload :Groups, './controllers/groups'
-    autoload :Iut, './controllers/iut'
     autoload :Links, './controllers/links'
     autoload :Memberships, './controllers/memberships'
     autoload :Modules, './controllers/modules'

@@ -4,17 +4,17 @@ module Modusynth
   module Controllers
     class Experiments < Modusynth::Controllers::Base
       get '/' do
-        mods = Modusynth::Models::Module
-               .includes(:parameters, :ports)
-               .where(synthesizer_id: symbolized_params[:synthesizer_id])
-               .to_a
-        tool_ids = mods.map(&:tool_id).uniq
-        raw_tools = Modusynth::Services::Tools::Find.instance.find_by_ids(ids: tool_ids)
-        tools = raw_tools.to_a.to_h { |t| [t.id, t] }
-        mods.each do |mod|
-          mod.tool = tools[mod.tool_id]
-        end
-        render_json 'modules/list.json', mods:
+        halt 200, 'ok'
+      end
+    end
+  end
+end
+
+module Modusynth
+  module Controllers
+    class Bare < Sinatra::Base
+      get '/' do
+        halt 200, 'ok'
       end
     end
   end
