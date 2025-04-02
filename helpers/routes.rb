@@ -36,20 +36,8 @@ module Modusynth
         Modusynth::Models::Permissions::Right.find_or_create_by(label: right)
       end
 
-      # Add the default values for all fields in the options hash.
-      # @param [Hash] the options that were passed to the route
-      #   declaration function call. Any key that is in this hash
-      #   will override the corresponding key in the default hash.
-      # @return [Hash] the hash with the default values added for
-      #   the corresponding keys.
       def with_defaults(options)
-        defaults = {
-          authenticated: true,
-          ownership: nil,
-          # Indicates if the route is ONLY accessible to admins.
-          admin: false
-        }
-        defaults.merge options
+        { authenticated: true, ownership: nil }.merge options
       end
     end
   end
