@@ -14,7 +14,6 @@ module Modusynth
         create_right(**options) if options.key? :right
 
         send verb, path do
-          Mongo::Logger.level = 0
           if ENV['RACK_ENV'] != 'test'
             Modusynth::Services::OAuth::Applications.instance.authenticate(
               request.env['HTTP_X_PUBLIC_KEY'],
