@@ -11,13 +11,13 @@ module Modusynth
         options = with_defaults options
         auth_service = Modusynth::Services::Authentication.instance
 
-        create_right options[:right] if options.has_key? :right
+        create_right(**options) if options.key? :right
 
         send verb, path do
           if ENV['RACK_ENV'] != 'test'
             Modusynth::Services::OAuth::Applications.instance.authenticate(
               request.env['HTTP_X_PUBLIC_KEY'],
-              request.env['HTTP_X_PRIVATE_KEY'],
+              request.env['HTTP_X_PRIVATE_KEY']
             )
           end
           if options[:authenticated]
@@ -32,9 +32,8 @@ module Modusynth
         end
       end
 
-      def create_right label
-        service = Modusynth::Services::Permissions::Rights.instance
-        service.create_if_not_exists(query: { label: label }, verbose: true)
+      def create_right(right: nil, **_)
+        Modusynth::Models::Permissions::Right.find_or_create_by(label: right)
       end
 
       # Add the default values for all fields in the options hash.

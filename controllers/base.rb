@@ -3,11 +3,10 @@
 module Modusynth
   module Controllers
     class Base < Sinatra::Base
-      register Sinatra::CrossOrigin
       register Modusynth::Helpers::Routes
       helpers Modusynth::Helpers::Payloads
 
-      attr_accessor :notifier, :tab_id
+      attr_accessor :session
 
       before do
         content_type :json
@@ -15,15 +14,12 @@ module Modusynth
                   'Access-Control-Allow-Origin' => '*',
                   'Access-Control-Allow-Methods' => '*'
                 })
-        @tab_id = symbolized_params[:tab_id] || 'unknown'
-        @notifier = Modusynth::Services::Notifications::Notifier.new(@tab_id)
       end
 
       configure do
-        enable :cross_origin
         set :logger, Logger.new($stdout)
         logger.level = Logger::ERROR if ENV['RACK_ENV'] == 'test'
-        # This configuration options allow the error handler to work in tests.
+        # These configuration options allow the error handler to work in tests.
         set :show_exceptions, false
         set :raise_errors, false
         set :views, proc { File.join(root, '..', 'views') }
@@ -71,7 +67,13 @@ module Modusynth
         symbolized_params[:t] || DateTime.now
       end
 
-      attr_reader :session
+      def notifier
+        @notifier ||= Modusynth::Services::Notifications::Notifier.new(@tab_id)
+      end
+
+      def tab_id
+        symbolized_params[:tab_id] || 'unknown'
+      end
     end
   end
 end
