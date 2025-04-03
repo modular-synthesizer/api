@@ -11,6 +11,7 @@ Bundler.require(env)
 require './constants/index'
 require './module'
 Mongoid.load!('config/mongoid.yml', env)
+Mongo::Logger.level = ENV.fetch('MONGO_LOGGING_LEVEL', 1).to_i
 
 Modusynth::Services::Initialization.instance.run
 
