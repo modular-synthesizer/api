@@ -11,7 +11,7 @@ module Modusynth
       end
 
       api_route 'get', '/', right: ::Rights::SYNTHESIZERS_READ do
-        mods = service.list(**symbolized_params)
+        mods = service.eager_load(**symbolized_params)
         render_json 'modules/list.json', mods:
       end
 
