@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/AbcSize
 # frozen_string_literal: true
 
 module Modusynth
@@ -30,7 +31,7 @@ module Modusynth
         mod
       end
 
-      def delete mod
+      def delete(mod)
         ports_ids = mod.ports.map(&:id).map(&:to_s)
         Modusynth::Models::Link.where(:from.in => ports_ids).delete_all
         Modusynth::Models::Link.where(:to.in => ports_ids).delete_all
@@ -51,6 +52,39 @@ module Modusynth
       def model
         Modusynth::Models::Module
       end
+
+      # Finds the given modules by their respective IDs and
+      def eager_load(synthesizer_id: nil, **_) # rubocop:disable Metrics/MethodLength
+        mods = model
+               .includes(:parameters, :ports)
+               .where(synthesizer_id:)
+               .to_a
+        tools = Modusynth::Models::Tool
+                .includes(:parameters, :ports, :controls)
+                .where(:id.in => mods.map(&:tool_id))
+                .to_a
+        mapped_tool_params = {}
+        mapped_tool_ports = {}
+        tools.each do |tool|
+          tool.parameters.each do |tp|
+            mapped_tool_params[tp.id] = tp
+          end
+          tool.ports.each do |tp|
+            mapped_tool_ports[tp.id] = tp
+          end
+        end
+        mods.each do |mod|
+          mod.parameters.each do |p|
+            p.template = mapped_tool_params[p.template_id]
+          end
+          mod.ports.each do |p|
+            p.descriptor = mapped_tool_ports[p.descriptor_id]
+          end
+        end
+        mods
+      end
     end
   end
 end
+
+# rubocop:enable Metrics/AbcSize
