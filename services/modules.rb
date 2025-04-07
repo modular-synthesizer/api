@@ -11,7 +11,7 @@ module Modusynth
           id: synthesizer_id,
           field: 'synthesizer_id'
         )
-        tool = Modusynth::Services::Tools::Find.instance.find_or_fail(id: tool_id)
+        tool = Modusynth::Services::Tools::Find.instance.find_by_ids(ids: [tool_id]).first
         model.new(synthesizer:, tool:, slot:, rack:)
       end
 
