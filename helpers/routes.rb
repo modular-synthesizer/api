@@ -14,12 +14,7 @@ module Modusynth
         create_right(**options) if options.key? :right
 
         send verb, path do
-          if ENV['RACK_ENV'] != 'test'
-            Modusynth::Services::OAuth::Applications.instance.authenticate(
-              request.env['HTTP_X_PUBLIC_KEY'],
-              request.env['HTTP_X_PRIVATE_KEY']
-            )
-          end
+          check_application if ENV['RACK_ENV'] != 'test'
           if options[:authenticated]
             @session = auth_service.authenticate(symbolized_params)
             auth_service.check_privileges(@session) if options[:admin]
@@ -30,6 +25,11 @@ module Modusynth
           end
           instance_eval(&block)
         end
+      end
+
+      def check_application
+        app_service = Modusynth::Services::OAuth::Applications.instance
+        app_service.authenticate(api_key: request.env['HTTP_X_API_KEY'])
       end
 
       def create_right(right: nil, **_)

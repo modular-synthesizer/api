@@ -17,9 +17,9 @@ module Modusynth
 
         field :name, type: String
 
-        field :public_key, type: String
-
-        field :private_key, type: String
+        # @!attribute [rw] api_key
+        #   @return [String] the "password" for the application, used to make every request on the API.
+        field :api_key, type: String
 
         belongs_to :account, class_name: 'Modusynth::Models::Account', inverse_of: :application
 

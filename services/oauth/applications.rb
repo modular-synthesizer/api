@@ -9,16 +9,11 @@ module Modusynth
         end
 
         def build_with_account(name: nil, account: nil, **_)
-          model.new(
-            name:,
-            account:,
-            public_key: SecureRandom.hex(16),
-            private_key: SecureRandom.hex(64)
-          )
+          model.new(name:, account:, api_key: SecureRandom.hex(64))
         end
 
-        def authenticate public_key, private_key
-          application = model.find_by(public_key:, private_key:)
+        def authenticate(api_key: nil, **_)
+          application = model.find_by(api_key:)
           raise Modusynth::Exceptions.forbidden 'application' if application.nil?
         end
 
