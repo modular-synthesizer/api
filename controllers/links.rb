@@ -9,6 +9,11 @@ module Modusynth
         render_json 'links/list.json', links:
       end
 
+      api_route 'get', '/v2', right: ::Rights::SYNTHESIZERS_READ do
+        links = service.list(params)
+        render_json 'links/list_v2.json', links:
+      end
+
       api_route 'post', '/', right: ::Rights::SYNTHESIZERS_WRITE do
         link = service.create(session: @session, **symbolized_params)
         rendered = jbuilder :'links/_link.json', locals: { link: }
