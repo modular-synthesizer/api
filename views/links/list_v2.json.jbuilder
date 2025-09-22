@@ -1,4 +1,4 @@
-json.links links do |link|
+json.array! links do |link|
   json.id link.id.to_s
   json.color link.color
   json.from do
