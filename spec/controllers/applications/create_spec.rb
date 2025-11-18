@@ -1,5 +1,4 @@
 RSpec.describe 'POST /applications' do
-
   def app
     Modusynth::Controllers::Applications
   end
@@ -28,11 +27,8 @@ RSpec.describe 'POST /applications' do
       it 'Has the correct name' do
         expect(application.name).to eq 'Application Name'
       end
-      it 'Has a public key with the correct length' do
-        expect(application.public_key.length).to be 32
-      end
-      it 'Has a private key with the correct length' do
-        expect(application.private_key.length).to be 128
+      it 'Has an API key with the correct length' do
+        expect(application.api_key.length).to be 128
       end
     end
   end
@@ -40,7 +36,7 @@ RSpec.describe 'POST /applications' do
     describe 'When the name is not given' do
       before do
         post '/', {
-          auth_token: session.token,
+          auth_token: session.token
         }.to_json
       end
       it 'Returns a 400 (Bad Request) status code' do
