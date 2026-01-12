@@ -11,7 +11,6 @@ module Modusynth
     autoload :Memberships, './services/memberships'
     autoload :Modules, './services/modules'
     autoload :Notifications, './services/notifications/index'
-    autoload :OAuth, './services/oauth/index'
     autoload :Parameters, './services/parameters'
     autoload :Permissions, './services/permissions/index'
     autoload :Ports, './services/ports'

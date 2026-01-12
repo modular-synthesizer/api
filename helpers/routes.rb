@@ -14,12 +14,6 @@ module Modusynth
         create_right(**options) if options.key? :right
 
         send verb, path do
-          if ENV['RACK_ENV'] != 'test'
-            Modusynth::Services::OAuth::Applications.instance.authenticate(
-              request.env['HTTP_X_PUBLIC_KEY'],
-              request.env['HTTP_X_PRIVATE_KEY']
-            )
-          end
           if options[:authenticated]
             @session = auth_service.authenticate(symbolized_params)
             auth_service.check_privileges(@session) if options[:admin]
