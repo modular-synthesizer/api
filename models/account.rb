@@ -17,8 +17,9 @@ module Modusynth
       field :email, type: String
 
       field :admin, type: Boolean, default: false
-
-      field :sample_rate, type: Integer, default: 44_100
+      # @!attributes [rw] jwt_secret
+      #   @return [String] the JWT secret salt for the session tokens of this user. SHOULD not be reset often.
+      field :jwt_secret, type: String, default: -> { SecureRandom.uuid }
 
       # @!attribute [w] password
       #   @return [String] password of the user; don't attempt to get the value, just set it when changing the password.
@@ -54,9 +55,6 @@ module Modusynth
                   message: 'format',
                   if: :email?
                 }
-
-      validates :sample_rate,
-                numericality: { greater_than: 44_099, less_than: 192_001, message: 'value' }
 
       validates :password,
                 presence: { message: 'required', if: -> { !persisted? || password_digest_changed? } },

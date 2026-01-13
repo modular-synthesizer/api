@@ -5,24 +5,28 @@ module Modusynth
 
       def search session:, query: '', **_
         return [] if query.size < 3
-        return model.where(username: /#{query}/).limit(10).to_a
+
+        model.where(username: /#{query}/).limit(10).to_a
       end
 
       def build username: nil, email: nil, password: nil, password_confirmation: nil, **rest
         model.new(username:, email:, password:, password_confirmation:)
       end
 
-      def authenticate username, password
+      def authenticate(username, password)
         account = find_or_fail_username username
         raise Modusynth::Exceptions.required 'password' if password.nil?
         raise Modusynth::Exceptions.forbidden 'username' unless account.authenticate(password)
+
         account
       end
 
-      def find_or_fail_username username
+      def find_or_fail_username(username)
         raise Modusynth::Exceptions.required 'username' if username.nil?
+
         account = model.where(username: username).first
         raise Modusynth::Exceptions.unknown 'username' if account.nil?
+
         account
       end
 
@@ -33,13 +37,6 @@ module Modusynth
           end
         end
         instance
-      end
-
-      def update account, session: nil, **payload
-        requester = session.account
-        raise Modusynth::Exceptions.forbidden if requester != account && !requester.admin
-        account.update(payload.slice(:sample_rate))
-        account
       end
 
       def find_and_update_groups id: nil, groups: [], **_

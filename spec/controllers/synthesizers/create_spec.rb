@@ -8,7 +8,7 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
 
   describe 'POST /' do
     describe 'Nominal case' do
-      before { post '/', {name: 'test synth', auth_token: session.token}.to_json }
+      before { post '/', { name: 'test synth', auth_token: session.token }.to_json }
 
       it 'Returns a 201 (Created) status code' do
         expect(last_response.status).to be 201
@@ -20,7 +20,8 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
           x: 0,
           y: 0,
           scale: 1.0,
-          voices: 1
+          voices: 1,
+          sample_rate: 44_100
         )
       end
       describe 'Created synthesizer' do
@@ -31,6 +32,9 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
         end
         it 'Has the correct number of voices' do
           expect(synth.voices).to be 1
+        end
+        it 'Has the correct sample rate' do
+          expect(synth.sample_rate).to eq 44_100
         end
       end
       describe 'The created membership' do
@@ -56,7 +60,7 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
     end
     describe 'Alternative cases' do
       describe 'The number of polyphony voices is given' do
-        before { post '/', {name: 'test synth', voices: 64, auth_token: session.token}.to_json }
+        before { post '/', { name: 'test synth', voices: 64, auth_token: session.token }.to_json }
 
         it 'Returns a 201 (Created) status code' do
           expect(last_response.status).to be 201
@@ -65,10 +69,21 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
           expect(last_response.body).to include_json(voices: 64)
         end
       end
+
+      describe 'The sample rate is given' do
+        before { post '/', { name: 'test synth', sample_rate: 48_000, auth_token: session.token }.to_json }
+
+        it 'Returns a 201 (Created) status code' do
+          expect(last_response.status).to be 201
+        end
+        it 'Returns the correct body' do
+          expect(last_response.body).to include_json(sample_rate: 48_000)
+        end
+      end
     end
     describe 'Error cases' do
       describe 'Name not given' do
-        before { post '/', {auth_token: session.token}.to_json }
+        before { post '/', { auth_token: session.token }.to_json }
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
@@ -80,8 +95,8 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
         end
       end
       describe 'Name too short' do
-        before { post '/', {name: 'foo', auth_token: session.token}.to_json }
-        
+        before { post '/', { name: 'foo', auth_token: session.token }.to_json }
+
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
         end
@@ -92,8 +107,8 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
         end
       end
       describe 'Voices number below 1' do
-        before { post '/', {name: 'test-name', voices: 0, auth_token: session.token}.to_json }
-        
+        before { post '/', { name: 'test-name', voices: 0, auth_token: session.token }.to_json }
+
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
         end
@@ -104,8 +119,8 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
         end
       end
       describe 'Voices over 256' do
-        before { post '/', {name: 'test-name', voices: 257, auth_token: session.token}.to_json }
-        
+        before { post '/', { name: 'test-name', voices: 257, auth_token: session.token }.to_json }
+
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
         end

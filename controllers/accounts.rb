@@ -30,19 +30,6 @@ module Modusynth
         render_json ACCOUNT_VIEW, account:
       end
 
-      api_route 'put', '/own', right: ::Rights::ACCOUNTS_WRITE do
-        account = service.find_and_update(
-          **symbolized_params, id: @session.account.id.to_s,
-                               session: @session
-        )
-        render_json ACCOUNT_VIEW, account:
-      end
-
-      api_route 'put', '/:id', right: ::Rights::ACCOUNTS_ADMIN do
-        account = service.find_and_update(**symbolized_params, session: @session)
-        render_json ACCOUNT_VIEW, account:
-      end
-
       def service
         Modusynth::Services::Accounts.instance
       end

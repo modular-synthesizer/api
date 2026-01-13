@@ -5,17 +5,17 @@ RSpec.describe 'PUT /:id' do
 
   let!(:account) { create(:random_admin) }
   let!(:session) { create(:session, account:) }
-  let!(:synthesizer) {
+  let!(:synthesizer) do
     Modusynth::Services::Synthesizers.instance.create(
       account:, name: 'test synth'
     )
-  }
+  end
   let!(:membership) { synthesizer.memberships.first }
 
   describe 'Nominal case' do
     describe 'When nothing is updated' do
       before do
-        put("/#{synthesizer.id.to_s}", { auth_token: session.token })
+        put("/#{synthesizer.id}", { auth_token: session.token })
       end
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
@@ -53,7 +53,7 @@ RSpec.describe 'PUT /:id' do
   describe 'Alternative cases' do
     describe 'When updating the name' do
       before do
-        put "/#{synthesizer.id.to_s}", {
+        put "/#{synthesizer.id}", {
           auth_token: session.token,
           name: 'new name'
         }
@@ -71,7 +71,7 @@ RSpec.describe 'PUT /:id' do
     end
     describe 'When updating the X coordinate' do
       before do
-        put "/#{synthesizer.id.to_s}", { auth_token: session.token, x: 100 }
+        put "/#{synthesizer.id}", { auth_token: session.token, x: 100 }
       end
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
@@ -86,7 +86,7 @@ RSpec.describe 'PUT /:id' do
     end
     describe 'When updating the Y coordinate' do
       before do
-        put "/#{synthesizer.id.to_s}", { auth_token: session.token, y: 100 }
+        put "/#{synthesizer.id}", { auth_token: session.token, y: 100 }
       end
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
@@ -101,7 +101,7 @@ RSpec.describe 'PUT /:id' do
     end
     describe 'When updating the scale' do
       before do
-        put "/#{synthesizer.id.to_s}", { auth_token: session.token, scale: 2 }
+        put "/#{synthesizer.id}", { auth_token: session.token, scale: 2 }
       end
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
@@ -116,7 +116,7 @@ RSpec.describe 'PUT /:id' do
     end
     describe 'When updating the number of polyphony voices' do
       before do
-        put "/#{synthesizer.id.to_s}", { auth_token: session.token, voices: 64 }
+        put "/#{synthesizer.id}", { auth_token: session.token, voices: 64 }
       end
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
@@ -127,6 +127,21 @@ RSpec.describe 'PUT /:id' do
       it 'Has updated the name correctly' do
         synthesizer.reload
         expect(synthesizer.voices).to be 64
+      end
+    end
+    describe 'When updating the sample rate' do
+      before do
+        put "/#{synthesizer.id}", { auth_token: session.token, sample_rate: 48_000 }
+      end
+      it 'Returns a 200 (OK) status code' do
+        expect(last_response.status).to be 200
+      end
+      it 'Returns the correct body' do
+        expect(last_response.body).to include_json(sample_rate: 48_000)
+      end
+      it 'Has updated the name correctly' do
+        synthesizer.reload
+        expect(synthesizer.sample_rate).to be 48_000
       end
     end
   end
@@ -147,7 +162,7 @@ RSpec.describe 'PUT /:id' do
     end
     describe 'When the name is nil' do
       before do
-        put "/#{synthesizer.id.to_s}", { auth_token: session.token, name: nil }
+        put "/#{synthesizer.id}", { auth_token: session.token, name: nil }
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -164,7 +179,7 @@ RSpec.describe 'PUT /:id' do
     end
     describe 'When the name is too short' do
       before do
-        put "/#{synthesizer.id.to_s}", { auth_token: session.token, name: 'a' }
+        put "/#{synthesizer.id}", { auth_token: session.token, name: 'a' }
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -181,7 +196,7 @@ RSpec.describe 'PUT /:id' do
     end
     describe 'When the scale is too low' do
       before do
-        put "/#{synthesizer.id.to_s}", { auth_token: session.token, scale: 0 }
+        put "/#{synthesizer.id}", { auth_token: session.token, scale: 0 }
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -198,7 +213,7 @@ RSpec.describe 'PUT /:id' do
     end
     describe 'When the number of voices is too low' do
       before do
-        put "/#{synthesizer.id.to_s}", { auth_token: session.token, voices: 0 }
+        put "/#{synthesizer.id}", { auth_token: session.token, voices: 0 }
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -215,7 +230,7 @@ RSpec.describe 'PUT /:id' do
     end
     describe 'When the number of voices is too high' do
       before do
-        put "/#{synthesizer.id.to_s}", { auth_token: session.token, voices: 257 }
+        put "/#{synthesizer.id}", { auth_token: session.token, voices: 257 }
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -229,7 +244,7 @@ RSpec.describe 'PUT /:id' do
         synthesizer.reload
         expect(synthesizer.voices).to be 1
       end
-    end 
+    end
   end
 
   include_examples 'authentication', 'put', '/id'

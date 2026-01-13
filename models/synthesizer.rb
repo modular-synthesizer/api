@@ -19,6 +19,9 @@ module Modusynth
       # @!attribute [rw] voices
       #   @return [Integer] the number of polyphony voices in the synthesizer, 1 means it's monophonic.
       field :voices, type: Integer, default: 1
+      # @!attributes [rw] sample_rate
+      #   @return [Integer] the number of samples taken by second for this synthesizer. More means cleaner sound.
+      field :sample_rate, type: Integer, default: 44_100
 
       # @!attributes [r] modules
       #   @return [Array<Modusynth::Models::Module>] the list of the instanciated tools present in the synthesizer.

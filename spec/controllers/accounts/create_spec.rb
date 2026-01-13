@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# rubocop:disable Metrics/BlockLength
 RSpec.describe 'POST /accounts' do
   def app
     Modusynth::Controllers::Accounts
@@ -23,9 +26,8 @@ RSpec.describe 'POST /accounts' do
         username: 'babausse',
         email: 'courtois.vincent@outlook.com',
         groups: [
-          {id: group.id.to_s, slug: 'default-group'}
-        ],
-        sample_rate: 44100
+          { id: group.id.to_s, slug: 'default-group' }
+        ]
       )
     end
     describe 'The created account' do
@@ -46,8 +48,8 @@ RSpec.describe 'POST /accounts' do
       it 'Has groups counting the default groups' do
         expect(account.all_groups.count).to be 1
       end
-      it 'Has the correct sample_rate' do
-        expect(account.sample_rate).to be 44100
+      it 'Has a JWT secret set with a string' do
+        expect(account.jwt_secret.size).to be > 20
       end
     end
   end
@@ -223,3 +225,4 @@ RSpec.describe 'POST /accounts' do
     end
   end
 end
+# rubocop:enable Metrics/BlockLength
