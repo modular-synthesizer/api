@@ -4,11 +4,13 @@ RSpec.describe 'GET /accounts/:id' do
   end
 
   let!(:account) { create(:babausse) }
-  let!(:session) { create(:session, account: account) }
+  let!(:auth_token) do
+    Modusynth::Services::Tokens.instance.create(username: 'babausse', password: account.password)[:jwt_token]
+  end
 
   describe 'Nominal case' do
     before do
-      get '/own', {auth_token: session.token}
+      get '/own', { auth_token:, account_id: account.id.to_s }
     end
     it 'Returns a 200 (OK) status code' do
       expect(last_response.status).to be 200
@@ -22,6 +24,5 @@ RSpec.describe 'GET /accounts/:id' do
     end
   end
 
-  include_examples 'authentication', 'get', "/own"
-  include_examples 'scopes', 'get', "/own"
+  include_examples 'authentication', 'GET /own'
 end

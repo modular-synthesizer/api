@@ -6,7 +6,7 @@ module Modusynth
       register Modusynth::Helpers::Routes
       helpers Modusynth::Helpers::Payloads
 
-      attr_accessor :session
+      attr_accessor :session, :account
 
       before do
         content_type :json

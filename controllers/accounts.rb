@@ -15,9 +15,8 @@ module Modusynth
         render_json 'accounts/list.json', accounts:
       end
 
-      api_route 'get', '/own', right: ::Rights::ACCOUNTS_READ do
-        account = service.find_or_fail(id: @session.account.id)
-        render_json ACCOUNT_VIEW, account:
+      new_route 'get', '/own', right: ::Rights::ACCOUNTS_READ do
+        render_json ACCOUNT_VIEW, account: @account
       end
 
       api_route 'get', '/:id', right: ::Rights::ACCOUNTS_ADMIN do
