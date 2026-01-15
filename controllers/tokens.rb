@@ -1,7 +1,7 @@
 module Modusynth
   module Controllers
     class Tokens < Modusynth::Controllers::Base
-      api_route 'post', '/', authenticated: false do
+      post '/' do
         token = service.create(**symbolized_params)
         render_json 'tokens/_token.json', status: 201, **token
       end

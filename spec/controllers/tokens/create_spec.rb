@@ -39,7 +39,7 @@ RSpec.describe 'POST /tokens' do
       let!(:token) { Modusynth::Models::Token.all.first }
 
       it 'Has the correct JWT token' do
-        expect(token.jwt_token).to eq expected_token
+        expect(token.jwt_token_id).to eq 'random_hex_string'
       end
       it 'Has the correct date of refreshment' do
         expect(token.refreshed_at).to be nil
