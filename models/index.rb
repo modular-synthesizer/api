@@ -13,6 +13,7 @@ module Modusynth
     autoload :Synthesizer, './models/synthesizer'
     autoload :Session, './models/session'
     autoload :Social, './models/social/index'
+    autoload :Token, './models/token'
     autoload :Tools, './models/tools/index'
     autoload :Tool, './models/tool'
   end

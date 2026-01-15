@@ -24,7 +24,7 @@ module Modusynth
         return parameters.map { |p| symbolize! p } if parameters.is_a? Array
         return parameters unless parameters.is_a?(Hash)
 
-        [parameters.map { |k, v| [k.to_sym, symbolize!(v)] }].to_h
+        parameters.to_h { |k, v| [k.to_sym, symbolize!(v)] }
       end
     end
   end

@@ -55,6 +55,8 @@ GEM
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
     json (2.9.1)
+    jwt (3.1.2)
+      base64
     language_server-protocol (3.17.0.3)
     logger (1.6.4)
     loofah (2.23.1)
@@ -174,6 +176,7 @@ DEPENDENCIES
   factory_bot (= 6.2.1)
   faker (= 2.23.0)
   jbuilder (= 2.13.0)
+  jwt (= 3.1.2)
   mongoid (= 8.1.7)
   mongoid-embedded-errors (= 4.0.0)
   pry (= 0.14.1)

@@ -9,6 +9,7 @@ group :development, :production, :test do
   gem 'bunny', '2.23.0'
   gem 'dotenv', '2.8.1', require: 'dotenv/load'
   gem 'jbuilder', '2.13.0'
+  gem 'jwt', '3.1.2'
   gem 'mongoid', '8.1.7'
   gem 'mongoid-embedded-errors', '4.0.0'
   gem 'pry', '0.14.1'
