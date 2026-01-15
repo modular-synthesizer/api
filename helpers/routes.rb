@@ -33,6 +33,8 @@ module Modusynth
           if authenticated
             @account = Modusynth::Services::Accounts.instance.find_or_fail(id: symbolized_params[:account_id])
             @token = Modusynth::Services::Tokens.instance.parse(account: @account, **symbolized_params)
+            raise Modusynth::Exceptions.forbidden 'account_id' if @token[0]['exp'] < Time.now.to_i
+
             auth_service.check_privileges(@account) if admin
             auth_service.check_rights(@account, right) unless right.empty?
             @stored_token = Modusynth::Models::Token.active.find_by(jwt_token_id: @token[0]['jti'])

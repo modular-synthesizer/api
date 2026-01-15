@@ -34,10 +34,14 @@ module Modusynth
         payload = {
           sub: account.username,
           jti:,
-          exp: Time.now.to_i + 600,
+          exp: ten_minutes_from_now,
           iss: 'Synple'
         }
         JWT.encode(payload, account.jwt_secret, 'HS256')
+      end
+
+      def ten_minutes_from_now
+        Time.now.to_i + 600
       end
 
       def accounts_service

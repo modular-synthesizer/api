@@ -6,7 +6,7 @@ class TestTokensController < Modusynth::Controllers::Base
   end
 end
 
-RSpec.describe 'Token authentication' do # rubocop:disable Metrics/BlockLength
+RSpec.describe 'Token authentication' do
   def app
     TestTokensController
   end
@@ -22,55 +22,6 @@ RSpec.describe 'Token authentication' do # rubocop:disable Metrics/BlockLength
       expect(last_response.status).to be 204
     end
   end
-  describe 'Exception case : when the token is invalid' do
-    before do
-      get '/', { auth_token: 'test_invalid_token', account_id: account.id.to_s }
-    end
-    it 'Returns a 403 (Forbidden) status code' do
-      expect(last_response.status).to be 403
-    end
-    it 'Returns the correct body' do
-      expect(last_response.body).to include_json(key: 'account_id', message: 'forbidden')
-    end
-  end
-  describe 'Exception case : when the user UUID does not match the token' do
-    before do
-      get '/', { auth_token:, account_id: 'other_account_id' }
-    end
-    it 'Returns a 403 (Forbidden) status code' do
-      expect(last_response.status).to be 403
-    end
-    it 'Returns the correct body' do
-      expect(last_response.body).to include_json(key: 'account_id', message: 'forbidden')
-    end
-  end
-  describe 'When the token is expired' do
-    before do
-      allow(Time).to receive(:now).and_return(Time.at(0))
-    end
-  end
-  describe 'When the token has been refreshed' do
-    before do
-      Modusynth::Models::Token.first.update_attributes(refreshed_at: DateTime.now)
-      get '/', { auth_token:, account_id: account.id.to_s }
-    end
-    it 'Returns a 403 (Forbidden) status code' do
-      expect(last_response.status).to be 403
-    end
-    it 'Returns the correct body' do
-      expect(last_response.body).to include_json(key: 'account_id', message: 'forbidden')
-    end
-  end
-  describe 'When the token has been invalidated' do
-    before do
-      Modusynth::Models::Token.first.update_attributes(invalidated_at: DateTime.now)
-      get '/', { auth_token:, account_id: account.id.to_s }
-    end
-    it 'Returns a 403 (Forbidden) status code' do
-      expect(last_response.status).to be 403
-    end
-    it 'Returns the correct body' do
-      expect(last_response.body).to include_json(key: 'account_id', message: 'forbidden')
-    end
-  end
+
+  include_examples 'authentication', 'GET /'
 end
