@@ -14,8 +14,8 @@ module Modusynth
       store_in collection: 'tokens'
 
       # @!attributes [r] jwt_token
-      #   @return [String] the encoded JWT token for this user session. It includes expiration, account_id, etc.
-      field :jwt_token, type: String
+      #   @return [String] the jit field of the JWT token used to identify it when refreshing it.
+      field :jwt_token_id, type: String, default: -> { SecureRandom.hex(32) }
       # @!attributes [r] refresh_token
       #   @return [String] the random string used to recreate a session more easily when this one has expired.
       field :refresh_token, type: String, default: -> { SecureRandom.hex(32) }

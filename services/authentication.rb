@@ -38,13 +38,13 @@ module Modusynth
       #
       # @param session [Modusynth::Models::Session] the session makind the request.
       # @raise [Modusynth::Exceptions::Forbidden] if the user is not admin.
-      def check_privileges(session)
-        raise Modusynth::Exceptions.forbidden unless session.account.admin
+      def check_privileges(account)
+        raise Modusynth::Exceptions.forbidden unless account.admin
       end
 
-      def check_rights(session, label)
+      def check_rights(account, label)
         rights = Modusynth::Models::Permissions::Right.where(
-          :group_ids.in => session.account.group_ids, label:
+          :group_ids.in => account.group_ids, label:
         )
         raise Modusynth::Exceptions.forbidden unless rights.exists?
       end

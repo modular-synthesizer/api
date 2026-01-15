@@ -51,6 +51,10 @@ module Modusynth
         halt exception.status, exception.message
       end
 
+      error JWT::DecodeError do
+        halt 403, { key: 'account_id', message: 'forbidden' }.to_json
+      end
+
       error StandardError do |exception|
         halt 500, { message: exception.message }.to_json
       end

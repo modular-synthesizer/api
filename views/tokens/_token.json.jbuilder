@@ -1,1 +1,2 @@
-json.call(token, :jwt_token, :refresh_token)
+json.jwt_token jwt_token
+json.refresh_token refresh_token
