@@ -3,6 +3,7 @@ module Modusynth
     module Payloads
       def body_params
         return params if request.body.nil?
+
         request.body.rewind
         JSON.parse(request.body.read.to_s).merge(params)
       rescue JSON::ParserError
@@ -19,10 +20,11 @@ module Modusynth
         symbolize!(body_params)
       end
 
-      def symbolize! parameters
+      def symbolize!(parameters)
         return parameters.map { |p| symbolize! p } if parameters.is_a? Array
         return parameters unless parameters.is_a?(Hash)
-        Hash[parameters.map {|k, v| [k.to_sym, symbolize!(v)]}]
+
+        [parameters.map { |k, v| [k.to_sym, symbolize!(v)] }].to_h
       end
     end
   end
