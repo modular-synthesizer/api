@@ -22,12 +22,6 @@ module Modusynth
         account
       end
 
-      def find_and_update_groups account: nil, groups: [], **_
-        # TODO: find the groups, and add tests to check that works
-        account.update_attributes(groups:)
-        account
-      end
-
       def model
         Modusynth::Models::Account
       end

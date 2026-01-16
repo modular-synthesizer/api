@@ -18,11 +18,6 @@ module Modusynth
         render_json ACCOUNT_VIEW, account:
       end
 
-      endpoint 'put', '/:uuid/groups', right: ::Rights::ACCOUNTS_ADMIN do
-        account = service.find_and_update_groups(**symbolized_params)
-        render_json ACCOUNT_VIEW, account:
-      end
-
       def service
         Modusynth::Services::Accounts.instance
       end
