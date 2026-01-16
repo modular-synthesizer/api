@@ -16,7 +16,7 @@ RSpec.describe 'POST /accounts' do
         password_confirmation: 'testpassword',
         email: 'courtois.vincent@outlook.com'
       }
-      post '/', payload.to_json
+      post '/accounts', payload.to_json
     end
     it 'Returns a 201 (Created) status code' do
       expect(last_response.status).to be 201
@@ -61,7 +61,7 @@ RSpec.describe 'POST /accounts' do
           password: 'testpassword',
           password_confirmation: 'testpassword'
         }
-        post '/', payload.to_json
+        post '/accounts', payload.to_json
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -80,7 +80,7 @@ RSpec.describe 'POST /accounts' do
           password: 'testpassword',
           password_confirmation: 'testpassword'
         }
-        post '/', payload.to_json
+        post '/accounts', payload.to_json
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -100,7 +100,7 @@ RSpec.describe 'POST /accounts' do
           password: 'testpassword',
           password_confirmation: 'testpassword'
         }
-        post '/', payload.to_json
+        post '/accounts', payload.to_json
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -118,7 +118,7 @@ RSpec.describe 'POST /accounts' do
           password: 'testpassword',
           password_confirmation: 'testpassword'
         }
-        post '/', payload.to_json
+        post '/accounts', payload.to_json
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -137,7 +137,7 @@ RSpec.describe 'POST /accounts' do
           password: 'testpassword',
           password_confirmation: 'testpassword'
         }
-        post '/', payload.to_json
+        post '/accounts', payload.to_json
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -157,7 +157,7 @@ RSpec.describe 'POST /accounts' do
           password: 'testpassword',
           password_confirmation: 'testpassword'
         }
-        post '/', payload.to_json
+        post '/accounts', payload.to_json
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -175,7 +175,7 @@ RSpec.describe 'POST /accounts' do
           email: 'courtois.vincent@outlook.com',
           password_confirmation: 'testpassword'
         }
-        post '/', payload.to_json
+        post '/accounts', payload.to_json
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -193,7 +193,7 @@ RSpec.describe 'POST /accounts' do
           email: 'courtois.vincent@outlook.com',
           password: 'testpassword'
         }
-        post '/', payload.to_json
+        post '/accounts', payload.to_json
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -212,7 +212,7 @@ RSpec.describe 'POST /accounts' do
           password: 'testpassword',
           password_confirmation: 'wrongconfirmation'
         }
-        post '/', payload.to_json
+        post '/accounts', payload.to_json
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400

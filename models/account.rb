@@ -9,6 +9,10 @@ module Modusynth
 
       store_in collection: 'accounts'
 
+      # @!attributes [r] uuid
+      #   @return [String] a uniq hexadecimal identifier used as account_id in queries
+      field :uuid, type: String, default: -> { SecureRandom.hex(16) }
+
       field :username, type: String
       # @!attribute [r] password_digest
       #   @return [String] the password of the user, encrypted with the Blowfish algorithm.

@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# rubocop:disable Metrics/BlockLength
 RSpec.describe 'POST /sessions' do
   def app
     Modusynth::Controllers::Sessions
@@ -79,8 +82,8 @@ RSpec.describe 'POST /sessions' do
   end
   describe 'Error cases' do
     describe 'When the username is not given' do
-      before do 
-        post '/', {duration: 3600, password: 'testpassword'}.to_json
+      before do
+        post '/', { duration: 3600, password: 'testpassword' }.to_json
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -92,8 +95,8 @@ RSpec.describe 'POST /sessions' do
       end
     end
     describe 'When the password is not given' do
-      before do 
-        post '/', {duration: 3600, username: babausse.username}.to_json
+      before do
+        post '/', { duration: 3600, username: babausse.username }.to_json
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -106,7 +109,7 @@ RSpec.describe 'POST /sessions' do
     end
     describe 'When the username is not found' do
       before do
-        post '/', {duration: 3600, username: 'unknown', password: 'testpassword'}.to_json
+        post '/', { duration: 3600, username: 'unknown', password: 'testpassword' }.to_json
       end
       it 'Returns a 404 (Not Found) status code' do
         expect(last_response.status).to be 404
@@ -119,7 +122,7 @@ RSpec.describe 'POST /sessions' do
     end
     describe 'When the password is not the correct one' do
       before do
-        post '/', {duration: 3600, username: babausse.username, password: 'wrongpassword'}.to_json
+        post '/', { duration: 3600, username: babausse.username, password: 'wrongpassword' }.to_json
       end
       it 'Returns a 404 (Not Found) status code' do
         expect(last_response.status).to be 403
@@ -132,3 +135,4 @@ RSpec.describe 'POST /sessions' do
     end
   end
 end
+# rubocop:enable Metrics/BlockLength

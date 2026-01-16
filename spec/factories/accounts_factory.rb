@@ -1,18 +1,19 @@
 FactoryBot.define do
-  factory :account, class: ::Modusynth::Models::Account do
-
+  factory :account, class: Modusynth::Models::Account do
     username { Faker::Alphanumeric.unique.alphanumeric(number: 10, min_alpha: 10) }
     email { Faker::Internet.unique.free_email }
     password { 'testpassword' }
     password_confirmation { 'testpassword' }
 
-    factory :account_without_rights do; end
+    factory :account_without_rights do
+    end
 
     factory :babausse do
       username { 'babausse' }
+      uuid { 'babausse-uuid' }
       email { 'courtois.vincent@outlook.com' }
       after :create do |account|
-        account.groups = [ create(:full_rights) ]
+        account.groups = [create(:full_rights)]
         account.save!
       end
     end
@@ -28,7 +29,7 @@ FactoryBot.define do
       after :create do |account|
         group = Modusynth::Models::Permissions::Group.find_by(slug: 'full-rights')
         if group.nil?
-          account.groups = [ create(:full_rights) ]
+          account.groups = [create(:full_rights)]
         else
           account.groups.push(group)
         end

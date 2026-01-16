@@ -1,4 +1,4 @@
-RSpec.describe 'GET /accounts/:id' do
+RSpec.describe 'GET /accounts/:uuid/profile' do
   def app
     Modusynth::Controllers::Accounts
   end
@@ -10,7 +10,7 @@ RSpec.describe 'GET /accounts/:id' do
 
   describe 'Nominal case' do
     before do
-      get '/own', { auth_token:, account_id: account.id.to_s }
+      get '/babausse-uuid/profile', { auth_token: }
     end
     it 'Returns a 200 (OK) status code' do
       expect(last_response.status).to be 200
@@ -24,5 +24,5 @@ RSpec.describe 'GET /accounts/:id' do
     end
   end
 
-  include_examples 'authentication', 'GET /own'
+  include_examples 'authentication', 'GET /babausse-uuid/profile'
 end

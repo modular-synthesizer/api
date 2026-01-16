@@ -5,26 +5,20 @@ module Modusynth
     class Accounts < Modusynth::Controllers::Base
       ACCOUNT_VIEW = 'accounts/account.json'
 
-      api_route 'post', '/', authenticated: false do
+      post '/accounts' do
         account = service.create(**symbolized_params)
         render_json ACCOUNT_VIEW, status: 201, account:
       end
 
-      api_route 'get', '/search', right: ::Rights::ACCOUNTS_READ do
-        accounts = service.search(session:, **symbolized_params)
-        render_json 'accounts/list.json', accounts:
+      endpoint 'get', '/:uuid/accounts', right: ::Rights::ACCOUNTS_READ do
+        render_json 'accounts/list.json', accounts: service.search(**symbolized_params)
       end
 
-      new_route 'get', '/own', right: ::Rights::ACCOUNTS_READ do
-        render_json ACCOUNT_VIEW, account: @account
-      end
-
-      api_route 'get', '/:id', right: ::Rights::ACCOUNTS_ADMIN do
-        account = service.find_or_fail(id: params[:id])
+      endpoint 'get', '/:uuid/profile', right: ::Rights::ACCOUNTS_READ do
         render_json ACCOUNT_VIEW, account:
       end
 
-      api_route 'put', '/:id/groups', right: ::Rights::ACCOUNTS_ADMIN do
+      endpoint 'put', '/:uuid/groups', right: ::Rights::ACCOUNTS_ADMIN do
         account = service.find_and_update_groups(**symbolized_params)
         render_json ACCOUNT_VIEW, account:
       end

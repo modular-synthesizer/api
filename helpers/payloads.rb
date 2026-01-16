@@ -5,7 +5,7 @@ module Modusynth
         return params if request.body.nil?
 
         request.body.rewind
-        JSON.parse(request.body.read.to_s).merge(params)
+        params.merge(JSON.parse(request.body.read.to_s))
       rescue JSON::ParserError
         params
       end

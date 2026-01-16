@@ -15,7 +15,7 @@ Mongo::Logger.level = ENV.fetch('MONGO_LOGGING_LEVEL', 1).to_i
 
 Modusynth::Services::Initialization.instance.run
 
-map('/accounts') { run Modusynth::Controllers::Accounts.new }
+run Modusynth::Controllers::Accounts.new
 map('/applications') { run Modusynth::Controllers::Applications.new }
 map('/categories') { run Modusynth::Controllers::Categories.new }
 map('/experiments/base') { run Modusynth::Controllers::Bare.new }

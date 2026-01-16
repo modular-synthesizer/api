@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# rubocop:disable Metrics/BlockLength
+
 RSpec.shared_examples 'authentication' do |route|
   def make_request(verb, path, payload = {})
     if %w[get delete].include? verb
@@ -15,6 +19,7 @@ RSpec.shared_examples 'authentication' do |route|
   end
 
   let!(:account) { create(:babausse, jwt_secret: 'super_secret') }
+  let!(:account_id) { account.uuid }
   let!(:auth_token) { create_token(account)[:jwt_token] }
 
   let!(:verb) { route.split[0].downcase }
@@ -36,7 +41,7 @@ RSpec.shared_examples 'authentication' do |route|
 
   describe 'Authentication error : the token is invalid' do
     before do
-      make_request verb, path, { auth_token: 'test_invalid_token', account_id: account.id.to_s }
+      make_request verb, path, { auth_token: 'test_invalid_token', account_id: }
     end
     it 'Returns a 403 (Forbidden) status code' do
       expect(last_response.status).to be 403
@@ -47,8 +52,12 @@ RSpec.shared_examples 'authentication' do |route|
   end
 
   describe 'Authentication error : the user UUID does not match the token' do
+    let!(:invalid_path) do
+      split = path.split('/')
+      [split[0], 'invalid-uuid', *split.slice(2, split.count - 2)].join('/')
+    end
     before do
-      make_request verb, path, { auth_token:, account_id: 'other_account_id' }
+      make_request verb, invalid_path, { auth_token: }
     end
     it 'Returns a 403 (Forbidden) status code' do
       expect(last_response.status).to be 403
@@ -61,7 +70,7 @@ RSpec.shared_examples 'authentication' do |route|
   describe 'Authentication error : the token is expired' do
     before do
       allow(Modusynth::Services::Tokens.instance).to receive(:ten_minutes_from_now).and_return(600)
-      make_request verb, path, { auth_token: create_token(account)[:jwt_token], account_id: account.id.to_s }
+      make_request verb, path, { auth_token: create_token(account)[:jwt_token], account_id: }
     end
     it 'Returns a 403 (Forbidden) status code' do
       expect(last_response.status).to be 403
@@ -74,7 +83,7 @@ RSpec.shared_examples 'authentication' do |route|
   describe 'Authentication error : the token has been refreshed' do
     before do
       Modusynth::Models::Token.first.update_attributes(refreshed_at: DateTime.now)
-      make_request verb, path, { auth_token:, account_id: account.id.to_s }
+      make_request verb, path, { auth_token:, account_id: }
     end
     it 'Returns a 403 (Forbidden) status code' do
       expect(last_response.status).to be 403
@@ -87,7 +96,7 @@ RSpec.shared_examples 'authentication' do |route|
   describe 'Authentication error : the token has been invalidated' do
     before do
       Modusynth::Models::Token.first.update_attributes(invalidated_at: DateTime.now)
-      make_request verb, path, { auth_token:, account_id: account.id.to_s }
+      make_request verb, path, { auth_token:, account_id: }
     end
     it 'Returns a 403 (Forbidden) status code' do
       expect(last_response.status).to be 403
@@ -101,7 +110,7 @@ RSpec.shared_examples 'authentication' do |route|
     let!(:account) { create(:authenticator) }
     let!(:auth_token) { create_token(account)[:jwt_token] }
     before do
-      make_request verb, path, { auth_token:, account_id: account.id.to_s }
+      make_request verb, path, { auth_token:, account_id: }
     end
     it 'Returns a 403 (Forbidden) status code' do
       expect(last_response.status).to be 403
@@ -111,3 +120,5 @@ RSpec.shared_examples 'authentication' do |route|
     end
   end
 end
+
+# rubocop:enable Metrics/BlockLength

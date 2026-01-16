@@ -44,7 +44,7 @@ module Modusynth
         end
 
         def account
-          @account ||= accounts_service.find_or_fail(id: symbolized_params[:account_id])
+          @account ||= accounts_service.find_by(uuid: symbolized_params[:uuid])
         end
 
         def token

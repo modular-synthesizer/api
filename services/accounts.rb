@@ -3,7 +3,7 @@ module Modusynth
     class Accounts < Modusynth::Services::Base
       include Singleton
 
-      def search session:, query: '', **_
+      def search query: '', **_
         return [] if query.size < 3
 
         model.where(username: /#{query}/).limit(10).to_a
@@ -18,6 +18,10 @@ module Modusynth
         raise Modusynth::Exceptions.forbidden 'username' if password.nil? || !account.authenticate(password)
 
         account
+      end
+
+      def find_by(uuid:, **_)
+        model.find_by(uuid:)
       end
 
       def find_or_fail_username(username)
@@ -38,8 +42,12 @@ module Modusynth
         instance
       end
 
-      def find_and_update_groups id: nil, groups: [], **_
-        find_and_update(id:, groups:)
+      def find_and_update_groups uuid: nil, groups: [], **_
+        account = find_by(uuid:)
+        raise Modusynth::Exceptions.unknown 'uuid' if account.nil?
+
+        account.update_attributes(groups:)
+        account
       end
 
       def model

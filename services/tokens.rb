@@ -26,7 +26,7 @@ module Modusynth
 
       def parse(auth_token:, account:, **_)
         token = JWT.decode(auth_token, account.jwt_secret, 'HS256')
-        raise Modusynth::Exceptions.forbidden 'username' if token[0]['sub'] != account.username
+        raise Modusynth::Exceptions.forbidden 'username' if token[0]['sub'] != account.uuid
         raise Modusynth::Exceptions.forbidden 'username' if token[0]['iss'] != 'Synple'
 
         token
@@ -36,7 +36,7 @@ module Modusynth
 
       def create_jwt_token(account:, jti:, **_)
         payload = {
-          sub: account.username,
+          sub: account.uuid,
           jti:,
           exp: ten_minutes_from_now,
           iss: 'Synple'
