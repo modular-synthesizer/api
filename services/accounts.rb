@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Services
     class Accounts < Modusynth::Services::Base
@@ -9,7 +11,7 @@ module Modusynth
         model.where(username: /#{query}/).limit(10).to_a
       end
 
-      def build username: nil, email: nil, password: nil, password_confirmation: nil, **rest
+      def build username: nil, email: nil, password: nil, password_confirmation: nil, **_
         model.new(username:, email:, password:, password_confirmation:)
       end
 
