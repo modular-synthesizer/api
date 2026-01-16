@@ -33,20 +33,24 @@ module Modusynth
         def find_or_fail(id: nil, container: nil, field: 'id', **_)
           raise Modusynth::Exceptions.required(field) if id.nil?
 
-          instance = find(id: id, container:)
+          find_or_fail_by(id:, container:, field:)
+        end
+
+        def find_or_fail_by(container: nil, field: 'id', **payload)
+          instance = find_by(**payload, container:)
           raise Modusynth::Exceptions.unknown(field) if instance.nil?
 
           instance
         end
 
         def find(id:, container: nil, **_)
-          check_model_implementation! caller: 'find'
-          container = model if container.nil?
-          container.where(id: id).first
+          find_by(id:, container:)
         end
 
-        def find_by(**payload)
-          model.find_by(**payload)
+        def find_by(container: nil, **payload)
+          check_model_implementation! caller: 'find'
+          container = model if container.nil?
+          container.find_by(**payload)
         end
 
         def check_model_implementation!(caller:)

@@ -16,38 +16,14 @@ module Modusynth
       end
 
       def authenticate(username, password)
-        account = find_or_fail_username username
-        raise Modusynth::Exceptions.forbidden 'username' if password.nil? || !account.authenticate(password)
+        account = find_or_fail_by(username:)
+        raise Modusynth::Exceptions.forbidden 'username' unless account.authenticate(password)
 
         account
       end
 
-      def find_by(uuid:, **_)
-        model.find_by(uuid:)
-      end
-
-      def find_or_fail_username(username)
-        raise Modusynth::Exceptions.forbidden 'username' if username.nil?
-
-        account = model.where(username: username).first
-        raise Modusynth::Exceptions.forbidden 'username' if account.nil?
-
-        account
-      end
-
-      def update instance, **payload
-        if payload[:groups].is_a? Array
-          instance.groups = payload[:groups].map.with_index do |group, index|
-            Permissions::Groups.instance.find_or_fail(id: group[:id], field: "groups[#{index}].id")
-          end
-        end
-        instance
-      end
-
-      def find_and_update_groups uuid: nil, groups: [], **_
-        account = find_by(uuid:)
-        raise Modusynth::Exceptions.unknown 'uuid' if account.nil?
-
+      def find_and_update_groups account: nil, groups: [], **_
+        # TODO: find the groups, and add tests to check that works
         account.update_attributes(groups:)
         account
       end
