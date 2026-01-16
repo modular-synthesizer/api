@@ -27,44 +27,8 @@ module Modusynth
         end
       end
 
-      def new_route(verb, path, authenticated: true, right: [], ownership: false, admin: false, &block)
-        send verb, path do
-          auth_service = Modusynth::Services::Authentication.instance
-          if authenticated
-            @account = Modusynth::Services::Accounts.instance.find_or_fail(id: symbolized_params[:account_id])
-            @token = Modusynth::Services::Tokens.instance.parse(account: @account, **symbolized_params)
-            raise Modusynth::Exceptions.forbidden 'account_id' if @token[0]['exp'] < Time.now.to_i
-
-            auth_service.check_privileges(@account) if admin
-            auth_service.check_rights(@account, right) unless right.empty?
-            @stored_token = Modusynth::Models::Token.active.find_by(jwt_token_id: @token[0]['jti'])
-            raise Modusynth::Exceptions.forbidden 'account_id' if @stored_token.nil?
-          end
-          @resource = auth_service.ownership(symbolized_params, account, service) if ownership && respond_to?(:service)
-          instance_eval(&block)
-        rescue StandardError
-          raise Modusynth::Exceptions.forbidden 'account_id'
-        end
-      end
-
-      def token
-        @token ||= JWT.decode(symbolized_params[:jwt_token], account.username, 'HS256')
-      end
-
-      def account
-        @account ||= account.find_or_fail_username(token[0][:sub])
-      end
-
       def create_right(right: nil, **_)
         Modusynth::Models::Permissions::Right.find_or_create_by(label: right)
-      end
-
-      def auth_service
-        Modusynth::Services::Authentication.instance
-      end
-
-      def tokens_service
-        Modusynth::Services::Tokens.instance
       end
 
       def with_defaults(options)

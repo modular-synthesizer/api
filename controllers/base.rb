@@ -3,10 +3,10 @@
 module Modusynth
   module Controllers
     class Base < Sinatra::Base
-      register Modusynth::Helpers::Routes
+      register Modusynth::Helpers::Endpoints
       helpers Modusynth::Helpers::Payloads
 
-      attr_accessor :session, :account
+      attr_accessor :session
 
       before do
         content_type :json

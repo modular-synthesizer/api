@@ -46,7 +46,7 @@ module Modusynth
         rights = Modusynth::Models::Permissions::Right.where(
           :group_ids.in => account.group_ids, label:
         )
-        raise Modusynth::Exceptions.forbidden unless rights.exists?
+        raise Modusynth::Exceptions.forbidden 'account_id' unless rights.exists?
       end
 
       # Checks if the user making the request has access to the resource. To

@@ -8,11 +8,14 @@ RSpec.shared_examples 'authentication' do |route|
   end
 
   def create_token(account)
-    Modusynth::Services::Tokens.instance.create(username: account.username, password: account.password)[:jwt_token]
+    Modusynth::Services::Tokens.instance.create(
+      username: account.username,
+      password: account.password
+    )
   end
 
   let!(:account) { create(:babausse, jwt_secret: 'super_secret') }
-  let(:auth_token) { create_token(account) }
+  let!(:auth_token) { create_token(account)[:jwt_token] }
 
   let!(:verb) { route.split[0].downcase }
   let!(:path) { route.split[1] }
@@ -58,7 +61,7 @@ RSpec.shared_examples 'authentication' do |route|
   describe 'Authentication error : the token is expired' do
     before do
       allow(Modusynth::Services::Tokens.instance).to receive(:ten_minutes_from_now).and_return(600)
-      make_request verb, path, { auth_token: create_token(account), account_id: account.id.to_s }
+      make_request verb, path, { auth_token: create_token(account)[:jwt_token], account_id: account.id.to_s }
     end
     it 'Returns a 403 (Forbidden) status code' do
       expect(last_response.status).to be 403
@@ -84,6 +87,20 @@ RSpec.shared_examples 'authentication' do |route|
   describe 'Authentication error : the token has been invalidated' do
     before do
       Modusynth::Models::Token.first.update_attributes(invalidated_at: DateTime.now)
+      make_request verb, path, { auth_token:, account_id: account.id.to_s }
+    end
+    it 'Returns a 403 (Forbidden) status code' do
+      expect(last_response.status).to be 403
+    end
+    it 'Returns the correct body' do
+      expect(last_response.body).to include_json(key: 'account_id', message: 'forbidden')
+    end
+  end
+
+  describe 'Authentication Error : the user has no permissions to access the route' do
+    let!(:account) { create(:authenticator) }
+    let!(:auth_token) { create_token(account)[:jwt_token] }
+    before do
       make_request verb, path, { auth_token:, account_id: account.id.to_s }
     end
     it 'Returns a 403 (Forbidden) status code' do

@@ -12,14 +12,13 @@ module Modusynth
         extend ActiveSupport::Concern
 
         def list **criteria
-          do_list **criteria
+          do_list(**criteria)
         end
 
         def do_list **criteria
           check_model_implementation! caller: 'find'
           model.where(**criteria)
         end
-
 
         # Tries to find a group given its unique identifier. If it does not
         # find it, fails with a correct esception raised. If the model
@@ -33,8 +32,10 @@ module Modusynth
         #   correctly implemented
         def find_or_fail(id: nil, container: nil, field: 'id', **_)
           raise Modusynth::Exceptions.required(field) if id.nil?
+
           instance = find(id: id, container:)
           raise Modusynth::Exceptions.unknown(field) if instance.nil?
+
           instance
         end
 
@@ -48,10 +49,10 @@ module Modusynth
           model.find_by(**payload)
         end
 
-        def check_model_implementation! caller:
-          unless respond_to? :model, true
-            raise Modusynth::Exceptions::Concern.new(caller:, called: 'model')
-          end
+        def check_model_implementation!(caller:)
+          return if respond_to? :model, true
+
+          raise Modusynth::Exceptions::Concern.new(caller:, called: 'model')
         end
       end
     end

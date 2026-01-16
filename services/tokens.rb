@@ -20,6 +20,10 @@ module Modusynth
         }
       end
 
+      def find_by(jwt_token_id:)
+        model.active.find_by(jwt_token_id:)
+      end
+
       def parse(auth_token:, account:, **_)
         token = JWT.decode(auth_token, account.jwt_secret, 'HS256')
         raise Modusynth::Exceptions.forbidden 'username' if token[0]['sub'] != account.username
