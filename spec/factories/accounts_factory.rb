@@ -8,16 +8,6 @@ FactoryBot.define do
     factory :account_without_rights do
     end
 
-    factory :babausse do
-      username { 'babausse' }
-      uuid { 'babausse-uuid' }
-      email { 'courtois.vincent@outlook.com' }
-      after :create do |account|
-        account.groups = [create(:full_rights)]
-        account.save!
-      end
-    end
-
     # Used ONLY for authentication errors in controllers tests.
     factory :authenticator do
       username { 'authenticator' }
@@ -27,13 +17,17 @@ FactoryBot.define do
     factory(:random_admin) do
       admin { true }
       after :create do |account|
-        group = Modusynth::Models::Permissions::Group.find_by(slug: 'full-rights')
-        if group.nil?
-          account.groups = [create(:full_rights)]
-        else
-          account.groups.push(group)
-        end
+        account.groups.push(Modusynth::Models::Permissions::Group.find_by(slug: 'full-rights'))
         account.save!
+      end
+      factory(:admin) do
+        uuid { 'admin-uuid' }
+      end
+
+      factory :babausse do
+        username { 'babausse' }
+        uuid { 'babausse-uuid' }
+        email { 'courtois.vincent@outlook.com' }
       end
     end
   end

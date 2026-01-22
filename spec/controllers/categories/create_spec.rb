@@ -3,12 +3,12 @@ RSpec.describe 'POST /categories' do
     Modusynth::Controllers::Categories
   end
 
-  let!(:admin) { create(:random_admin) }
-  let!(:admin_session) { create(:session, account: admin) }
-  
+  let!(:admin) { create(:admin) }
+  let!(:auth_token) { create_token(admin) }
+
   describe 'Nominal case' do
     before do
-      post '/', {name: 'testCategory', auth_token: admin_session.token}.to_json
+      post '/admin-uuid/categories', { name: 'testCategory', auth_token: }.to_json
     end
 
     it 'Returns a 201 (Created) status code' do
@@ -18,7 +18,7 @@ RSpec.describe 'POST /categories' do
       expect(last_response.body).to include_json(
         id: have_attributes(size: 24),
         name: 'testCategory'
-    )
+      )
     end
     describe 'The created category' do
       let!(:category) { Modusynth::Models::Category.first }
@@ -35,7 +35,7 @@ RSpec.describe 'POST /categories' do
   describe 'Error cases' do
     describe 'The name is not given' do
       before do
-        post '/', {auth_token: admin_session.token}.to_json
+        post '/admin-uuid/categories', { auth_token: }.to_json
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -48,7 +48,7 @@ RSpec.describe 'POST /categories' do
     end
     describe 'The name is not at least one character long' do
       before do
-        post '/', {name: 'c', auth_token: admin_session.token}.to_json
+        post '/admin-uuid/categories', { name: 'c', auth_token: }.to_json
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -61,8 +61,8 @@ RSpec.describe 'POST /categories' do
     end
     describe 'The name is already used in another category' do
       before do
-        post '/', {name: 'testCategory', auth_token: admin_session.token}.to_json
-        post '/', {name: 'testCategory', auth_token: admin_session.token}.to_json
+        post '/admin-uuid/categories', { name: 'testCategory', auth_token: }.to_json
+        post '/admin-uuid/categories', { name: 'testCategory', auth_token: }.to_json
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -75,7 +75,7 @@ RSpec.describe 'POST /categories' do
     end
     describe 'The name has a bad format' do
       before do
-        post '/', {name: 'test category', auth_token: admin_session.token}.to_json
+        post '/admin-uuid/categories', { name: 'test category', auth_token: }.to_json
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -88,5 +88,5 @@ RSpec.describe 'POST /categories' do
     end
   end
 
-  include_examples 'scopes', 'post', '/'
+  include_examples 'authentication', 'POST /categories'
 end

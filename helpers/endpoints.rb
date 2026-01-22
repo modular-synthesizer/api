@@ -15,10 +15,12 @@ module Modusynth
         options = DEFAULT_OPTIONS.merge(options)
         create_right(**options) if options.key? :right
         send verb.downcase, path do
-          check_authenticated_constraints(**options) if options[:authenticated]
+          begin
+            check_authenticated_constraints(**options) if options[:authenticated]
+          rescue StandardError
+            raise_forbidden_account
+          end
           instance_eval(&block)
-        rescue StandardError
-          raise_forbidden_account
         end
       end
 

@@ -24,5 +24,5 @@ RSpec.describe 'GET /accounts/:uuid/profile' do
     end
   end
 
-  include_examples 'authentication', 'GET /babausse-uuid/profile'
+  include_examples 'authentication', 'GET /profile'
 end
