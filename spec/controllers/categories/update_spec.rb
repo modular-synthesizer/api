@@ -1,15 +1,18 @@
+# frozen_string_literal: true
+
+# rubocop:disable Metrics/BlockLength
 RSpec.describe 'PUT /categories/:id' do
   def app
     Modusynth::Controllers::Categories.new
   end
 
-  let!(:admin) { create(:random_admin) }
-  let!(:admin_session) { create(:session, account: admin) }
+  let!(:account) { create(:admin) }
+  let!(:auth_token) { create_token(account) }
 
   let!(:dopefun) { create(:dopefun) }
   describe 'Nominal case' do
     before do
-      put "/#{dopefun.id.to_s}", {name: 'otherName', auth_token: admin_session.token}.to_json
+      put "/admin-uuid/categories/#{dopefun.id}", { name: 'otherName', auth_token: }.to_json
     end
     it 'Returns a 200 (OK) status code' do
       expect(last_response.status).to be 200
@@ -29,7 +32,7 @@ RSpec.describe 'PUT /categories/:id' do
   describe 'Alternative case' do
     describe 'A name is not given' do
       before do
-        put "/#{dopefun.id.to_s}", {auth_token: admin_session.token}
+        put "/admin-uuid/categories/#{dopefun.id}", { auth_token: }
       end
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
@@ -51,7 +54,7 @@ RSpec.describe 'PUT /categories/:id' do
   describe 'error cases' do
     describe 'The category is not found' do
       before do
-        put '/unknown', {auth_token: admin_session.token}
+        put '/admin-uuid/categories/unknown', { auth_token: }
       end
       it 'returns a 404 (Not Found) status code' do
         expect(last_response.status).to be 404
@@ -64,7 +67,7 @@ RSpec.describe 'PUT /categories/:id' do
     end
     describe 'The name is too short' do
       before do
-        put "/#{dopefun.id.to_s}", {name: 'c', auth_token: admin_session.token}.to_json
+        put "/admin-uuid/categories/#{dopefun.id}", { name: 'c', auth_token: }.to_json
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -77,7 +80,7 @@ RSpec.describe 'PUT /categories/:id' do
     end
     describe 'The name does not have the correct format' do
       before do
-        put "/#{dopefun.id.to_s}", {name: 'new name', auth_token: admin_session.token}.to_json
+        put "/admin-uuid/categories/#{dopefun.id}", { name: 'new name', auth_token: }.to_json
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -90,5 +93,6 @@ RSpec.describe 'PUT /categories/:id' do
     end
   end
 
-  include_examples 'scopes', 'put', '/any_id'
+  include_examples 'authentication', 'PUT /categories/category-id'
 end
+# rubocop:enable Metrics/BlockLength

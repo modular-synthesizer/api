@@ -47,6 +47,10 @@ module Modusynth
         halt 403, { key: exception.key, message: exception.error }.to_json
       end
 
+      error Sinatra::NotFound do
+        halt 404, { key: 'path', message: 'unknown' }.to_json
+      end
+
       error Modusynth::Exceptions::Service do |exception|
         halt exception.status, exception.message
       end
