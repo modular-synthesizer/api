@@ -53,11 +53,11 @@ module Modusynth
         )
       end
 
-      def remove id: nil, session: nil, **_
+      def remove id: nil, account: nil, **_
         synthesizer = find(id:)
         return if synthesizer.nil?
 
-        membership = Memberships.instance.find_by(session:, synthesizer:)
+        membership = Memberships.instance.find_by(account:, synthesizer:)
         return if membership.nil? or !membership.type_creator?
 
         synthesizer.update(deleted_at: DateTime.now, deleted_by: membership.account)

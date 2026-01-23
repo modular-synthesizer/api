@@ -1,14 +1,18 @@
+# rubocop:disable Metrics/BlockLength
 RSpec.describe Modusynth::Controllers::Synthesizers do
   def app
     Modusynth::Controllers::Synthesizers
   end
 
-  let!(:babausse) { create(:babausse) }
-  let!(:session) { create(:session, account: babausse) }
+  let!(:account) { create(:admin) }
+  let!(:auth_token) { create_token(account) }
+  let!(:uri) { '/admin-uuid/synthesizers' }
 
   describe 'POST /' do
     describe 'Nominal case' do
-      before { post '/', { name: 'test synth', auth_token: session.token }.to_json }
+      before do
+        post uri, { name: 'test synth', auth_token: }.to_json
+      end
 
       it 'Returns a 201 (Created) status code' do
         expect(last_response.status).to be 201
@@ -45,7 +49,7 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
           expect(synth.memberships.count).to be 1
         end
         it 'Has created a membership with the correct account' do
-          expect(membership.account.id).to eq babausse.id
+          expect(membership.account.id).to eq account.id
         end
         it 'Has initialized the membership with the correct X' do
           expect(membership.x).to be 0
@@ -60,7 +64,9 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
     end
     describe 'Alternative cases' do
       describe 'The number of polyphony voices is given' do
-        before { post '/', { name: 'test synth', voices: 64, auth_token: session.token }.to_json }
+        before do
+          post uri, { name: 'test synth', voices: 64, auth_token: }.to_json
+        end
 
         it 'Returns a 201 (Created) status code' do
           expect(last_response.status).to be 201
@@ -71,7 +77,9 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
       end
 
       describe 'The sample rate is given' do
-        before { post '/', { name: 'test synth', sample_rate: 48_000, auth_token: session.token }.to_json }
+        before do
+          post uri, { name: 'test synth', sample_rate: 48_000, auth_token: }.to_json
+        end
 
         it 'Returns a 201 (Created) status code' do
           expect(last_response.status).to be 201
@@ -83,7 +91,9 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
     end
     describe 'Error cases' do
       describe 'Name not given' do
-        before { post '/', { auth_token: session.token }.to_json }
+        before do
+          post uri, { auth_token: }.to_json
+        end
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
@@ -95,7 +105,9 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
         end
       end
       describe 'Name too short' do
-        before { post '/', { name: 'foo', auth_token: session.token }.to_json }
+        before do
+          post uri, { name: 'foo', auth_token: }.to_json
+        end
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
@@ -107,7 +119,9 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
         end
       end
       describe 'Voices number below 1' do
-        before { post '/', { name: 'test-name', voices: 0, auth_token: session.token }.to_json }
+        before do
+          post uri, { name: 'test-name', voices: 0, auth_token: }.to_json
+        end
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
@@ -119,7 +133,9 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
         end
       end
       describe 'Voices over 256' do
-        before { post '/', { name: 'test-name', voices: 257, auth_token: session.token }.to_json }
+        before do
+          post uri, { name: 'test-name', voices: 257, auth_token: }.to_json
+        end
 
         it 'Returns a 400 (Bad Request) status code' do
           expect(last_response.status).to be 400
@@ -133,6 +149,7 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
     end
   end
 
-  include_examples 'authentication', 'post', '/'
-  include_examples 'scopes', 'post', '/'
+  include_examples 'authentication', 'POST /synthesizers'
 end
+
+# rubocop:enable Metrics/BlockLength

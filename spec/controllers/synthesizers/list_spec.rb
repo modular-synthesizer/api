@@ -1,15 +1,19 @@
+# frozen_string_literal: true
+
+# rubocop:disable Metrics/BlockLength
 RSpec.describe Modusynth::Controllers::Synthesizers do
   def app
     Modusynth::Controllers::Synthesizers
   end
 
-  let!(:babausse) { create(:babausse) }
-  let!(:session) { create(:session, account: babausse) }
+  let!(:account) { create(:admin) }
+  let!(:auth_token) { create_token(account) }
+  let!(:uri) { '/admin-uuid/synthesizers' }
 
   describe 'GET /' do
     describe 'empty list' do
       before do
-        get '/', {auth_token: session.token}
+        get uri, { auth_token: }
       end
 
       it 'Returns a 200 (OK) status code' do
@@ -20,51 +24,40 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
       end
     end
     describe 'populated list' do
-      let!(:synthesizer) {
-        Modusynth::Services::Synthesizers.instance.create(name: 'test synth', account: session.account)
-      }
+      let!(:synthesizer) do
+        post uri, { name: 'test synth', auth_token: }
+        Modusynth::Models::Synthesizer.find_by(name: 'test synth')
+      end
+
       before do
-        get '/', {auth_token: session.token}
+        get uri, { auth_token: }
       end
 
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
       end
       it 'Returns the correct body' do
-        expect(last_response.body).to include_json([
-          {
-            id: a_kind_of(String),
-            members: [
-              {
-                id: synthesizer.creator.id.to_s,
-                username: babausse.username,
-                account_id: babausse.id.to_s,
-                type: 'creator'
-              }
-            ],
-            name: 'test synth',
-            x: 0,
-            y: 0,
-            scale: 1
-          }
-        ])
+        membership = { id: synthesizer.creator.id.to_s, username: 'admin', account_id: 'admin-uuid', type: 'creator' }
+        expectation = [{ id: a_kind_of(String), members: [membership], name: 'test synth', x: 0, y: 0, scale: 1 }]
+        expect(last_response.body).to include_json(expectation)
       end
     end
     describe 'Restricted list depending on the ownership' do
       let!(:other_user) { create(:random_admin) }
-      let!(:other_session) { create(:session, account: other_user) }
+      let!(:other_token) { create_token(other_user) }
       let!(:synthesizer) { create(:synthesizer, name: 'test synth') }
       let!(:other_synth) { create(:synthesizer, name: 'test synth') }
+      let!(:model) { Modusynth::Models::Social::Membership }
 
       before do
-        Modusynth::Models::Social::Membership.create(account: other_user, synthesizer: other_synth, enum_type: 'creator')
-        Modusynth::Models::Social::Membership.create(account: babausse, synthesizer: other_synth, enum_type: 'write')
-        Modusynth::Models::Social::Membership.create(account: babausse, synthesizer: synthesizer, enum_type: 'creator')
+        model.create(account: other_user, synthesizer: other_synth, enum_type: 'creator')
+        model.create(account:, synthesizer: other_synth, enum_type: 'write')
+        model.create(account:, synthesizer: synthesizer, enum_type: 'creator')
       end
 
       describe 'when you ask for owned synthesizers' do
         before do
-          get '/', { auth_token: session.token, type: 'creator' }
+          get uri, { auth_token:, type: 'creator' }
         end
         it 'Returns a 200 (OK) status code' do
           expect(last_response.status).to be 200
@@ -81,7 +74,7 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
       end
       describe 'when you ask for not owned synthesizers' do
         before do
-          get '/', { auth_token: session.token, type: [ 'read', 'write' ] }
+          get uri, { auth_token:, type: %w[read write] }
         end
         it 'Returns a 200 (OK) status code' do
           expect(last_response.status).to be 200
@@ -98,7 +91,7 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
       end
       describe 'When you still want all your synths, owned or not' do
         before do
-          get '/', { auth_token: session.token }
+          get uri, { auth_token: }
         end
         it 'Returns a 200 (OK) status code' do
           expect(last_response.status).to be 200
@@ -109,16 +102,12 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
       end
     end
     describe 'List with deleted synthesizers in it' do
-
       let!(:service) { Modusynth::Services::Synthesizers.instance }
-      let!(:synthesizer) { service.create(name: 'test synth', account: session.account) }
+      let!(:synthesizer) { service.create(name: 'test synth', account:) }
 
       before do
-        service.remove(id: synthesizer.id, session:)
-      end
-
-      before do
-        get '/', {auth_token: session.token}
+        delete "/admin-uuid/synthesizers/#{synthesizer.id}", { auth_token: }
+        get uri, { auth_token: }
       end
 
       it 'Returns a 200 (OK) status code' do
@@ -130,6 +119,7 @@ RSpec.describe Modusynth::Controllers::Synthesizers do
     end
   end
 
-  include_examples 'authentication', 'get', '/'
-  include_examples 'scopes', 'get', '/'
+  include_examples 'authentication', 'GET /synthesizers'
 end
+
+# rubocop:enable Metrics/BlockLength

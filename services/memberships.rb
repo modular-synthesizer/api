@@ -8,13 +8,13 @@ module Modusynth
         if session.nil? or !synthesizer.memberships.where(account: session.account, enum_type: 'creator').exists?
           raise Modusynth::Exceptions.forbidden('auth_token')
         end
+
         account = Accounts.instance.find_or_fail(id: account_id, field: 'account_id')
         if account.memberships.where(synthesizer:).exists?
           raise Modusynth::Exceptions::BadRequest.new('account_id', 'uniq')
         end
-        unless ['read', 'write'].include?(type)
-          raise Modusynth::Exceptions::BadRequest.new('type', 'value')
-        end
+        raise Modusynth::Exceptions::BadRequest.new('type', 'value') unless %w[read write].include?(type)
+
         model.new(synthesizer:, account:, enum_type: type, x: 0, y: 0, scale: 1.0)
       end
 
@@ -27,18 +27,21 @@ module Modusynth
       def find_or_fail_by synthesizer: nil, session: nil, **_
         membership = find_by(synthesizer:, session:)
         raise Modusynth::Exceptions.forbidden('auth_token') if membership.nil?
+
         membership
       end
 
-      def find_by synthesizer: nil, session: nil, **_
-        Modusynth::Models::Social::Membership.where(synthesizer:, account: session.account).first
+      def find_by synthesizer: nil, account: nil, **_
+        model.find_by(synthesizer:, account:)
       end
 
       def remove id:, session:, **_
         membership = find(id:)
         return if membership.nil? or membership.type_creator?
+
         requester = find_by(synthesizer: membership.synthesizer, session:)
         return if requester.nil?
+
         membership.delete if requester.type_creator? || membership.account.id == session.account.id
       end
 

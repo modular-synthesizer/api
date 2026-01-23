@@ -21,6 +21,7 @@ FactoryBot.define do
         account.save!
       end
       factory(:admin) do
+        username { 'admin' }
         uuid { 'admin-uuid' }
       end
 
