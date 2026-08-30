@@ -15,8 +15,9 @@ Mongo::Logger.level = ENV.fetch('MONGO_LOGGING_LEVEL', 1).to_i
 
 Modusynth::Services::Initialization.instance.run
 
+puts "Checking after initialization"
+
 map('/accounts') { run Modusynth::Controllers::Accounts.new }
-map('/applications') { run Modusynth::Controllers::Applications.new }
 map('/categories') { run Modusynth::Controllers::Categories.new }
 map('/experiments/base') { run Modusynth::Controllers::Bare.new }
 map('/experiments') { run Modusynth::Controllers::Experiments.new }
@@ -36,3 +37,6 @@ map('/tools/links') { run Modusynth::Controllers::ToolsResources::InnerLinks.new
 map('/tools/nodes') { run Modusynth::Controllers::ToolsResources::InnerNodes.new }
 map('/tools/parameters') { run Modusynth::Controllers::ToolsResources::Parameters.new }
 map('/tools/ports') { run Modusynth::Controllers::ToolsResources::Ports.new }
+
+
+puts "Checking after routes"

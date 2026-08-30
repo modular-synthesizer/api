@@ -8,7 +8,7 @@ module Modusynth
 
         def initialize(tab_id = 'unknown')
           @tab_id = tab_id
-          @channel = connection.create_channel unless connection.nil?
+          @channel = connection.create_channel unless connection.nil? rescue nil
         end
 
         def connection
@@ -33,7 +33,7 @@ module Modusynth
         end
 
         def publish(prefix, operation, routing_key, payload)
-          return if channel.nil?
+          return if connection.nil? || channel.nil?
 
           payload = JSON.parse(payload).merge(tab_id.nil? ? {} : { tab_id: })
           exchange(prefix).publish({ operation:, payload: }.to_json, routing_key:)

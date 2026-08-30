@@ -16,8 +16,12 @@ module Modusynth
         def initialize
           return if ENV['RACK_ENV'] == 'test'
 
-          @get = Bunny.new ENV.fetch('RMQ_URI', nil)
-          @get.start
+          begin
+            @get = Bunny.new ENV.fetch('RMQ_URI', nil)
+            @get.start
+          rescue
+            puts "There was an error connecting to the RMQ server"
+          end
         end
       end
     end
