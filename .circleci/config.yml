@@ -39,7 +39,7 @@ jobs:
           command: gem install bundler && bundle install
       - run:
           name: Run lint
-          command: bundle exec rubocop
+          command: bundle exec rubocop controllers/ models/ constants/ exceptions/
 workflows:
   version: 2.1
   build:

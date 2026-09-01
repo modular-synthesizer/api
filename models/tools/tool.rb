@@ -22,7 +22,7 @@ module Modusynth
         #   @return [Integer] The number of slots the tool will take in each rack.
         field :slots, type: Integer
         # @!attribute [rw] experimental
-        #   @return [Boolean] TRUE if the tool is still an experimentation and not ready to be released, FALSE otherwise.
+        #   @return [Boolean] TRUE if the tool is still an experiment and not ready to be released, FALSE otherwise.
         field :experimental, type: Boolean, default: true
 
         field :x, type: Integer, default: 0
@@ -38,7 +38,7 @@ module Modusynth
         embeds_many :inner_links, class_name: '::Modusynth::Models::Tools::InnerLink'
 
         # @!attribute [rw] controls
-        #   @return [Array<Modusynth::Models::Tools::Control>] the list of graphical representation ok knobs, labels, etc.
+        #   @return [Array<Modusynth::Models::Tools::Control>] the list of graphical representation ok knobs, labels...
         has_many :controls, class_name: '::Modusynth::Models::Tools::Control', inverse_of: :tool
         # @!attribute [rw] ports
         #   @return [Array<Modusynth::Models::Tools::Port>] the list of exposed input/output ports for the module.
