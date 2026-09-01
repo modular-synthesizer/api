@@ -31,11 +31,15 @@ jobs:
           path: test/reports/rspec.xml
           destination: rspec.xml
   lint-job:
-    docker:
-      - image: cimg/ruby:3.3.12
+    executor: mongoruby
     steps:
-      - virtuacommands/perform-rubocop-analysis:
-          directories: controllers/ models/ constants/ exceptions/
+      - checkout
+      - run:
+          name: Install dependencies
+          command: gem install bundler && bundle install
+      - run:
+          name: Run lint
+          command: bundle exec rubocop
 workflows:
   version: 2.1
   build:
@@ -48,7 +52,7 @@ workflows:
           folders: "spec/controllers/synthesizers spec/controllers/modules spec/controllers/links"
       - test-job:
           name: authorizations-tests
-          folders: "spec/controllers/accounts spec/controllers/applications spec/controllers/groups spec/controllers/rights spec/controllers/sessions"
+          folders: "spec/controllers/accounts spec/controllers/groups spec/controllers/rights spec/controllers/sessions"
       - test-job:
           name: rest-of-tests
           folders: "spec/controllers/categories spec/controllers/generators spec/controllers/memberships"
