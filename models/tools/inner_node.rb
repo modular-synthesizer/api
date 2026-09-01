@@ -38,7 +38,7 @@ module Modusynth
                   presence: { message: 'required' },
                   length: { minimum: 3, message: 'length', if: :generator? }
 
-        embedded_in :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :inner_nodes
+        embedded_in :tool, class_name: '::Modusynth::Models::Tools::Tool', inverse_of: :inner_nodes
       end
     end
   end

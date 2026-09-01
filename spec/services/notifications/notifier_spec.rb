@@ -5,8 +5,10 @@ RSpec.describe Modusynth::Services::Notifications::Notifier do
   let!(:service) { Modusynth::Services::Notifications::Notifier.new('tab_id') }
   let!(:topic) { double(:topic, publish: double(:publish)) }
   let!(:channel) { double(:channel, topic: topic) }
+  let!(:connection) { double(:connection) }
   before do
     allow(service).to receive(:channel).and_return(channel)
+    allow(service).to receive(:connection).and_return(connection)
   end
   describe 'Classic commands' do
     describe 'No sessions are given' do

@@ -44,8 +44,8 @@ module Modusynth
         scope :outputs, -> { where(kind: 'output') }
 
         # @!attribute [rw] tool
-        #   @return [Modusynth::Models::Tool] the tool in which the port is declared.
-        belongs_to :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :ports, optional: true
+        #   @return [Modusynth::Models::Tools::Tool] the tool in which the port is declared.
+        belongs_to :tool, class_name: '::Modusynth::Models::Tools::Tool', inverse_of: :ports, optional: true
       end
     end
   end

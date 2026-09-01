@@ -10,7 +10,7 @@ module Modusynth
 
         embeds_one :to, class_name: 'Models::Tools::InnerLinkEnd'
 
-        embedded_in :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :inner_links
+        embedded_in :tool, class_name: '::Modusynth::Models::Tools::Tool', inverse_of: :inner_links
       end
     end
   end

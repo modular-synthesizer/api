@@ -16,7 +16,7 @@ module Modusynth
         end
 
         def model
-          Modusynth::Models::Tool
+          Modusynth::Models::Tools::Tool
         end
       end
     end

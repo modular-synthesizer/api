@@ -1,6 +1,6 @@
 RSpec.shared_examples 'empty lists' do
   it 'has Created no tool' do
-    expect(Modusynth::Models::Tool.all.size).to be 0
+    expect(Modusynth::Models::Tools::Tool.all.size).to be 0
   end
   it 'Has created no ports' do
     expect(Modusynth::Models::Tools::Port.all.size).to be 0
@@ -37,7 +37,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         )
       end
       describe 'Created tool' do
-        let!(:tool) { Modusynth::Models::Tool.first }
+        let!(:tool) { Modusynth::Models::Tools::Tool.first }
 
         it 'Has the correct name' do
           expect(tool.name).to eq 'VCA'
@@ -70,7 +70,7 @@ RSpec.describe Modusynth::Controllers::Tools do
           expect(last_response.status).to be 201
         end
         it 'Returns the correct body' do
-          creation = Modusynth::Models::Tool.first
+          creation = Modusynth::Models::Tools::Tool.first
           expect(last_response.body).to include_json(
             id: creation.id.to_s,
             name: 'VCA',
@@ -84,7 +84,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
 
         describe 'Created inner nodes' do
-          let!(:tool) { Modusynth::Models::Tool.first }
+          let!(:tool) { Modusynth::Models::Tools::Tool.first }
           let!(:node) { tool.inner_nodes.first }
 
           it 'Has created exactly one inner node' do
@@ -112,7 +112,7 @@ RSpec.describe Modusynth::Controllers::Tools do
           expect(last_response.status).to be 201
         end
         it 'Returns the correct body' do
-          creation = Modusynth::Models::Tool.first
+          creation = Modusynth::Models::Tools::Tool.first
           expect(last_response.body).to include_json(
             id: creation.id.to_s,
             name: 'VCA',
@@ -127,7 +127,7 @@ RSpec.describe Modusynth::Controllers::Tools do
           )
         end
         describe 'The created node coordinates' do
-          let!(:creation) { Modusynth::Models::Tool.first.inner_nodes.first }
+          let!(:creation) { Modusynth::Models::Tools::Tool.first.inner_nodes.first }
 
           it 'Has the correct X coordinate' do
             expect(creation.x).to be 100
@@ -149,7 +149,7 @@ RSpec.describe Modusynth::Controllers::Tools do
         end
 
         describe 'Created inner link' do
-          let!(:tool) { Modusynth::Models::Tool.first }
+          let!(:tool) { Modusynth::Models::Tools::Tool.first }
           let!(:link) { tool.inner_links.first }
           let!(:from) { link.from }
           let!(:to) { link.to }
@@ -232,7 +232,7 @@ RSpec.describe Modusynth::Controllers::Tools do
           expect(last_response.status).to be 201
         end
         it 'Returns the correct body' do
-          creation = Modusynth::Models::Tool.first
+          creation = Modusynth::Models::Tools::Tool.first
           expect(last_response.body).to include_json(
             id: creation.id.to_s,
             name: 'VCA',
@@ -263,14 +263,14 @@ RSpec.describe Modusynth::Controllers::Tools do
 
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
-            id: Modusynth::Models::Tool.first.id.to_s,
+            id: Modusynth::Models::Tools::Tool.first.id.to_s,
             name: 'VCA',
             slots: 3,
             ports: [{name: 'INPUT', index: 0, target: 'gain'}]
           )
         end
         describe 'Created input port' do
-          let!(:tool) { Modusynth::Models::Tool.first }
+          let!(:tool) { Modusynth::Models::Tools::Tool.first }
           let!(:input) { tool.inputs.first }
 
           it 'Has created only one input' do
@@ -300,14 +300,14 @@ RSpec.describe Modusynth::Controllers::Tools do
 
         it 'Returns the correct body' do
           expect(last_response.body).to include_json(
-            id: Modusynth::Models::Tool.first.id.to_s,
+            id: Modusynth::Models::Tools::Tool.first.id.to_s,
             name: 'VCA',
             slots: 3,
             ports: [{name: 'OUTPUT', index: 0, target: 'gain'}]
           )
         end
         describe 'Created input port' do
-          let!(:tool) { Modusynth::Models::Tool.first }
+          let!(:tool) { Modusynth::Models::Tools::Tool.first }
           let!(:output) { tool.outputs.first }
 
           it 'Has created only one input' do

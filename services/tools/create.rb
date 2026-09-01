@@ -17,7 +17,7 @@ module Modusynth
           experimental: true,
           **rest
         )
-          tool = Modusynth::Models::Tool.new(
+          tool = Modusynth::Models::Tools::Tool.new(
             name:,
             slots:,
             experimental:,

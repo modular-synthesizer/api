@@ -19,7 +19,7 @@ module Modusynth
 
       belongs_to :synthesizer, class_name: '::Modusynth::Models::Synthesizer', inverse_of: :modules
 
-      belongs_to :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :modules
+      belongs_to :tool, class_name: '::Modusynth::Models::Tools::Tool', inverse_of: :modules
 
       has_many :parameters, class_name: '::Modusynth::Models::Modules::Parameter', inverse_of: :module
 

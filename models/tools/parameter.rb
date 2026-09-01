@@ -42,7 +42,7 @@ module Modusynth
 
         validates :field, presence: { message: 'required' }
 
-        belongs_to :tool, class_name: '::Modusynth::Models::Tool', inverse_of: :parameters, optional: true
+        belongs_to :tool, class_name: '::Modusynth::Models::Tools::Tool', inverse_of: :parameters, optional: true
 
         has_many :instances, class_name: '::Modusynth::Models::Modules::Parameter', inverse_of: :template
 

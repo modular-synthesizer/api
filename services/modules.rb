@@ -59,7 +59,7 @@ module Modusynth
                .includes(:parameters, :ports)
                .where(synthesizer_id:)
                .to_a
-        tools = Modusynth::Models::Tool
+        tools = Modusynth::Models::Tools::Tool
                 .includes(:parameters, :ports, :controls)
                 .where(:id.in => mods.map(&:tool_id))
                 .to_a

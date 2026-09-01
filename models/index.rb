@@ -14,6 +14,5 @@ module Modusynth
     autoload :Session, './models/session'
     autoload :Social, './models/social/index'
     autoload :Tools, './models/tools/index'
-    autoload :Tool, './models/tool'
   end
 end

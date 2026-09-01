@@ -13,7 +13,7 @@ module Modusynth
 
       field :name, type: String
 
-      has_many :tools, class_name: '::Modusynth::Models::Tool', inverse_of: :category
+      has_many :tools, class_name: '::Modusynth::Models::Tools::Tool', inverse_of: :category
 
       validates :name,
                 presence: { message: 'required' },

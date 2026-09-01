@@ -11,6 +11,7 @@ module Modusynth
       autoload :InnerNode, './models/tools/inner_node'
       autoload :Parameter, './models/tools/parameter'
       autoload :Port, './models/tools/port'
+      autoload :Tool, './models/tools/tool'
     end
   end
 end

@@ -9,7 +9,7 @@ FactoryBot.define do
       generator { 'OscillatorNode' }
     end
   end
-  factory :tool, class: Modusynth::Models::Tool do
+  factory :tool, class: Modusynth::Models::Tools::Tool do
     name { 'test tool' }
     slots { 5 }
     factory :VCA do

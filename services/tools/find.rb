@@ -6,7 +6,7 @@ module Modusynth
         include Modusynth::Services::Concerns::Finder
 
         def model
-          Modusynth::Models::Tool
+          Modusynth::Models::Tools::Tool
         end
 
         def list session: nil, **_
@@ -15,7 +15,7 @@ module Modusynth
         end
 
         def find_by_ids(ids: [], **_)
-          Modusynth::Models::Tool
+          Modusynth::Models::Tools::Tool
             .includes(:ports, :parameters, :controls)
             .where(:id.in => ids)
         end
