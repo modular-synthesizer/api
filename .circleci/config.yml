@@ -3,7 +3,7 @@ version: 2.1
 executors:
   mongoruby:
     docker:
-      - image: cimg/ruby:3.3.6
+      - image: cimg/ruby:3.3.12
       - image: mongo:5.0.12
 
 orbs:
