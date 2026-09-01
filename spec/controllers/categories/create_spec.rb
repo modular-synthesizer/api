@@ -26,8 +26,8 @@ RSpec.describe 'POST /categories' do
       it 'Has the correct name' do
         expect(category.name).to eq 'testCategory'
       end
-      it 'Has no tools at creation' do
-        expect(category.tools.count).to be 0
+      it 'Has no blueprints at creation' do
+        expect(category.blueprints.count).to be 0
       end
     end
   end

@@ -5,13 +5,13 @@ module Modusynth
     module ToolsResources
       class InnerNodes < Modusynth::Controllers::ToolsResources::Base
         api_route 'post', '/', right: ::Rights::TOOLS_WRITE do
-          node = service.create(**symbolized_params, tool:)
-          render_json 'tools/_node.json', status: 201, node:
+          node = service.create(**symbolized_params, blueprint:)
+          render_json 'blueprints/_node.json', status: 201, node:
         end
 
         api_route 'put', '/:id', right: ::Rights::TOOLS_WRITE do
-          node = service.find_and_update(**symbolized_params, container: tool.inner_nodes)
-          render_json 'tools/_node.json', node:
+          node = service.find_and_update(**symbolized_params, container: blueprint.inner_nodes)
+          render_json 'blueprints/_node.json', node:
         end
 
         def service
@@ -19,7 +19,7 @@ module Modusynth
         end
 
         def container
-          tool.inner_nodes
+          blueprint.inner_nodes
         end
       end
     end

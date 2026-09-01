@@ -24,7 +24,7 @@ module Modusynth
       field :sample_rate, type: Integer, default: 44_100
 
       # @!attributes [r] modules
-      #   @return [Array<Modusynth::Models::Module>] the list of the instanciated tools present in the synthesizer.
+      #   @return [Array<Modusynth::Models::Module>] the list of the instanciated blueprints present in the synthesizer.
       has_many :modules, class_name: '::Modusynth::Models::Module', inverse_of: :synthesizer
       # @!attributes [r] links
       #   @return [Array<Modusynth::Models::Link>] the array of the links between the synthesizers' modules.

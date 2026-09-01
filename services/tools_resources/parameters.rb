@@ -7,7 +7,7 @@ module Modusynth
         def build(
           name: nil,
           targets: [],
-          tool: nil,
+          blueprint: nil,
           field: nil,
           minimum: 0,
           maximum: 100,
@@ -20,14 +20,14 @@ module Modusynth
           template = model.new(
             name:,
             targets:,
-            tool:,
+            blueprint:,
             minimum:,
             maximum:,
             step:,
             precision:,
             field:,
             default:,
-            instances: tool.modules.map do |mod|
+            instances: blueprint.modules.map do |mod|
               Modusynth::Models::Modules::Parameter.new(value: default, module: mod)
             end
           )
@@ -53,7 +53,7 @@ module Modusynth
         end
 
         def model
-          Modusynth::Models::Tools::Parameter
+          Modusynth::Models::Blueprints::Parameter
         end
       end
     end

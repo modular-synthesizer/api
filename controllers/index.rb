@@ -17,7 +17,7 @@ module Modusynth
     autoload :Rights, './controllers/rights'
     autoload :Sessions, './controllers/sessions'
     autoload :Synthesizers, './controllers/synthesizers'
-    autoload :Tools, './controllers/tools'
+    autoload :Blueprints, './controllers/blueprints'
     autoload :ToolsResources, './controllers/tools_resources/index'
   end
 end

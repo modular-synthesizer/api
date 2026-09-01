@@ -25,7 +25,7 @@ RSpec.describe 'POST /generators' do
       )
     end
     describe 'Created generator' do
-      let!(:generator) { Modusynth::Models::Tools::Generator.first }
+      let!(:generator) { Modusynth::Models::Blueprints::Generator.first }
 
       it 'Has the correct name' do
         expect(generator.name).to eq 'square_oscillator'
@@ -62,7 +62,7 @@ RSpec.describe 'POST /generators' do
         )
       end
       describe 'Created generator' do
-        let!(:generator) { Modusynth::Models::Tools::Generator.where(name: 'createGain').first }
+        let!(:generator) { Modusynth::Models::Blueprints::Generator.where(name: 'createGain').first }
 
         it 'has the correct name' do
           expect(generator.name).to eq 'createGain'
@@ -98,7 +98,7 @@ RSpec.describe 'POST /generators' do
         )
       end
       describe 'The created generator' do
-        let!(:generator) { Modusynth::Models::Tools::Generator.first }
+        let!(:generator) { Modusynth::Models::Blueprints::Generator.first }
 
         it 'Has the correct number of inputs' do
           expect(generator.inputs).to be 6

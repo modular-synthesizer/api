@@ -5,8 +5,8 @@ module Modusynth
     module ToolsResources
       class InnerLinks < Modusynth::Controllers::ToolsResources::Base
         api_route 'post', '/', right: ::Rights::TOOLS_WRITE do
-          link = service.create(**symbolized_params, tool:)
-          render_json 'tools/_link.json', status: 201, link:
+          link = service.create(**symbolized_params, blueprint:)
+          render_json 'blueprints/_link.json', status: 201, link:
         end
 
         def service
@@ -14,7 +14,7 @@ module Modusynth
         end
 
         def container
-          tool.inner_links
+          blueprint.inner_links
         end
       end
     end

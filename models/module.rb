@@ -19,7 +19,7 @@ module Modusynth
 
       belongs_to :synthesizer, class_name: '::Modusynth::Models::Synthesizer', inverse_of: :modules
 
-      belongs_to :tool, class_name: '::Modusynth::Models::Tools::Tool', inverse_of: :modules
+      belongs_to :blueprint, class_name: '::Modusynth::Models::Blueprints::Blueprint', inverse_of: :modules
 
       has_many :parameters, class_name: '::Modusynth::Models::Modules::Parameter', inverse_of: :module
 
@@ -29,15 +29,15 @@ module Modusynth
         synthesizer.account
       end
 
-      # Instanciates all porst and parameters from the tool in the node.
+      # Instanciates all porst and parameters from the blueprint in the node.
       after_create do |document|
-        document.tool.parameters.each do |parameter|
+        document.blueprint.parameters.each do |parameter|
           document.parameters << Modusynth::Models::Modules::Parameter.new(
             template: parameter,
             value: parameter.default
           )
         end
-        document.tool.ports.each do |port|
+        document.blueprint.ports.each do |port|
           document.ports << Modusynth::Models::Modules::Port.new(
             descriptor: port, module: document
           )

@@ -6,8 +6,8 @@ module Modusynth
       class InnerNodes < Modusynth::Services::Base
         include Singleton
 
-        def build name: nil, generator: nil, x: 0, y: 0, polyphonic: false, tool: nil, **_
-          model.new(name:, generator:, x:, y:, tool:, polyphonic:)
+        def build name: nil, generator: nil, x: 0, y: 0, polyphonic: false, blueprint: nil, **_
+          model.new(name:, generator:, x:, y:, blueprint:, polyphonic:)
         end
 
         def validate! **payload
@@ -15,7 +15,7 @@ module Modusynth
         end
 
         def model
-          Modusynth::Models::Tools::InnerNode
+          Modusynth::Models::Blueprints::InnerNode
         end
       end
     end

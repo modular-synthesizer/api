@@ -33,7 +33,7 @@ module Modusynth
       end
 
       # Raises an error if the user is not an administrator. It is used to
-      # forbid normal users to access routes such as tools or parameters
+      # forbid normal users to access routes such as blueprints or parameters
       # management so that they don't modify the application's data.
       #
       # @param session [Modusynth::Models::Session] the session makind the request.

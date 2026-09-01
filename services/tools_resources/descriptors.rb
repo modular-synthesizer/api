@@ -5,7 +5,7 @@ module Modusynth
         include Singleton
         
         def model
-          Modusynth::Models::Tools::Descriptor
+          Modusynth::Models::Blueprints::Descriptor
         end
       end
     end

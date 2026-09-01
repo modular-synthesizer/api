@@ -6,13 +6,13 @@ module Modusynth
     class Modules < Modusynth::Services::Base
       include Singleton
 
-      def build synthesizer_id: nil, tool_id: nil, slot: 0, rack: 0, **_
+      def build synthesizer_id: nil, blueprint_id: nil, slot: 0, rack: 0, **_
         synthesizer = Modusynth::Services::Synthesizers.instance.find_or_fail(
           id: synthesizer_id,
           field: 'synthesizer_id'
         )
-        tool = Modusynth::Services::Tools::Find.instance.find_by_ids(ids: [tool_id]).first
-        model.new(synthesizer:, tool:, slot:, rack:)
+        blueprint = Modusynth::Services::Blueprints::Find.instance.find_by_ids(ids: [blueprint_id]).first
+        model.new(synthesizer:, blueprint:, slot:, rack:)
       end
 
       def list(synthesizer_id:, **_)
@@ -59,17 +59,17 @@ module Modusynth
                .includes(:parameters, :ports)
                .where(synthesizer_id:)
                .to_a
-        tools = Modusynth::Models::Tools::Tool
+        blueprints = Modusynth::Models::Blueprints::Blueprint
                 .includes(:parameters, :ports, :controls)
-                .where(:id.in => mods.map(&:tool_id))
+                .where(:id.in => mods.map(&:blueprint_id))
                 .to_a
         mapped_tool_params = {}
         mapped_tool_ports = {}
-        tools.each do |tool|
-          tool.parameters.each do |tp|
+        blueprints.each do |blueprint|
+          blueprint.parameters.each do |tp|
             mapped_tool_params[tp.id] = tp
           end
-          tool.ports.each do |tp|
+          blueprint.ports.each do |tp|
             mapped_tool_ports[tp.id] = tp
           end
         end

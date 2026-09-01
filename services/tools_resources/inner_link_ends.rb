@@ -9,7 +9,7 @@ module Modusynth
         end
 
         def model
-          Modusynth::Models::Tools::InnerLinkEnd
+          Modusynth::Models::Blueprints::InnerLinkEnd
         end
       end
     end

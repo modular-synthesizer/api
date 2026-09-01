@@ -5,13 +5,13 @@ module Modusynth
     module ToolsResources
       class Ports < Modusynth::Controllers::ToolsResources::Base
         api_route 'post', '/', right: ::Rights::TOOLS_WRITE do
-          port = service.create(**symbolized_params, tool:)
-          render_json 'tools/_port.json', status: 201, port:
+          port = service.create(**symbolized_params, blueprint:)
+          render_json 'blueprints/_port.json', status: 201, port:
         end
 
         api_route 'put', '/:id', right: ::Rights::TOOLS_WRITE do
           port = service.find_and_update(**symbolized_params)
-          render_json 'tools/_port.json', port:
+          render_json 'blueprints/_port.json', port:
         end
 
         def service

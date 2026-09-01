@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :empty_port, class: Modusynth::Models::Tools::Port do
+  factory :empty_port, class: Modusynth::Models::Blueprints::Port do
     target { 'node_target' }
     index { 0 }
     factory :input_port do

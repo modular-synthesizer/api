@@ -45,8 +45,8 @@ workflows:
   build:
     jobs:
       - test-job:
-          name: tools-tests
-          folders: spec/controllers/tools
+          name: blueprints-tests
+          folders: spec/controllers/blueprints
       - test-job:
           name: synthesizers-tests
           folders: "spec/controllers/synthesizers spec/controllers/modules spec/controllers/links"

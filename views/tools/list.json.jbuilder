@@ -1,1 +1,0 @@
-json.partial! 'tools/tool', collection: tools, as: :tool

@@ -13,6 +13,6 @@ module Modusynth
     autoload :Synthesizer, './models/synthesizer'
     autoload :Session, './models/session'
     autoload :Social, './models/social/index'
-    autoload :Tools, './models/tools/index'
+    autoload :Blueprints, './models/blueprints/index'
   end
 end

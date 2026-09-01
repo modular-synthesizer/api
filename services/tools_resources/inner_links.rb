@@ -6,11 +6,11 @@ module Modusynth
       class InnerLinks < Modusynth::Services::Base
         include Singleton
 
-        def build from: nil, to: nil, tool: nil, prefix: '', **_
+        def build from: nil, to: nil, blueprint: nil, prefix: '', **_
           model.new(
             from: ends_service.build_and_validate!(**from, prefix: "#{prefix}.from"),
             to: ends_service.build_and_validate!(**to, prefix: "#{prefix}.to"),
-            tool:
+            blueprint:
           )
         end
 
@@ -30,7 +30,7 @@ module Modusynth
         end
 
         def model
-          Modusynth::Models::Tools::InnerLink
+          Modusynth::Models::Blueprints::InnerLink
         end
       end
     end

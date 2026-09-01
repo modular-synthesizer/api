@@ -5,7 +5,7 @@ module Modusynth
     module ToolsResources
       class Base < Modusynth::Controllers::Base
         def tools_service
-          Modusynth::Services::Tools::Find.instance
+          Modusynth::Services::Blueprints::Find.instance
         end
 
         api_route 'delete', '/:id', right: ::Rights::TOOLS_WRITE do
@@ -13,8 +13,8 @@ module Modusynth
           halt 204
         end
 
-        def tool
-          tools_service.find_or_fail(id: symbolized_params[:tool_id], field: 'tool_id')
+        def blueprint
+          tools_service.find_or_fail(id: symbolized_params[:blueprint_id], field: 'blueprint_id')
         end
 
         def container

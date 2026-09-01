@@ -1,0 +1,1 @@
+json.partial! 'blueprints/blueprint', collection: blueprints, as: :blueprint

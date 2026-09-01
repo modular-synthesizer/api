@@ -17,7 +17,7 @@ module Modusynth
       end
 
       def model
-        Modusynth::Models::Tools::Generator
+        Modusynth::Models::Blueprints::Generator
       end
 
       private

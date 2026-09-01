@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :empty_control, class: Modusynth::Models::Tools::Control do
+  factory :empty_control, class: Modusynth::Models::Blueprints::Control do
     factory :knob do
       component { 'Knob' }
     end

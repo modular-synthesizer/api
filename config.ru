@@ -30,13 +30,13 @@ map('/parameters') { run Modusynth::Controllers::Parameters.new }
 map('/rights') { run Modusynth::Controllers::Rights.new }
 map('/sessions') { run Modusynth::Controllers::Sessions.new }
 map('/synthesizers') { run Modusynth::Controllers::Synthesizers.new }
-map('/tools') { run Modusynth::Controllers::Tools.new }
+map('/blueprints') { run Modusynth::Controllers::Blueprints.new }
 
-map('/tools/controls') { run Modusynth::Controllers::ToolsResources::Controls.new }
-map('/tools/links') { run Modusynth::Controllers::ToolsResources::InnerLinks.new }
-map('/tools/nodes') { run Modusynth::Controllers::ToolsResources::InnerNodes.new }
-map('/tools/parameters') { run Modusynth::Controllers::ToolsResources::Parameters.new }
-map('/tools/ports') { run Modusynth::Controllers::ToolsResources::Ports.new }
+map('/blueprints/controls') { run Modusynth::Controllers::ToolsResources::Controls.new }
+map('/blueprints/links') { run Modusynth::Controllers::ToolsResources::InnerLinks.new }
+map('/blueprints/nodes') { run Modusynth::Controllers::ToolsResources::InnerNodes.new }
+map('/blueprints/parameters') { run Modusynth::Controllers::ToolsResources::Parameters.new }
+map('/blueprints/ports') { run Modusynth::Controllers::ToolsResources::Ports.new }
 
 
 puts "Checking after routes"

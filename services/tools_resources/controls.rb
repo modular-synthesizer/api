@@ -6,8 +6,8 @@ module Modusynth
       class Controls < Modusynth::Services::Base
         include Singleton
 
-        def build tool: nil, component: nil, payload: {}, **_
-          model.new(tool:, component:, payload:)
+        def build blueprint: nil, component: nil, payload: {}, **_
+          model.new(blueprint:, component:, payload:)
         end
 
         def update control, **payload
@@ -16,7 +16,7 @@ module Modusynth
         end
 
         def model
-          Modusynth::Models::Tools::Control
+          Modusynth::Models::Blueprints::Control
         end
       end
     end

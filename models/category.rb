@@ -2,7 +2,7 @@
 
 module Modusynth
   module Models
-    # A category is often a breand under which we place tools so that
+    # A category is often a breand under which we place blueprints so that
     # we can split them in the interface and regroup them in likewise
     # categories for the user to not be over-crowded.
     # @author Vincent Courtois <courtois.vincent@outlook.com>
@@ -13,7 +13,7 @@ module Modusynth
 
       field :name, type: String
 
-      has_many :tools, class_name: '::Modusynth::Models::Tools::Tool', inverse_of: :category
+      has_many :blueprints, class_name: '::Modusynth::Models::Blueprints::Blueprint', inverse_of: :category
 
       validates :name,
                 presence: { message: 'required' },

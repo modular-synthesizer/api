@@ -4,14 +4,14 @@ module Modusynth
       class Ports < Modusynth::Services::Base
         include Singleton
 
-        def build kind: nil, name: nil, target: nil, index: nil, tool: nil, **others
+        def build kind: nil, name: nil, target: nil, index: nil, blueprint: nil, **others
           descriptor = model.new(
             kind:,
             name:,
             target:,
             index:,
-            tool:,
-            ports: tool.modules.map do |mod|
+            blueprint:,
+            ports: blueprint.modules.map do |mod|
               Modusynth::Models::Modules::Port.new(module: mod)
             end
           )
@@ -44,7 +44,7 @@ module Modusynth
         end
 
         def model
-          Modusynth::Models::Tools::Port
+          Modusynth::Models::Blueprints::Port
         end
 
         def mod_ports_service

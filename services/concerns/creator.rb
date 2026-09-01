@@ -38,8 +38,8 @@ module Modusynth
           end
         end
 
-        def build_with_tool tool, items, prefix: ''
-          items_with_tool = items.map { |i| i.merge(tool:) }
+        def build_with_tool blueprint, items, prefix: ''
+          items_with_tool = items.map { |i| i.merge(blueprint:) }
           build_all items_with_tool, prefix:
         end
 

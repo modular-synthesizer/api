@@ -8,13 +8,13 @@ describe Modusynth::Controllers::Modules do
 
   describe 'POST /' do
     let!(:synth) { create(:synthesizer) }
-    let!(:tool) { create(:VCA) }
+    let!(:blueprint) { create(:VCA) }
 
     describe 'Nominal case' do
       before do
         payload = {
           synthesizer_id: synth.id.to_s,
-          tool_id: tool.id.to_s,
+          blueprint_id: blueprint.id.to_s,
           auth_token: session.token
         }
         post '/', payload.to_json
@@ -26,7 +26,7 @@ describe Modusynth::Controllers::Modules do
       it 'Returns the correct body' do
         expect(last_response.body).to include_json({
           id: have_attributes(size: 24),
-          category: 'tools',
+          category: 'blueprints',
           type: 'VCA',
           nodes: [
             {name: 'gain', generator: 'GainNode'}
@@ -57,8 +57,8 @@ describe Modusynth::Controllers::Modules do
         it 'Has the correct synthesizer' do
           expect(creation.synthesizer_id.to_s).to eq synth.id.to_s
         end
-        it 'Has the correct tool' do
-          expect(creation.tool_id.to_s).to eq tool.id.to_s
+        it 'Has the correct blueprint' do
+          expect(creation.blueprint_id.to_s).to eq blueprint.id.to_s
         end
         it 'Has parameters corresponding to the number of parameters' do
           expect(creation.parameters.size).to be 1

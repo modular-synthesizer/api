@@ -8,10 +8,10 @@ RSpec.describe 'POST /links' do
   let!(:synthesizer) do
     Modusynth::Services::Synthesizers.instance.create(account:, name: 'test synth')
   end
-  let!(:tool) do
+  let!(:blueprint) do
     create(:VCA, ports: [ build(:input_port), build(:output_port) ])
   end
-  let!(:mod) { create(:module, tool:, synthesizer:) }
+  let!(:mod) { create(:module, blueprint:, synthesizer:) }
   let!(:from) { mod.ports.first.id.to_s }
   let!(:to) { mod.ports.last.id.to_s }
 
