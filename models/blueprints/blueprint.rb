@@ -22,7 +22,7 @@ module Modusynth
         #   @return [Integer] The number of slots the blueprint will take in each rack.
         field :slots, type: Integer
         # @!attribute [rw] experimental
-        #   @return [Boolean] TRUE if the blueprint is still an experiment and not ready to be released, FALSE otherwise.
+        #   @return [Boolean] TRUE if it is still an experiment and not ready to be released, FALSE otherwise.
         field :experimental, type: Boolean, default: true
 
         field :x, type: Integer, default: 0
@@ -38,10 +38,10 @@ module Modusynth
         embeds_many :inner_links, class_name: '::Modusynth::Models::Blueprints::InnerLink'
 
         # @!attribute [rw] controls
-        #   @return [Array<Modusynth::Models::Blueprints::Control>] the list of graphical representation ok knobs, labels...
+        #   @return [Array<Modusynth::Models::Blueprints::Control>] the list of graphic representation ok controls
         has_many :controls, class_name: '::Modusynth::Models::Blueprints::Control', inverse_of: :blueprint
         # @!attribute [rw] ports
-        #   @return [Array<Modusynth::Models::Blueprints::Port>] the list of exposed input/output ports for the module.
+        #   @return [Array<Modusynth::Models::Blueprints::Port>] the list of exposed I/O ports for the module.
         has_many :ports, class_name: '::Modusynth::Models::Blueprints::Port', inverse_of: :blueprint
 
         has_many :parameters, class_name: '::Modusynth::Models::Blueprints::Parameter', inverse_of: :blueprint

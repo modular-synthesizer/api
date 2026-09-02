@@ -4,8 +4,9 @@ module Modusynth
   module Models
     module Blueprints
       # A parameter represents a value of an AudioParam in the client-side application. It links a descriptor setting
-      # constraints for the value of the parameter, and a set of targets being inner nodes of the blueprint the parameter is
-      # declared into. After being instanciated, each blueprint parameter will generate a module parameter.
+      # constraints for the value of the parameter, and a set of targets being inner nodes of the blueprint the
+      # parameter is declared into. After being instanciated, each blueprint parameter will generate a module
+      # parameter.
       #
       # @author Vincent Courtois <courtois.vincent@outlook.com>
       class Parameter
@@ -42,7 +43,8 @@ module Modusynth
 
         validates :field, presence: { message: 'required' }
 
-        belongs_to :blueprint, class_name: '::Modusynth::Models::Blueprints::Blueprint', inverse_of: :parameters, optional: true
+        belongs_to :blueprint, class_name: '::Modusynth::Models::Blueprints::Blueprint', inverse_of: :parameters,
+                               optional: true
 
         has_many :instances, class_name: '::Modusynth::Models::Modules::Parameter', inverse_of: :template
 

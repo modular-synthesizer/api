@@ -45,7 +45,8 @@ module Modusynth
 
         # @!attribute [rw] blueprint
         #   @return [Modusynth::Models::Blueprints::Blueprint] the blueprint in which the port is declared.
-        belongs_to :blueprint, class_name: '::Modusynth::Models::Blueprints::Blueprint', inverse_of: :ports, optional: true
+        belongs_to :blueprint, class_name: '::Modusynth::Models::Blueprints::Blueprint', inverse_of: :ports,
+                               optional: true
       end
     end
   end
