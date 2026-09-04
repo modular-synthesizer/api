@@ -53,7 +53,7 @@ module Modusynth
         end
 
         def model
-          Modusynth::Models::Blueprints::Parameter
+          Modusynth::Models::Blueprints::ParameterTemplate
         end
       end
     end

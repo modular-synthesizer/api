@@ -7,8 +7,8 @@ module Modusynth
       # blueprint descriptor. The value will be replacing the
       class Parameter
         include Mongoid::Document
-        include Modusynth::Models::Blueprints::Parameter
-
+        include Modusynth::Models::Concerns::Parameter
+        
         store_in collection: 'parameters'
 
         field :value, type: Float

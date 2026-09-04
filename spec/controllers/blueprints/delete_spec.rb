@@ -75,7 +75,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
           expect(Modusynth::Models::Blueprints::Blueprint.find_by(id: blueprint.id.to_s)).to be_nil
         end
         it 'Has correctly deleted the parameter' do
-          expect(Modusynth::Models::Blueprints::Parameter.find_by(id: tool_parameter.id.to_s)).to be_nil
+          expect(Modusynth::Models::Blueprints::ParameterTemplate.find_by(id: tool_parameter.id.to_s)).to be_nil
         end
       end
       describe 'When the blueprint has a control' do

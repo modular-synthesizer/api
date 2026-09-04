@@ -11,7 +11,7 @@ module Modusynth
       # @author Vincent Courtois <courtois.vincent@outlook.com>
       class ParameterTemplate
         include Mongoid::Document
-        include Modusynth::Models::Blueprints::Parameter
+        include Modusynth::Models::Concerns::Parameter
 
         store_in collection: 'parameter_templates'
       end

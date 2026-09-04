@@ -21,7 +21,7 @@ RSpec.describe 'DELETE /blueprints/parameters/:id' do
       expect(last_response.status).to be 204
     end
     it 'Has deleted the parameter' do
-      expect(Modusynth::Models::Blueprints::Parameter.where(id: parameter.id).count).to be 0
+      expect(Modusynth::Models::Blueprints::ParameterTemplate.where(id: parameter.id).count).to be 0
     end
     it 'Has deleted the parameter in the associated modules' do
       expect(mod.parameters.where(parameter: parameter.id).count).to be 0
@@ -36,7 +36,7 @@ RSpec.describe 'DELETE /blueprints/parameters/:id' do
         expect(last_response.status).to be 204
       end
       it 'Has not deleted the port' do
-        expect(Modusynth::Models::Blueprints::Parameter.where(id: parameter.id).count).to be 1
+        expect(Modusynth::Models::Blueprints::ParameterTemplate.where(id: parameter.id).count).to be 1
       end
     end
   end

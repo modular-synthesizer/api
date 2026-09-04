@@ -31,12 +31,6 @@ module Modusynth
 
       # Instanciates all porst and parameters from the blueprint in the node.
       after_create do |document|
-        document.blueprint.parameters.each do |parameter|
-          document.parameters << Modusynth::Models::Modules::Parameter.new(
-            template: parameter,
-            value: parameter.default
-          )
-        end
         document.blueprint.ports.each do |port|
           document.ports << Modusynth::Models::Modules::Port.new(
             descriptor: port, module: document

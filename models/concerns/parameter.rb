@@ -1,8 +1,10 @@
 module Modusynth
   module Models
     module Concerns
-      module Parameters
-        include do
+      module Parameter
+        extend ActiveSupport::Concern
+
+        included do
           # @!attribute [rw] targets
           #   @return [Array<String>] The names of the inner nodes this parameter is applied onto.
           field :targets, type: Array, default: []
