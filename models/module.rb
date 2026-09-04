@@ -21,7 +21,7 @@ module Modusynth
 
       belongs_to :blueprint, class_name: '::Modusynth::Models::Blueprints::Blueprint', inverse_of: :modules
 
-      has_many :parameters, class_name: '::Modusynth::Models::Modules::Parameter', inverse_of: :module
+      embeds_many :parameters, class_name: '::Modusynth::Models::Modules::Parameter', inverse_of: :module
 
       has_many :ports, class_name: '::Modusynth::Models::Modules::Port', inverse_of: :module
 

@@ -12,12 +12,34 @@ module Modusynth
           field: 'synthesizer_id'
         )
         blueprint = Modusynth::Services::Blueprints::Find.instance.find_by_ids(ids: [blueprint_id]).first
-        model.new(synthesizer:, blueprint:, slot:, rack:)
+        model.new(
+          synthesizer:,
+          blueprint:,
+          slot:,
+          rack:,
+          parameters: create_parameters_from(blueprint.parameters)
+        )
       end
 
       def list(synthesizer_id:, **_)
         model
           .where(synthesizer_id:)
+      end
+
+      def create_parameters_from(parameter_templates)
+        parameter_templates.map do |template|
+          return Modusynth::Models::Modules::Parameter.new(
+            target:template.target
+            name: template.name
+            field: template.field
+            default: template.default
+            minimum: template.minimum
+            maximum: template.maximum
+            value: template.default
+            precision: template.precision
+            step: template.step
+          )
+        end
       end
 
       def update id: nil, session: nil, **payload

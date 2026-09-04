@@ -7,28 +7,13 @@ module Modusynth
       # blueprint descriptor. The value will be replacing the
       class Parameter
         include Mongoid::Document
+        include Modusynth::Models::Blueprints::Parameter
 
         store_in collection: 'parameters'
 
         field :value, type: Float
 
-        belongs_to :template, class_name: '::Modusynth::Models::Blueprints::Parameter', inverse_of: :instances
-
         belongs_to :module, class_name: '::Modusynth::Models::Module', inverse_of: :value
-
-        def name
-          template.name
-        end
-
-        %i[minimum maximum step precision].each do |field|
-          define_method field do
-            parameter.descriptor.send(field)
-          end
-        end
-
-        scope :called, lambda { |name|
-          where(:parameter_id.in => Modusynth::Models::Blueprints::Parameter.called(name).map(&:id))
-        }
       end
     end
   end
