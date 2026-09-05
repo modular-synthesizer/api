@@ -14,10 +14,9 @@ module Modusynth
           step: 1,
           precision: 0,
           default: 50,
-          prefix: '',
           **_
         )
-          template = model.new(
+          model.new(
             name:,
             targets:,
             blueprint:,
@@ -26,14 +25,10 @@ module Modusynth
             step:,
             precision:,
             field:,
-            default:,
-            instances: blueprint.modules.map do |mod|
-              Modusynth::Models::Modules::Parameter.new(value: default, module: mod)
-            end
+            default:
           )
-          template
         end
-        
+
         def update parameter, **payload
           parameter.update(payload.slice(:name, :targets, :field, :minimum, :default, :maximum, :step, :precision))
           # If the thresholds have been edited, some values in modules might be out of bound so we clamp them.
@@ -47,7 +42,7 @@ module Modusynth
           build(**payload).validate!
         end
 
-        def delete parameter
+        def delete(parameter)
           parameter.instances.each(&:delete)
           parameter.delete
         end

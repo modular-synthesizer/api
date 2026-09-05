@@ -2,13 +2,12 @@ RSpec.describe 'POST /blueprints/parameters' do
   def app
     Modusynth::Controllers::ToolsResources::Parameters
   end
-  
+
   let!(:account) { create(:random_admin) }
   let!(:session) { create(:session, account:) }
   let!(:category) { create(:dopefun) }
   let!(:blueprint) { create(:blueprint, category:, experimental: false) }
   let!(:synthesizer) { Modusynth::Services::Synthesizers.instance.create(account:, name: 'test synth') }
-  let!(:mod) { create(:module, blueprint:, synthesizer:) }
 
   describe 'Nominal case' do
     before do
@@ -16,7 +15,7 @@ RSpec.describe 'POST /blueprints/parameters' do
         blueprint_id: blueprint.id.to_s,
         auth_token: session.token,
         name: 'custom parameter',
-        field: 'gain',
+        field: 'gain'
       }
     end
     it 'Returns a 201 (Created) status code' do
@@ -65,18 +64,6 @@ RSpec.describe 'POST /blueprints/parameters' do
         expect(parameter.field).to eq 'gain'
       end
     end
-    describe 'The created instanciation of the parameter in the modules' do
-      let!(:parameter) do
-        [mod, blueprint].each(&:reload)
-        mod.parameters.last
-      end
-      it 'Has created the parameter with the correct value' do
-        expect(parameter.value).to be 50.0
-      end
-      it 'Has created the parameter with the correct template' do
-        expect(parameter.template.name).to eq 'custom parameter'
-      end
-    end
   end
 
   describe 'Alternative cases' do
@@ -92,7 +79,7 @@ RSpec.describe 'POST /blueprints/parameters' do
           default: 5,
           step: 0.1,
           precision: 1,
-          targets: ['node1', 'node2']
+          targets: %w[node1 node2]
         }
       end
       it 'Returns a 201 (Created) status code' do
@@ -107,7 +94,7 @@ RSpec.describe 'POST /blueprints/parameters' do
           default: 5,
           step: 0.1,
           precision: 1,
-          targets: ['node1', 'node2']
+          targets: %w[node1 node2]
         )
       end
       it 'Has correctly created a parameter on the blueprint' do
@@ -115,12 +102,12 @@ RSpec.describe 'POST /blueprints/parameters' do
       end
       describe 'The created parameter' do
         let!(:parameter) { blueprint.reload && blueprint.parameters.last }
-  
+
         it 'Has the correct name' do
           expect(parameter.name).to eq 'custom parameter'
         end
         it 'Has the correct targets' do
-          expect(parameter.targets).to eq ['node1', 'node2']
+          expect(parameter.targets).to eq %w[node1 node2]
         end
         it 'Has the correct minimum' do
           expect(parameter.minimum).to be 1

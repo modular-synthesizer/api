@@ -11,4 +11,12 @@ FactoryBot.define do
       targets { ['node1'] }
     end
   end
+
+  factory :parameter_instance, class: Modusynth::Models::Modules::Parameter do
+    factory :frequency_instance do
+      name { 'freqparam' }
+      field { 'frequency' }
+      targets { ['node1'] }
+    end
+  end
 end

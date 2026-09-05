@@ -1,5 +1,4 @@
 RSpec.describe 'PUT /blueprints/parameters/:id' do
-
   def app
     Modusynth::Controllers::ToolsResources::Parameters
   end
@@ -11,10 +10,11 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
   let!(:parameter) { create(:parameter, name: 'test-param', field: 'gain', blueprint:) }
   let!(:synthesizer) { Modusynth::Services::Synthesizers.instance.create(account:, name: 'test synth') }
   let!(:mod) { create(:module, blueprint:, synthesizer:) }
+  let!(:mod_param) { create(:parameter_instance, module: mod, name: 'test-param', field: 'gain') }
 
   describe 'Nominal case' do
     before do
-      put "/#{parameter.id.to_s}", { auth_token: session.token }
+      put "/#{parameter.id}", { auth_token: session.token }
     end
     it 'Returns a 200 (OK) status code' do
       expect(last_response.status).to be 200
@@ -65,7 +65,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
   describe 'Alternative cases' do
     describe 'Updates the name' do
       before do
-        put "/#{parameter.id.to_s}", {
+        put "/#{parameter.id}", {
           auth_token: session.token,
           name: 'another-name'
         }
@@ -92,7 +92,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'Updates the targets' do
       before do
-        put "/#{parameter.id.to_s}", {
+        put "/#{parameter.id}", {
           auth_token: session.token,
           targets: ['new-target']
         }
@@ -119,7 +119,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'Updates the field' do
       before do
-        put "/#{parameter.id.to_s}", {
+        put "/#{parameter.id}", {
           auth_token: session.token,
           field: 'frequency'
         }
@@ -146,7 +146,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'Updates the minimum' do
       before do
-        put "/#{parameter.id.to_s}", {
+        put "/#{parameter.id}", {
           auth_token: session.token,
           minimum: 1
         }
@@ -173,7 +173,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'Updates the maximum' do
       before do
-        put "/#{parameter.id.to_s}", {
+        put "/#{parameter.id}", {
           auth_token: session.token,
           maximum: 99
         }
@@ -200,7 +200,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'Updates the default' do
       before do
-        put "/#{parameter.id.to_s}", {
+        put "/#{parameter.id}", {
           auth_token: session.token,
           default: 30
         }
@@ -227,7 +227,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'Updates the step' do
       before do
-        put "/#{parameter.id.to_s}", {
+        put "/#{parameter.id}", {
           auth_token: session.token,
           step: 10
         }
@@ -254,7 +254,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'Updates the precision' do
       before do
-        put "/#{parameter.id.to_s}", {
+        put "/#{parameter.id}", {
           auth_token: session.token,
           precision: 1
         }
@@ -281,7 +281,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'The value needs to be clamped when updating the minimum' do
       before do
-        put "/#{parameter.id.to_s}", {
+        put "/#{parameter.id}", {
           auth_token: session.token,
           minimum: 60,
           default: 60
@@ -292,17 +292,17 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
       end
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
-          minimum: 60,
+          minimum: 60
         )
       end
-       it 'Correctly updates the value in the corresponding modules' do
-        mod.reload
-        expect(mod.parameters.first.value).to be 60.0
+      it 'Has not updated the minimum of the corresponding module parameter' do
+        mod_param.reload
+        expect(mod_param.minimum).to be 0
       end
     end
     describe 'The value needs to be clamped when updating the maximum' do
       before do
-        put "/#{parameter.id.to_s}", {
+        put "/#{parameter.id}", {
           auth_token: session.token,
           maximum: 10,
           default: 10
@@ -316,9 +316,9 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
           maximum: 10
         )
       end
-      it 'Correctly updates the value in the corresponding modules' do
-        mod.reload
-        expect(mod.parameters.first.value).to be 10.0
+      it 'Has not updated the maximum of the corresponding module parameter' do
+        mod_param.reload
+        expect(mod_param.maximum).to be 100
       end
     end
   end
@@ -326,7 +326,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
   describe 'Error cases' do
     describe 'The name is empty' do
       before do
-        put "/#{parameter.id.to_s}", {
+        put "/#{parameter.id}", {
           auth_token: session.token,
           name: nil
         }
@@ -342,7 +342,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'The boundaries are not in the correct order when updating the minimum' do
       before do
-        put "/#{parameter.id.to_s}", {
+        put "/#{parameter.id}", {
           auth_token: session.token,
           minimum: parameter.maximum + 1
         }
@@ -362,7 +362,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'The boundaries are not in the correct order when updating the maximum' do
       before do
-        put "/#{parameter.id.to_s}", {
+        put "/#{parameter.id}", {
           auth_token: session.token,
           maximum: parameter.minimum - 1
         }
@@ -382,7 +382,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'The default value is not in boundaries when updating above the maximum' do
       before do
-        put "/#{parameter.id.to_s}", {
+        put "/#{parameter.id}", {
           auth_token: session.token,
           default: parameter.maximum + 1
         }
@@ -402,7 +402,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'The default value is not in boundaries when updating below the minimum' do
       before do
-        put "/#{parameter.id.to_s}", {
+        put "/#{parameter.id}", {
           auth_token: session.token,
           default: parameter.minimum - 1
         }
