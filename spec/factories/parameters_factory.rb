@@ -18,5 +18,10 @@ FactoryBot.define do
       field { 'frequency' }
       targets { ['node1'] }
     end
+    factory :gain_instance do
+      name { 'gainparam' }
+      field { 'gain' }
+      targets { ['node1'] }
+    end
   end
 end
