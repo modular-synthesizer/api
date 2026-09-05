@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Modusynth
   module Models
     module Concerns
@@ -35,7 +37,7 @@ module Modusynth
           validates :field, presence: { message: 'required' }
 
           belongs_to :blueprint, class_name: '::Modusynth::Models::Blueprints::Blueprint', inverse_of: :parameters,
-                                optional: true
+                                 optional: true
 
           has_many :instances, class_name: '::Modusynth::Models::Modules::Parameter', inverse_of: :template
 

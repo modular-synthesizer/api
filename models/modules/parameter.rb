@@ -8,7 +8,7 @@ module Modusynth
       class Parameter
         include Mongoid::Document
         include Modusynth::Models::Concerns::Parameter
-        
+
         store_in collection: 'parameters'
 
         field :value, type: Float
