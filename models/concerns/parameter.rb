@@ -32,10 +32,6 @@ module Modusynth
           #   @return [Float] a value can only be modified by this amount when editing it via a knob.
           field :step, type: Float, default: 1
 
-          validates :name, presence: { message: 'required' }
-
-          validates :field, presence: { message: 'required' }
-
           belongs_to :blueprint, class_name: '::Modusynth::Models::Blueprints::Blueprint', inverse_of: :parameters,
                                  optional: true
 
@@ -44,6 +40,18 @@ module Modusynth
           validate :boundaries
 
           validate :default_value
+
+          validate :name_presence
+
+          validate :field_presence
+
+          def name_presence
+            errors.add(:name, 'required') if name.nil? || name.empty?
+          end
+
+          def field_presence
+            errors.add(:field, 'required') if field.nil? || field.empty?
+          end
 
           def boundaries
             errors.add(:boundaries, 'order') if minimum && maximum && minimum > maximum

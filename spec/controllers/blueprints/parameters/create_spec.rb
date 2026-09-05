@@ -82,6 +82,7 @@ RSpec.describe 'POST /blueprints/parameters' do
           precision: 1,
           targets: %w[node1 node2]
         }
+        blueprint.reload
       end
       it 'Returns a 201 (Created) status code' do
         expect(last_response.status).to be 201
