@@ -12,11 +12,8 @@ orbs:
 
 jobs:
   test-job:
-    parameters:
-      folders:
-        type: string
-        default: ""
     executor: mongoruby
+    parallelism: 4
     steps:
       - checkout
       - run:
@@ -24,7 +21,9 @@ jobs:
           command: gem install bundler && bundle install
       - run:
           name: Run tests
-          command: bundle exec rspec --format RspecJunitFormatter -o test/reports/rspec.xml << parameters.folders >>
+          command: |
+            TEST_FILES=$(circleci tests glob "spec/**/*_spec.rb" | circleci test split)
+            bundle exec rspec --format RspecJunitFormatter -o test/reports/rspec.xml - ${TEST_FILES}
       - store_test_results:
           path: test/reports
       - store_artifacts:
@@ -44,16 +43,5 @@ workflows:
   version: 2.1
   build:
     jobs:
-      - test-job:
-          name: blueprints-tests
-          folders: spec/controllers/blueprints
-      - test-job:
-          name: synthesizers-tests
-          folders: "spec/controllers/synthesizers spec/controllers/modules spec/controllers/links"
-      - test-job:
-          name: authorizations-tests
-          folders: "spec/controllers/accounts spec/controllers/groups spec/controllers/rights spec/controllers/sessions"
-      - test-job:
-          name: rest-of-tests
-          folders: "spec/controllers/categories spec/controllers/generators spec/controllers/memberships"
+      - test-job
       - lint-job
