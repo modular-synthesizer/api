@@ -12,12 +12,37 @@ module Modusynth
           field: 'synthesizer_id'
         )
         blueprint = Modusynth::Services::Blueprints::Find.instance.find_by_ids(ids: [blueprint_id]).first
-        model.new(synthesizer:, blueprint:, slot:, rack:)
+        instance = model.new(
+          synthesizer:,
+          blueprint:,
+          slot:,
+          rack:
+        )
+        instance.parameters = create_parameters_from(blueprint.parameters, instance)
+        instance
       end
 
       def list(synthesizer_id:, **_)
         model
           .where(synthesizer_id:)
+      end
+
+      def create_parameters_from(parameter_templates, mod)
+        parameter_templates.map do |template|
+          param = Modusynth::Models::Modules::Parameter.new(
+            targets: template.targets,
+            name: template.name,
+            field: template.field,
+            default: template.default,
+            minimum: template.minimum,
+            maximum: template.maximum,
+            value: template.default,
+            precision: template.precision,
+            step: template.step,
+            module: mod
+          )
+          param
+        end
       end
 
       def update id: nil, session: nil, **payload
@@ -60,9 +85,9 @@ module Modusynth
                .where(synthesizer_id:)
                .to_a
         blueprints = Modusynth::Models::Blueprints::Blueprint
-                .includes(:parameters, :ports, :controls)
-                .where(:id.in => mods.map(&:blueprint_id))
-                .to_a
+                     .includes(:parameters, :ports, :controls)
+                     .where(:id.in => mods.map(&:blueprint_id))
+                     .to_a
         mapped_tool_params = {}
         mapped_tool_ports = {}
         blueprints.each do |blueprint|

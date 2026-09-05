@@ -21,7 +21,7 @@ module Modusynth
 
       belongs_to :blueprint, class_name: '::Modusynth::Models::Blueprints::Blueprint', inverse_of: :modules
 
-      has_many :parameters, class_name: '::Modusynth::Models::Modules::Parameter', inverse_of: :module
+      embeds_many :parameters, class_name: '::Modusynth::Models::Modules::Parameter', inverse_of: :module
 
       has_many :ports, class_name: '::Modusynth::Models::Modules::Port', inverse_of: :module
 
@@ -31,12 +31,6 @@ module Modusynth
 
       # Instanciates all porst and parameters from the blueprint in the node.
       after_create do |document|
-        document.blueprint.parameters.each do |parameter|
-          document.parameters << Modusynth::Models::Modules::Parameter.new(
-            template: parameter,
-            value: parameter.default
-          )
-        end
         document.blueprint.ports.each do |port|
           document.ports << Modusynth::Models::Modules::Port.new(
             descriptor: port, module: document

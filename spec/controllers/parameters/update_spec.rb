@@ -11,11 +11,12 @@ describe Modusynth::Controllers::Parameters do
       Modusynth::Services::Synthesizers.instance.create(account:, name: 'test synth', racks: 2)
     end
     let!(:node) { create(:VCA_module, synthesizer: synth) }
-    let!(:param_id) { node.parameters.first.id.to_s }
+    let!(:parameter) { create(:gain_instance, module: node) }
+    let!(:param_id) { parameter.id.to_s }
 
     describe 'Nominal case' do
       before do
-        payload = {value: 2, auth_token: session.token, t: 1989 }
+        payload = { value: 2, auth_token: session.token, t: 1989 }
         put "/#{param_id}", payload.to_json
       end
       it 'Returns a 200 (OK) status code' do
@@ -27,8 +28,8 @@ describe Modusynth::Controllers::Parameters do
         )
       end
       it 'Has update the gain value' do
-        node.reload
-        expect(node.parameters.first.value).to be 2.0
+        parameter.reload
+        expect(parameter.value).to be 2.0
       end
     end
     describe 'Alternative cases' do
@@ -45,8 +46,8 @@ describe Modusynth::Controllers::Parameters do
           expect(last_response.status).to be 200
         end
         it 'Has updated the value' do
-          node.reload
-          expect(node.parameters.first.value).to be 2.0
+          parameter.reload
+          expect(parameter.value).to be 2.0
         end
       end
     end

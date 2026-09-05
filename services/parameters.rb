@@ -10,8 +10,7 @@ module Modusynth
         membership = Memberships.instance.find_or_fail_by(session:, synthesizer:)
         raise Modusynth::Exceptions.forbidden('auth_token') if membership.nil? || membership.type_read?
 
-        template = parameter.template
-        if value.nil? || value < template.minimum || value > template.maximum
+        if value.nil? || value < parameter.minimum || value > parameter.maximum
           raise Modusynth::Exceptions::BadRequest.new('value', 'boundaries')
         end
 

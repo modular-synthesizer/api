@@ -5,21 +5,21 @@ describe Modusynth::Controllers::Modules do
 
   let!(:account) { create(:random_admin) }
   let!(:session) { create(:session, account: account) }
+  let!(:synth) do
+    Modusynth::Services::Synthesizers.instance.create(account:, name: 'test synth', racks: 2)
+  end
+  let!(:node) { create(:VCA_module, synthesizer: synth) }
+  let!(:parameter) { create(:gain_instance, module: node) }
+  let!(:param_id) { parameter.id.to_s }
 
   describe 'PUT /:id' do
-    let!(:synth) do
-      Modusynth::Services::Synthesizers.instance.create(account:, name: 'test synth', racks: 2)
-    end
-    let!(:node) { create(:VCA_module, synthesizer: synth) }
-    let!(:param_id) { node.parameters.first.id.to_s }
-
     describe 'Nominal case' do
       before do
         payload = {
-          parameters: [{value: 2, id: param_id}],
+          parameters: [{ value: 2, id: param_id }],
           auth_token: session.token
         }
-        put "/#{node.id.to_s}", payload.to_json
+        put "/#{node.id}", payload.to_json
       end
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
@@ -36,7 +36,7 @@ describe Modusynth::Controllers::Modules do
             rack: 42,
             auth_token: other_session.token
           }
-          put "/#{node.id.to_s}", payload.to_json
+          put "/#{node.id}", payload.to_json
         end
         it 'Returns a 200 (OK) status code' do
           expect(last_response.status).to be 200
@@ -49,7 +49,7 @@ describe Modusynth::Controllers::Modules do
       describe 'When updating the slot of the module' do
         before do
           payload = { slot: 10, auth_token: session.token }
-          put "/#{node.id.to_s}", payload.to_json
+          put "/#{node.id}", payload.to_json
         end
         it 'Returns a 200 (OK) status code' do
           expect(last_response.status).to be 200
@@ -65,7 +65,7 @@ describe Modusynth::Controllers::Modules do
       describe 'When updating the rack of the module' do
         before do
           payload = { rack: 1, auth_token: session.token }
-          put "/#{node.id.to_s}", payload.to_json
+          put "/#{node.id}", payload.to_json
         end
         it 'Returns a 200 (OK) status code' do
           expect(last_response.status).to be 200
@@ -90,7 +90,7 @@ describe Modusynth::Controllers::Modules do
             rack: 42,
             auth_token: other_session.token
           }
-          put "/#{node.id.to_s}", payload.to_json
+          put "/#{node.id}", payload.to_json
         end
         it 'Returns a 403 (Forbidden) status code' do
           expect(last_response.status).to be 403
