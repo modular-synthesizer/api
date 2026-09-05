@@ -17,6 +17,7 @@ RSpec.describe 'POST /blueprints/parameters' do
         name: 'custom parameter',
         field: 'gain'
       }
+      blueprint.reload
     end
     it 'Returns a 201 (Created) status code' do
       expect(last_response.status).to be 201
