@@ -10,10 +10,7 @@ module Modusynth
             name:,
             target:,
             index:,
-            blueprint:,
-            ports: blueprint.modules.map do |mod|
-              Modusynth::Models::Modules::Port.new(module: mod)
-            end
+            blueprint:
           )
         end
 

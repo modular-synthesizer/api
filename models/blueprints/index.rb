@@ -10,7 +10,7 @@ module Modusynth
       autoload :InnerLinkEnd, './models/blueprints/inner_link_end'
       autoload :InnerNode, './models/blueprints/inner_node'
       autoload :ParameterTemplate, './models/blueprints/parameter_template'
-      autoload :PortTemplate, './models/blueprints/port'
+      autoload :PortTemplate, './models/blueprints/port_template'
       autoload :Blueprint, './models/blueprints/blueprint'
     end
   end

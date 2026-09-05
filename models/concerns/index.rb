@@ -7,6 +7,7 @@ module Modusynth
       autoload :Enumerable, './models/concerns/enumerable'
       autoload :Ownable, './models/concerns/ownable'
       autoload :Parameter, './models/concerns/parameter'
+      autoload :Port, './models/concerns/port'
     end
   end
 end
