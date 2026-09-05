@@ -1,9 +1,8 @@
 RSpec.describe 'DELETE /blueprints/ports/:id' do
-
   def app
     Modusynth::Controllers::ToolsResources::Ports
   end
-  
+
   let!(:account) { create(:random_admin) }
   let!(:session) { create(:session, account:) }
   let!(:category) { create(:dopefun) }
@@ -14,15 +13,15 @@ RSpec.describe 'DELETE /blueprints/ports/:id' do
 
   describe 'Nominal case' do
     let!(:link) { create(:link, from: mod.ports.first, to: mod.ports.last, synthesizer:) }
-    
+
     before do
-      delete "/#{port.id.to_s}", { auth_token: session.token }
+      delete "/#{port.id}", { auth_token: session.token }
     end
     it 'Returns a 204 (No Content) status code' do
       expect(last_response.status).to be 204
     end
     it 'Has deleted the port' do
-      expect(Modusynth::Models::Blueprints::Port.where(id: port.id).count).to be 0
+      expect(Modusynth::Models::Blueprints::PortTemplate.where(id: port.id).count).to be 0
     end
     it 'Has deleted the port in the associated modules' do
       expect(mod.ports.where(descriptor_id: port.id).count).to be 0
@@ -36,13 +35,13 @@ RSpec.describe 'DELETE /blueprints/ports/:id' do
   describe 'Alternative cases' do
     describe 'When the port is not found on the blueprint' do
       before do
-        delete "/unknown", { auth_token: session.token }
+        delete '/unknown', { auth_token: session.token }
       end
       it 'Returns a 204 (No Content) status code' do
         expect(last_response.status).to be 204
       end
       it 'Has not deleted the port' do
-        expect(Modusynth::Models::Blueprints::Port.where(id: port.id).count).to be 1
+        expect(Modusynth::Models::Blueprints::PortTemplate.where(id: port.id).count).to be 1
       end
     end
   end

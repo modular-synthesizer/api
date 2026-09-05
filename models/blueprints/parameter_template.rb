@@ -13,6 +13,11 @@ module Modusynth
         include Mongoid::Document
         include Modusynth::Models::Concerns::Parameter
 
+        # @!attribute [rw] blueprint
+        #   @return [Modusynth::Models::Blueprints::Blueprint] the blueprint in which the parameter is declared.
+        embedded_in :blueprint, class_name: '::Modusynth::Models::Blueprints::Blueprint', inverse_of: :parameters,
+                                optional: true
+
         store_in collection: 'parameter_templates'
       end
     end

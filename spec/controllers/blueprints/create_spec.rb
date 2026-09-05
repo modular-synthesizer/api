@@ -3,10 +3,9 @@ RSpec.shared_examples 'empty lists' do
     expect(Modusynth::Models::Blueprints::Blueprint.all.size).to be 0
   end
   it 'Has created no ports' do
-    expect(Modusynth::Models::Blueprints::Port.all.size).to be 0
+    expect(Modusynth::Models::Blueprints::PortTemplate.all.size).to be 0
   end
 end
-
 
 RSpec.describe Modusynth::Controllers::Blueprints do
   def app
@@ -14,14 +13,13 @@ RSpec.describe Modusynth::Controllers::Blueprints do
   end
 
   describe 'POST /' do
-
     let!(:admin) { create(:random_admin) }
     let!(:session) { create(:session, account: admin) }
     let!(:dopefun) { create(:dopefun) }
 
     describe 'Nominal case' do
       before do
-        post '/', {name: 'VCA', slots: 3, auth_token: session.token, categoryId: dopefun.id.to_s}.to_json
+        post '/', { name: 'VCA', slots: 3, auth_token: session.token, categoryId: dopefun.id.to_s }.to_json
       end
 
       it 'Returns a 201 (Created) status code' do
@@ -62,7 +60,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
             slots: 3,
             auth_token: session.token,
             categoryId: dopefun.id.to_s,
-            nodes: [{ name: 'gain', generator: 'GainNode'}]
+            nodes: [{ name: 'gain', generator: 'GainNode' }]
           }.to_json
         end
 
@@ -105,7 +103,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
             slots: 3,
             auth_token: session.token,
             categoryId: dopefun.id.to_s,
-            nodes: [{ name: 'gain', generator: 'GainNode', x: 100, y: 200}]
+            nodes: [{ name: 'gain', generator: 'GainNode', x: 100, y: 200 }]
           }.to_json
         end
         it 'Returns a 201 (Created) status code' do
@@ -144,7 +142,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
             slots: 3,
             auth_token: session.token,
             categoryId: dopefun.id.to_s,
-            links: [{from: {node: 'oscillator', index: 0}, to: {node: 'gain', index: 1}}]
+            links: [{ from: { node: 'oscillator', index: 0 }, to: { node: 'gain', index: 1 } }]
           }.to_json
         end
 
@@ -153,7 +151,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
           let!(:link) { blueprint.inner_links.first }
           let!(:from) { link.from }
           let!(:to) { link.to }
-  
+
           it 'Has created exactly one inner link' do
             expect(blueprint.inner_links.size).to be 1
           end
@@ -170,7 +168,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
             expect(to.index).to be 1
           end
         end
-        
+
         describe 'The origin index is not given' do
           before do
             post '/', {
@@ -178,7 +176,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
               categoryId: dopefun.id.to_s,
               name: 'testtool',
               auth_token: session.token,
-              links: [{to: {node: 'test', index: 0}, from: {node: 'other'}}]
+              links: [{ to: { node: 'test', index: 0 }, from: { node: 'other' } }]
             }.to_json
           end
 
@@ -193,7 +191,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
             )
           end
         end
-        
+
         describe 'The destination index is not given' do
           before do
             post '/', {
@@ -201,7 +199,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
               categoryId: dopefun.id.to_s,
               name: 'testtool',
               auth_token: session.token,
-              links: [{to: {node: 'test'}, from: {node: 'other', index: 0}}]
+              links: [{ to: { node: 'test' }, from: { node: 'other', index: 0 } }]
             }.to_json
           end
 
@@ -224,7 +222,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
             slots: 3,
             auth_token: session.token,
             categoryId: dopefun.id.to_s,
-            parameters: [{targets: ['target'], name: 'testparam', field: 'testfield'}]
+            parameters: [{ targets: ['target'], name: 'testparam', field: 'testfield' }]
           }.to_json
         end
 
@@ -257,7 +255,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
             slots: 3,
             auth_token: session.token,
             categoryId: dopefun.id.to_s,
-            ports: [{kind: 'input', name: 'INPUT', target: 'gain', index: 0}]
+            ports: [{ kind: 'input', name: 'INPUT', target: 'gain', index: 0 }]
           }.to_json
         end
 
@@ -266,7 +264,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
             id: Modusynth::Models::Blueprints::Blueprint.first.id.to_s,
             name: 'VCA',
             slots: 3,
-            ports: [{name: 'INPUT', index: 0, target: 'gain'}]
+            ports: [{ name: 'INPUT', index: 0, target: 'gain' }]
           )
         end
         describe 'Created input port' do
@@ -294,7 +292,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
             slots: 3,
             auth_token: session.token,
             categoryId: dopefun.id.to_s,
-            ports: [{kind: 'output', name: 'OUTPUT', target: 'gain', index: 0}]
+            ports: [{ kind: 'output', name: 'OUTPUT', target: 'gain', index: 0 }]
           }.to_json
         end
 
@@ -303,7 +301,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
             id: Modusynth::Models::Blueprints::Blueprint.first.id.to_s,
             name: 'VCA',
             slots: 3,
-            ports: [{name: 'OUTPUT', index: 0, target: 'gain'}]
+            ports: [{ name: 'OUTPUT', index: 0, target: 'gain' }]
           )
         end
         describe 'Created input port' do
@@ -329,40 +327,40 @@ RSpec.describe Modusynth::Controllers::Blueprints do
     describe 'Error cases' do
       describe 'No name given' do
         before do
-          post '/', {slots: 3, categoryId: dopefun.id.to_s, auth_token: session.token}.to_json
+          post '/', { slots: 3, categoryId: dopefun.id.to_s, auth_token: session.token }.to_json
         end
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct error body' do
-          expect(last_response.body).to include_json({key: 'name', message: 'required'})
+          expect(last_response.body).to include_json({ key: 'name', message: 'required' })
         end
         include_examples 'empty lists'
       end
       describe 'Name too short' do
         before do
-          post '/', {slots: 3, categoryId: dopefun.id.to_s, auth_token: session.token, name: 'a'}.to_json
+          post '/', { slots: 3, categoryId: dopefun.id.to_s, auth_token: session.token, name: 'a' }.to_json
         end
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct error body' do
-          expect(last_response.body).to include_json({key: 'name', message: 'minlength'})
+          expect(last_response.body).to include_json({ key: 'name', message: 'minlength' })
         end
         include_examples 'empty lists'
       end
       describe 'Slots not given' do
         before do
-          post '/', {name: 'foobar', categoryId: dopefun.id.to_s, auth_token: session.token}.to_json
+          post '/', { name: 'foobar', categoryId: dopefun.id.to_s, auth_token: session.token }.to_json
         end
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct error body' do
-          expect(last_response.body).to include_json({key: 'slots', message: 'required'})
+          expect(last_response.body).to include_json({ key: 'slots', message: 'required' })
         end
         include_examples 'empty lists'
       end
@@ -380,20 +378,20 @@ RSpec.describe Modusynth::Controllers::Blueprints do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct error body' do
-          expect(last_response.body).to include_json({key: 'slots', message: 'value'})
+          expect(last_response.body).to include_json({ key: 'slots', message: 'value' })
         end
         include_examples 'empty lists'
       end
       describe 'Slots given with zero as value' do
         before do
-          post '/', {slots: 0, name: 'foobar', categoryId: dopefun.id.to_s, auth_token: session.token}.to_json
+          post '/', { slots: 0, name: 'foobar', categoryId: dopefun.id.to_s, auth_token: session.token }.to_json
         end
 
         it 'Returns a 400 (Bad Request) error code' do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct error body' do
-          expect(last_response.body).to include_json({key: 'slots', message: 'value'})
+          expect(last_response.body).to include_json({ key: 'slots', message: 'value' })
         end
         include_examples 'empty lists'
       end
@@ -407,7 +405,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
             categoryId: dopefun.id.to_s,
             name: 'testtool',
             auth_token: session.token,
-            nodes: [{generator: 'GainNode'}]
+            nodes: [{ generator: 'GainNode' }]
           }.to_json
         end
 
@@ -415,7 +413,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct error body' do
-          expect(last_response.body).to include_json({key: 'nodes[0].name', message: 'required'})
+          expect(last_response.body).to include_json({ key: 'nodes[0].name', message: 'required' })
         end
         include_examples 'empty lists'
       end
@@ -427,7 +425,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
             categoryId: dopefun.id.to_s,
             name: 'testtool',
             auth_token: session.token,
-            nodes: [{name: 'a', generator: 'GainNode'}]
+            nodes: [{ name: 'a', generator: 'GainNode' }]
           }.to_json
         end
 
@@ -435,7 +433,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct error body' do
-          expect(last_response.body).to include_json({key: 'nodes[0].name', message: 'length'})
+          expect(last_response.body).to include_json({ key: 'nodes[0].name', message: 'length' })
         end
         include_examples 'empty lists'
       end
@@ -447,7 +445,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
             categoryId: dopefun.id.to_s,
             name: 'testtool',
             auth_token: session.token,
-            nodes: [{name: 'testnode'}]
+            nodes: [{ name: 'testnode' }]
           }.to_json
         end
 
@@ -455,7 +453,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct error body' do
-          expect(last_response.body).to include_json({key: 'nodes[0].generator', message: 'required'})
+          expect(last_response.body).to include_json({ key: 'nodes[0].generator', message: 'required' })
         end
         include_examples 'empty lists'
       end
@@ -467,7 +465,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
             categoryId: dopefun.id.to_s,
             name: 'testtool',
             auth_token: session.token,
-            nodes: [{generator: 'a', name: 'testnode'}]
+            nodes: [{ generator: 'a', name: 'testnode' }]
           }.to_json
         end
 
@@ -475,7 +473,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
           expect(last_response.status).to be 400
         end
         it 'Returns the correct error body' do
-          expect(last_response.body).to include_json({key: 'nodes[0].generator', message: 'length'})
+          expect(last_response.body).to include_json({ key: 'nodes[0].generator', message: 'length' })
         end
         include_examples 'empty lists'
       end
@@ -489,7 +487,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
             categoryId: dopefun.id.to_s,
             name: 'testtool',
             auth_token: session.token,
-            links: [{to: {node: 'test', index: 0}}]
+            links: [{ to: { node: 'test', index: 0 } }]
           }.to_json
         end
 
@@ -510,7 +508,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
             categoryId: dopefun.id.to_s,
             name: 'testtool',
             auth_token: session.token,
-            links: [{to: {node: 'test', index: 0}, from: {index: 0}}]
+            links: [{ to: { node: 'test', index: 0 }, from: { index: 0 } }]
           }.to_json
         end
 
@@ -531,7 +529,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
             categoryId: dopefun.id.to_s,
             name: 'testtool',
             auth_token: session.token,
-            links: [{from: {node: 'test', index: 0}}]
+            links: [{ from: { node: 'test', index: 0 } }]
           }.to_json
         end
 
@@ -552,7 +550,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
             categoryId: dopefun.id.to_s,
             name: 'testtool',
             auth_token: session.token,
-            links: [{from: {node: 'test', index: 0}, to: {index: 0}}]
+            links: [{ from: { node: 'test', index: 0 }, to: { index: 0 } }]
           }.to_json
         end
 

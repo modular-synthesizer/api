@@ -23,19 +23,10 @@ module Modusynth
 
       embeds_many :parameters, class_name: '::Modusynth::Models::Modules::Parameter', inverse_of: :module
 
-      has_many :ports, class_name: '::Modusynth::Models::Modules::Port', inverse_of: :module
+      embeds_many :ports, class_name: '::Modusynth::Models::Modules::Port', inverse_of: :module
 
       def account
         synthesizer.account
-      end
-
-      # Instanciates all porst and parameters from the blueprint in the node.
-      after_create do |document|
-        document.blueprint.ports.each do |port|
-          document.ports << Modusynth::Models::Modules::Port.new(
-            descriptor: port, module: document
-          )
-        end
       end
 
       def method_missing(name, *args, &block)

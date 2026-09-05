@@ -8,19 +8,11 @@ module Modusynth
       # @author Vincent Courtois <courtois.vincent@outlook.com>
       class Port
         include Mongoid::Document
+        include Modusynth::Models::Concerns::Port
 
         store_in collection: 'ports'
 
-        belongs_to :module, class_name: '::Modusynth::Models::Module'
-
-        belongs_to :descriptor, class_name: '::Modusynth::Models::Blueprints::Port', inverse_of: :ports
-
-        def kind
-          descriptor.kind
-        end
-
-        scope :inputs, -> { where(:descriptor.in => Modusynth::Models::Blueprints::Port.all.inputs.to_a) }
-        scope :outputs, -> { where(:descriptor.in => Modusynth::Models::Blueprints::Port.all.outputs.to_a) }
+        embedded_in :module, class_name: '::Modusynth::Models::Module', inverse_of: :ports
       end
     end
   end

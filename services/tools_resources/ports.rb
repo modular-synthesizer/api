@@ -5,7 +5,7 @@ module Modusynth
         include Singleton
 
         def build kind: nil, name: nil, target: nil, index: nil, blueprint: nil, **others
-          descriptor = model.new(
+          model.new(
             kind:,
             name:,
             target:,
@@ -15,11 +15,10 @@ module Modusynth
               Modusynth::Models::Modules::Port.new(module: mod)
             end
           )
-          descriptor
         end
-        
+
         def update port, **payload
-          delete_links = [:target, :kind, :index].any? do |field|
+          delete_links = %i[target kind index].any? do |field|
             # The to_s here is given because params return a string index, not an integer
             payload.key?(field) && payload[field] != port[field].to_s
           end
@@ -36,7 +35,7 @@ module Modusynth
           build(**payload).validate!
         end
 
-        def delete descriptor
+        def delete(descriptor)
           Modusynth::Models::Modules::Port.where(descriptor:).each do |mod_port|
             mod_ports_service.remove(id: mod_port.id)
           end
@@ -44,7 +43,7 @@ module Modusynth
         end
 
         def model
-          Modusynth::Models::Blueprints::Port
+          Modusynth::Models::Blueprints::PortTemplate
         end
 
         def mod_ports_service

@@ -1,5 +1,4 @@
 RSpec.describe 'POST /blueprints/ports' do
-
   def app
     Modusynth::Controllers::ToolsResources::Ports
   end
@@ -34,7 +33,7 @@ RSpec.describe 'POST /blueprints/ports' do
       )
     end
     describe 'Created port' do
-      let!(:port) { Modusynth::Models::Blueprints::Port.last }
+      let!(:port) { Modusynth::Models::Blueprints::PortTemplate.last }
 
       it 'Has the correct kind' do
         expect(port.kind).to eq 'input'

@@ -1,5 +1,4 @@
 RSpec.describe 'PUT /blueprints/ports/:id' do
-
   def app
     Modusynth::Controllers::ToolsResources::Ports
   end
@@ -14,10 +13,9 @@ RSpec.describe 'PUT /blueprints/ports/:id' do
   let!(:port) { blueprint.ports.first }
 
   describe 'Nominal cases' do
-
     describe 'Update the name of the port' do
       before do
-        put "/#{port.id.to_s}", { auth_token: session.token, name: 'newname' }
+        put "/#{port.id}", { auth_token: session.token, name: 'newname' }
       end
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
@@ -31,7 +29,7 @@ RSpec.describe 'PUT /blueprints/ports/:id' do
         )
       end
       it 'Has updated the name correctly' do
-        expect(Modusynth::Models::Blueprints::Port.find(port.id).name).to eq 'newname'
+        expect(Modusynth::Models::Blueprints::PortTemplate.find(port.id).name).to eq 'newname'
       end
       it 'Has not deleted the links as the structure has not changed' do
         expect(Modusynth::Models::Link.count).to be 1
@@ -39,7 +37,7 @@ RSpec.describe 'PUT /blueprints/ports/:id' do
     end
     describe 'Update the target of the port' do
       before do
-        put "/#{port.id.to_s}", { auth_token: session.token, target: 'newtarget' }
+        put "/#{port.id}", { auth_token: session.token, target: 'newtarget' }
       end
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
@@ -53,7 +51,7 @@ RSpec.describe 'PUT /blueprints/ports/:id' do
         )
       end
       it 'Has updated the target correctly' do
-        expect(Modusynth::Models::Blueprints::Port.find(port.id).target).to eq 'newtarget'
+        expect(Modusynth::Models::Blueprints::PortTemplate.find(port.id).target).to eq 'newtarget'
       end
       it 'Has deleted all the links to the associated modules as the structure has changed' do
         expect(Modusynth::Models::Link.count).to be 0
@@ -61,7 +59,7 @@ RSpec.describe 'PUT /blueprints/ports/:id' do
     end
     describe 'Update the kind of the port' do
       before do
-        put "/#{port.id.to_s}", { auth_token: session.token, kind: 'output' }
+        put "/#{port.id}", { auth_token: session.token, kind: 'output' }
       end
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
@@ -75,7 +73,7 @@ RSpec.describe 'PUT /blueprints/ports/:id' do
         )
       end
       it 'Has updated the kind correctly' do
-        expect(Modusynth::Models::Blueprints::Port.find(port.id).kind).to eq 'output'
+        expect(Modusynth::Models::Blueprints::PortTemplate.find(port.id).kind).to eq 'output'
       end
       it 'Has deleted all the links to the associated modules as the structure has changed' do
         expect(Modusynth::Models::Link.count).to be 0
@@ -83,7 +81,7 @@ RSpec.describe 'PUT /blueprints/ports/:id' do
     end
     describe 'Update the index of the port' do
       before do
-        put "/#{port.id.to_s}", { auth_token: session.token, index: 1 }
+        put "/#{port.id}", { auth_token: session.token, index: 1 }
       end
       it 'Returns a 200 (OK) status code' do
         expect(last_response.status).to be 200
@@ -97,7 +95,7 @@ RSpec.describe 'PUT /blueprints/ports/:id' do
         )
       end
       it 'Has updated the index correctly' do
-        expect(Modusynth::Models::Blueprints::Port.find(port.id).index).to be 1
+        expect(Modusynth::Models::Blueprints::PortTemplate.find(port.id).index).to be 1
       end
       it 'Has deleted all the links to the associated modules as the structure has changed' do
         expect(Modusynth::Models::Link.count).to be 0
@@ -108,7 +106,7 @@ RSpec.describe 'PUT /blueprints/ports/:id' do
   describe 'Error cases' do
     describe 'When the name is too short' do
       before do
-        put "/#{port.id.to_s}", { auth_token: session.token, name: 'a' }
+        put "/#{port.id}", { auth_token: session.token, name: 'a' }
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -119,12 +117,12 @@ RSpec.describe 'PUT /blueprints/ports/:id' do
         )
       end
       it 'Has not updated the name' do
-        expect(Modusynth::Models::Blueprints::Port.find(port.id).name).to eq 'INPUT'
+        expect(Modusynth::Models::Blueprints::PortTemplate.find(port.id).name).to eq 'INPUT'
       end
     end
     describe 'When the kind is not in the possible values' do
       before do
-        put "/#{port.id.to_s}", { auth_token: session.token, kind: 'test' }
+        put "/#{port.id}", { auth_token: session.token, kind: 'test' }
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -135,7 +133,7 @@ RSpec.describe 'PUT /blueprints/ports/:id' do
         )
       end
       it 'Has not updated the kind' do
-        expect(Modusynth::Models::Blueprints::Port.find(port.id).kind).to eq 'input'
+        expect(Modusynth::Models::Blueprints::PortTemplate.find(port.id).kind).to eq 'input'
       end
       it 'Has not deleted any link' do
         expect(Modusynth::Models::Link.count).to be 1
@@ -143,7 +141,7 @@ RSpec.describe 'PUT /blueprints/ports/:id' do
     end
     describe 'When the index is below zero' do
       before do
-        put "/#{port.id.to_s}", { auth_token: session.token, index: -1 }
+        put "/#{port.id}", { auth_token: session.token, index: -1 }
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -154,7 +152,7 @@ RSpec.describe 'PUT /blueprints/ports/:id' do
         )
       end
       it 'Has not updated the kind' do
-        expect(Modusynth::Models::Blueprints::Port.find(port.id).index).to be 0
+        expect(Modusynth::Models::Blueprints::PortTemplate.find(port.id).index).to be 0
       end
       it 'Has not deleted any link' do
         expect(Modusynth::Models::Link.count).to be 1
