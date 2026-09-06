@@ -11,4 +11,17 @@ FactoryBot.define do
       name { 'OUTPUT' }
     end
   end
+
+  factory :port_instance, class: Modusynth::Models::Modules::Port do
+    target { 'node_target' }
+    index { 0 }
+    factory :input_port_instance do
+      kind { 'input' }
+      name { 'INPUT' }
+    end
+    factory :output_port_instance do
+      kind { 'output' }
+      name { 'OUTPUT' }
+    end
+  end
 end

@@ -14,17 +14,22 @@ module Modusynth
           )
         end
 
+        def remove_in_blueprint(blueprint: nil, id: nil, **_)
+          blueprint.ports.find_by(id:)&.delete
+        end
+
+        def find_in_blueprint(blueprint: nil, id: nil, **_)
+          raise Modusynth::Exceptions.required('id') if id.nil?
+
+          parameter = blueprint.ports.find_by(id:)
+          raise Modusynth::Exceptions.unknown('id') if parameter.nil?
+
+          parameter
+        end
+
         def update port, **payload
-          delete_links = %i[target kind index].any? do |field|
-            # The to_s here is given because params return a string index, not an integer
-            payload.key?(field) && payload[field] != port[field].to_s
-          end
           port.update(payload.slice(:name, :target, :kind, :index))
-          if delete_links && port.valid?
-            Modusynth::Models::Modules::Port.where(descriptor: port).each do |mod_port|
-              mod_ports_service.delete_links mod_port
-            end
-          end
+          port.validate!
           port
         end
 

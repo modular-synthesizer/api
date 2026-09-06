@@ -29,7 +29,7 @@ module Modusynth
           end
 
           def name_length
-            errors.add(:name, 'length') if name && name.count < 3
+            errors.add(:name, 'length') if !name.nil? && name.length < 3
           end
 
           def index_presence
