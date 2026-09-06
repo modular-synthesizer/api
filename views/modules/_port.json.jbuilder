@@ -1,2 +1,4 @@
+# frozen_string_literal: true
+
 json.id port.id.to_s
-json.(port.descriptor, :name, :target, :kind, :index)
+json.call(port, :name, :target, :kind, :index)

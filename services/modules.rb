@@ -19,6 +19,7 @@ module Modusynth
           rack:
         )
         instance.parameters = create_parameters_from(blueprint.parameters, instance)
+        instance.ports = create_ports_from(blueprint.ports, instance)
         instance
       end
 
@@ -39,6 +40,19 @@ module Modusynth
             value: template.default,
             precision: template.precision,
             step: template.step,
+            module: mod
+          )
+          param
+        end
+      end
+
+      def create_ports_from(port_templates, mod)
+        port_templates.map do |template|
+          param = Modusynth::Models::Modules::Port.new(
+            target: template.target,
+            kind: template.kind,
+            name: template.name,
+            index: template.index,
             module: mod
           )
           param

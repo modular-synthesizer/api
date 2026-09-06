@@ -16,7 +16,7 @@ describe Modusynth::Controllers::Parameters do
 
     describe 'Nominal case' do
       before do
-        payload = { value: 2, auth_token: session.token, t: 1989 }
+        payload = { value: 2, auth_token: session.token, t: 1989, module_id: node.id.to_s }
         put "/#{param_id}", payload.to_json
       end
       it 'Returns a 200 (OK) status code' do
@@ -39,7 +39,7 @@ describe Modusynth::Controllers::Parameters do
         let!(:membership) { create(:membership, account: other_account, synthesizer: synth, enum_type: 'write') }
 
         before do
-          payload = { value: 2, auth_token: other_session.token }
+          payload = { value: 2, auth_token: other_session.token, module_id: node.id.to_s }
           put "/#{param_id}", payload.to_json
         end
         it 'Returns a 200 (OK) status code' do
@@ -54,7 +54,7 @@ describe Modusynth::Controllers::Parameters do
     describe 'Error cases' do
       describe 'When the value is below the minimum' do
         before do
-          payload = { value: -1, auth_token: session.token }
+          payload = { value: -1, auth_token: session.token, module_id: node.id.to_s }
           put "/#{param_id}", payload.to_json
         end
 
@@ -69,7 +69,7 @@ describe Modusynth::Controllers::Parameters do
       end
       describe 'When the value is above the maximum' do
         before do
-          payload = { value: 101, auth_token: session.token }
+          payload = { value: 101, auth_token: session.token, module_id: node.id.to_s }
           put "/#{param_id}", payload.to_json
         end
 
@@ -88,7 +88,7 @@ describe Modusynth::Controllers::Parameters do
         let!(:membership) { create(:membership, account: other_account, synthesizer: synth, enum_type: 'read') }
 
         before do
-          payload = { valuz: 2, auth_token: other_session.token }
+          payload = { valuz: 2, auth_token: other_session.token, module_id: node.id.to_s }
           put "/#{param_id}", payload.to_json
         end
         it 'Returns a 403 (Forbidden) status code' do
