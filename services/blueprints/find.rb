@@ -16,15 +16,16 @@ module Modusynth
 
         def find_by_ids(ids: [], **_)
           Modusynth::Models::Blueprints::Blueprint
-            .includes(:ports, :parameters, :controls)
+            .includes(:controls)
             .where(:id.in => ids)
         end
 
-        def find_if_allowed id: nil, session:, **_
+        def find_if_allowed session:, id: nil, **_
           blueprint = find_or_fail(id:)
           if blueprint.experimental && can_see_experimentals(session:)
             raise Modusynth::Exception.forbidden('auth_token')
           end
+
           blueprint
         end
 
