@@ -11,8 +11,6 @@ module Modusynth
         include Mongoid::Document
         include Modusynth::Models::Concerns::Port
 
-        store_in collection: 'port_templates'
-
         # @!attribute [rw] blueprint
         #   @return [Modusynth::Models::Blueprints::Blueprint] the blueprint in which the port is declared.
         embedded_in :blueprint, class_name: '::Modusynth::Models::Blueprints::Blueprint', inverse_of: :ports

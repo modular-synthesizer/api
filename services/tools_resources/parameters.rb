@@ -29,12 +29,22 @@ module Modusynth
           )
         end
 
+        def find_in_blueprint(blueprint: nil, id: nil, **_)
+          raise Modusynth::Exceptions.required('id') if id.nil?
+
+          parameter = blueprint.parameters.find_by(id:)
+          raise Modusynth::Exceptions.unknown('id') if parameter.nil?
+
+          parameter
+        end
+
+        def remove_in_blueprint(blueprint: nil, id: nil, **_)
+          blueprint.parameters.find_by(id:)&.delete
+        end
+
         def update parameter, **payload
           parameter.update(payload.slice(:name, :targets, :field, :minimum, :default, :maximum, :step, :precision))
-          # If the thresholds have been edited, some values in modules might be out of bound so we clamp them.
-          parameter.instances.each do |ins|
-            ins.update(value: [parameter.minimum, parameter.maximum, ins.value].sort[1])
-          end
+          parameter.validate!
           parameter
         end
 

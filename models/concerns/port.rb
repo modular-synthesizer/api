@@ -20,17 +20,33 @@ module Modusynth
           #   @return [Integer] the index on which to connect this port on the inner node (above or equal zero).
           field :index, type: Integer, default: 0
 
-          validates :name,
-                    presence: { message: 'required' },
-                    length: { minimum: 3, message: 'length', if: :name? }
+          %i[name_presence name_length index_presence index_value kind_presence kind_value].each do |rule|
+            validate rule
+          end
 
-          validates :index,
-                    presence: { message: 'required' },
-                    numericality: { greater_than: -1, message: 'value', if: :index? }
+          def name_presence
+            errors.add(:name, 'required') if name.nil? || name.empty?
+          end
 
-          validates :kind,
-                    presence: { message: 'required' },
-                    inclusion: { in: %w[input output], message: 'value' }
+          def name_length
+            errors.add(:name, 'length') if name && name.count < 3
+          end
+
+          def index_presence
+            errors.add(:index, 'required') if index.nil?
+          end
+
+          def index_value
+            errors.add(:index, 'value') if !index.nil? && index.negative?
+          end
+
+          def kind_presence
+            errors.add(:kind, 'required') if kind.nil?
+          end
+
+          def kind_value
+            errors.add(:kind, 'value') if !kind.nil? && !%w[input output].include?(kind)
+          end
 
           scope :inputs, -> { where(kind: 'input') }
           scope :outputs, -> { where(kind: 'output') }

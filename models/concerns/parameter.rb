@@ -32,11 +32,6 @@ module Modusynth
           #   @return [Float] a value can only be modified by this amount when editing it via a knob.
           field :step, type: Float, default: 1
 
-          belongs_to :blueprint, class_name: '::Modusynth::Models::Blueprints::Blueprint', inverse_of: :parameters,
-                                 optional: true
-
-          has_many :instances, class_name: '::Modusynth::Models::Modules::Parameter', inverse_of: :template
-
           validate :boundaries
 
           validate :default_value
