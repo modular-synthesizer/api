@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :inner_node, class: Modusynth::Models::Blueprints::InnerNode do
+  factory :inner_node, class: Modusynth::Models::Blueprints::AudioNode do
     factory :gain_node do
       name { 'gain' }
       generator { 'GainNode' }
@@ -24,7 +24,7 @@ FactoryBot.define do
           build(:output_port, name: 'OUTPUT', target: 'gain')
         ]
         blueprint.controls = [
-          build(:knob, payload: {x: 0, y: 100, target: 'gainparam'})
+          build(:knob, payload: { x: 0, y: 100, target: 'gainparam' })
         ]
         blueprint.save!
       end

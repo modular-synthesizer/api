@@ -6,7 +6,7 @@ module Modusynth
       # The representation of one of the Web Audio API node embedded
       # inside a module in a synthesizer. The type show how it will
       # be created by the frontend part.
-      class InnerNode
+      class AudioNode
         include Mongoid::Document
 
         # @!attribute [rw] name

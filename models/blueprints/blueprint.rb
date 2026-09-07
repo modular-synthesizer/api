@@ -33,7 +33,7 @@ module Modusynth
 
         belongs_to :category, class_name: '::Modusynth::Models::Category', inverse_of: :blueprints, optional: true
 
-        embeds_many :inner_nodes, class_name: '::Modusynth::Models::Blueprints::InnerNode'
+        embeds_many :inner_nodes, class_name: '::Modusynth::Models::Blueprints::AudioNode'
 
         embeds_many :inner_links, class_name: '::Modusynth::Models::Blueprints::InnerLink'
 

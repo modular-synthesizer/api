@@ -15,7 +15,7 @@ module Modusynth
         end
 
         def model
-          Modusynth::Models::Blueprints::InnerNode
+          Modusynth::Models::Blueprints::AudioNode
         end
       end
     end
