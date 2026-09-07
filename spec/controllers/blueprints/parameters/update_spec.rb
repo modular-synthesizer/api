@@ -14,7 +14,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
 
   describe 'Nominal case' do
     before do
-      put "/#{parameter.id}", { auth_token: session.token }
+      put "/#{parameter.id}", { auth_token: session.token, blueprint_id: blueprint.id.to_s }
     end
     it 'Returns a 200 (OK) status code' do
       expect(last_response.status).to be 200
@@ -67,7 +67,8 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
       before do
         put "/#{parameter.id}", {
           auth_token: session.token,
-          name: 'another-name'
+          name: 'another-name',
+          blueprint_id: blueprint.id.to_s
         }
       end
       it 'Returns a 200 (OK) status code' do
@@ -94,7 +95,8 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
       before do
         put "/#{parameter.id}", {
           auth_token: session.token,
-          targets: ['new-target']
+          targets: ['new-target'],
+          blueprint_id: blueprint.id.to_s
         }
       end
       it 'Returns a 200 (OK) status code' do
@@ -121,7 +123,8 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
       before do
         put "/#{parameter.id}", {
           auth_token: session.token,
-          field: 'frequency'
+          field: 'frequency',
+          blueprint_id: blueprint.id.to_s
         }
       end
       it 'Returns a 200 (OK) status code' do
@@ -148,7 +151,8 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
       before do
         put "/#{parameter.id}", {
           auth_token: session.token,
-          minimum: 1
+          minimum: 1,
+          blueprint_id: blueprint.id.to_s
         }
       end
       it 'Returns a 200 (OK) status code' do
@@ -175,7 +179,8 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
       before do
         put "/#{parameter.id}", {
           auth_token: session.token,
-          maximum: 99
+          maximum: 99,
+          blueprint_id: blueprint.id.to_s
         }
       end
       it 'Returns a 200 (OK) status code' do
@@ -202,7 +207,8 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
       before do
         put "/#{parameter.id}", {
           auth_token: session.token,
-          default: 30
+          default: 30,
+          blueprint_id: blueprint.id.to_s
         }
       end
       it 'Returns a 200 (OK) status code' do
@@ -229,7 +235,8 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
       before do
         put "/#{parameter.id}", {
           auth_token: session.token,
-          step: 10
+          step: 10,
+          blueprint_id: blueprint.id.to_s
         }
       end
       it 'Returns a 200 (OK) status code' do
@@ -256,7 +263,8 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
       before do
         put "/#{parameter.id}", {
           auth_token: session.token,
-          precision: 1
+          precision: 1,
+          blueprint_id: blueprint.id.to_s
         }
       end
       it 'Returns a 200 (OK) status code' do
@@ -284,7 +292,8 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
         put "/#{parameter.id}", {
           auth_token: session.token,
           minimum: 60,
-          default: 60
+          default: 60,
+          blueprint_id: blueprint.id.to_s
         }
       end
       it 'Returns a 200 (OK) status code' do
@@ -305,7 +314,8 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
         put "/#{parameter.id}", {
           auth_token: session.token,
           maximum: 10,
-          default: 10
+          default: 10,
+          blueprint_id: blueprint.id.to_s
         }
       end
       it 'Returns a 200 (OK) status code' do
@@ -328,7 +338,8 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
       before do
         put "/#{parameter.id}", {
           auth_token: session.token,
-          name: nil
+          name: nil,
+          blueprint_id: blueprint.id.to_s
         }
       end
       it 'Returns a 400 (Bad Request) status code' do
@@ -344,7 +355,8 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
       before do
         put "/#{parameter.id}", {
           auth_token: session.token,
-          minimum: parameter.maximum + 1
+          minimum: parameter.maximum + 1,
+          blueprint_id: blueprint.id.to_s
         }
       end
       it 'Returns a 400 (Bad Request) status code' do
@@ -364,7 +376,8 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
       before do
         put "/#{parameter.id}", {
           auth_token: session.token,
-          maximum: parameter.minimum - 1
+          maximum: parameter.minimum - 1,
+          blueprint_id: blueprint.id.to_s
         }
       end
       it 'Returns a 400 (Bad Request) status code' do
@@ -384,7 +397,8 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
       before do
         put "/#{parameter.id}", {
           auth_token: session.token,
-          default: parameter.maximum + 1
+          default: parameter.maximum + 1,
+          blueprint_id: blueprint.id.to_s
         }
       end
       it 'Returns a 400 (Bad Request) status code' do
@@ -404,7 +418,8 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
       before do
         put "/#{parameter.id}", {
           auth_token: session.token,
-          default: parameter.minimum - 1
+          default: parameter.minimum - 1,
+          blueprint_id: blueprint.id.to_s
         }
       end
       it 'Returns a 400 (Bad Request) status code' do

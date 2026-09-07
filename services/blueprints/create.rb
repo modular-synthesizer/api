@@ -32,9 +32,8 @@ module Modusynth
         end
 
         def validate! **payload
-          if payload[:categoryId].nil?
-            raise Modusynth::Exceptions::Service.new(key: 'categoryId', error: 'required')
-          end
+          raise Modusynth::Exceptions::Service.new(key: 'categoryId', error: 'required') if payload[:categoryId].nil?
+
           build(**payload).validate!
         end
 

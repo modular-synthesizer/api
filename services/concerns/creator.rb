@@ -23,42 +23,50 @@ module Modusynth
           record
         end
 
-        def create_if_not_exists query: {}, payload: {}, merge_query: true, verbose: false
+        def create_embedded container:, collection:, **payload
+          record = build(**payload)
+          record.validate!
+          container.send(:"#{collection}=", container.send(collection.to_sym) + [record])
+          container.save!
+          record
+        end
+
+        def create_if_not_exists(query: {}, payload: {}, merge_query: true, verbose: false)
           return nil unless respond_to?(:find_by)
+
           found_item = find_by(**query)
           return nil unless found_item.nil?
+
           puts "Creating element with payload #{payload} from query #{query}"
-          return create(**(merge_query ? (query.merge(payload)) : payload))
+          create(**(merge_query ? query.merge(payload) : payload))
         end
 
         # Syntactic sugar to create an entire list of items easily.
-        def build_all items, prefix: ''
+        def build_all(items, prefix: '')
           items.map.with_index do |item, index|
             build_and_validate!(**item, prefix: prefix == '' ? '' : "#{prefix}[#{index}]")
           end
         end
 
-        def build_with_tool blueprint, items, prefix: ''
+        def build_with_tool(blueprint, items, prefix: '')
           items_with_tool = items.map { |i| i.merge(blueprint:) }
           build_all items_with_tool, prefix:
         end
 
         # Validates the payload with the rules defined in the service, and builds the item without persisting it.
         def build_and_validate! prefix: '', **payload
-          begin
-            validate!(prefix:, **payload) if respond_to?(:validate!, true)
-            build(**payload)
-          rescue Mongoid::Errors::Validations => exception
-            exc_klass.from_messages(exception.document.errors.messages, prefix:)
-          rescue ActiveModel::ValidationError => exception
-            exc_klass.from_messages(exception.model.errors.messages, prefix:)
-          rescue Modusynth::Exceptions::Unknown => exception
-            exc_klass.from_unknown(exception, prefix:)
-          rescue Modusynth::Exceptions::BadRequest => exception
-            exc_klass.from_bad_request(exception, prefix:)
-          end
+          validate!(prefix:, **payload) if respond_to?(:validate!, true)
+          build(**payload)
+        rescue Mongoid::Errors::Validations => e
+          exc_klass.from_messages(e.document.errors.messages, prefix:)
+        rescue ActiveModel::ValidationError => e
+          exc_klass.from_messages(e.model.errors.messages, prefix:)
+        rescue Modusynth::Exceptions::Unknown => e
+          exc_klass.from_unknown(e, prefix:)
+        rescue Modusynth::Exceptions::BadRequest => e
+          exc_klass.from_bad_request(e, prefix:)
         end
-        
+
         def exc_klass
           Modusynth::Exceptions::Service
         end

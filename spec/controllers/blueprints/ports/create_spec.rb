@@ -1,5 +1,4 @@
 RSpec.describe 'POST /blueprints/ports' do
-
   def app
     Modusynth::Controllers::ToolsResources::Ports
   end
@@ -34,7 +33,11 @@ RSpec.describe 'POST /blueprints/ports' do
       )
     end
     describe 'Created port' do
-      let!(:port) { Modusynth::Models::Blueprints::Port.last }
+      let(:port_id) { JSON.parse(last_response.body)['id'] }
+      let(:port) do
+        blueprint.reload
+        blueprint.ports.find(port_id)
+      end
 
       it 'Has the correct kind' do
         expect(port.kind).to eq 'input'
@@ -50,9 +53,6 @@ RSpec.describe 'POST /blueprints/ports' do
       end
       it 'Has the correct blueprint' do
         expect(port.blueprint.id).to eq blueprint.id
-      end
-      it 'Has added the port in the corresponding modules' do
-        expect(mod.ports.where(descriptor_id: port.id).count).to be 1
       end
     end
 

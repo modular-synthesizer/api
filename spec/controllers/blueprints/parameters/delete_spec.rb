@@ -1,9 +1,8 @@
 RSpec.describe 'DELETE /blueprints/parameters/:id' do
-
   def app
     Modusynth::Controllers::ToolsResources::Parameters
   end
-  
+
   let!(:account) { create(:random_admin) }
   let!(:session) { create(:session, account:) }
   let!(:category) { create(:dopefun) }
@@ -13,15 +12,15 @@ RSpec.describe 'DELETE /blueprints/parameters/:id' do
   let!(:mod) { create(:module, blueprint:, synthesizer:) }
 
   describe 'Nominal case' do
-
     before do
-      delete "/#{parameter.id.to_s}", { auth_token: session.token }
+      delete "/#{parameter.id}", { auth_token: session.token, blueprint_id: blueprint.id.to_s }
     end
     it 'Returns a 204 (No Content) status code' do
       expect(last_response.status).to be 204
     end
     it 'Has deleted the parameter' do
-      expect(Modusynth::Models::Blueprints::ParameterTemplate.where(id: parameter.id).count).to be 0
+      blueprint.reload
+      expect(blueprint.parameters.count).to be 0
     end
     it 'Has deleted the parameter in the associated modules' do
       expect(mod.parameters.where(parameter: parameter.id).count).to be 0
@@ -30,13 +29,14 @@ RSpec.describe 'DELETE /blueprints/parameters/:id' do
   describe 'Alternative cases' do
     describe 'When the parameter is not found on the blueprint' do
       before do
-        delete "/unknown", { auth_token: session.token }
+        delete '/unknown', { auth_token: session.token, blueprint_id: blueprint.id.to_s }
       end
       it 'Returns a 204 (No Content) status code' do
         expect(last_response.status).to be 204
       end
       it 'Has not deleted the port' do
-        expect(Modusynth::Models::Blueprints::ParameterTemplate.where(id: parameter.id).count).to be 1
+        blueprint.reload
+        expect(blueprint.parameters.count).to be 1
       end
     end
   end

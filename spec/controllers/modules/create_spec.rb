@@ -25,31 +25,31 @@ describe Modusynth::Controllers::Modules do
       end
       it 'Returns the correct body' do
         expect(last_response.body).to include_json({
-          id: have_attributes(size: 24),
-          category: 'blueprints',
-          type: 'VCA',
-          nodes: [
-            {name: 'gain', generator: 'GainNode'}
-          ],
-          links: [],
-          voices: 1,
-          parameters: [
-            {
-              name: 'gainparam',
-              field: 'gain',
-              value: 50,
-              targets: ['gain'],
-              minimum: 0,
-              maximum: 100,
-              step: 1,
-              precision: 0
-            }
-          ],
-          ports: [
-            {name: 'INPUT', target: 'gain', index: 0},
-            {name: 'OUTPUT', target: 'gain', index: 0}
-          ]
-        })
+                                                     id: have_attributes(size: 24),
+                                                     category: 'blueprints',
+                                                     type: 'VCA',
+                                                     nodes: [
+                                                       { name: 'gain', generator: 'GainNode' }
+                                                     ],
+                                                     links: [],
+                                                     voices: 1,
+                                                     parameters: [
+                                                       {
+                                                         name: 'gainparam',
+                                                         field: 'gain',
+                                                         value: 50,
+                                                         targets: ['gain'],
+                                                         minimum: 0,
+                                                         maximum: 100,
+                                                         step: 1,
+                                                         precision: 0
+                                                       }
+                                                     ],
+                                                     ports: [
+                                                       { name: 'INPUT', target: 'gain', index: 0 },
+                                                       { name: 'OUTPUT', target: 'gain', index: 0 }
+                                                     ]
+                                                   })
       end
 
       describe 'The created module' do
@@ -73,7 +73,7 @@ describe Modusynth::Controllers::Modules do
     end
     describe 'Error case' do
       describe 'The synthesizer does not exist' do
-        before { post '/', {synthesizer_id: 'unknown', auth_token: session.token}.to_json }
+        before { post '/', { synthesizer_id: 'unknown', auth_token: session.token }.to_json }
 
         it 'Returns a 404 (Not Found) status code' do
           expect(last_response.status).to be 404
@@ -86,7 +86,7 @@ describe Modusynth::Controllers::Modules do
       end
     end
   end
-  
+
   include_examples 'authentication', 'post', '/'
   include_examples 'scopes', 'post', '/'
 end

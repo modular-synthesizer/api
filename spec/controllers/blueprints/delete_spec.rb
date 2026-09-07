@@ -11,7 +11,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
 
     describe 'Nominal case' do
       before do
-        delete "/#{blueprint.id.to_s}", { auth_token: session.token }
+        delete "/#{blueprint.id}", { auth_token: session.token }
       end
 
       it 'Returns a 204 (No Content) status code' do
@@ -25,9 +25,9 @@ RSpec.describe Modusynth::Controllers::Blueprints do
       describe 'When a module has been created from the blueprint' do
         let!(:synthesizer) { Modusynth::Services::Synthesizers.instance.create(account:, name: 'test synth') }
         let(:node) { create(:VCA_module, synthesizer: synthesizer) }
-  
+
         before do
-          delete "/#{blueprint.id.to_s}", { auth_token: session.token }
+          delete "/#{blueprint.id}", { auth_token: session.token }
         end
 
         it 'Returns a 204 (No Content) status code' do
@@ -45,7 +45,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
         let!(:output_port) { create(:output_port, blueprint:) }
 
         before do
-          delete "/#{blueprint.id.to_s}", { auth_token: session.token }
+          delete "/#{blueprint.id}", { auth_token: session.token }
         end
 
         it 'Returns a 204 (No Content) Status code' do
@@ -55,17 +55,17 @@ RSpec.describe Modusynth::Controllers::Blueprints do
           expect(Modusynth::Models::Blueprints::Blueprint.find_by(id: blueprint.id.to_s)).to be_nil
         end
         it 'Has correctly deleted the input port' do
-          expect(Modusynth::Models::Blueprints::Port.find_by(id: input_port.id.to_s)).to be_nil
+          expect(Modusynth::Models::Blueprints::PortTemplate.find_by(id: input_port.id.to_s)).to be_nil
         end
         it 'Has correctly deleted the output port' do
-          expect(Modusynth::Models::Blueprints::Port.find_by(id: output_port.id.to_s)).to be_nil
+          expect(Modusynth::Models::Blueprints::PortTemplate.find_by(id: output_port.id.to_s)).to be_nil
         end
       end
       describe 'When the blueprint has a parameter' do
         let!(:tool_parameter) { create(:tool_parameter, blueprint:) }
 
         before do
-          delete "/#{blueprint.id.to_s}", { auth_token: session.token }
+          delete "/#{blueprint.id}", { auth_token: session.token }
         end
 
         it 'Returns a 204 (No Content) Status code' do
@@ -82,7 +82,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
         let!(:tool_control) { create(:tool_control, blueprint:) }
 
         before do
-          delete "/#{blueprint.id.to_s}", { auth_token: session.token }
+          delete "/#{blueprint.id}", { auth_token: session.token }
         end
 
         it 'Returns a 204 (No Content) Status code' do

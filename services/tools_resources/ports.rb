@@ -5,30 +5,31 @@ module Modusynth
         include Singleton
 
         def build kind: nil, name: nil, target: nil, index: nil, blueprint: nil, **others
-          descriptor = model.new(
+          model.new(
             kind:,
             name:,
             target:,
             index:,
-            blueprint:,
-            ports: blueprint.modules.map do |mod|
-              Modusynth::Models::Modules::Port.new(module: mod)
-            end
+            blueprint:
           )
-          descriptor
         end
-        
+
+        def remove_in_blueprint(blueprint: nil, id: nil, **_)
+          blueprint.ports.find_by(id:)&.delete
+        end
+
+        def find_in_blueprint(blueprint: nil, id: nil, **_)
+          raise Modusynth::Exceptions.required('id') if id.nil?
+
+          parameter = blueprint.ports.find_by(id:)
+          raise Modusynth::Exceptions.unknown('id') if parameter.nil?
+
+          parameter
+        end
+
         def update port, **payload
-          delete_links = [:target, :kind, :index].any? do |field|
-            # The to_s here is given because params return a string index, not an integer
-            payload.key?(field) && payload[field] != port[field].to_s
-          end
           port.update(payload.slice(:name, :target, :kind, :index))
-          if delete_links && port.valid?
-            Modusynth::Models::Modules::Port.where(descriptor: port).each do |mod_port|
-              mod_ports_service.delete_links mod_port
-            end
-          end
+          port.validate!
           port
         end
 
@@ -36,7 +37,7 @@ module Modusynth
           build(**payload).validate!
         end
 
-        def delete descriptor
+        def delete(descriptor)
           Modusynth::Models::Modules::Port.where(descriptor:).each do |mod_port|
             mod_ports_service.remove(id: mod_port.id)
           end
@@ -44,7 +45,7 @@ module Modusynth
         end
 
         def model
-          Modusynth::Models::Blueprints::Port
+          Modusynth::Models::Blueprints::PortTemplate
         end
 
         def mod_ports_service

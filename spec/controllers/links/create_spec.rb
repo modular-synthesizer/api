@@ -1,6 +1,6 @@
 RSpec.describe 'POST /links' do
   def app
-    ::Modusynth::Controllers::Links
+    Modusynth::Controllers::Links
   end
 
   let!(:account) { create(:babausse) }
@@ -9,15 +9,17 @@ RSpec.describe 'POST /links' do
     Modusynth::Services::Synthesizers.instance.create(account:, name: 'test synth')
   end
   let!(:blueprint) do
-    create(:VCA, ports: [ build(:input_port), build(:output_port) ])
+    create(:VCA, ports: [build(:input_port), build(:output_port)])
   end
-  let!(:mod) { create(:module, blueprint:, synthesizer:) }
-  let!(:from) { mod.ports.first.id.to_s }
-  let!(:to) { mod.ports.last.id.to_s }
+  let!(:mod) do
+    create(:module, blueprint:, synthesizer:)
+  end
+  let!(:from) { create(:output_port_instance, module: mod).id.to_s }
+  let!(:to) { create(:input_port_instance, module: mod).id.to_s }
 
   describe 'Nominal case' do
     before do
-      post '/', {auth_token: session.token, from:, to:, synthesizer_id: synthesizer.id.to_s}.to_json
+      post '/', { auth_token: session.token, from:, to:, synthesizer_id: synthesizer.id.to_s }.to_json
     end
     it 'Returns a 201 (Created) status code' do
       expect(last_response.status).to be 201
@@ -75,7 +77,7 @@ RSpec.describe 'POST /links' do
       end
       it 'Returns the correct body' do
         expect(last_response.body).to include_json(
-          from:, to:, synthesizer_id: synthesizer.id.to_s,
+          from:, to:, synthesizer_id: synthesizer.id.to_s
         )
       end
     end
@@ -86,7 +88,7 @@ RSpec.describe 'POST /links' do
         post '/', {
           auth_token: session.token,
           to:,
-          synthesizer_id: synthesizer.id.to_s,
+          synthesizer_id: synthesizer.id.to_s
         }
       end
       it 'Returns a 400 (Bad Request) status code' do
@@ -104,7 +106,7 @@ RSpec.describe 'POST /links' do
           auth_token: session.token,
           to:,
           from: 'unknown',
-          synthesizer_id: synthesizer.id.to_s,
+          synthesizer_id: synthesizer.id.to_s
         }
       end
       it 'Returns a 404 (Not Found) status code' do
@@ -121,7 +123,7 @@ RSpec.describe 'POST /links' do
         post '/', {
           auth_token: session.token,
           from:,
-          synthesizer_id: synthesizer.id.to_s,
+          synthesizer_id: synthesizer.id.to_s
         }
       end
       it 'Returns a 400 (Bad Request) status code' do
@@ -139,7 +141,7 @@ RSpec.describe 'POST /links' do
           auth_token: session.token,
           from:,
           to: 'unknown',
-          synthesizer_id: synthesizer.id.to_s,
+          synthesizer_id: synthesizer.id.to_s
         }
       end
       it 'Returns a 404 (Not Found) status code' do
@@ -156,7 +158,7 @@ RSpec.describe 'POST /links' do
         post '/', {
           auth_token: session.token,
           from:,
-          to:,
+          to:
         }
       end
       it 'Returns a 400 (Bad Request) status code' do
