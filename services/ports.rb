@@ -3,21 +3,21 @@ module Modusynth
     class Ports < Modusynth::Services::Base
       include Singleton
 
-      def find_or_fail(id: nil, synthesizer: nil, field: 'from', **_)
+      def find_or_fail(id: nil, field: 'from', **_)
         raise Modusynth::Exceptions.required(field) if id.nil?
-        synthesizer.modules.each do |mod|
-          found = mod.ports.where(id:).first
-          return found unless found.nil?
-        end
-        raise Modusynth::Exceptions.unknown(field)
+
+        instance = ::Modusynth::Models::Modules::Port.find_by(id:)
+        raise Modusynth::Exceptions::Unknown.new(field, 'unknown') if instance.nil?
+
+        instance
       end
 
-      def delete port
+      def delete(port)
         delete_links port
         port.delete
       end
 
-      def delete_links port
+      def delete_links(port)
         Modusynth::Models::Link.where(from: port).delete_all
         Modusynth::Models::Link.where(to: port).delete_all
       end

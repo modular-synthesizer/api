@@ -12,7 +12,7 @@ module Modusynth
 
         store_in collection: 'ports'
 
-        embedded_in :module, class_name: '::Modusynth::Models::Module', inverse_of: :ports
+        belongs_to :module, class_name: '::Modusynth::Models::Module', inverse_of: :ports
       end
     end
   end

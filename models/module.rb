@@ -23,7 +23,8 @@ module Modusynth
 
       embeds_many :parameters, class_name: '::Modusynth::Models::Modules::Parameter', inverse_of: :module
 
-      embeds_many :ports, class_name: '::Modusynth::Models::Modules::Port', inverse_of: :module
+      # ports are NOT embeded because they have to be referenced in cables and modules.
+      has_many :ports, class_name: '::Modusynth::Models::Modules::Port', inverse_of: :module
 
       def account
         synthesizer.account
