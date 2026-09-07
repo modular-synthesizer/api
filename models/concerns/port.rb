@@ -6,7 +6,7 @@ module Modusynth
       module Port
         extend ActiveSupport::Concern
 
-        included do
+        included do # rubocop:disable Metrics/BlockLength
           # @!attribute [rw] kind
           #   @return [String] the kind of port (INPUT or OUTPUT) to know what it can be connected to.
           field :kind, type: String
