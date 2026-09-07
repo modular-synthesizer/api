@@ -12,20 +12,9 @@ module Modusynth
       # @author Vincent Courtois <courtois.vincent@outlook.com>
       class Control
         include Mongoid::Document
+        include Modusynth::Models::Concerns::Control
 
         store_in collection: 'tools_controls'
-
-        # @!attribute [rw] component
-        #   @return [String] the name of the component, on the client-side, used to render this control.
-        field :component, type: String
-        # @!attribute [rw] payload
-        #   @return [Hash] the attributes passed to the component as props. If an attribute is not defined, the default
-        #     value for this key will be used on the client side.
-        field :payload, type: Hash, default: {}
-
-        validates :component,
-                  presence: { message: 'required' },
-                  format: { with: /\A[A-Z][A-Za-z]*\Z/, message: 'format', if: :component? }
 
         belongs_to :blueprint, class_name: '::Modusynth::Models::Blueprints::Blueprint', inverse_of: :controls,
                                optional: true

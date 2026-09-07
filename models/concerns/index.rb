@@ -3,6 +3,7 @@
 module Modusynth
   module Models
     module Concerns
+      autoload :Control, './models/concerns/control'
       autoload :Deletable, './models/concerns/deletable'
       autoload :Enumerable, './models/concerns/enumerable'
       autoload :Ownable, './models/concerns/ownable'
