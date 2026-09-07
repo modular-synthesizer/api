@@ -16,7 +16,7 @@ module Modusynth
         end
 
         def model
-          Modusynth::Models::Blueprints::Control
+          Modusynth::Models::Blueprints::ControlTemplate
         end
       end
     end

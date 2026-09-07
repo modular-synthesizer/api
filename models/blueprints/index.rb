@@ -3,7 +3,7 @@
 module Modusynth
   module Models
     module Blueprints
-      autoload :Control, './models/blueprints/control'
+      autoload :ControlTemplate, './models/blueprints/control_template'
       autoload :Descriptor, './models/blueprints/descriptor'
       autoload :Generator, './models/blueprints/generator'
       autoload :InnerLink, './models/blueprints/inner_link'

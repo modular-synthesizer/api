@@ -10,11 +10,11 @@ module Modusynth
       # targeting a parameter can for example be a knob, or a screen displaying in.
       #
       # @author Vincent Courtois <courtois.vincent@outlook.com>
-      class Control
+      class ControlTemplate
         include Mongoid::Document
         include Modusynth::Models::Concerns::Control
 
-        store_in collection: 'tools_controls'
+        store_in collection: 'control_templates'
 
         belongs_to :blueprint, class_name: '::Modusynth::Models::Blueprints::Blueprint', inverse_of: :controls,
                                optional: true
