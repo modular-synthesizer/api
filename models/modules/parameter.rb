@@ -9,9 +9,11 @@ module Modusynth
         include Mongoid::Document
         include Modusynth::Models::Concerns::Parameter
 
+        store_in collection: :parameters
+
         field :value, type: Float
 
-        embedded_in :module, class_name: '::Modusynth::Models::Module', inverse_of: :parameters
+        belongs_to :module, class_name: '::Modusynth::Models::Module', inverse_of: :parameters
       end
     end
   end

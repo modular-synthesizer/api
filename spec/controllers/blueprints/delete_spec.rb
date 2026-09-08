@@ -92,7 +92,7 @@ RSpec.describe Modusynth::Controllers::Blueprints do
           expect(Modusynth::Models::Blueprints::Blueprint.find_by(id: blueprint.id.to_s)).to be_nil
         end
         it 'Has correctly deleted the control' do
-          expect(Modusynth::Models::Blueprints::ControlTemplate.find_by(id: tool_control.id.to_s)).to be_nil
+          expect(Modusynth::Models::Blueprints::Control.find_by(id: tool_control.id.to_s)).to be_nil
         end
       end
     end
