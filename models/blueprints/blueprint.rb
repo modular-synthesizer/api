@@ -38,7 +38,7 @@ module Modusynth
         embeds_many :inner_links, class_name: '::Modusynth::Models::Blueprints::InnerLink'
 
         # @!attribute [rw] controls
-        #   @return [Array<Modusynth::Models::Blueprints::ControlTemplate>] the list of graphic representation ok controls
+        #   @return [Array<Modusynth::Models::Blueprints::ControlTemplate>]
         has_many :controls, class_name: '::Modusynth::Models::Blueprints::ControlTemplate', inverse_of: :blueprint
         # @!attribute [rw] ports
         #   @return [Array<Modusynth::Models::Blueprints::PortTemplate>] the list of exposed I/O ports for the module.
