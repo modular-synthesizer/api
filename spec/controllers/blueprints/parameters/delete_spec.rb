@@ -10,6 +10,7 @@ RSpec.describe 'DELETE /blueprints/parameters/:id' do
   let!(:parameter) { create(:frequency, blueprint:) }
   let!(:synthesizer) { Modusynth::Services::Synthesizers.instance.create(account:, name: 'test synth') }
   let!(:mod) { create(:module, blueprint:, synthesizer:) }
+  let!(:mod_param) { create(:parameter_instance, module: mod, name: 'test-param', field: 'gain') }
 
   describe 'Nominal case' do
     before do
@@ -22,8 +23,8 @@ RSpec.describe 'DELETE /blueprints/parameters/:id' do
       blueprint.reload
       expect(blueprint.parameters.count).to be 0
     end
-    it 'Has deleted the parameter in the associated modules' do
-      expect(mod.parameters.where(parameter: parameter.id).count).to be 0
+    it 'Has not deleted the parameter in the associated modules' do
+      expect(mod.parameters.count).to be 1
     end
   end
   describe 'Alternative cases' do
@@ -34,7 +35,7 @@ RSpec.describe 'DELETE /blueprints/parameters/:id' do
       it 'Returns a 204 (No Content) status code' do
         expect(last_response.status).to be 204
       end
-      it 'Has not deleted the port' do
+      it 'Has not deleted the parameter' do
         blueprint.reload
         expect(blueprint.parameters.count).to be 1
       end
