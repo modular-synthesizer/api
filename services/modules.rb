@@ -98,28 +98,6 @@ module Modusynth
                .includes(:parameters, :ports)
                .where(synthesizer_id:)
                .to_a
-        blueprints = Modusynth::Models::Blueprints::Blueprint
-                     .includes(:parameters, :ports, :controls)
-                     .where(:id.in => mods.map(&:blueprint_id))
-                     .to_a
-        mapped_tool_params = {}
-        mapped_tool_ports = {}
-        blueprints.each do |blueprint|
-          blueprint.parameters.each do |tp|
-            mapped_tool_params[tp.id] = tp
-          end
-          blueprint.ports.each do |tp|
-            mapped_tool_ports[tp.id] = tp
-          end
-        end
-        mods.each do |mod|
-          mod.parameters.each do |p|
-            p.template = mapped_tool_params[p.template_id]
-          end
-          mod.ports.each do |p|
-            p.descriptor = mapped_tool_ports[p.descriptor_id]
-          end
-        end
         mods
       end
     end

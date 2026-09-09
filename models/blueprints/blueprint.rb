@@ -39,7 +39,7 @@ module Modusynth
 
         # @!attribute [rw] controls
         #   @return [Array<Modusynth::Models::Blueprints::ControlTemplate>]
-        has_many :controls, class_name: '::Modusynth::Models::Blueprints::ControlTemplate', inverse_of: :blueprint
+        embeds_many :controls, class_name: '::Modusynth::Models::Blueprints::ControlTemplate', inverse_of: :blueprint
         # @!attribute [rw] ports
         #   @return [Array<Modusynth::Models::Blueprints::PortTemplate>] the list of exposed I/O ports for the module.
         embeds_many :ports, class_name: '::Modusynth::Models::Blueprints::PortTemplate', inverse_of: :blueprint

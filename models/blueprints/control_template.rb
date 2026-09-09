@@ -14,10 +14,7 @@ module Modusynth
         include Mongoid::Document
         include Modusynth::Models::Concerns::Control
 
-        store_in collection: 'control_templates'
-
-        belongs_to :blueprint, class_name: '::Modusynth::Models::Blueprints::Blueprint', inverse_of: :controls,
-                               optional: true
+        embedded_in :blueprint, class_name: '::Modusynth::Models::Blueprints::Blueprint', inverse_of: :controls
       end
     end
   end

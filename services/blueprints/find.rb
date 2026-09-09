@@ -15,9 +15,7 @@ module Modusynth
         end
 
         def find_by_ids(ids: [], **_)
-          Modusynth::Models::Blueprints::Blueprint
-            .includes(:controls)
-            .where(:id.in => ids)
+          Modusynth::Models::Blueprints::Blueprint.where(:id.in => ids)
         end
 
         def find_if_allowed session:, id: nil, **_
