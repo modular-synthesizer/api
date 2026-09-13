@@ -42,7 +42,8 @@ describe Modusynth::Controllers::Modules do
                                                          minimum: 0,
                                                          maximum: 100,
                                                          step: 1,
-                                                         precision: 0
+                                                         precision: 0,
+                                                         default: 50,
                                                        }
                                                      ],
                                                      ports: [
