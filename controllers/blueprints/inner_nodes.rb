@@ -2,8 +2,8 @@
 
 module Modusynth
   module Controllers
-    module ToolsResources
-      class InnerNodes < Modusynth::Controllers::ToolsResources::Base
+    module Blueprints
+      class InnerNodes < Modusynth::Controllers::Blueprints::Base
         api_route 'post', '/', right: ::Rights::TOOLS_WRITE do
           node = service.create(**symbolized_params, blueprint:)
           render_json 'blueprints/_node.json', status: 201, node:
@@ -15,7 +15,7 @@ module Modusynth
         end
 
         def service
-          Modusynth::Services::ToolsResources::InnerNodes.instance
+          Modusynth::Services::Blueprints::InnerNodes.instance
         end
 
         def container

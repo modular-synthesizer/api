@@ -1,6 +1,6 @@
 RSpec.describe 'PUT /blueprints/parameters/:id' do
   def app
-    Modusynth::Controllers::ToolsResources::Parameters
+    Modusynth::Controllers::Blueprints::Parameters
   end
 
   let!(:account) { create(:random_admin) }

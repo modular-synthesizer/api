@@ -1,6 +1,6 @@
 RSpec.describe 'POST /blueprints/nodes' do
   def app
-    Modusynth::Controllers::ToolsResources::InnerNodes
+    Modusynth::Controllers::Blueprints::InnerNodes
   end
   
   let!(:account) { create(:random_admin) }

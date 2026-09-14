@@ -40,23 +40,23 @@ module Modusynth
         private
 
         def ports_service
-          Modusynth::Services::ToolsResources::Ports.instance
+          Modusynth::Services::Blueprints::Ports.instance
         end
 
         def params_service
-          Modusynth::Services::ToolsResources::Parameters.instance
+          Modusynth::Services::Blueprints::Parameters.instance
         end
 
         def controls_service
-          Modusynth::Services::ToolsResources::Controls.instance
+          Modusynth::Services::Blueprints::Controls.instance
         end
 
         def nodes_service
-          Modusynth::Services::ToolsResources::InnerNodes.instance
+          Modusynth::Services::Blueprints::InnerNodes.instance
         end
 
         def links_service
-          Modusynth::Services::ToolsResources::InnerLinks.instance
+          Modusynth::Services::Blueprints::InnerLinks.instance
         end
       end
     end

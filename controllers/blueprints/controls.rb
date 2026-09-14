@@ -2,8 +2,8 @@
 
 module Modusynth
   module Controllers
-    module ToolsResources
-      class Controls < Modusynth::Controllers::ToolsResources::Base
+    module Blueprints
+      class Controls < Modusynth::Controllers::Blueprints::Base
         api_route 'post', '/', right: ::Rights::TOOLS_WRITE do
           control = service.create(**symbolized_params, blueprint:)
           render_json 'blueprints/_control.json', status: 201, control:
@@ -15,7 +15,7 @@ module Modusynth
         end
 
         def service
-          Modusynth::Services::ToolsResources::Controls.instance
+          Modusynth::Services::Blueprints::Controls.instance
         end
       end
     end

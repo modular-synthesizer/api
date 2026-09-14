@@ -1,6 +1,6 @@
-RSpec.describe Modusynth::Controllers::Blueprints do
+RSpec.describe Modusynth::Controllers::Blueprints::Blueprints do
   def app
-    Modusynth::Controllers::Blueprints
+    Modusynth::Controllers::Blueprints::Blueprints
   end
 
   describe 'GET /' do

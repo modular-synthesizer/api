@@ -2,8 +2,8 @@
 
 module Modusynth
   module Controllers
-    module ToolsResources
-      class Ports < Modusynth::Controllers::ToolsResources::Base
+    module Blueprints
+      class Ports < Modusynth::Controllers::Blueprints::Base
         api_route 'post', '/', right: ::Rights::TOOLS_WRITE do
           port = service.create(**symbolized_params, blueprint:)
           render_json 'blueprints/_port.json', status: 201, port:
@@ -21,7 +21,7 @@ module Modusynth
         end
 
         def service
-          Modusynth::Services::ToolsResources::Ports.instance
+          Modusynth::Services::Blueprints::Ports.instance
         end
       end
     end

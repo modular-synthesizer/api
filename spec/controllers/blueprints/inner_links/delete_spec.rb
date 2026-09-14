@@ -1,6 +1,6 @@
 RSpec.describe 'DELETE /blueprints/links/:id' do
   def app
-    Modusynth::Controllers::ToolsResources::InnerLinks
+    Modusynth::Controllers::Blueprints::InnerLinks
   end
   
   let!(:account) { create(:random_admin) }
@@ -8,7 +8,7 @@ RSpec.describe 'DELETE /blueprints/links/:id' do
   let!(:category) { create(:dopefun) }
   let!(:blueprint) { create(:VCA, category:, experimental: false) }
   let!(:link) do
-    Modusynth::Services::ToolsResources::InnerLinks.instance.create(
+    Modusynth::Services::Blueprints::InnerLinks.instance.create(
       auth_token: session.token,
       blueprint: blueprint,
       from: { node: 'from-node', index: 1 },

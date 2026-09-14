@@ -2,7 +2,7 @@
 
 module Modusynth
   module Controllers
-    module ToolsResources
+    module Blueprints
       class Base < Modusynth::Controllers::Base
         def tools_service
           Modusynth::Services::Blueprints::Find.instance

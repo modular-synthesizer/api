@@ -1,6 +1,6 @@
 RSpec.describe 'POST /blueprints/controls' do
   def app
-    Modusynth::Controllers::ToolsResources::Controls
+    Modusynth::Controllers::Blueprints::Controls
   end
   
   let!(:account) { create(:random_admin) }

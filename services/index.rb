@@ -17,6 +17,6 @@ module Modusynth
     autoload :Sessions, './services/sessions'
     autoload :Synthesizers, './services/synthesizers'
     autoload :Blueprints, './services/blueprints/index'
-    autoload :ToolsResources, './services/tools_resources/index'
+    autoload :Blueprints, './services/blueprints/index'
   end
 end

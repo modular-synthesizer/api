@@ -1,6 +1,6 @@
 module Modusynth
   module Services
-    module ToolsResources
+    module Blueprints
       class Ports < Modusynth::Services::Base
         include Singleton
 

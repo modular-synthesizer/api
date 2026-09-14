@@ -1,6 +1,6 @@
 RSpec.describe 'DELETE /blueprints/ports/:id' do
   def app
-    Modusynth::Controllers::ToolsResources::Ports
+    Modusynth::Controllers::Blueprints::Ports
   end
 
   let!(:account) { create(:random_admin) }

@@ -2,8 +2,8 @@
 
 module Modusynth
   module Controllers
-    module ToolsResources
-      class Parameters < Modusynth::Controllers::ToolsResources::Base
+    module Blueprints
+      class Parameters < Modusynth::Controllers::Blueprints::Base
         api_route 'post', '/', right: ::Rights::TOOLS_WRITE do
           parameter = service.create_embedded(container: blueprint, collection: :parameters, **symbolized_params)
           render_json 'blueprints/_parameter.json', status: 201, parameter:
@@ -21,7 +21,7 @@ module Modusynth
         end
 
         def service
-          Modusynth::Services::ToolsResources::Parameters.instance
+          Modusynth::Services::Blueprints::Parameters.instance
         end
       end
     end

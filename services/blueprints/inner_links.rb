@@ -2,7 +2,7 @@
 
 module Modusynth
   module Services
-    module ToolsResources
+    module Blueprints
       class InnerLinks < Modusynth::Services::Base
         include Singleton
 

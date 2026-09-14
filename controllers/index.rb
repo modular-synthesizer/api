@@ -3,10 +3,9 @@
 module Modusynth
   module Controllers
     autoload :Accounts, './controllers/accounts'
-    autoload :Bare, './controllers/experiments'
     autoload :Base, './controllers/base'
+    autoload :Blueprints, './controllers/blueprints/index'
     autoload :Categories, './controllers/categories'
-    autoload :Experiments, './controllers/experiments'
     autoload :Generators, './controllers/generators'
     autoload :Groups, './controllers/groups'
     autoload :Links, './controllers/links'
@@ -17,7 +16,5 @@ module Modusynth
     autoload :Rights, './controllers/rights'
     autoload :Sessions, './controllers/sessions'
     autoload :Synthesizers, './controllers/synthesizers'
-    autoload :Blueprints, './controllers/blueprints'
-    autoload :ToolsResources, './controllers/tools_resources/index'
   end
 end
