@@ -18,7 +18,6 @@ Modusynth::Services::Initialization.instance.run
 map('/accounts') { run Modusynth::Controllers::Accounts.new }
 map('/categories') { run Modusynth::Controllers::Categories.new }
 map('/experiments/base') { run Modusynth::Controllers::Bare.new }
-map('/experiments') { run Modusynth::Controllers::Experiments.new }
 map('/generators') { run Modusynth::Controllers::Generators.new }
 map('/groups') { run Modusynth::Controllers::Groups.new }
 map('/links') { run Modusynth::Controllers::Links.new }
