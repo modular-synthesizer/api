@@ -29,8 +29,8 @@ map('/sessions') { run Modusynth::Controllers::Sessions.new }
 map('/synthesizers') { run Modusynth::Controllers::Synthesizers.new }
 map('/blueprints') { run Modusynth::Controllers::Blueprints::Blueprints.new }
 
-map('/blueprints/controls') { run Modusynth::Controllers::Blueprints::Controls.new }
 map('/blueprints/links') { run Modusynth::Controllers::Blueprints::InnerLinks.new }
 map('/blueprints/nodes') { run Modusynth::Controllers::Blueprints::InnerNodes.new }
+map('/blueprints/:blueprint_id/controls') { run Modusynth::Controllers::Blueprints::Controls.new }
 map('/blueprints/:blueprint_id/parameters') { run Modusynth::Controllers::Blueprints::Parameters.new }
 map('/blueprints/:blueprint_id/ports') { run Modusynth::Controllers::Blueprints::Ports.new }

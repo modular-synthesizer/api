@@ -10,8 +10,14 @@ module Modusynth
         end
 
         api_route 'put', '/:id', right: ::Rights::TOOLS_WRITE do
-          control = service.find_and_update(**symbolized_params)
+          control = service.find_in_blueprint(**symbolized_params, blueprint:)
+          control = service.update(control, **symbolized_params)
           render_json 'blueprints/_control.json', control:
+        end
+
+        api_route 'delete', '/:id', right: ::Rights::TOOLS_WRITE do
+          service.remove_in_blueprint(**symbolized_params, blueprint:)
+          halt 204
         end
 
         def service

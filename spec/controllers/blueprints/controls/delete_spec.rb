@@ -11,7 +11,7 @@ RSpec.describe 'DELETE /blueprints/controls/:id' do
   describe 'Nominal case' do
     before do
       delete "/#{blueprint.controls.first.id.to_s}", {
-        auth_token: session.token
+        blueprint_id: blueprint.id.to_s, auth_token: session.token
       }
     end
     it 'Returns a 204 (No Content) status code' do
@@ -24,7 +24,7 @@ RSpec.describe 'DELETE /blueprints/controls/:id' do
   end
   describe 'Alternative case' do
     before do
-      delete '/unknown', { auth_token: session.token }
+      delete '/unknown', { blueprint_id: blueprint.id.to_s, auth_token: session.token }
     end
     describe 'When the UUID is not found' do
       it 'Returns a 204 (No Content) status code' do
