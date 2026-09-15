@@ -16,7 +16,7 @@ module Modusynth
         end
 
         api_route 'delete', '/:id', right: ::Rights::TOOLS_WRITE do
-          service.remove_in_blueprint(**symbolized_params, blueprint:)
+          service.delete(**symbolized_params, collection: :controls)
           halt 204
         end
 

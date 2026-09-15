@@ -29,6 +29,16 @@ module Modusynth
           control
         end
 
+        def delete blueprint_id: nil, id: nil, **_
+          blueprint = ::Modusynth::Models::Blueprints::Blueprint.find_by(id: blueprint_id)
+          return if blueprint.nil?
+
+          control = blueprint.controls.find_by(id:)
+          return if control.nil?
+
+          control.delete
+        end
+
         def model
           Modusynth::Models::Blueprints::ControlTemplate
         end

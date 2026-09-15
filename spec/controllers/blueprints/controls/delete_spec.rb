@@ -23,10 +23,22 @@ RSpec.describe 'DELETE /blueprints/controls/:id' do
     end
   end
   describe 'Alternative case' do
-    before do
-      delete '/unknown', { blueprint_id: blueprint.id.to_s, auth_token: session.token }
-    end
     describe 'When the UUID is not found' do
+      before do
+        delete '/unknown', { blueprint_id: blueprint.id.to_s, auth_token: session.token }
+      end
+      it 'Returns a 204 (No Content) status code' do
+        expect(last_response.status).to be 204
+      end
+      it 'Has not deleted the control' do
+        blueprint.reload
+        expect(blueprint.controls.count).to be 1
+      end
+    end
+    describe 'When the UUID of the blueprint is unknown' do
+      before do
+        delete '/anything', { blueprint_id: 'unknown', auth_token: session.token }
+      end
       it 'Returns a 204 (No Content) status code' do
         expect(last_response.status).to be 204
       end
