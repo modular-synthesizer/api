@@ -27,7 +27,7 @@ module Modusynth
 
       def update(id, payload)
         payload = payload.slice('color')
-        link = find_or_fail(id)
+        link = find_or_fail(id:)
         link.update(**payload)
         link
       end
