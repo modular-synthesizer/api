@@ -5,6 +5,7 @@ module Modusynth
     module V2
       class Synthesizers < Modusynth::Controllers::Base
         api_route 'get', '/:id', right: ::Rights::SYNTHESIZERS_READ do
+          ::Modusynth::Features::Synthesizers::Find.new(session:, **symbolized_params).run
           halt 200, {}.to_json
         end
       end

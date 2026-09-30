@@ -9,14 +9,25 @@ RSpec.describe Modusynth::Controllers::V2::Synthesizers do
   let!(:account) { create(:random_admin) }
   # The session used to authentify each and every request.
   let!(:session) { create(:session, account: account) }
+  # The synthesizer under tests, with modules and cables.
+  let!(:synthesizer) { create(:full_synthesizer) }
+  # THe link between the synthesizer and the user.
+  let!(:membership) { create(:membership, synthesizer:, account:) }
 
   describe 'Nominal case' do
     before do
-      get '/test_uuid', { auth_token: session.token }
+      get "/#{synthesizer.id}", { auth_token: session.token }
     end
     it 'gets a synthesizer when asked with a correct UUID' do
       expect(last_response.status).to be 200
       expect(JSON.parse(last_response.body)).to eq({})
+    end
+  end
+  describe 'Error cases' do
+    it 'throws an error when the synthesizer identified by this UUID does not exist' do
+      get '/unknown', { auth_token: session.token }
+      expect(last_response.status).to be 404
+      expect(last_response.body).to include_json({ key: 'id', message: 'unknown' })
     end
   end
 end
