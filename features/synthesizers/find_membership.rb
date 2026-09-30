@@ -3,29 +3,29 @@
 module Modusynth
   module Features
     module Synthesizers
-      class Find
+      class FindMembership
         # @!attribute [r] id
         #   @return [String] the unique UUID of the synthesizers the user is looking for.
         # @!attribute [r] session
         #   @return [Models::Session] the current session authnticating the user.
-        attr_reader :id, :session, :synthesizer
+        attr_reader :session, :synthesizer, :membership
 
-        def initialize(id:, session:, **_)
-          @id = id
+        def initialize(synthesizer:, session:, **_)
           @session = session
-          @synthesizer = Modusynth::Models::Synthesizer.find_by(id:)
+          @synthesizer = synthesizer
+          @membership = synthesizer.memberships.find_by(account_id: session.account.id)
         end
 
         def run
-          raise ::Modusynth::Exceptions.unknown unless exists(synthesizer:)
+          raise ::Modusynth::Exceptions.unknown unless exists(membership:)
 
-          synthesizer
+          membership
         end
 
         private
 
-        def exists(synthesizer:)
-          !synthesizer.nil?
+        def exists(membership:)
+          !membership.nil?
         end
       end
     end

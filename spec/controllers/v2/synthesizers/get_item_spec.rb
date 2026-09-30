@@ -1,4 +1,5 @@
 # rubocop:disable Metrics/BlockLength
+# rubocop:disable Layout/FirstHashElementIndentation
 # frozen_string_literal: true
 
 RSpec.describe Modusynth::Controllers::V2::Synthesizers do
@@ -21,7 +22,14 @@ RSpec.describe Modusynth::Controllers::V2::Synthesizers do
     end
     it 'gets a synthesizer when asked with a correct UUID' do
       expect(last_response.status).to be 200
-      expect(JSON.parse(last_response.body)).to eq({})
+      expect(last_response.body).to include_json({
+        cables: [],
+        modules: [],
+        x: 0,
+        y: 0,
+        name: synthesizer.name,
+        voices: 16
+      })
     end
   end
   describe 'Error cases' do
@@ -46,3 +54,4 @@ RSpec.describe Modusynth::Controllers::V2::Synthesizers do
 end
 
 # rubocop:enable Metrics/BlockLength
+# rubocop:enable Layout/FirstHashElementIndentation

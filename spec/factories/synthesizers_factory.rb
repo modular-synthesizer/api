@@ -3,6 +3,7 @@ FactoryBot.define do
     name { 'test synth' }
 
     factory :full_synthesizer do
+      voices { 16 }
     end
   end
 
