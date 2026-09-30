@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/BlockLength
 # frozen_string_literal: true
 
 RSpec.describe Modusynth::Controllers::V2::Synthesizers do
@@ -29,5 +30,13 @@ RSpec.describe Modusynth::Controllers::V2::Synthesizers do
       expect(last_response.status).to be 404
       expect(last_response.body).to include_json({ key: 'id', message: 'unknown' })
     end
+    it 'throws an error when the synthesizer does not belong to this user' do
+      attacker_session = create(:session, account: create(:random_admin))
+      get "/#{synthesizer.id}", { auth_token: attacker_session.token }
+      expect(last_response.status).to be 404
+      expect(last_response.body).to include_json({ key: 'id', message: 'unknown' })
+    end
   end
 end
+
+# rubocop:enable Metrics/BlockLength
