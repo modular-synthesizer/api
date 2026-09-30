@@ -16,5 +16,6 @@ module Modusynth
     autoload :Rights, './controllers/rights'
     autoload :Sessions, './controllers/sessions'
     autoload :Synthesizers, './controllers/synthesizers'
+    autoload :V2, './controllers/v2/index'
   end
 end
