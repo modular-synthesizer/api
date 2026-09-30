@@ -12,7 +12,7 @@ RSpec.describe Modusynth::Controllers::V2::Synthesizers do
   let!(:session) { create(:session, account: account) }
   # The synthesizer under tests, with modules and cables.
   let!(:synthesizer) { create(:full_synthesizer) }
-  # THe link between the synthesizer and the user.
+  # The link between the synthesizer and the user.
   let!(:membership) { create(:membership, synthesizer:, account:) }
 
   describe 'Nominal case' do
@@ -35,6 +35,12 @@ RSpec.describe Modusynth::Controllers::V2::Synthesizers do
       get "/#{synthesizer.id}", { auth_token: attacker_session.token }
       expect(last_response.status).to be 404
       expect(last_response.body).to include_json({ key: 'id', message: 'unknown' })
+    end
+    it 'throws an error when the user does not have the right to access this resource' do
+      attacker_session = create(:session, account: create(:account_without_rights))
+      get "/#{synthesizer.id}", { auth_token: attacker_session.token }
+      expect(last_response.status).to be 403
+      expect(last_response.body).to include_json({ key: 'auth_token', message: 'forbidden' })
     end
   end
 end
