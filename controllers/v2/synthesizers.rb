@@ -7,7 +7,7 @@ module Modusynth
         api_route 'get', '/:id', right: ::Rights::SYNTHESIZERS_READ do
           synthesizer = find_synthesizer.new(session:, **symbolized_params).run
           membership = find_membership.new(session:, synthesizer:).run
-          render_json :'v2/synthesizers/_synthesizer.json', synthesizer:, membership:
+          render_json :'v2/synthesizers/_synthesizer.json', membership:
         end
 
         def find_synthesizer

@@ -4,6 +4,9 @@ FactoryBot.define do
 
     factory :full_synthesizer do
       voices { 16 }
+      after :create do |synthesizer|
+        synthesizer.modules = [create(:vco_module, synthesizer:)]
+      end
     end
   end
 

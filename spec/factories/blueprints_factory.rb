@@ -29,5 +29,9 @@ FactoryBot.define do
         blueprint.save!
       end
     end
+    factory :vco_blueprint do
+      name { 'vco' }
+      slots { 6 }
+    end
   end
 end

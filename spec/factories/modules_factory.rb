@@ -10,5 +10,13 @@ FactoryBot.define do
         ]
       end
     end
+
+    # A fully-functional VCO to test the new synthesizer route. It implements most of the cases,
+    # like a port linked to several inner audio WAA node, or a parameter linked to several audio
+    # WAA parameters.
+    factory :vco_module do
+      name { 'VCO' }
+      association :blueprint, factory: :vco_blueprint
+    end
   end
 end

@@ -24,7 +24,9 @@ RSpec.describe Modusynth::Controllers::V2::Synthesizers do
       expect(last_response.status).to be 200
       expect(last_response.body).to include_json({
         cables: [],
-        modules: [],
+        modules: [
+          { name: 'vco' }
+        ],
         x: 0,
         y: 0,
         name: synthesizer.name,
