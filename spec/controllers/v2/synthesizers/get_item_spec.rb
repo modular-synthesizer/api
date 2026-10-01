@@ -25,7 +25,7 @@ RSpec.describe Modusynth::Controllers::V2::Synthesizers do
       expect(last_response.body).to include_json({
         cables: [],
         modules: [
-          { name: 'vco' }
+          { name: 'vco', controls: [] }
         ],
         x: 0,
         y: 0,

@@ -39,6 +39,10 @@ module Modusynth
         end
       end
 
+      def controls
+        blueprint.controls
+      end
+
       def respond_to_missing?(_name, _include_private = false)
         super
       end
