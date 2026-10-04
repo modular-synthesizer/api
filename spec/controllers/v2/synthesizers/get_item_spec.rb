@@ -21,11 +21,17 @@ RSpec.describe Modusynth::Controllers::V2::Synthesizers do
       get "/#{synthesizer.id}", { auth_token: session.token }
     end
     it 'gets a synthesizer when asked with a correct UUID' do
+      expected_id = synthesizer.modules.first.ports.first.id.to_s
       expect(last_response.status).to be 200
       expect(last_response.body).to include_json({
         cables: [],
         modules: [
-          { name: 'vco', controls: [] }
+          {
+            name: 'vco',
+            controls: [
+              { id: expected_id, x: 20, y: 360, target: 'oscillator', component: 'Port' }
+            ]
+          }
         ],
         x: 0,
         y: 0,

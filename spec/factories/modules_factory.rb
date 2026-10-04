@@ -17,6 +17,18 @@ FactoryBot.define do
     factory :vco_module do
       name { 'VCO' }
       association :blueprint, factory: :vco_blueprint
+
+      after :create do |audio_module|
+        audio_module.ports = [build(:out_port)]
+        audio_module.save!
+      end
     end
+  end
+
+  factory :out_port, class: Modusynth::Models::Modules::Port do
+    kind { 'output' }
+    name { 'output' }
+    target { 'oscillator' }
+    index { 0 }
   end
 end

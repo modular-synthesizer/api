@@ -32,6 +32,12 @@ FactoryBot.define do
     factory :vco_blueprint do
       name { 'vco' }
       slots { 6 }
+
+      after :create do |blueprint|
+        blueprint.ports = [build(:output_port, name: 'output', target: 'oscillator')]
+        blueprint.controls = [build(:control_port)]
+        blueprint.save!
+      end
     end
   end
 end

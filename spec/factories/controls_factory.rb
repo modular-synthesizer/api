@@ -6,5 +6,9 @@ FactoryBot.define do
     factory :button do
       component { 'Button' }
     end
+    factory :control_port do
+      component { 'Port' }
+      payload { { x: 20, y: 360, target: 'output', label: 'IN' } }
+    end
   end
 end
