@@ -1,6 +1,6 @@
 RSpec.describe 'POST /blueprints/parameters' do
   def app
-    Modusynth::Controllers::Blueprints::Parameters
+    Modusynth::Controllers::Blueprints::Blueprints
   end
 
   let!(:account) { create(:random_admin) }
@@ -11,7 +11,7 @@ RSpec.describe 'POST /blueprints/parameters' do
 
   describe 'Nominal case' do
     before do
-      post '/', {
+      post "/#{blueprint.id.to_s}/parameters", {
         blueprint_id: blueprint.id.to_s,
         auth_token: session.token,
         name: 'custom parameter',
@@ -70,7 +70,7 @@ RSpec.describe 'POST /blueprints/parameters' do
   describe 'Alternative cases' do
     describe 'When giving constraints and/or targets' do
       before do
-        post '/', {
+        post "/#{blueprint.id.to_s}/parameters", {
           blueprint_id: blueprint.id.to_s,
           auth_token: session.token,
           name: 'custom parameter',
@@ -136,7 +136,7 @@ RSpec.describe 'POST /blueprints/parameters' do
   describe 'Error cases' do
     describe 'When the name is not given' do
       before do
-        post '/', {
+        post "/#{blueprint.id.to_s}/parameters", {
           blueprint_id: blueprint.id.to_s,
           auth_token: session.token
         }
@@ -155,8 +155,7 @@ RSpec.describe 'POST /blueprints/parameters' do
     end
     describe 'When the field is not given' do
       before do
-        post '/', {
-          blueprint_id: blueprint.id.to_s,
+        post "/#{blueprint.id.to_s}/parameters", {
           auth_token: session.token,
           name: 'custom parameter'
         }
@@ -175,8 +174,7 @@ RSpec.describe 'POST /blueprints/parameters' do
     end
     describe 'When the boundaries are not in the correct order' do
       before do
-        post '/', {
-          blueprint_id: blueprint.id.to_s,
+        post "/#{blueprint.id.to_s}/parameters", {
           auth_token: session.token,
           name: 'custom parameter',
           field: 'gain',
@@ -198,8 +196,7 @@ RSpec.describe 'POST /blueprints/parameters' do
     end
     describe 'When the default is not between boundaries' do
       before do
-        post '/', {
-          blueprint_id: blueprint.id.to_s,
+        post "/#{blueprint.id.to_s}/parameters", {
           auth_token: session.token,
           name: 'custom parameter',
           field: 'gain',

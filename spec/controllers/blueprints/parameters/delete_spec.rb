@@ -1,6 +1,6 @@
 RSpec.describe 'DELETE /blueprints/parameters/:id' do
   def app
-    Modusynth::Controllers::Blueprints::Parameters
+    Modusynth::Controllers::Blueprints::Blueprints
   end
 
   let!(:account) { create(:random_admin) }
@@ -14,7 +14,7 @@ RSpec.describe 'DELETE /blueprints/parameters/:id' do
 
   describe 'Nominal case' do
     before do
-      delete "/#{parameter.id}", { auth_token: session.token, blueprint_id: blueprint.id.to_s }
+      delete "/#{blueprint.id.to_s}/parameters/#{parameter.id}", { auth_token: session.token, blueprint_id: blueprint.id.to_s }
     end
     it 'Returns a 204 (No Content) status code' do
       expect(last_response.status).to be 204
@@ -30,7 +30,7 @@ RSpec.describe 'DELETE /blueprints/parameters/:id' do
   describe 'Alternative cases' do
     describe 'When the parameter is not found on the blueprint' do
       before do
-        delete '/unknown', { auth_token: session.token, blueprint_id: blueprint.id.to_s }
+        delete "/#{blueprint.id.to_s}/parameters/unknown", { auth_token: session.token, blueprint_id: blueprint.id.to_s }
       end
       it 'Returns a 204 (No Content) status code' do
         expect(last_response.status).to be 204

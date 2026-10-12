@@ -1,6 +1,6 @@
 RSpec.describe 'PUT /blueprints/parameters/:id' do
   def app
-    Modusynth::Controllers::Blueprints::Parameters
+    Modusynth::Controllers::Blueprints::Blueprints
   end
 
   let!(:account) { create(:random_admin) }
@@ -14,7 +14,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
 
   describe 'Nominal case' do
     before do
-      put "/#{parameter.id}", { auth_token: session.token, blueprint_id: blueprint.id.to_s }
+      put "/#{blueprint.id.to_s}/parameters/#{parameter.id}", { auth_token: session.token, blueprint_id: blueprint.id.to_s }
     end
     it 'Returns a 200 (OK) status code' do
       expect(last_response.status).to be 200
@@ -65,7 +65,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
   describe 'Alternative cases' do
     describe 'Updates the name' do
       before do
-        put "/#{parameter.id}", {
+        put "/#{blueprint.id.to_s}/parameters/#{parameter.id}", {
           auth_token: session.token,
           name: 'another-name',
           blueprint_id: blueprint.id.to_s
@@ -93,7 +93,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'Updates the targets' do
       before do
-        put "/#{parameter.id}", {
+        put "/#{blueprint.id.to_s}/parameters/#{parameter.id}", {
           auth_token: session.token,
           targets: ['new-target'],
           blueprint_id: blueprint.id.to_s
@@ -121,7 +121,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'Updates the field' do
       before do
-        put "/#{parameter.id}", {
+        put "/#{blueprint.id.to_s}/parameters/#{parameter.id}", {
           auth_token: session.token,
           field: 'frequency',
           blueprint_id: blueprint.id.to_s
@@ -149,7 +149,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'Updates the minimum' do
       before do
-        put "/#{parameter.id}", {
+        put "/#{blueprint.id.to_s}/parameters/#{parameter.id}", {
           auth_token: session.token,
           minimum: 1,
           blueprint_id: blueprint.id.to_s
@@ -177,7 +177,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'Updates the maximum' do
       before do
-        put "/#{parameter.id}", {
+        put "/#{blueprint.id.to_s}/parameters/#{parameter.id}", {
           auth_token: session.token,
           maximum: 99,
           blueprint_id: blueprint.id.to_s
@@ -205,7 +205,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'Updates the default' do
       before do
-        put "/#{parameter.id}", {
+        put "/#{blueprint.id.to_s}/parameters/#{parameter.id}", {
           auth_token: session.token,
           default: 30,
           blueprint_id: blueprint.id.to_s
@@ -233,7 +233,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'Updates the step' do
       before do
-        put "/#{parameter.id}", {
+        put "/#{blueprint.id.to_s}/parameters/#{parameter.id}", {
           auth_token: session.token,
           step: 10,
           blueprint_id: blueprint.id.to_s
@@ -261,7 +261,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'Updates the precision' do
       before do
-        put "/#{parameter.id}", {
+        put "/#{blueprint.id.to_s}/parameters/#{parameter.id}", {
           auth_token: session.token,
           precision: 1,
           blueprint_id: blueprint.id.to_s
@@ -289,7 +289,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'The value needs to be clamped when updating the minimum' do
       before do
-        put "/#{parameter.id}", {
+        put "/#{blueprint.id.to_s}/parameters/#{parameter.id}", {
           auth_token: session.token,
           minimum: 60,
           default: 60,
@@ -311,7 +311,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'The value needs to be clamped when updating the maximum' do
       before do
-        put "/#{parameter.id}", {
+        put "/#{blueprint.id.to_s}/parameters/#{parameter.id}", {
           auth_token: session.token,
           maximum: 10,
           default: 10,
@@ -336,7 +336,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
   describe 'Error cases' do
     describe 'The name is empty' do
       before do
-        put "/#{parameter.id}", {
+        put "/#{blueprint.id.to_s}/parameters/#{parameter.id}", {
           auth_token: session.token,
           name: nil,
           blueprint_id: blueprint.id.to_s
@@ -353,7 +353,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'The boundaries are not in the correct order when updating the minimum' do
       before do
-        put "/#{parameter.id}", {
+        put "/#{blueprint.id.to_s}/parameters/#{parameter.id}", {
           auth_token: session.token,
           minimum: parameter.maximum + 1,
           blueprint_id: blueprint.id.to_s
@@ -374,7 +374,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'The boundaries are not in the correct order when updating the maximum' do
       before do
-        put "/#{parameter.id}", {
+        put "/#{blueprint.id.to_s}/parameters/#{parameter.id}", {
           auth_token: session.token,
           maximum: parameter.minimum - 1,
           blueprint_id: blueprint.id.to_s
@@ -395,7 +395,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'The default value is not in boundaries when updating above the maximum' do
       before do
-        put "/#{parameter.id}", {
+        put "/#{blueprint.id.to_s}/parameters/#{parameter.id}", {
           auth_token: session.token,
           default: parameter.maximum + 1,
           blueprint_id: blueprint.id.to_s
@@ -416,7 +416,7 @@ RSpec.describe 'PUT /blueprints/parameters/:id' do
     end
     describe 'The default value is not in boundaries when updating below the minimum' do
       before do
-        put "/#{parameter.id}", {
+        put "/#{blueprint.id.to_s}/parameters/#{parameter.id}", {
           auth_token: session.token,
           default: parameter.minimum - 1,
           blueprint_id: blueprint.id.to_s

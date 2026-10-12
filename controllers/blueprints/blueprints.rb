@@ -32,6 +32,30 @@ module Modusynth
           halt 204
         end
 
+        api_route 'post', '/:blueprint_id/parameters', right: ::Rights::TOOLS_WRITE do
+          parameter = params_service.create_embedded(container: blueprint, collection: :parameters, **symbolized_params)
+          render_json 'blueprints/_parameter.json', status: 201, parameter:
+        end
+
+        api_route 'put', '/:blueprint_id/parameters/:id', right: ::Rights::TOOLS_WRITE do
+          parameter = params_service.find_in_blueprint(**symbolized_params, blueprint:)
+          parameter = params_service.update(parameter, **symbolized_params)
+          render_json 'blueprints/_parameter.json', parameter:
+        end
+
+        api_route 'delete', '/:blueprint_id/parameters/:id', right: ::Rights::TOOLS_WRITE do
+          params_service.remove_in_blueprint(**symbolized_params, blueprint:)
+          halt 204
+        end
+
+        def blueprint
+          service.find_or_fail(id: symbolized_params[:blueprint_id], field: 'blueprint_id')
+        end
+
+        def params_service
+          Modusynth::Services::Blueprints::Parameters.instance
+        end
+
         def service
           Modusynth::Services::Blueprints::Find.instance
         end
