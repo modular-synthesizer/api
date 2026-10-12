@@ -30,6 +30,9 @@ RSpec.describe Modusynth::Controllers::V2::Synthesizers do
             name: 'vco',
             controls: [
               { id: expected_id, x: 20, y: 360, target: 'oscillator', component: 'Port' }
+            ],
+            nodes: [
+              
             ]
           }
         ],

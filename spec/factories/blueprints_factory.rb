@@ -34,6 +34,7 @@ FactoryBot.define do
       slots { 6 }
 
       after :create do |blueprint|
+        blueprint.inner_nodes = [build(:oscillator_node)]
         blueprint.ports = [build(:output_port, name: 'output', target: 'oscillator')]
         blueprint.controls = [build(:control_port)]
         blueprint.save!
