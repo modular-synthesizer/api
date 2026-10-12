@@ -1,6 +1,6 @@
 RSpec.describe 'POST /blueprints/controls' do
   def app
-    Modusynth::Controllers::Blueprints::Controls
+    Modusynth::Controllers::Blueprints::Blueprints
   end
   
   let!(:account) { create(:random_admin) }
@@ -10,9 +10,8 @@ RSpec.describe 'POST /blueprints/controls' do
 
   describe 'Nominal case' do
     before do
-      post '/', {
+      post "/#{blueprint.id.to_s}/controls", {
         auth_token: session.token,
-        blueprint_id: blueprint.id.to_s,
         component: 'TestComponent',
         payload: {foo: 'bar'}
       }
@@ -40,9 +39,8 @@ RSpec.describe 'POST /blueprints/controls' do
   describe 'Alternative cases' do
     describe 'When the payload is not given' do
       before do
-        post '/', {
+        post "/#{blueprint.id.to_s}/controls", {
           auth_token: session.token,
-          blueprint_id: blueprint.id.to_s,
           component: 'TestComponent'
         }
       end
@@ -70,9 +68,8 @@ RSpec.describe 'POST /blueprints/controls' do
   describe 'Error cases' do
     describe 'When the component is not given' do
       before do
-        post '/', {
+        post "/#{blueprint.id.to_s}/controls", {
           auth_token: session.token,
-          blueprint_id: blueprint.id.to_s,
           payload: {foo: 'bar'}
         }
       end
@@ -90,9 +87,8 @@ RSpec.describe 'POST /blueprints/controls' do
     end
     describe 'When the component has an incorrect format' do
       before do
-        post '/', {
+        post "/#{blueprint.id.to_s}/controls", {
           auth_token: session.token,
-          blueprint_id: blueprint.id.to_s,
           component: 'wrong format'
         }
       end

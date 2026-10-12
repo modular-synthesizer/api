@@ -1,7 +1,7 @@
 RSpec.describe 'PUT /blueprints/controls/:id' do
 
   def app
-    Modusynth::Controllers::Blueprints::Controls
+    Modusynth::Controllers::Blueprints::Blueprints
   end
   
   let!(:account) { create(:random_admin) }
@@ -12,8 +12,7 @@ RSpec.describe 'PUT /blueprints/controls/:id' do
 
   describe 'Nominal case' do
     before do
-      put "/#{control.id.to_s}", {
-        blueprint_id: blueprint.id.to_s,
+      put "/#{blueprint.id.to_s}/controls/#{control.id.to_s}", {
         auth_token: session.token,
         component: 'OtherComponent'
       }
@@ -36,8 +35,7 @@ RSpec.describe 'PUT /blueprints/controls/:id' do
   describe 'Alternative case' do
     describe 'When the payload is updated' do
       before do
-        put "/#{control.id.to_s}", {
-          blueprint_id: blueprint.id.to_s,
+        put "/#{blueprint.id.to_s}/controls/#{control.id.to_s}", {
           auth_token: session.token,
           payload: {bar: 'baz'}
         }
@@ -61,7 +59,7 @@ RSpec.describe 'PUT /blueprints/controls/:id' do
   describe 'Error cases' do
     describe 'When the UUID is not found' do
       before do
-        put '/unknown', { blueprint_id: blueprint.id.to_s, auth_token: session.token }
+        put "/#{blueprint.id.to_s}/controls/unknown", { auth_token: session.token }
       end
       it 'Returns a 404 (Not Found status code' do
         expect(last_response.status).to be 404
@@ -80,7 +78,7 @@ RSpec.describe 'PUT /blueprints/controls/:id' do
     end
     describe 'When the component is not given' do
       before do
-        put "/#{control.id.to_s}", { blueprint_id: blueprint.id.to_s, auth_token: session.token, component: nil }
+        put "/#{blueprint.id.to_s}/controls/#{control.id.to_s}", { auth_token: session.token, component: nil }
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
@@ -99,7 +97,7 @@ RSpec.describe 'PUT /blueprints/controls/:id' do
     end
     describe 'When the component has an incorrect format' do
       before do
-        put "/#{control.id.to_s}", { blueprint_id: blueprint.id.to_s, auth_token: session.token, component: 'wrong format' }
+        put "/#{blueprint.id.to_s}/controls/#{control.id.to_s}", { auth_token: session.token, component: 'wrong format' }
       end
       it 'Returns a 400 (Bad Request) status code' do
         expect(last_response.status).to be 400
