@@ -1,6 +1,6 @@
 RSpec.describe 'DELETE /blueprints/ports/:id' do
   def app
-    Modusynth::Controllers::Blueprints::Ports
+    Modusynth::Controllers::Blueprints::Blueprints
   end
 
   let!(:account) { create(:random_admin) }
@@ -15,7 +15,7 @@ RSpec.describe 'DELETE /blueprints/ports/:id' do
     let!(:link) { create(:link, from: mod.ports.first, to: mod.ports.last, synthesizer:) }
 
     before do
-      delete "/#{port.id}", { auth_token: session.token, blueprint_id: blueprint.id.to_s }
+      delete "/#{blueprint.id.to_s}/ports/#{port.id}", { auth_token: session.token }
       blueprint.reload
     end
     it 'Returns a 204 (No Content) status code' do
@@ -28,7 +28,7 @@ RSpec.describe 'DELETE /blueprints/ports/:id' do
   describe 'Alternative cases' do
     describe 'When the port is not found on the blueprint' do
       before do
-        delete '/unknown', { auth_token: session.token, blueprint_id: blueprint.id.to_s }
+        delete "/#{blueprint.id.to_s}/ports/unknown", { auth_token: session.token }
         blueprint.reload
       end
       it 'Returns a 204 (No Content) status code' do

@@ -8,7 +8,6 @@ module Modusynth
       autoload :Controls, './controllers/blueprints/controls'
       autoload :InnerLinks, './controllers/blueprints/inner_links'
       autoload :InnerNodes, './controllers/blueprints/inner_nodes'
-      autoload :Ports, './controllers/blueprints/ports'
     end
   end
 end

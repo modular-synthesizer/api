@@ -47,6 +47,26 @@ module Modusynth
           params_service.remove_in_blueprint(**symbolized_params, blueprint:)
           halt 204
         end
+        
+        api_route 'post', '/:blueprint_id/ports', right: ::Rights::TOOLS_WRITE do
+          port = ports_service.create_embedded(container: blueprint, collection: :ports, **symbolized_params)
+          render_json 'blueprints/_port.json', status: 201, port:
+        end
+
+        api_route 'put', '/:blueprint_id/ports/:id', right: ::Rights::TOOLS_WRITE do
+          port = ports_service.find_in_blueprint(**symbolized_params, blueprint:)
+          port = ports_service.update(port, **symbolized_params)
+          render_json 'blueprints/_port.json', port:
+        end
+
+        api_route 'delete', '/:blueprint_id/ports/:id', right: ::Rights::TOOLS_WRITE do
+          ports_service.remove_in_blueprint(**symbolized_params, blueprint:)
+          halt 204
+        end
+
+        def ports_service
+          Modusynth::Services::Blueprints::Ports.instance
+        end
 
         def blueprint
           service.find_or_fail(id: symbolized_params[:blueprint_id], field: 'blueprint_id')

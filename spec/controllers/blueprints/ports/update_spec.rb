@@ -1,6 +1,6 @@
 RSpec.describe 'PUT /blueprints/ports/:id' do
   def app
-    Modusynth::Controllers::Blueprints::Ports
+    Modusynth::Controllers::Blueprints::Blueprints
   end
 
   let!(:account) { create(:random_admin) }
@@ -14,7 +14,7 @@ RSpec.describe 'PUT /blueprints/ports/:id' do
   describe 'Nominal cases' do
     describe 'Update the name of the port' do
       before do
-        put "/#{port.id}", { auth_token: session.token, name: 'newname', blueprint_id: blueprint.id.to_s }
+        put "/#{blueprint.id.to_s}/ports/#{port.id}", { auth_token: session.token, name: 'newname' }
         blueprint.reload
       end
       it 'Returns a 200 (OK) status code' do
@@ -34,7 +34,7 @@ RSpec.describe 'PUT /blueprints/ports/:id' do
     end
     describe 'Update the target of the port' do
       before do
-        put "/#{port.id}", { auth_token: session.token, target: 'newtarget', blueprint_id: blueprint.id.to_s }
+        put "/#{blueprint.id.to_s}/ports/#{port.id}", { auth_token: session.token, target: 'newtarget' }
         blueprint.reload
       end
       it 'Returns a 200 (OK) status code' do
@@ -54,7 +54,7 @@ RSpec.describe 'PUT /blueprints/ports/:id' do
     end
     describe 'Update the kind of the port' do
       before do
-        put "/#{port.id}", { auth_token: session.token, kind: 'output', blueprint_id: blueprint.id.to_s }
+        put "/#{blueprint.id.to_s}/ports/#{port.id}", { auth_token: session.token, kind: 'output' }
         blueprint.reload
       end
       it 'Returns a 200 (OK) status code' do
@@ -74,7 +74,7 @@ RSpec.describe 'PUT /blueprints/ports/:id' do
     end
     describe 'Update the index of the port' do
       before do
-        put "/#{port.id}", { auth_token: session.token, index: 1, blueprint_id: blueprint.id.to_s }
+        put "/#{blueprint.id.to_s}/ports/#{port.id}", { auth_token: session.token, index: 1 }
         blueprint.reload
       end
       it 'Returns a 200 (OK) status code' do
@@ -97,7 +97,7 @@ RSpec.describe 'PUT /blueprints/ports/:id' do
   describe 'Error cases' do
     describe 'When the name is too short' do
       before do
-        put "/#{port.id}", { auth_token: session.token, name: 'a', blueprint_id: blueprint.id.to_s }
+        put "/#{blueprint.id.to_s}/ports/#{port.id}", { auth_token: session.token, name: 'a' }
         blueprint.reload
       end
       it 'Returns a 400 (Bad Request) status code' do
@@ -114,7 +114,7 @@ RSpec.describe 'PUT /blueprints/ports/:id' do
     end
     describe 'When the kind is not in the possible values' do
       before do
-        put "/#{port.id}", { auth_token: session.token, kind: 'test', blueprint_id: blueprint.id.to_s }
+        put "/#{blueprint.id.to_s}/ports/#{port.id}", { auth_token: session.token, kind: 'test' }
         blueprint.reload
       end
       it 'Returns a 400 (Bad Request) status code' do
@@ -131,7 +131,7 @@ RSpec.describe 'PUT /blueprints/ports/:id' do
     end
     describe 'When the index is below zero' do
       before do
-        put "/#{port.id}", { auth_token: session.token, index: -1, blueprint_id: blueprint.id.to_s }
+        put "/#{blueprint.id.to_s}/ports/#{port.id}", { auth_token: session.token, index: -1 }
         blueprint.reload
       end
       it 'Returns a 400 (Bad Request) status code' do

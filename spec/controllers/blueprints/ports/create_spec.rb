@@ -1,6 +1,6 @@
 RSpec.describe 'POST /blueprints/ports' do
   def app
-    Modusynth::Controllers::Blueprints::Ports
+    Modusynth::Controllers::Blueprints::Blueprints
   end
 
   let!(:account) { create(:random_admin) }
@@ -12,8 +12,7 @@ RSpec.describe 'POST /blueprints/ports' do
 
   describe 'Nominal case' do
     before do
-      post '/', {
-        blueprint_id: blueprint.id.to_s,
+      post "/#{blueprint.id.to_s}/ports", {
         auth_token: session.token,
         name: 'custom port',
         kind: 'input',
@@ -59,8 +58,7 @@ RSpec.describe 'POST /blueprints/ports' do
     describe 'Error cases' do
       describe 'When the name is not given' do
         before do
-          post '/', {
-            blueprint_id: blueprint.id.to_s,
+          post "/#{blueprint.id.to_s}/ports", {
             auth_token: session.token,
             kind: 'input',
             index: 0,
@@ -78,8 +76,7 @@ RSpec.describe 'POST /blueprints/ports' do
       end
       describe 'When the name is too short' do
         before do
-          post '/', {
-            blueprint_id: blueprint.id.to_s,
+          post "/#{blueprint.id.to_s}/ports", {
             auth_token: session.token,
             name: 'IN',
             kind: 'input',
@@ -98,8 +95,7 @@ RSpec.describe 'POST /blueprints/ports' do
       end
       describe 'When the index is not given' do
         before do
-          post '/', {
-            blueprint_id: blueprint.id.to_s,
+          post "/#{blueprint.id.to_s}/ports", {
             auth_token: session.token,
             name: 'custom port',
             kind: 'input',
@@ -117,7 +113,7 @@ RSpec.describe 'POST /blueprints/ports' do
       end
       describe 'When the index is below zero' do
         before do
-          post '/', {
+          post "/#{blueprint.id.to_s}/ports", {
             blueprint_id: blueprint.id.to_s,
             auth_token: session.token,
             name: 'custom port',
@@ -135,30 +131,10 @@ RSpec.describe 'POST /blueprints/ports' do
           )
         end
       end
-      describe 'When the blueprint UUID is not given' do
-        before do
-          post '/', {
-            auth_token: session.token,
-            name: 'custom port',
-            kind: 'input',
-            index: 0,
-            target: 'test target'
-          }
-        end
-        it 'Returns a 400 (Bad Request) status code' do
-          expect(last_response.status).to be 400
-        end
-        it 'Returns the correct body' do
-          expect(last_response.body).to include_json(
-            key: 'blueprint_id', message: 'required'
-          )
-        end
-      end
       describe 'When the blueprint UUID is not found' do
         before do
-          post '/', {
+          post "/unknown/ports", {
             auth_token: session.token,
-            blueprint_id: 'unknown',
             name: 'custom port',
             kind: 'input',
             index: 0,
@@ -176,9 +152,8 @@ RSpec.describe 'POST /blueprints/ports' do
       end
       describe 'When the kind is not given' do
         before do
-          post '/', {
+          post "/#{blueprint.id.to_s}/ports", {
             auth_token: session.token,
-            blueprint_id: blueprint.id.to_s,
             name: 'custom port',
             index: 0,
             target: 'test target'
@@ -195,9 +170,8 @@ RSpec.describe 'POST /blueprints/ports' do
       end
       describe 'When the kind is not in the possible values' do
         before do
-          post '/', {
+          post "/#{blueprint.id.to_s}/ports", {
             auth_token: session.token,
-            blueprint_id: blueprint.id.to_s,
             name: 'custom port',
             kind: 'unknown',
             index: 0,
