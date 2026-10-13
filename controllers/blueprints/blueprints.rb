@@ -47,7 +47,7 @@ module Modusynth
           params_service.remove_in_blueprint(**symbolized_params, blueprint:)
           halt 204
         end
-        
+
         api_route 'post', '/:blueprint_id/ports', right: ::Rights::TOOLS_WRITE do
           port = ports_service.create_embedded(container: blueprint, collection: :ports, **symbolized_params)
           render_json 'blueprints/_port.json', status: 201, port:
@@ -63,7 +63,7 @@ module Modusynth
           ports_service.remove_in_blueprint(**symbolized_params, blueprint:)
           halt 204
         end
-        
+
         api_route 'post', '/:blueprint_id/controls', right: ::Rights::TOOLS_WRITE do
           control = controls_service.create_embedded(container: blueprint, collection: :controls, **symbolized_params)
           render_json 'blueprints/_control.json', status: 201, control:
